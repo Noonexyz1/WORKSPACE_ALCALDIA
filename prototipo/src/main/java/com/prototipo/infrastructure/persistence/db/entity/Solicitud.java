@@ -1,0 +1,42 @@
+package com.prototipo.infrastructure.persistence.db.entity;
+
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import java.util.List;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Entity
+@Table(name = "solicitud")
+public class Solicitud {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(updatable = false, nullable = false)
+    private Long id;
+    private Long nroDeCopias;
+    //private TipoDocumento tipoDeDocumento;
+    private String tipoDeDocumento;
+    private Long nroDePaginas;
+    //private Unidad nombreUnidad;
+    //private EstadoSolicitud estadoSolicitud;
+    /*private DPF archivoParaFotocopiar;*/
+    //private Notificacion notificacionToAprobar;
+
+    @ManyToOne
+    private Usuario usuarioEnvio;
+
+    @OneToMany(mappedBy = "solicitud")
+    private List<HistorialUsuario> listaHistoriales;
+
+    @OneToMany(mappedBy = "solicitud")
+    private List<Aprobacion> listaAprobacion;
+
+
+}
