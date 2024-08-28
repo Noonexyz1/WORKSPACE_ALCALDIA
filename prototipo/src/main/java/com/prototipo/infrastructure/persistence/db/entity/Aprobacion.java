@@ -31,3 +31,4 @@ public class Aprobacion {
     private List<Operacion> listaOperacions;
 
 }
+
