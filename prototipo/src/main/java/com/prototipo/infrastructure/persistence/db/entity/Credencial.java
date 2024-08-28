@@ -21,6 +21,6 @@ public class Credencial {
     private String correo;
     private String password;
 
-    @ManyToOne
-    private Usuario usuario;
+    @OneToOne
+    private Usuario fk_usuario;
 }

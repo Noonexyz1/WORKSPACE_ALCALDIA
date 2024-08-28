@@ -1,5 +1,10 @@
 package com.prototipo.domain.model;
 
+import lombok.Builder;
+import lombok.Getter;
+
+@Getter
+@Builder
 public class Solicitud {
     private Long id;
     private Long nroDeCopias;
