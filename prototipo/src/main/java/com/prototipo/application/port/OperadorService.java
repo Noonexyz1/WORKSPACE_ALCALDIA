@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface OperadorService {
     List<Solicitud> verSolicitudes();
-    boolean cambiarEstadoDeSolicitud(EstadoSolicitud nuevoEstado);
+    boolean cambiarEstadoDeSolicitud(Solicitud solicitud, EstadoSolicitud nuevoEstado);
 }

@@ -23,22 +23,32 @@ public class Usuario {
     private String nombres;
     private String apellidos;
 
-    @ManyToOne
-    private Unidad unidadTrabajo;
-    @ManyToOne
-    private Unidad responsableUnidad;
-    @ManyToOne
-    private Rol rol;
 
-    @OneToMany(mappedBy = "usuario")
-    private List<Credencial> listaDeCredenciales;
-    @OneToMany(mappedBy = "usuarioEnvio")
-    private List<Solicitud> listaUsuarioSoli;
-    @OneToMany(mappedBy = "usuario")
-    private List<HistorialUsuario> listaHistoriales;
-    @OneToMany(mappedBy = "usuario")
+    @OneToOne(mappedBy = "fk_usuarioResponsable")
+    private Unidad unidad;
+
+    @ManyToOne
+    private Unidad fk_unidad;
+
+    @OneToOne(mappedBy = "fk_usuario")
+    private Credencial credencial;
+
+    @ManyToOne
+    private Rol fk_rol;
+
+    @OneToMany(mappedBy = "fk_solicitante")
+    private List<Solicitud> listaSolicitantes;
+
+    @OneToMany(mappedBy = "fk_solicitante")
     private List<Aprobacion> listaAprobacion;
-    @OneToMany(mappedBy = "usuario")
-    private List<Operacion> listaOperaciones;
+
+
+
+
+
+
+
+    @OneToMany(mappedBy = "fk_operador")
+    private List<Aprobacion> listaOperaciones;
 
 }

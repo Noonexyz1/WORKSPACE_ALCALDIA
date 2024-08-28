@@ -11,20 +11,15 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "historial_usuario")
-public class HistorialUsuario {
+@Table(name = "archivo_pdf")
+public class ArchivoPdf {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
-    private String fecha;
-    private String detalle;
+    private String archivo;
 
-
-    @ManyToOne
-    private Usuario usuario;
-    @ManyToOne
-    private Solicitud solicitud;
-
+    @OneToOne
+    private Solicitud fk_solicitud;
 }

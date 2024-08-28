@@ -1,38 +1,33 @@
 package com.prototipo.application.impl;
 
 import com.prototipo.application.port.OperadorService;
-import com.prototipo.application.port.UsuarioService;
+import com.prototipo.application.port.SolicitudPersist;
 import com.prototipo.domain.enums.EstadoSolicitud;
-import com.prototipo.domain.model.Credencial;
 import com.prototipo.domain.model.Solicitud;
 
 import java.util.List;
 
-public class OperadorImpl implements OperadorService, UsuarioService {
+public class OperadorImpl  implements OperadorService {
+
+    private SolicitudPersist solicitudPersist;
+
 
 
     @Override
     public List<Solicitud> verSolicitudes() {
-        return List.of();
+        return this.solicitudPersist.getSolicitudesOperador();
     }
 
     @Override
-    public boolean cambiarEstadoDeSolicitud(EstadoSolicitud nuevoEstado) {
+    public boolean cambiarEstadoDeSolicitud(Solicitud solicitud, EstadoSolicitud nuevoEstado) {
+        Solicitud soli = Solicitud.builder()
+                .id(solicitud.getId())
+                .nroDeCopias(solicitud.getNroDeCopias())
+                .nroDePaginas(solicitud.getNroDePaginas())
+                .tipoDeDocumento(solicitud.getTipoDeDocumento())
+                .build();
+
+
         return false;
-    }
-
-    @Override
-    public void iniciarSesion(Credencial credencial) {
-
-    }
-
-    @Override
-    public void solicitarFotocopiar(Solicitud solicitud) {
-
-    }
-
-    @Override
-    public List<Solicitud> verHistorialSolicitudes() {
-        return List.of();
     }
 }

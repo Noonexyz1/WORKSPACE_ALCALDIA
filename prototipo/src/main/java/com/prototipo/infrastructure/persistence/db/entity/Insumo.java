@@ -26,6 +26,12 @@ public class Insumo {
     private String formato; //ENUM('PDF', 'Excel') NOT NULL
     private String detalle;
 
-    @OneToMany(mappedBy = "insumo")
-    private List<Operacion> listaOperaciones;
+
+    @OneToMany(mappedBy = "fk_insumo")
+    private List<Aprobacion> listaAprobaciones;
+
+
+
+
+
 }

@@ -21,6 +21,6 @@ public class Rol {
     private Long id;
     private String nombreRol;
 
-    @OneToMany(mappedBy = "rol")
+    @OneToMany(mappedBy = "fk_rol")
     private List<Usuario> listRoles;
 }
