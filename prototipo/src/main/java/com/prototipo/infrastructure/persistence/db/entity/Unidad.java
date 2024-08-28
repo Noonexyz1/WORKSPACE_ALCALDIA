@@ -23,8 +23,12 @@ public class Unidad {
     private String nombre;
     private String direccion;
 
-    @OneToMany(mappedBy = "unidadTrabajo")
+
+    @OneToOne
+    private Usuario fk_usuarioResponsable;
+
+    @OneToMany(mappedBy = "fk_unidad")
     private List<Usuario> listaDeTrabajadores;
-    @OneToMany(mappedBy = "responsableUnidad")
-    private List<Usuario> listaDeResponsables;
+
+
 }

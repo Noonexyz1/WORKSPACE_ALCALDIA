@@ -29,14 +29,16 @@ public class Solicitud {
     /*private DPF archivoParaFotocopiar;*/
     //private Notificacion notificacionToAprobar;
 
+
     @ManyToOne
-    private Usuario usuarioEnvio;
+    private Usuario fk_solicitante;
 
-    @OneToMany(mappedBy = "solicitud")
-    private List<HistorialUsuario> listaHistoriales;
+    @OneToOne(mappedBy = "fk_solicitud")
+    private ArchivoPdf archivoPdf;
 
-    @OneToMany(mappedBy = "solicitud")
+    @OneToMany(mappedBy = "fk_solicitud")
     private List<Aprobacion> listaAprobacion;
+
 
 
 }

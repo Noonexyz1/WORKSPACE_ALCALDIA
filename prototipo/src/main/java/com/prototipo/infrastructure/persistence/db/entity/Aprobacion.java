@@ -23,12 +23,18 @@ public class Aprobacion {
 
 
     @ManyToOne
-    private Usuario usuario;
-    @ManyToOne
-    private Solicitud solicitud;
+    private Usuario fk_solicitante;
 
-    @OneToMany(mappedBy = "aprobacion")
-    private List<Operacion> listaOperacions;
+    @ManyToOne
+    private Solicitud fk_solicitud;
+
+    @ManyToOne
+    private Insumo fk_insumo;
+
+
+
+    @ManyToOne
+    private Usuario fk_operador;
 
 }
 
