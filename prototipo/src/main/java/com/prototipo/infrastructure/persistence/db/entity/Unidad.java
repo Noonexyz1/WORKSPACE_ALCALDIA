@@ -24,8 +24,9 @@ public class Unidad {
     private String direccion;
 
 
-    @OneToOne
-    private Usuario fk_usuarioResponsable;
+    @OneToOne(mappedBy = "fk_unidadResponsable")
+    private Usuario usuario;
+
 
     @OneToMany(mappedBy = "fk_unidad")
     private List<Usuario> listaDeTrabajadores;

@@ -1,0 +1,23 @@
+insert into prototipo.unidad(direccion, nombre)
+values("piso 1", "limites"),
+("piso 1", "distrital"),
+("piso 2", "transito"),
+("piso 3", "legal"),
+("piso 4", "exploracion"),
+("piso 5", "consiliacion"),
+("piso 6", "alcantalliras");
+
+
+insert into prototipo.rol(nombre_rol)
+values("Administrador"),
+("Solicitante"),
+("Operador"),
+("Responsable");
+
+
+INSERT INTO prototipo.insumo(detalle, fecha_reporte, formato, tipo_reporte)
+VALUES
+("detalle del reporte 2", "2005-07-15", "A4", "informe"),
+("detalle del reporte 3", "2010-12-01", "legal", "análisis"),
+("detalle del reporte 4", "2022-04-20", "oficio", "resumen"),
+("detalle del reporte 5", CURRENT_DATE(), "carta", "reporte");

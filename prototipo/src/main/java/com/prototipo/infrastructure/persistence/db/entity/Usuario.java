@@ -24,8 +24,11 @@ public class Usuario {
     private String apellidos;
 
 
-    @OneToOne(mappedBy = "fk_usuarioResponsable")
-    private Unidad unidad;
+    @OneToOne
+    private Unidad fk_unidadResponsable;
+
+
+
 
     @ManyToOne
     private Unidad fk_unidad;
