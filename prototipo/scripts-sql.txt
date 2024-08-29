@@ -1,23 +1,266 @@
-insert into prototipo.unidad(direccion, nombre)
-values("piso 1", "limites"),
-("piso 1", "distrital"),
-("piso 2", "transito"),
-("piso 3", "legal"),
-("piso 4", "exploracion"),
-("piso 5", "consiliacion"),
-("piso 6", "alcantalliras");
+INSERT INTO prototipo.unidad(nombre)
+VALUES
+("Atención al Ciudadano"),
+("Registro Civil"),
+("Servicios Generales"),
+("Planeación Urbana"),
+("Transporte y Movilidad"),
+("Desarrollo Económico"),
+("Asesoría Jurídica"),
+("Recursos Humanos"),
+("Secretaría de Hacienda"),
+("Cultura y Deporte"),
+("Medio Ambiente"),
+("Obras Públicas"),
+("Desarrollo Social"),
+("Oficina de la Alcaldesa"),
+("Gabinete de Gobierno");
 
 
 insert into prototipo.rol(nombre_rol)
 values("Administrador"),
 ("Solicitante"),
-("Operador"),
-("Responsable");
+("Operador");
+
+
 
 
 INSERT INTO prototipo.insumo(detalle, fecha_reporte, formato, tipo_reporte)
 VALUES
-("detalle del reporte 2", "2005-07-15", "A4", "informe"),
-("detalle del reporte 3", "2010-12-01", "legal", "análisis"),
-("detalle del reporte 4", "2022-04-20", "oficio", "resumen"),
-("detalle del reporte 5", CURRENT_DATE(), "carta", "reporte");
+("Solicitud de 50 copias de contrato de arrendamiento", "2023-02-14", "A4", "contrato"),
+("Impresión de plan de desarrollo urbano", "2023-03-22", "A3", "plan"),
+("Copia de actas de reunión del gabinete", "2023-04-10", "legal", "actas"),
+("Duplicado de expediente de personal", "2023-05-05", "oficio", "expediente"),
+("Impresión de certificado de residencia", "2023-06-01", "A4", "certificado"),
+("Copias del reglamento interno de trabajo", "2023-06-15", "carta", "reglamento"),
+("Reproducción de planos de infraestructura", "2023-07-12", "A2", "plano"),
+("Duplicado de recibos de pago", "2023-07-22", "oficio", "recibo"),
+("Impresión de documentos de licitación", "2023-08-03", "A4", "licitación"),
+("Copia de manual de procedimientos", "2023-08-15", "A4", "manual"),
+("Impresión de permisos de construcción", "2023-09-01", "legal", "permiso"),
+("Duplicado de informes trimestrales", "2023-09-10", "carta", "informe"),
+("Copia de contrato de suministro", "2023-09-22", "A4", "contrato"),
+("Reproducción de documentos de auditoría", "2023-10-05", "A4", "auditoría"),
+("Impresión de guías de servicio comunitario", "2023-10-20", "carta", "guía");
+
+
+#INSERTAMOS USUARIOS
+INSERT INTO usuario (fk_responsable_id, fk_rol_id, fk_unidad_id, apellidos, nombres)
+VALUES (NULL, 1, 3, 'Perez', 'Ana'),
+(NULL, 2, 1, 'Lopez', 'Carlos'),
+(NULL, 2, 2, 'Garcia', 'Maria'),
+(NULL, 2, 4, 'Hernandez', 'Jose'),
+(NULL, 2, 5, 'Martinez', 'Luisa'),
+(NULL, 2, 6, 'Gonzales', 'David'),
+(NULL, 2, 9, 'Ramirez', 'Miguel'),
+(3, 2, 2, 'Vargas', 'Sandra'),
+(3, 2, 2, 'Roberto', 'Castillo'),
+(3, 2, 2, 'Claudia', 'Ortega'),
+(4, 2, 4, 'Silva', 'Andres'),
+(4, 2, 4, 'Rios', 'Gabriel'),
+(4, 2, 4, 'Fernandez', 'Sofia'),
+(5, 2, 5, 'Pena', 'Tomas'),
+(5, 2, 5, 'Duarte', 'Patricia'),
+(5, 2, 5, 'Herrera', 'Ignacio'),
+(6, 2, 6, 'Rojas', 'Pablo'),
+(6, 2, 6, 'Salazar', 'Veronica'),
+(6, 2, 6, 'Mejia', 'Ricardo'),
+(7, 2, 9, 'Cervantes', 'Nataliza'),
+(7, 2, 9, 'Ibarra', 'Gillermo'),
+(3, 3, 2, 'Barrios', 'Javier'),
+(3, 3, 2, 'Sanchez', 'Laura'),
+(4, 3, 4, 'Jimenez', 'Raul'),
+(4, 3, 4, 'Alvarez', 'Sonia'),
+(5, 3, 5, 'Campoz', 'Estevan'),
+(5, 3, 5, 'Duarte', 'Patricia'),
+(7, 3, 9, 'Morales', 'Raul'),
+(7, 3, 9, 'Salazar ', 'Claudio');
+
+
+
+SELECT * FROM unidad;
+SELECT * FROM rol;
+SELECT * FROM usuario;
+SELECT * FROM insumo;
+
+
+SELECT usuario.nombres, usuario.apellidos, unidad.nombre, usuario.fk_unidad_id
+FROM usuario, unidad
+WHERE unidad.id = usuario.fk_unidad_id;
+
+
+#INSETANDO A CREDENCIALES
+INSERT INTO prototipo.credencial(correo, password, fk_usuario_id)
+VALUES('ana.perez@dominio.com', 'password123', 1),    -- Ana Perez
+('carlos.lopez@dominio.com', 'password123', 2), -- Carlos Lopez
+('maria.garcia@dominio.com', 'password123', 3), -- Maria Garcia
+('jose.hernandez@dominio.com', 'password123', 4), -- Jose Hernandez
+('luisa.martinez@dominio.com', 'password123', 5), -- Luisa Martinez
+('david.gonzales@dominio.com', 'password123', 6), -- David Gonzales
+('miguel.ramirez@dominio.com', 'password123', 7), -- Miguel Ramirez
+('sandra.vargas@dominio.com', 'password123', 8), -- Sandra Vargas
+('roberto.castillo@dominio.com', 'password123', 9), -- Roberto Castillo
+('claudia.ortega@dominio.com', 'password123', 10), -- Claudia Ortega
+('andres.silva@dominio.com', 'password123', 11), -- Andres Silva
+('gabriel.rios@dominio.com', 'password123', 12), -- Gabriel Rios
+('sofia.fernandez@dominio.com', 'password123', 13), -- Sofia Fernandez
+('tomas.pena@dominio.com', 'password123', 14), -- Tomas Pena
+('patricia.duarte@dominio.com', 'password123', 15), -- Patricia Duarte
+('ignacio.herrera@dominio.com', 'password123', 16), -- Ignacio Herrera
+('pablo.rojas@dominio.com', 'password123', 17), -- Pablo Rojas
+('veronica.salazar@dominio.com', 'password123', 18), -- Veronica Salazar
+('ricardo.mejia@dominio.com', 'password123', 19), -- Ricardo Mejia
+('nataliza.cervantes@dominio.com', 'password123', 20), -- Nataliza Cervantes
+('gillermo.ibarra@dominio.com', 'password123', 21), -- Gillermo Ibarra
+('javier.barrios@dominio.com', 'password123', 22), -- Javier Barrios
+('laura.sanchez@dominio.com', 'password123', 23), -- Laura Sanchez
+('raul.jimenez@dominio.com', 'password123', 24), -- Raul Jimenez
+('sonia.alvarez@dominio.com', 'password123', 25), -- Sonia Alvarez
+('estevan.campoz@dominio.com', 'password123', 26), -- Estevan Campoz
+('patricia.duarte2@dominio.com', 'password123', 27), -- Patricia Duarte
+('raul.morales@dominio.com', 'password123', 28), -- Raul Morales
+('claudio.salazar@dominio.com', 'password123', 29); -- Claudio Salazar
+
+
+
+SELECT * FROM credencial;
+
+#INSERTAMOS REGISTROS A LA TABLA SOLICITUD
+INSERT INTO solicitud(fk_solicitante_id, nro_de_copias, nro_de_paginas, tipo_de_documento, notificacion_to_aprobar)
+VALUES
+(3, 1, 15, 'Licencia de Conducir', 'Aprobada'),
+(6, 2, 30, 'Cédula de Identidad', 'Aprobada'),
+(9, 1, 12, 'Certificado de Nacimiento', 'Aprobada'),
+(12, 2, 10, 'Licencia de Conducir', 'Aprobada'),
+(15, 5, 30, 'Constancia de Trabajo', 'Aprobada'),
+(18, 1, 10, 'Cédula de Identidad', 'Aprobada'),
+(21, 4, 8, 'Licencia de Conducir', 'Aprobada'),
+(24, 2, 10, 'Certificado de Estudios', 'Aprobada'),
+(27, 3, 10, 'Certificado de Nacimiento', 'Aprobada'),
+(2, 3, 15, 'Cédula de Identidad', 'Aprobada'),
+(5, 3, 20, 'Acta de Defunción', 'Aprobada'),
+(8, 5, 25, 'Cédula de Identidad', 'Aprobada'),
+(11, 3, 15, 'Licencia de Conducir', 'Aprobada'),
+(14, 5, 12, 'Cédula de Identidad', 'Aprobada'),
+(20, 3, 12, 'Acta de Defunción', 'Aprobada'),
+(17, 4, 25, 'Certificado de Nacimiento', 'Aprobada'),
+(2, 2, 10, 'Certificado de Nacimiento', 'Pendiente'),
+(4, 3, 5, 'Certificado de Estudios', 'Rechazada'),
+(5, 5, 20, 'Acta de Matrimonio', 'Pendiente'),
+(7, 4, 25, 'Constancia de Trabajo', 'Rechazada'),
+(8, 2, 10, 'Cédula de Identidad', 'Pendiente'),
+(10, 3, 8, 'Acta de Defunción', 'Rechazada'),
+(11, 4, 7, 'Cédula de Identidad', 'Pendiente'),
+(13, 3, 20, 'Acta de Matrimonio', 'Rechazada'),
+(14, 1, 10, 'Certificado de Nacimiento', 'Pendiente'),
+(16, 2, 12, 'Certificado de Estudios', 'Rechazada'),
+(17, 4, 15, 'Licencia de Conducir', 'Pendiente'),
+(19, 3, 25, 'Acta de Defunción', 'Rechazada'),
+(20, 2, 20, 'Certificado de Nacimiento', 'Pendiente'),
+(22, 5, 12, 'Acta de Matrimonio', 'Rechazada'),
+(23, 3, 7, 'Cédula de Identidad', 'Pendiente'),
+(25, 1, 15, 'Constancia de Trabajo', 'Rechazada'),
+(26, 4, 20, 'Acta de Defunción', 'Pendiente'),
+(28, 2, 18, 'Licencia de Conducir', 'Rechazada'),
+(29, 5, 25, 'Acta de Matrimonio', 'Pendiente'),
+(3, 1, 10, 'Constancia de Trabajo', 'Rechazada'),
+(4, 4, 30, 'Certificado de Estudios', 'Pendiente'),
+(6, 2, 10, 'Licencia de Conducir', 'Rechazada'),
+(7, 1, 8, 'Certificado de Nacimiento', 'Pendiente'),
+(9, 4, 12, 'Acta de Matrimonio', 'Rechazada'),
+(10, 2, 20, 'Constancia de Trabajo', 'Pendiente'),
+(12, 4, 18, 'Acta de Defunción', 'Rechazada'),
+(13, 2, 30, 'Certificado de Estudios', 'Pendiente'),
+(15, 1, 20, 'Constancia de Trabajo', 'Rechazada'),
+(16, 3, 10, 'Acta de Matrimonio', 'Pendiente'),
+(18, 2, 15, 'Licencia de Conducir', 'Rechazada'),
+(19, 1, 8, 'Cédula de Identidad', 'Pendiente'),
+(21, 5, 30, 'Certificado de Estudios', 'Pendiente');
+
+
+
+SELECT * from solicitud;
+
+
+#INSERTAMOS A LA TABLA ARCHIVO_PDF
+INSERT INTO prototipo.archivo_pdf(fk_solicitud_id, archivo)
+VALUES
+(1, 'U2FtcGxlU3RyaW5nMDE='),
+(2, 'U2FtcGxlU3RyaW5nMDI='),
+(3, 'U2FtcGxlU3RyaW5nMDM='),
+(4, 'U2FtcGxlU3RyaW5nMDQ='),
+(5, 'U2FtcGxlU3RyaW5nMDU='),
+(6, 'U2FtcGxlU3RyaW5nMDY='),
+(7, 'U2FtcGxlU3RyaW5nMDc='),
+(8, 'U2FtcGxlU3RyaW5nMDg='),
+(9, 'U2FtcGxlU3RyaW5nMDk='),
+(10, 'U2FtcGxlU3RyaW5nMTA='),
+(11, 'U2FtcGxlU3RyaW5nMTE='),
+(12, 'U2FtcGxlU3RyaW5nMTI='),
+(13, 'U2FtcGxlU3RyaW5nMTM='),
+(14, 'U2FtcGxlU3RyaW5nMTQ='),
+(15, 'U2FtcGxlU3RyaW5nMTU='),
+(16, 'U2FtcGxlU3RyaW5nMTY='),
+(17, 'U2FtcGxlU3RyaW5nMTc='),
+(18, 'U2FtcGxlU3RyaW5nMTg='),
+(19, 'U2FtcGxlU3RyaW5nMTk='),
+(20, 'U2FtcGxlU3RyaW5nMjA='),
+(21, 'U2FtcGxlU3RyaW5nMjE='),
+(22, 'U2FtcGxlU3RyaW5nMjI='),
+(23, 'U2FtcGxlU3RyaW5nMjM='),
+(24, 'U2FtcGxlU3RyaW5nMjQ='),
+(25, 'U2FtcGxlU3RyaW5nMjU='),
+(26, 'U2FtcGxlU3RyaW5nMjY='),
+(27, 'U2FtcGxlU3RyaW5nMjc='),
+(28, 'U2FtcGxlU3RyaW5nMjg='),
+(29, 'U2FtcGxlU3RyaW5nMjk='),
+(30, 'U2FtcGxlU3RyaW5nMzA='),
+(31, 'U2FtcGxlU3RyaW5nMzE='),
+(32, 'U2FtcGxlU3RyaW5nMzI='),
+(33, 'U2FtcGxlU3RyaW5nMzM='),
+(34, 'U2FtcGxlU3RyaW5nMzQ='),
+(35, 'U2FtcGxlU3RyaW5nMzU='),
+(36, 'U2FtcGxlU3RyaW5nMzY='),
+(37, 'U2FtcGxlU3RyaW5nMzc='),
+(38, 'U2FtcGxlU3RyaW5nMzg='),
+(39, 'U2FtcGxlU3RyaW5nMzk='),
+(40, 'U2FtcGxlU3RyaW5nNDA='),
+(41, 'U2FtcGxlU3RyaW5nNDE='),
+(42, 'U2FtcGxlU3RyaW5nNDI='),
+(43, 'U2FtcGxlU3RyaW5nNDM='),
+(44, 'U2FtcGxlU3RyaW5nNDQ='),
+(45, 'U2FtcGxlU3RyaW5nNDU='),
+(46, 'U2FtcGxlU3RyaW5nNDY='),
+(47, 'U2FtcGxlU3RyaW5nNDc='),
+(48, 'U2FtcGxlU3RyaW5nNDg=');
+
+
+SELECT * FROM archivo_pdf;
+
+
+
+INSERT INTO aprobacion (fk_solicitud_id, fk_solicitante_id, fk_operador_id, fk_insumo_id)
+VALUES
+(1, 4, 22, 1),
+(2, 5, 23, 2),
+(3, 6, 24, 3),
+(4, 7, 25, 4),
+(5, 8, 26, 5),
+(6, 9, 27, 6),
+(7, 10, 28, 7),
+(8, 11, 29, 8),
+(9, 12, 22, 9),
+(10, 13, 23, 10),
+(11, 14, 24, 11),
+(12, 15, 25, 12),
+(13, 16, 26, 13),
+(14, 17, 27, 14),
+(15, 18, 28, 15),
+(16, 19, 29, 1);
+
+
+SELECT * FROM usuario
+WHERE fk_rol_id = 3;
+
+
+SELECT * FROM aprobacion;
