@@ -24,11 +24,19 @@ public class Usuario {
     private String apellidos;
 
 
-    @OneToOne(mappedBy = "fk_usuarioResponsable")
-    private Unidad unidad;
+
+    // Relación reflexiva: un empleado puede tener un gerente
+    @ManyToOne
+    private Usuario fk_responsable;
+
+    // Relación reflexiva: un gerente puede tener múltiples empleados a su cargo
+    @OneToMany(mappedBy = "fk_responsable")
+    private List<Usuario> listEmpleadosACargo;
+
 
     @ManyToOne
     private Unidad fk_unidad;
+
 
     @OneToOne(mappedBy = "fk_usuario")
     private Credencial credencial;

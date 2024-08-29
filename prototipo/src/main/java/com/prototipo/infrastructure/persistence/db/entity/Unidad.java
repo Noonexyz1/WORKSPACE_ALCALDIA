@@ -21,14 +21,7 @@ public class Unidad {
     @Column(updatable = false, nullable = false)
     private Long id;
     private String nombre;
-    private String direccion;
-
-
-    @OneToOne
-    private Usuario fk_usuarioResponsable;
 
     @OneToMany(mappedBy = "fk_unidad")
-    private List<Usuario> listaDeTrabajadores;
-
-
+    private List<Usuario> listaUsuarios;
 }

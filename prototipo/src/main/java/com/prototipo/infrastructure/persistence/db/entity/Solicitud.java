@@ -26,8 +26,11 @@ public class Solicitud {
     private Long nroDePaginas;
     //private Unidad nombreUnidad;
     //private EstadoSolicitud estadoSolicitud;
-    /*private DPF archivoParaFotocopiar;*/
-    //private Notificacion notificacionToAprobar;
+    //private DPF archivoParaFotocopiar;
+
+
+    //los estados posibles son Pendiente, Aprobada y Rechazada
+    private String notificacionToAprobar;
 
 
     @ManyToOne
