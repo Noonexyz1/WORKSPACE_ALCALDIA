@@ -28,13 +28,13 @@ public class Aprobacion {
     @ManyToOne
     private Solicitud fk_solicitud;
 
-    @ManyToOne
-    private Insumo fk_insumo;
-
-
 
     @ManyToOne
     private Usuario fk_operador;
 
+
+
+    /*@ManyToOne
+    private Insumo fk_insumo;*/
 }
 

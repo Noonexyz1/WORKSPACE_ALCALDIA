@@ -126,56 +126,56 @@ VALUES('ana.perez@dominio.com', 'password123', 1),    -- Ana Perez
 SELECT * FROM credencial;
 
 #INSERTAMOS REGISTROS A LA TABLA SOLICITUD
-INSERT INTO solicitud(fk_solicitante_id, nro_de_copias, nro_de_paginas, tipo_de_documento, notificacion_to_aprobar)
+INSERT INTO solicitud(fk_solicitante_id, nro_de_copias, nro_de_paginas, tipo_de_documento, notificacion_to_aprobar, estado_solicitud)
 VALUES
-(3, 1, 15, 'Licencia de Conducir', 'Aprobada'),
-(6, 2, 30, 'Cédula de Identidad', 'Aprobada'),
-(9, 1, 12, 'Certificado de Nacimiento', 'Aprobada'),
-(12, 2, 10, 'Licencia de Conducir', 'Aprobada'),
-(15, 5, 30, 'Constancia de Trabajo', 'Aprobada'),
-(18, 1, 10, 'Cédula de Identidad', 'Aprobada'),
-(21, 4, 8, 'Licencia de Conducir', 'Aprobada'),
-(24, 2, 10, 'Certificado de Estudios', 'Aprobada'),
-(27, 3, 10, 'Certificado de Nacimiento', 'Aprobada'),
-(2, 3, 15, 'Cédula de Identidad', 'Aprobada'),
-(5, 3, 20, 'Acta de Defunción', 'Aprobada'),
-(8, 5, 25, 'Cédula de Identidad', 'Aprobada'),
-(11, 3, 15, 'Licencia de Conducir', 'Aprobada'),
-(14, 5, 12, 'Cédula de Identidad', 'Aprobada'),
-(20, 3, 12, 'Acta de Defunción', 'Aprobada'),
-(17, 4, 25, 'Certificado de Nacimiento', 'Aprobada'),
-(2, 2, 10, 'Certificado de Nacimiento', 'Pendiente'),
-(4, 3, 5, 'Certificado de Estudios', 'Rechazada'),
-(5, 5, 20, 'Acta de Matrimonio', 'Pendiente'),
-(7, 4, 25, 'Constancia de Trabajo', 'Rechazada'),
-(8, 2, 10, 'Cédula de Identidad', 'Pendiente'),
-(10, 3, 8, 'Acta de Defunción', 'Rechazada'),
-(11, 4, 7, 'Cédula de Identidad', 'Pendiente'),
-(13, 3, 20, 'Acta de Matrimonio', 'Rechazada'),
-(14, 1, 10, 'Certificado de Nacimiento', 'Pendiente'),
-(16, 2, 12, 'Certificado de Estudios', 'Rechazada'),
-(17, 4, 15, 'Licencia de Conducir', 'Pendiente'),
-(19, 3, 25, 'Acta de Defunción', 'Rechazada'),
-(20, 2, 20, 'Certificado de Nacimiento', 'Pendiente'),
-(22, 5, 12, 'Acta de Matrimonio', 'Rechazada'),
-(23, 3, 7, 'Cédula de Identidad', 'Pendiente'),
-(25, 1, 15, 'Constancia de Trabajo', 'Rechazada'),
-(26, 4, 20, 'Acta de Defunción', 'Pendiente'),
-(28, 2, 18, 'Licencia de Conducir', 'Rechazada'),
-(29, 5, 25, 'Acta de Matrimonio', 'Pendiente'),
-(3, 1, 10, 'Constancia de Trabajo', 'Rechazada'),
-(4, 4, 30, 'Certificado de Estudios', 'Pendiente'),
-(6, 2, 10, 'Licencia de Conducir', 'Rechazada'),
-(7, 1, 8, 'Certificado de Nacimiento', 'Pendiente'),
-(9, 4, 12, 'Acta de Matrimonio', 'Rechazada'),
-(10, 2, 20, 'Constancia de Trabajo', 'Pendiente'),
-(12, 4, 18, 'Acta de Defunción', 'Rechazada'),
-(13, 2, 30, 'Certificado de Estudios', 'Pendiente'),
-(15, 1, 20, 'Constancia de Trabajo', 'Rechazada'),
-(16, 3, 10, 'Acta de Matrimonio', 'Pendiente'),
-(18, 2, 15, 'Licencia de Conducir', 'Rechazada'),
-(19, 1, 8, 'Cédula de Identidad', 'Pendiente'),
-(21, 5, 30, 'Certificado de Estudios', 'Pendiente');
+(3, 1, 15, 'Licencia de Conducir', 'Aprobada', 'Pendiente'),
+(6, 2, 30, 'Cédula de Identidad', 'Aprobada', 'Completada'),
+(9, 1, 12, 'Certificado de Nacimiento', 'Aprobada', 'Pendiente'),
+(12, 2, 10, 'Licencia de Conducir', 'Aprobada', 'Completada'),
+(15, 5, 30, 'Constancia de Trabajo', 'Aprobada', 'Pendiente'),
+(18, 1, 10, 'Cédula de Identidad', 'Aprobada', 'Completada'),
+(21, 4, 8, 'Licencia de Conducir', 'Aprobada', 'Pendiente'),
+(24, 2, 10, 'Certificado de Estudios', 'Aprobada', 'Completada'),
+(27, 3, 10, 'Certificado de Nacimiento', 'Aprobada', 'Pendiente'),
+(2, 3, 15, 'Cédula de Identidad', 'Aprobada', 'Completada'),
+(5, 3, 20, 'Acta de Defunción', 'Aprobada', 'Pendiente'),
+(8, 5, 25, 'Cédula de Identidad', 'Aprobada', 'Completada'),
+(11, 3, 15, 'Licencia de Conducir', 'Aprobada', 'Pendiente'),
+(14, 5, 12, 'Cédula de Identidad', 'Aprobada', 'Completada'),
+(20, 3, 12, 'Acta de Defunción', 'Aprobada', 'Pendiente'),
+(17, 4, 25, 'Certificado de Nacimiento', 'Aprobada', 'Completada'),
+(2, 2, 10, 'Certificado de Nacimiento', 'Pendiente', 'Pendiente'),
+(4, 3, 5, 'Certificado de Estudios', 'Rechazada', 'Completada'),
+(5, 5, 20, 'Acta de Matrimonio', 'Pendiente', 'Pendiente'),
+(7, 4, 25, 'Constancia de Trabajo', 'Rechazada', 'Completada'),
+(8, 2, 10, 'Cédula de Identidad', 'Pendiente', 'Pendiente'),
+(10, 3, 8, 'Acta de Defunción', 'Rechazada', 'Completada'),
+(11, 4, 7, 'Cédula de Identidad', 'Pendiente', 'Pendiente'),
+(13, 3, 20, 'Acta de Matrimonio', 'Rechazada', 'Completada'),
+(14, 1, 10, 'Certificado de Nacimiento', 'Pendiente', 'Pendiente'),
+(16, 2, 12, 'Certificado de Estudios', 'Rechazada', 'Completada'),
+(17, 4, 15, 'Licencia de Conducir', 'Pendiente', 'Pendiente'),
+(19, 3, 25, 'Acta de Defunción', 'Rechazada', 'Completada'),
+(20, 2, 20, 'Certificado de Nacimiento', 'Pendiente', 'Pendiente'),
+(22, 5, 12, 'Acta de Matrimonio', 'Rechazada', 'Completada'),
+(23, 3, 7, 'Cédula de Identidad', 'Pendiente', 'Pendiente'),
+(25, 1, 15, 'Constancia de Trabajo', 'Rechazada', 'Completada'),
+(26, 4, 20, 'Acta de Defunción', 'Pendiente', 'Pendiente'),
+(28, 2, 18, 'Licencia de Conducir', 'Rechazada', 'Completada'),
+(29, 5, 25, 'Acta de Matrimonio', 'Pendiente', 'Pendiente'),
+(3, 1, 10, 'Constancia de Trabajo', 'Rechazada', 'Completada'),
+(4, 4, 30, 'Certificado de Estudios', 'Pendiente', 'Pendiente'),
+(6, 2, 10, 'Licencia de Conducir', 'Rechazada', 'Completada'),
+(7, 1, 8, 'Certificado de Nacimiento', 'Pendiente', 'Pendiente'),
+(9, 4, 12, 'Acta de Matrimonio', 'Rechazada', 'Completada'),
+(10, 2, 20, 'Constancia de Trabajo', 'Pendiente', 'Pendiente'),
+(12, 4, 18, 'Acta de Defunción', 'Rechazada', 'Completada'),
+(13, 2, 30, 'Certificado de Estudios', 'Pendiente', 'Pendiente'),
+(15, 1, 20, 'Constancia de Trabajo', 'Rechazada', 'Completada'),
+(16, 3, 10, 'Acta de Matrimonio', 'Pendiente', 'Pendiente'),
+(18, 2, 15, 'Licencia de Conducir', 'Rechazada', 'Completada'),
+(19, 1, 8, 'Cédula de Identidad', 'Pendiente', 'Pendiente'),
+(21, 5, 30, 'Certificado de Estudios', 'Pendiente', 'Completada');
 
 
 
@@ -239,7 +239,7 @@ SELECT * FROM archivo_pdf;
 
 
 
-INSERT INTO aprobacion (fk_solicitud_id, fk_solicitante_id, fk_operador_id, fk_insumo_id)
+/*INSERT INTO aprobacion (fk_solicitud_id, fk_solicitante_id, fk_operador_id, fk_insumo_id)
 VALUES
 (1, 4, 22, 1),
 (2, 5, 23, 2),
@@ -256,7 +256,7 @@ VALUES
 (13, 16, 26, 13),
 (14, 17, 27, 14),
 (15, 18, 28, 15),
-(16, 19, 29, 1);
+(16, 19, 29, 1);*/
 
 
 SELECT * FROM usuario
