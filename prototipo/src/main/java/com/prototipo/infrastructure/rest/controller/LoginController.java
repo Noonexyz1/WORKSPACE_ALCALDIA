@@ -16,6 +16,11 @@ public class LoginController {
 
     @PostMapping(path = {""}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<CredencialResqonse> iniciarSesion(@RequestBody CredencialRequest request){
-        return new ResponseEntity<>(new CredencialResqonse(), HttpStatus.OK);
+        CredencialResqonse response = CredencialResqonse.builder()
+                .id(23L)
+                .correo("asdfasdf@gmail.com")
+                .build();
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

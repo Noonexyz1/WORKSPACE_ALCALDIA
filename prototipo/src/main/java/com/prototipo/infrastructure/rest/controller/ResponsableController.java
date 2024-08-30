@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequestMapping(path = "/responsable")
 public class ResponsableController {
-    
+
     @PostMapping(path = {"/aprobarSolicitud"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void aprobarSolicitud(@RequestBody SolicitudRequest request) {
 

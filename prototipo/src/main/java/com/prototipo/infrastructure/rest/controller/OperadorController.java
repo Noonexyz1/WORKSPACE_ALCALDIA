@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -24,7 +25,13 @@ public class OperadorController {
 
     @PostMapping(path = {"/verSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudResponse>> verSolicitudes() {
-        return new ResponseEntity<>(List.of(), HttpStatus.OK);
+        List<SolicitudResponse> listRespon = new ArrayList<>();
+        listRespon.add(SolicitudResponse.builder()
+                        .id(24L)
+                        .nroDeCopias(234L)
+                        .build());
+
+        return new ResponseEntity<>(listRespon, HttpStatus.OK);
     }
 
 }
