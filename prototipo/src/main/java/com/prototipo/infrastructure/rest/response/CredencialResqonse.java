@@ -1,8 +1,12 @@
 package com.prototipo.infrastructure.rest.response;
 
 import com.prototipo.infrastructure.persistence.db.entity.Usuario;
-import lombok.Builder;
+import lombok.*;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class CredencialResqonse {
 

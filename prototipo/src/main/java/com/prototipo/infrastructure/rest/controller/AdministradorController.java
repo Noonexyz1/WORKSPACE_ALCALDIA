@@ -21,17 +21,17 @@ public class AdministradorController {
 
     }
 
-    @PostMapping(path = {"/eliminarUsuario/{idUsuario}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = {"/eliminarUsuario/{idUsuario}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void eliminarUsuario(@PathVariable Long idUsuario){
 
     }
 
-    @PostMapping(path = {"/asignarOperador/{idOperador}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void asignarOperador(@RequestBody Long idOperador){
+    @GetMapping(path = {"/asignarOperador/{idOperador}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void asignarOperador(@PathVariable Long idOperador){
 
     }
 
-    @PostMapping(path = {"/generarReporte"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = {"/generarReporte"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ReporteResponse> generarReporte(){
         ReporteResponse reporte = ReporteResponse.builder()
                 .id(234L)

@@ -1,7 +1,11 @@
 package com.prototipo.infrastructure.rest.request;
 
-import lombok.Builder;
+import lombok.*;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class CredencialRequest {
     private String correo;

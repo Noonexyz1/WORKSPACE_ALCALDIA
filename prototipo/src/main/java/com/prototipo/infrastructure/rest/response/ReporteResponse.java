@@ -1,7 +1,11 @@
 package com.prototipo.infrastructure.rest.response;
 
-import lombok.Builder;
+import lombok.*;
 
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class ReporteResponse {
     private Long id;
