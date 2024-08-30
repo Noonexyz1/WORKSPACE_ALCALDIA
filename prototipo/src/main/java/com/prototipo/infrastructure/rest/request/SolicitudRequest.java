@@ -1,5 +1,8 @@
 package com.prototipo.infrastructure.rest.request;
 
+import lombok.Builder;
+
+@Builder
 public class SolicitudRequest {
 
     private Long id;

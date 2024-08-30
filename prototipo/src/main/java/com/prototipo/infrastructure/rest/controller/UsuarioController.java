@@ -7,10 +7,11 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/user")
+@RequestMapping(path = "/usuario")
 public class UsuarioController {
 
     @PostMapping(path = {"/solicitarFotocopiar"}, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -20,6 +21,12 @@ public class UsuarioController {
 
     @PostMapping(path = {"/verHistorialSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudResponse>> verHistorialSolicitudes() {
-        return new ResponseEntity<>(List.of(), HttpStatus.OK);
+        List<SolicitudResponse> list = new ArrayList<>();
+        list.add(SolicitudResponse.builder()
+                        .id(345345L)
+                        .archivoPdf("asdfasdf2342asdfasdfasdf")
+                .build());
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
     }
 }

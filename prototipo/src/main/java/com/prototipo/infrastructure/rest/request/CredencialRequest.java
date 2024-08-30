@@ -1,7 +1,8 @@
 package com.prototipo.infrastructure.rest.request;
 
-import com.prototipo.domain.model.Usuario;
+import lombok.Builder;
 
+@Builder
 public class CredencialRequest {
     private String correo;
     private String password;

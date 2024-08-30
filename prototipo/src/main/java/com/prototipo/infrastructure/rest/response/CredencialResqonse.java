@@ -1,7 +1,9 @@
 package com.prototipo.infrastructure.rest.response;
 
-import com.prototipo.domain.model.Usuario;
+import com.prototipo.infrastructure.persistence.db.entity.Usuario;
+import lombok.Builder;
 
+@Builder
 public class CredencialResqonse {
 
     private Long id;
