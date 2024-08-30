@@ -22,6 +22,7 @@ public class Unidad {
     private Long id;
     private String nombre;
 
+
     @OneToMany(mappedBy = "fk_unidad")
-    private List<Usuario> listaUsuarios;
+    private List<Solicitud> listaUsuarios;
 }

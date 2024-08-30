@@ -34,8 +34,8 @@ public class Usuario {
     private List<Usuario> listEmpleadosACargo;
 
 
-    @ManyToOne
-    private Unidad fk_unidad;
+    /*@ManyToOne
+    private Unidad fk_unidad;*/
 
 
     @OneToOne(mappedBy = "fk_usuario")

@@ -25,7 +25,9 @@ public class Solicitud {
     private String tipoDeDocumento;
     private Long nroDePaginas;
     //private Unidad nombreUnidad;
+
     //private EstadoSolicitud estadoSolicitud;
+    private String estadoSolicitud;
     //private DPF archivoParaFotocopiar;
 
 
@@ -35,6 +37,9 @@ public class Solicitud {
 
     @ManyToOne
     private Usuario fk_solicitante;
+    @ManyToOne
+    private Unidad fk_unidad;
+
 
     @OneToOne(mappedBy = "fk_solicitud")
     private ArchivoPdf archivoPdf;
@@ -43,5 +48,6 @@ public class Solicitud {
     private List<Aprobacion> listaAprobacion;
 
 
-
+    @OneToMany(mappedBy = "fk_solicitud")
+    private List<GastoInsumo> listGastoInsumos;
 }
