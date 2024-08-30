@@ -1,4 +1,4 @@
-package com.prototipo.infrastructure.rest.request;
+package com.prototipo.infrastructure.rest.response;
 
 import com.prototipo.domain.model.Usuario;
 
