@@ -19,12 +19,20 @@ public class UsuarioController {
 
     }
 
-    @PostMapping(path = {"/verHistorialSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = {"/verHistorialSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudResponse>> verHistorialSolicitudes() {
         List<SolicitudResponse> list = new ArrayList<>();
         list.add(SolicitudResponse.builder()
                         .id(345345L)
                         .archivoPdf("asdfasdf2342asdfasdfasdf")
+                .build());
+        list.add(SolicitudResponse.builder()
+                .id(345345L)
+                .archivoPdf("asdfasdf2342asdfasdfasdf")
+                .build());
+        list.add(SolicitudResponse.builder()
+                .id(345345L)
+                .archivoPdf("asdfasdf2342asdfasdfasdf")
                 .build());
 
         return new ResponseEntity<>(list, HttpStatus.OK);

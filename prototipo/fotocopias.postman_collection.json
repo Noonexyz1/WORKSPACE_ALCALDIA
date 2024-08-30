@@ -1,6 +1,6 @@
 {
 	"info": {
-		"_postman_id": "af77c208-39fa-4df3-9e4e-19dcc605696e",
+		"_postman_id": "9d4c5611-dde8-49d7-8b29-5145d37e1d94",
 		"name": "fotocopias",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "36222603"
@@ -10,30 +10,70 @@
 			"name": "Administrador",
 			"item": [
 				{
-					"name": "New Request Copy",
+					"name": "crear usuario",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 34,\n    \"nombres\": \"Diego\",\n    \"apellidos\": \"Mamani\",\n    \"fk_responsable\": 5,\n    \"fk_rol\": 7\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:8080/api/listar/list",
+							"raw": "http://localhost:8081/administrador/creaUsuario",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8080",
+							"port": "8081",
 							"path": [
-								"api",
-								"listar",
-								"list"
+								"administrador",
+								"creaUsuario"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "New Request Copy",
+					"name": "editar usuario",
 					"request": {
 						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 34,\n    \"nombres\": \"Diego\",\n    \"apellidos\": \"Mamani\",\n    \"fk_responsable\": 5,\n    \"fk_rol\": 7\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/administrador/editarUsuario",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"administrador",
+								"editarUsuario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar usuario",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -45,51 +85,28 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/guardar/estudent",
+							"raw": "http://localhost:8081/administrador/eliminarUsuario/6",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8082",
+							"port": "8081",
 							"path": [
-								"api",
-								"guardar",
-								"estudent"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Solicitante",
-			"item": [
-				{
-					"name": "New Request Copy 2",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/listar/list",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"listar",
-								"list"
+								"administrador",
+								"eliminarUsuario",
+								"6"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "New Request Copy 2",
+					"name": "asignar operador",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -101,16 +118,48 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/guardar/estudent",
+							"raw": "http://localhost:8081/administrador/asignarOperador/8",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8082",
+							"port": "8081",
 							"path": [
-								"api",
-								"guardar",
-								"estudent"
+								"administrador",
+								"asignarOperador",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "generar reporte",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Diego\",\n    \"direccion\": \"diego@diego.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/administrador/generarReporte",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"administrador",
+								"generarReporte"
 							]
 						}
 					},
@@ -122,34 +171,13 @@
 			"name": "Operador",
 			"item": [
 				{
-					"name": "New Request Copy 2",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8080/api/listar/list",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8080",
-							"path": [
-								"api",
-								"listar",
-								"list"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "New Request Copy 2",
+					"name": "set estado soli",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombre\": \"Diego\",\n    \"direccion\": \"diego@diego.com\"\n}",
+							"raw": "{\n    \"id\": 101,\n    \"nroDeCopias\": 2,\n    \"tipoDeDocumento\": \"Licencia de Conducir\",\n    \"nroDePaginas\": 15,\n    \"estadoSolicitud\": \"Pendiente\",\n    \"notificacionToAprobar\": \"Aprobada\",\n    \"fk_solicitante\": 34,\n    \"fk_unidad\": \"Unidad de Tránsito\",\n    \"archivoPdf\": \"licencia_conducir.pdf\"\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -157,16 +185,35 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/guardar/estudent",
+							"raw": "http://localhost:8081/operador/setEstadoSolicitud",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8082",
+							"port": "8081",
 							"path": [
-								"api",
-								"guardar",
-								"estudent"
+								"operador",
+								"setEstadoSolicitud"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ver solicitudes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/operador/verSolicitudes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"operador",
+								"verSolicitudes"
 							]
 						}
 					},
@@ -178,13 +225,13 @@
 			"name": "Responsable",
 			"item": [
 				{
-					"name": "New Request Copy 2",
+					"name": "aprobar solicitud",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombre\": \"Diego\",\n    \"direccion\": \"diego@diego.com\"\n}",
+							"raw": "{\n    \"id\": 101,\n    \"nroDeCopias\": 2,\n    \"tipoDeDocumento\": \"Licencia de Conducir\",\n    \"nroDePaginas\": 15,\n    \"estadoSolicitud\": \"Pendiente\",\n    \"notificacionToAprobar\": \"Aprobada\",\n    \"fk_solicitante\": 34,\n    \"fk_unidad\": \"Unidad de Tránsito\",\n    \"archivoPdf\": \"licencia_conducir.pdf\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -192,26 +239,17 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/guardar/estudent",
+							"raw": "http://localhost:8081/responsable/aprobarSolicitud",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8082",
+							"port": "8081",
 							"path": [
-								"api",
-								"guardar",
-								"estudent"
+								"responsable",
+								"aprobarSolicitud"
 							]
 						}
-					},
-					"response": []
-				},
-				{
-					"name": "New Request",
-					"request": {
-						"method": "GET",
-						"header": []
 					},
 					"response": []
 				}
@@ -221,13 +259,13 @@
 			"name": "Login",
 			"item": [
 				{
-					"name": "New Request Copy 2",
+					"name": "do login",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombre\": \"Diego\",\n    \"direccion\": \"diego@diego.com\"\n}",
+							"raw": "{\n    \"correo\": \"diego@diego.com\",\n    \"password\": \"123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -235,26 +273,70 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8082/api/guardar/estudent",
+							"raw": "http://localhost:8081/dologin",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
-							"port": "8082",
+							"port": "8081",
 							"path": [
-								"api",
-								"guardar",
-								"estudent"
+								"dologin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuario Soli",
+			"item": [
+				{
+					"name": "set estado soli Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 101,\n    \"nroDeCopias\": 2,\n    \"tipoDeDocumento\": \"Licencia de Conducir\",\n    \"nroDePaginas\": 15,\n    \"estadoSolicitud\": \"Pendiente\",\n    \"notificacionToAprobar\": \"Aprobada\",\n    \"fk_solicitante\": 34,\n    \"fk_unidad\": \"Unidad de Tránsito\",\n    \"archivoPdf\": \"licencia_conducir.pdf\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/usuario/solicitarFotocopiar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"usuario",
+								"solicitarFotocopiar"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "New Request",
+					"name": "ver solicitudes Copy",
 					"request": {
 						"method": "GET",
-						"header": []
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/usuario/verHistorialSolicitudes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"usuario",
+								"verHistorialSolicitudes"
+							]
+						}
 					},
 					"response": []
 				}
