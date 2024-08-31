@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,4 +10,13 @@ import { Component } from '@angular/core';
 })
 export class LoginComponent {
 
+  private route: Router;
+
+  constructor(route: Router) {
+    this.route = route;
+  }
+  hacerLogin(): void {
+    alert('Haciendo Login...');
+    this.route.navigate(['/dashadministrador']);
+  }
 }
