@@ -17,6 +17,6 @@ export class LoginComponent {
   }
   hacerLogin(): void {
     alert('Haciendo Login...');
-    this.route.navigate(['/dashadministrador']);
+    this.route.navigate(['/dashboard']);
   }
 }

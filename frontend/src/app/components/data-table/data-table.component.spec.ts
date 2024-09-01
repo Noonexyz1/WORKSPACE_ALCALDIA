@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DashsolicitanteComponent } from './dashsolicitante.component';
+import { DataTableComponent } from './data-table.component';
 
-describe('DashsolicitanteComponent', () => {
-  let component: DashsolicitanteComponent;
-  let fixture: ComponentFixture<DashsolicitanteComponent>;
+describe('DataTableComponent', () => {
+  let component: DataTableComponent;
+  let fixture: ComponentFixture<DataTableComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashsolicitanteComponent]
+      imports: [DataTableComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DashsolicitanteComponent);
+    fixture = TestBed.createComponent(DataTableComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
