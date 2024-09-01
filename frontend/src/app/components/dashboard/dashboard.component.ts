@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import { initFlowbite } from 'flowbite';
+import { UserOptionComponent } from "../user-option/user-option.component";
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [],
+  imports: [UserOptionComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
