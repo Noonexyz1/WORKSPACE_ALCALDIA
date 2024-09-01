@@ -2,13 +2,13 @@ import { Component, OnInit } from '@angular/core';
 import { initFlowbite } from 'flowbite';
 
 @Component({
-  selector: 'app-dashsolicitante',
+  selector: 'app-dashboard',
   standalone: true,
   imports: [],
-  templateUrl: './dashsolicitante.component.html',
-  styleUrl: './dashsolicitante.component.css'
+  templateUrl: './dashboard.component.html',
+  styleUrl: './dashboard.component.css'
 })
-export class DashsolicitanteComponent implements OnInit{
+export class DashboardComponent implements OnInit{
 
   ngOnInit(): void {
     initFlowbite();
