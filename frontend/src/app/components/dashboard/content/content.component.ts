@@ -1,9 +1,10 @@
 import { Component } from '@angular/core';
+import { DataTableComponent } from "./data-table/data-table.component";
 
 @Component({
   selector: 'app-content',
   standalone: true,
-  imports: [],
+  imports: [DataTableComponent],
   templateUrl: './content.component.html',
   styleUrl: './content.component.css'
 })
