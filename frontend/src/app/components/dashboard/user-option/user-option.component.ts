@@ -8,5 +8,5 @@ import { Component } from '@angular/core';
   styleUrl: './user-option.component.css'
 })
 export class UserOptionComponent {
-
+  
 }
