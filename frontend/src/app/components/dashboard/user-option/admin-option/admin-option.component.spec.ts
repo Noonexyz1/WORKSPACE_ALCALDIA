@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RowTableComponent } from './row-table.component';
+import { AdminOptionComponent } from './admin-option.component';
 
-describe('RowTableComponent', () => {
-  let component: RowTableComponent;
-  let fixture: ComponentFixture<RowTableComponent>;
+describe('AdminOptionComponent', () => {
+  let component: AdminOptionComponent;
+  let fixture: ComponentFixture<AdminOptionComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RowTableComponent]
+      imports: [AdminOptionComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(RowTableComponent);
+    fixture = TestBed.createComponent(AdminOptionComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

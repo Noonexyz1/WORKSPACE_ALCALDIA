@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
-import { RowTableComponent } from "./row-table/row-table.component";
+import { RowTableUserComponent } from "./row-table-user/row-table-user.component";
+import { RowTableSoliComponent } from './row-table-soli/row-table-soli.component';
 
 @Component({
   selector: 'app-data-table',
   standalone: true,
-  imports: [RowTableComponent],
+  imports: [RowTableUserComponent, RowTableSoliComponent],
   templateUrl: './data-table.component.html',
   styleUrl: './data-table.component.css'
 })
