@@ -11,5 +11,5 @@ import { RowTableOpeComponent } from './row-table-ope/row-table-ope.component';
   styleUrl: './data-table.component.css'
 })
 export class DataTableComponent {
-
+  
 }

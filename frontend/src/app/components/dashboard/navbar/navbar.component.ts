@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   imports: [],
   templateUrl: './navbar.component.html',
   styleUrl: './navbar.component.css'
-})
+}) 
 export class NavbarComponent {
-
+  asdf = "";
 }
