@@ -32,16 +32,13 @@ public class LoginController {
                 .apellidos("Hamburguesa")
                 .build();
 
+        //Mediante el ROl, un rol tiene varios componentes para verlos
+        //uno de ellos es el admin-option
         List<DashboardConfigResponse> dashConfigList = new ArrayList<>();
         dashConfigList.add(DashboardConfigResponse.builder()
                         .id(1L)
-                        .nombreComponente("opcions")
+                        .nombreComponente("admin-option")
                         .datosCompononente("todas mis opciones")
-                        .build());
-        dashConfigList.add(DashboardConfigResponse.builder()
-                        .id(2L)
-                        .nombreComponente("datatable")
-                        .datosCompononente("datos de mi tabla")
                         .build());
 
         UsuarioResponse usuarioResponse = UsuarioResponse.builder()
