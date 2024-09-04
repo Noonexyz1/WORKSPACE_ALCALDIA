@@ -1,1 +1,7 @@
-<app-admin-option></app-admin-option>
+@if (usuario) {
+    @if (usuario!.listDashConfig[0].nombreComponente === 'admin-option') {
+        <app-admin-option></app-admin-option>
+    } @else {
+        <p>El usuario no ha iniciado sesión</p>
+    }
+}

@@ -1,21 +1,26 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { Usuario } from '../../model/Usuario';
 
 @Injectable({ providedIn: 'root' })
 export class SubjectUserService {
 
-  // Se supone que Subject deberia ser injectado porque Angular ya lo tiene en su IoC Container
-  // pero bueno
-  private subject$ = new Subject<Usuario>();
+  private subject$ = new BehaviorSubject<Usuario | null>(null); // Comienza con un valor nulo
 
-  constructor() { }
-
-  obtenerObservable(): Observable<Usuario> {
-      return this.subject$.asObservable();
+  constructor() {
+    const storedUser = localStorage.getItem('usuario');
+    if (storedUser) {
+      this.subject$.next(JSON.parse(storedUser)); // Emitir el usuario guardado al iniciar
+    }
   }
 
-  publicarDatos(valor: Usuario): void {
-      this.subject$.next(valor);
+  obtenerObservable(): Observable<Usuario | null> {
+    return this.subject$.asObservable();
+  }
+
+  public publicarDatos(valor: Usuario): void {
+    console.log('Publicando en el servicio (BehaviorSubject):', valor);
+    this.subject$.next(valor);
+    localStorage.setItem('usuario', JSON.stringify(valor)); // Guardar en localStorage
   }
 }
