@@ -1,7 +1,14 @@
 @if (usuario) {
     @if (usuario!.listDashConfig[0].nombreComponente === 'admin-option') {
         <app-admin-option></app-admin-option>
-    } @else {
-        <p>El usuario no ha iniciado sesión</p>
+    }
+    @if (usuario!.listDashConfig[0].nombreComponente === 'operador-option') {
+        <app-operador-option></app-operador-option>
+    }
+    @if (usuario!.listDashConfig[0].nombreComponente === 'responsable-option') {
+        <app-responsable-option></app-responsable-option>
+    }
+    @if (usuario!.listDashConfig[0].nombreComponente === 'solicitante-option') {
+        <app-solicitante-option></app-solicitante-option>
     }
 }

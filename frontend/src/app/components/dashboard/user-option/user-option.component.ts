@@ -2,11 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { AdminOptionComponent } from "./admin-option/admin-option.component";
 import { SubjectUserService } from '../../../services/subject-user/subject-user.service';
 import { Usuario } from '../../../model/Usuario';
+import { OperadorOptionComponent } from "./operador-option/operador-option.component";
+import { ResponsableOptionComponent } from "./responsable-option/responsable-option.component";
+import { SolicitanteOptionComponent } from "./solicitante-option/solicitante-option.component";
 
 @Component({
   selector: 'app-user-option',
   standalone: true,
-  imports: [AdminOptionComponent],
+  imports: [AdminOptionComponent, OperadorOptionComponent, ResponsableOptionComponent, SolicitanteOptionComponent],
   templateUrl: './user-option.component.html',
   styleUrl: './user-option.component.css'
 })
