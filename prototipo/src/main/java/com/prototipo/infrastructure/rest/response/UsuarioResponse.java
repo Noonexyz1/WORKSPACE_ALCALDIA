@@ -18,10 +18,8 @@ public class UsuarioResponse {
     private String apellidos;
 
     // Relación reflexiva: un empleado puede tener un gerente
-    @ManyToOne
     private UsuarioResponse fk_responsable;
 
-    @ManyToOne
     private RolResponse fk_rol;
 
     private List<DashboardConfigResponse> listDashConfig;

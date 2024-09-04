@@ -20,9 +20,14 @@ VALUES
 insert into prototipo.rol(nombre_rol)
 values("Administrador"),
 ("Solicitante"),
-("Operador");
+("Operador"),
+("Responsable");
 
-
+INSERT INTO prototipo.dashboard_config (fk_rol_id, nombre_componente)
+VALUES(1 ID, 1 FK, "admin-option"),
+(2 ID, 2 FK, "solicitante-option"),
+(3 ID, 3 FK, "operador-option"),
+(4 ID, 4 FK, "responsable-option");
 
 
 INSERT INTO prototipo.insumo(detalle, fecha_reporte, formato, tipo_reporte)
