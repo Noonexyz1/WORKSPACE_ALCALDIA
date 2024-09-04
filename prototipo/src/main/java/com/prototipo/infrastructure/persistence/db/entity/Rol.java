@@ -23,4 +23,7 @@ public class Rol {
 
     @OneToMany(mappedBy = "fk_rol")
     private List<Usuario> listRoles;
+
+    @OneToMany(mappedBy = "fk_rol")
+    private List<DashboardConfig> listDashConfig;
 }
