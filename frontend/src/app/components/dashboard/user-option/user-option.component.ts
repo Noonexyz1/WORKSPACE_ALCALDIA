@@ -9,5 +9,6 @@ import { AdminOptionComponent } from "./admin-option/admin-option.component";
   styleUrl: './user-option.component.css'
 })
 export class UserOptionComponent {
-    
+  //Desde aqui tiene que hacerse una peticion POST para traer la informacion del usuario response
+      
 }
