@@ -11,5 +11,16 @@ import { InfoSolicitudComponent } from "./info-solicitud/info-solicitud.componen
   styleUrl: './admin-option.component.css'
 })
 export class AdminOptionComponent {
+  
+  botonListaUsuarios(): void {
+    alert('Lista de usuarios');
+  }
 
+  botonListaSolicitudes(): void {
+    alert('Lista de solicitudes');
+  }
+
+  botonGenerarReporte(): void {
+    alert('Generar Reporte');
+  }
 }
