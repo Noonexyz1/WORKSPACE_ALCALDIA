@@ -63,9 +63,14 @@
 
     <!--Aqui debe ir los @if de angular para mostrar los valores del cual se van a mostrar
     de acuerdo a los botones de opciones de usuario-->
-    <app-data-table></app-data-table>
-    <app-form-nuevo-usuario></app-form-nuevo-usuario>
-    <br>
-    <app-info-solicitud></app-info-solicitud>
+    @if (opcion === 1) {
+        <app-data-table></app-data-table>
+    }
+    @if (opcion === 2) {
+        <app-form-nuevo-usuario></app-form-nuevo-usuario>
+    }
+    @if (opcion === 3) {
+        <app-info-solicitud></app-info-solicitud>
+    }
 
 </main>

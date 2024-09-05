@@ -12,15 +12,17 @@ import { InfoSolicitudComponent } from "./info-solicitud/info-solicitud.componen
 })
 export class AdminOptionComponent {
   
+  opcion: number = 1;
+
   botonListaUsuarios(): void {
-    alert('Lista de usuarios');
+    this.opcion = 1;
   }
 
   botonListaSolicitudes(): void {
-    alert('Lista de solicitudes');
+    this.opcion = 2;
   }
 
   botonGenerarReporte(): void {
-    alert('Generar Reporte');
+    this.opcion = 3;
   }
 }
