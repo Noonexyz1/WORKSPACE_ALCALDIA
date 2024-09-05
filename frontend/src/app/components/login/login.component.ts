@@ -43,9 +43,6 @@ export class LoginComponent {
     ]
   }
 
-  //ME PARECE QUE NO SE ESTA PUBLICANDO MI USUARIO
-  //PORQUE EL OBSERVADOR NO LA TRAE
-
   constructor(route: Router, subjectUserOption: SubjectUserService) {
     this.route = route;
     this.subjectUserOption = subjectUserOption;
