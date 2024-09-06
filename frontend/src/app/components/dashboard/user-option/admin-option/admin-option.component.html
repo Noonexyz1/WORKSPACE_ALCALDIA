@@ -21,8 +21,8 @@
         </form>
         <ul class="space-y-2 border-b-4 pb-4 rounded-lg">
             <li>
-                <a href="#"
-                    class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <a (click)="botonListaUsuarios()"
+                    class="cursor-pointer flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <svg class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                         viewBox="0 0 24 24">
@@ -33,8 +33,8 @@
                 </a>
             </li>
             <li>
-                <a href="#"
-                    class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <a (click)="botonListaSolicitudes()"
+                    class="cursor-pointer flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <svg class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                         viewBox="0 0 24 24">
@@ -45,8 +45,8 @@
                 </a>
             </li>
             <li>
-                <a href="#"
-                    class="flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <a (click)="botonGenerarReporte()"
+                    class="cursor-pointer flex items-center p-2 text-base font-medium text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
                     <svg class="w-6 h-6 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"
                         aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
                         viewBox="0 0 24 24">
@@ -63,9 +63,14 @@
 
     <!--Aqui debe ir los @if de angular para mostrar los valores del cual se van a mostrar
     de acuerdo a los botones de opciones de usuario-->
-    <app-data-table></app-data-table>
-    <app-form-nuevo-usuario></app-form-nuevo-usuario>
-    <br>
-    <app-info-solicitud></app-info-solicitud>
+    @if (opcion === 1) {
+        <app-lista-usuarios></app-lista-usuarios>
+    }
+    @if (opcion === 2) {
+        <app-form-nuevo-usuario></app-form-nuevo-usuario>
+    }
+    @if (opcion === 3) {
+        <app-info-solicitud></app-info-solicitud>
+    }
 
 </main>

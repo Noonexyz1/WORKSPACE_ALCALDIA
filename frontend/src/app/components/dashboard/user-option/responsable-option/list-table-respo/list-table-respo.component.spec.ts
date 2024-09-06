@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DataTableComponent } from './data-table.component';
+import { ListTableRespoComponent } from './list-table-respo.component';
 
-describe('DataTableComponent', () => {
-  let component: DataTableComponent;
-  let fixture: ComponentFixture<DataTableComponent>;
+describe('ListTableRespoComponent', () => {
+  let component: ListTableRespoComponent;
+  let fixture: ComponentFixture<ListTableRespoComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DataTableComponent]
+      imports: [ListTableRespoComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(DataTableComponent);
+    fixture = TestBed.createComponent(ListTableRespoComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
