@@ -11,4 +11,13 @@ import { InfoSolicitudOpeComponent } from './info-solicitud-ope/info-solicitud-o
 })
 export class OperadorOptionComponent {
 
+  opcion = 1;
+
+  botonListaSolicitudes(): void {
+    this.opcion = 1;
+  }
+
+  botonVerSolicitud(): void {
+    this.opcion = 2;
+  }
 }

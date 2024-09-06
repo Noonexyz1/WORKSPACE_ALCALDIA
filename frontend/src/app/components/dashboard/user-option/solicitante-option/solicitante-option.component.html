@@ -43,8 +43,14 @@
 </aside>
 <main class="p-4 md:ml-64 h-auto pt-20">
 
-    <app-list-table-soli></app-list-table-soli>
-    <app-form-nueva-solicitud></app-form-nueva-solicitud>
-    <app-form-nuevo-pass></app-form-nuevo-pass>
+    @if (opcion === 1) {
+        <app-list-table-soli></app-list-table-soli>
+    }
+    @if (opcion === 2) {
+        <app-form-nueva-solicitud></app-form-nueva-solicitud>
+    }
+    @if (opcion === 3) {
+        <app-form-nuevo-pass></app-form-nuevo-pass>
+    }
     
 </main>

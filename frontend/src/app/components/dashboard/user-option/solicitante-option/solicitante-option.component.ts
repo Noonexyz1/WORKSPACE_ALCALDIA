@@ -12,4 +12,16 @@ import { FormNuevoPassComponent } from './form-nuevo-pass/form-nuevo-pass.compon
 })
 export class SolicitanteOptionComponent {
 
+  opcion = 1;
+
+  botonListaSolicitudes(): void {
+    this.opcion = 1;
+  }
+
+  botonNuevaSolicitud(): void {
+    this.opcion = 2;
+  }
+  botonNuevoPass(): void {
+    this.opcion = 3;
+  }
 }

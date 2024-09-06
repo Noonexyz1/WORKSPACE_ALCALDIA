@@ -10,5 +10,14 @@ import { InfoSolicitudRespoComponent } from './info-solicitud-respo/info-solicit
   styleUrl: './responsable-option.component.css'
 })
 export class ResponsableOptionComponent {
+  
+  opcion = 1;
 
+  botonListaSolicitudes(): void {
+    this.opcion = 1;
+  }
+
+  botonVerSolicitud(): void {
+    this.opcion = 2;
+  }
 }

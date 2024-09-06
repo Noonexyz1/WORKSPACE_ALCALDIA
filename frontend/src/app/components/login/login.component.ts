@@ -37,7 +37,7 @@ export class LoginComponent {
     "listDashConfig": [
       {
         "id": 1,
-        "nombreComponente": "solicitante-option",
+        "nombreComponente": "operador-option",
         "datosCompononente": "todas mis opciones"
       }
     ]
