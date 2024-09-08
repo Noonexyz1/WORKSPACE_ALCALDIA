@@ -1,28 +1,38 @@
 import { Component } from '@angular/core';
-import { FormNuevoUsuarioComponent } from "./form-nuevo-usuario/form-nuevo-usuario.component";
-import { InfoSolicitudComponent } from "./info-solicitud/info-solicitud.component";
-import { ListaUsuariosComponent } from "./lista-usuarios/lista-usuarios.component";
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-admin-option',
   standalone: true,
-  imports: [FormNuevoUsuarioComponent, InfoSolicitudComponent, ListaUsuariosComponent],
+  imports: [RouterOutlet],
   templateUrl: './admin-option.component.html',
   styleUrl: './admin-option.component.css'
 })
 export class AdminOptionComponent {
-  
-  opcion: number = 1;
+
+  private router: Router;
+
+  constructor(route: Router) {
+    this.router = route;
+  }
 
   botonListaUsuarios(): void {
-    this.opcion = 1;
+    this.router.navigate(['/dashboard/admin/listaUsuarios']);
   }
-
+  
   botonListaSolicitudes(): void {
-    this.opcion = 2;
+    this.router.navigate(['/dashboard/admin/listaSolicitudes']);
+  }
+  
+  botonNuevoUsuario(): void {
+    this.router.navigate(['/dashboard/admin/nuevoUsuario']);
+  }
+  
+  botonGenerarReporte(): void {
+    this.router.navigate(['/dashboard/admin/****************']);
   }
 
-  botonGenerarReporte(): void {
-    this.opcion = 3;
+  botonCambiarContrasena(): void {
+    this.router.navigate(['/dashboard/admin/cambioPass']);
   }
 }
