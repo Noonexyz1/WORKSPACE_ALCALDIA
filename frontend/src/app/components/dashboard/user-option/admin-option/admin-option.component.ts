@@ -20,10 +20,6 @@ export class AdminOptionComponent {
     this.router.navigate(['/dashboard/admin/listaUsuarios']);
   }
   
-  botonListaSolicitudes(): void {
-    this.router.navigate(['/dashboard/admin/listaSolicitudes']);
-  }
-  
   botonNuevoUsuario(): void {
     this.router.navigate(['/dashboard/admin/nuevoUsuario']);
   }

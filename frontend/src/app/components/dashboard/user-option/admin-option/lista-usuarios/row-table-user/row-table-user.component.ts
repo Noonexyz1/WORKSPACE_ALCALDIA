@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-row-table-user',
@@ -9,4 +10,16 @@ import { Component } from '@angular/core';
 })
 export class RowTableUserComponent {
 
+  private router: Router;
+
+  constructor(router: Router) {
+    this.router = router;
+  }
+
+  botonVerUsuario(): void { 
+    this.router.navigate(['/dashboard/admin/listaUsuarios/ver']);
+  }
+  botonEditarUsuario(): void { 
+    this.router.navigate(['/dashboard/admin/listaUsuarios/editar']);
+  }
 }

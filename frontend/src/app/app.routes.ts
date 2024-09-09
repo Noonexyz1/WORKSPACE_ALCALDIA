@@ -4,8 +4,8 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ListaUsuariosComponent } from './components/dashboard/user-option/admin-option/lista-usuarios/lista-usuarios.component';
 import { FormNuevoUsuarioComponent } from './components/dashboard/user-option/admin-option/form-nuevo-usuario/form-nuevo-usuario.component';
 import { AdminOptionComponent } from './components/dashboard/user-option/admin-option/admin-option.component';
-import { ListaSoliAdminComponent } from './components/dashboard/user-option/admin-option/lista-soli-admin/lista-soli-admin.component';
 import { FormNuevoPassAdminComponent } from './components/dashboard/user-option/admin-option/form-nuevo-pass-admin/form-nuevo-pass-admin.component';
+import { EditarUsuarioAdminComponent } from './components/dashboard/user-option/admin-option/editar-usuario-admin/editar-usuario-admin.component';
 
 export const routes: Routes = [
     {path: "", redirectTo: "/login", pathMatch: "full"},
@@ -21,10 +21,12 @@ export const routes: Routes = [
                     {   
                         path: "listaUsuarios", 
                         component: ListaUsuariosComponent,
-                    },
-                    {   
-                        path: "listaSolicitudes", 
-                        component: ListaSoliAdminComponent,
+                        children: [
+                            {   
+                                path: "editar", 
+                                component: EditarUsuarioAdminComponent,
+                            },
+                        ]
                     },
                     {   
                         path: "nuevoUsuario", 
