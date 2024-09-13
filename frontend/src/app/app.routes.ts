@@ -1,96 +1,88 @@
 import { Routes } from '@angular/router';
 import { LoginComponent } from './components/login/login.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
-import { ListaUsuariosComponent } from './components/dashboard/user-option/admin-option/lista-usuarios/lista-usuarios.component';
-import { FormNuevoUsuarioComponent } from './components/dashboard/user-option/admin-option/form-nuevo-usuario/form-nuevo-usuario.component';
-import { AdminOptionComponent } from './components/dashboard/user-option/admin-option/admin-option.component';
-import { FormNuevoPassAdminComponent } from './components/dashboard/user-option/admin-option/form-nuevo-pass-admin/form-nuevo-pass-admin.component';
-import { EditarUsuarioAdminComponent } from './components/dashboard/user-option/admin-option/editar-usuario-admin/editar-usuario-admin.component';
+import { AdministradorComponent } from './components/administrador/administrador.component';
+import { ListaDeUsuariosComponent } from './components/shared/lista-de-usuarios/lista-de-usuarios.component';
+import { NuevoUsuarioComponent } from './components/shared/nuevo-usuario/nuevo-usuario.component';
+import { CambiarPassComponent } from './components/shared/cambiar-pass/cambiar-pass.component';
+import { GenerarReporteComponent } from './components/shared/generar-reporte/generar-reporte.component';
+import { OperadorComponent } from './components/operador/operador.component';
+import { ListaDeSolicitudesComponent } from './components/shared/lista-de-solicitudes/lista-de-solicitudes.component';
+import { NuevaSolicitudComponent } from './components/shared/nueva-solicitud/nueva-solicitud.component';
+import { SolicitanteComponent } from './components/solicitante/solicitante.component';
+import { ResponsableComponent } from './components/responsable/responsable.component';
 
 export const routes: Routes = [
-    {path: "", redirectTo: "/login", pathMatch: "full"},
-    {path: "login", component: LoginComponent},
+    { path: '', redirectTo: "login", pathMatch: "full" },
+    { path: 'login', component: LoginComponent },
     {
-        path: "dashboard", 
-        component: DashboardComponent,
+        path: 'administrador',
+        component: AdministradorComponent,
         children: [
-            {   
-                path: "admin", 
-                component: AdminOptionComponent,
-                children: [
-                    {   
-                        path: "listaUsuarios", 
-                        component: ListaUsuariosComponent,
-                        children: [
-                            {   
-                                path: "editar", 
-                                component: EditarUsuarioAdminComponent,
-                            },
-                        ]
-                    },
-                    {   
-                        path: "nuevoUsuario", 
-                        component: FormNuevoUsuarioComponent,
-                    },        
-                    {   
-                        path: "cambioPass", 
-                        component: FormNuevoPassAdminComponent,
-                    },        
-                ]
+            {
+                path: 'listaDeUsuarios',
+                component: ListaDeUsuariosComponent,
             },
-            {   
-                path: "operador", 
-                component: AdminOptionComponent,
-                children: [
-                    {   
-                        path: "listaUsuarios", 
-                        component: ListaUsuariosComponent,
-                    },
-                    {   
-                        path: "listaUsuarios", 
-                        component: ListaUsuariosComponent,
-                    },
-                    {   
-                        path: "nuevoUsuario", 
-                        component: FormNuevoUsuarioComponent,
-                    },        
-                ]
+            {
+                path: 'nuevoUsuario',
+                component: NuevoUsuarioComponent,
             },
-            {   
-                path: "responsable", 
-                component: AdminOptionComponent,
-                children: [
-                    {   
-                        path: "listaUsuarios", 
-                        component: ListaUsuariosComponent,
-                    },
-                    {   
-                        path: "listaUsuarios", 
-                        component: ListaUsuariosComponent,
-                    },
-                    {   
-                        path: "nuevoUsuario", 
-                        component: FormNuevoUsuarioComponent,
-                    },        
-                ]
+            {
+                path: 'generarReporte',
+                component: GenerarReporteComponent,
             },
-            {   
-                path: "solicitante", 
-                component: AdminOptionComponent,
-                children: [
-                    {   
-                        path: "listaUsuarios", 
-                        component: ListaUsuariosComponent,
-                    },
-                    {   
-                        path: "listaUsuarios", 
-                        component: ListaUsuariosComponent,
-                    },
-                    {   
-                        path: "nuevoUsuario", 
-                        component: FormNuevoUsuarioComponent,
-                    },        
-                ]
+            {
+                path: 'cambiarPass',
+                component: CambiarPassComponent,
+            },
+        ]
+    },
+    {
+        path: 'operador',
+        component: OperadorComponent,
+        children: [
+            {
+                path: 'listaDeSolicitudes',
+                component: ListaDeSolicitudesComponent,
+            },
+            {
+                path: 'cambiarEstado',
+                component: NuevoUsuarioComponent,
+            },
+            {
+                path: 'cambiarPass',
+                component: CambiarPassComponent,
+            },
+        ]
+    },
+    {
+        path: 'solicitante',
+        component: SolicitanteComponent,
+        children: [
+            {
+                path: 'misSolicitudes',
+                component: ListaDeSolicitudesComponent,
+            },
+            {
+                path: 'nuevaSolicitud',
+                component: NuevaSolicitudComponent,
+            },
+            {
+                path: 'cambiarPass',
+                component: CambiarPassComponent,
+            },
+        ]
+    },
+    {
+        path: 'responsable',
+        component: ResponsableComponent,
+        children: [
+            {
+                path: 'solicitudesUnidad',
+                component: ListaDeSolicitudesComponent,
+            },
+            {
+                path: 'cambiarPass',
+                component: CambiarPassComponent,
             },
         ]
     },
