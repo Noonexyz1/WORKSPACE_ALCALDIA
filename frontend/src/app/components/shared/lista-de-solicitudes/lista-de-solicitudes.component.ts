@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { RowTableSoliOpeComponent } from "./row-table-soli-ope/row-table-soli-ope.component";
+import { RowTableSolicitudesComponent } from "./row-table-solicitudes/row-table-solicitudes.component";
 
 @Component({
   selector: 'app-lista-de-solicitudes',
   standalone: true,
-  imports: [RowTableSoliOpeComponent],
+  imports: [RowTableSolicitudesComponent],
   templateUrl: './lista-de-solicitudes.component.html',
   styleUrl: './lista-de-solicitudes.component.css'
 })
