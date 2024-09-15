@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { RowTableSoliOpeComponent } from './row-table-soli-ope.component';
+import { EditarUsuarioComponent } from './editar-usuario.component';
 
-describe('RowTableSoliOpeComponent', () => {
-  let component: RowTableSoliOpeComponent;
-  let fixture: ComponentFixture<RowTableSoliOpeComponent>;
+describe('EditarUsuarioComponent', () => {
+  let component: EditarUsuarioComponent;
+  let fixture: ComponentFixture<EditarUsuarioComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RowTableSoliOpeComponent]
+      imports: [EditarUsuarioComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(RowTableSoliOpeComponent);
+    fixture = TestBed.createComponent(EditarUsuarioComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

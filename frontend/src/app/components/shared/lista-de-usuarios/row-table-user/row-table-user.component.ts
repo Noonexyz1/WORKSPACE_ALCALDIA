@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-row-table-user',
   standalone: true,
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './row-table-user.component.html',
   styleUrl: './row-table-user.component.css'
 })
@@ -15,11 +15,8 @@ export class RowTableUserComponent {
   constructor(router: Router) {
     this.router = router;
   }
-
-  botonVerUsuario(): void { 
-    this.router.navigate(['/dashboard/admin/listaUsuarios/ver']);
-  }
+  
   botonEditarUsuario(): void { 
-    this.router.navigate(['/dashboard/admin/listaUsuarios/editar']);
+    this.router.navigate(['/administrador/editarUsuario']);
   }
 }

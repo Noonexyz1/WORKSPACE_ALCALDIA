@@ -10,6 +10,9 @@ import { ListaDeSolicitudesComponent } from './components/shared/lista-de-solici
 import { NuevaSolicitudComponent } from './components/shared/nueva-solicitud/nueva-solicitud.component';
 import { SolicitanteComponent } from './components/solicitante/solicitante.component';
 import { ResponsableComponent } from './components/responsable/responsable.component';
+import { EditarUsuarioComponent } from './components/shared/editar-usuario/editar-usuario.component';
+import { ListaSoliResponsableComponent } from './components/shared/lista-soli-responsable/lista-soli-responsable.component';
+import { ListaSoliOperadorComponent } from './components/shared/lista-soli-operador/lista-soli-operador.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: "login", pathMatch: "full" },
@@ -34,6 +37,10 @@ export const routes: Routes = [
                 path: 'cambiarPass',
                 component: CambiarPassComponent,
             },
+            {
+                path: 'editarUsuario',
+                component: EditarUsuarioComponent,
+            },
         ]
     },
     {
@@ -42,7 +49,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'listaDeSolicitudes',
-                component: ListaDeSolicitudesComponent,
+                component: ListaSoliOperadorComponent,
             },
             {
                 path: 'cambiarEstado',
@@ -78,7 +85,7 @@ export const routes: Routes = [
         children: [
             {
                 path: 'solicitudesUnidad',
-                component: ListaDeSolicitudesComponent,
+                component: ListaSoliResponsableComponent,
             },
             {
                 path: 'cambiarPass',
