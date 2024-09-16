@@ -21,7 +21,6 @@ public class DashboardConfig {
     private Long id;
 
     private String nombreComponente;
-    private String datosCompononente;
 
     @ManyToOne
     private Rol fk_rol;

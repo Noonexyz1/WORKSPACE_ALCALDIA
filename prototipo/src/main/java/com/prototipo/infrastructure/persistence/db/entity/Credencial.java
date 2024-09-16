@@ -18,8 +18,8 @@ public class Credencial {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
-    private String correo;
-    private String password;
+    private String nombreUser;
+    private String pass;
 
     @OneToOne
     private Usuario fk_usuario;
