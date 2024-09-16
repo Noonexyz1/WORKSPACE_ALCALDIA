@@ -1,13 +1,13 @@
-package com.prototipo.application.impl;
+package com.prototipo.application.adapter;
 
-import com.prototipo.application.port.OperadorService;
-import com.prototipo.application.port.SolicitudPersist;
+import com.prototipo.application.useCase.OperadorService;
+import com.prototipo.application.useCase.SolicitudPersist;
 import com.prototipo.domain.enums.EstadoSolicitud;
 import com.prototipo.domain.model.Solicitud;
 
 import java.util.List;
 
-public class OperadorImpl  implements OperadorService {
+public class OperadorAdapter implements OperadorService {
 
     private SolicitudPersist solicitudPersist;
 
