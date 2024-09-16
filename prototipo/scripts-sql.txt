@@ -50,36 +50,36 @@ VALUES
 
 
 #INSERTAMOS USUARIOS
-INSERT INTO usuario (fk_responsable_id, fk_rol_id, fk_unidad_id, apellidos, nombres)
-VALUES (NULL, 1, 3, 'Perez', 'Ana'),
-(NULL, 2, 1, 'Lopez', 'Carlos'),
-(NULL, 2, 2, 'Garcia', 'Maria'),
-(NULL, 2, 4, 'Hernandez', 'Jose'),
-(NULL, 2, 5, 'Martinez', 'Luisa'),
-(NULL, 2, 6, 'Gonzales', 'David'),
-(NULL, 2, 9, 'Ramirez', 'Miguel'),
-(3, 2, 2, 'Vargas', 'Sandra'),
-(3, 2, 2, 'Roberto', 'Castillo'),
-(3, 2, 2, 'Claudia', 'Ortega'),
-(4, 2, 4, 'Silva', 'Andres'),
-(4, 2, 4, 'Rios', 'Gabriel'),
-(4, 2, 4, 'Fernandez', 'Sofia'),
-(5, 2, 5, 'Pena', 'Tomas'),
-(5, 2, 5, 'Duarte', 'Patricia'),
-(5, 2, 5, 'Herrera', 'Ignacio'),
-(6, 2, 6, 'Rojas', 'Pablo'),
-(6, 2, 6, 'Salazar', 'Veronica'),
-(6, 2, 6, 'Mejia', 'Ricardo'),
-(7, 2, 9, 'Cervantes', 'Nataliza'),
-(7, 2, 9, 'Ibarra', 'Gillermo'),
-(3, 3, 2, 'Barrios', 'Javier'),
-(3, 3, 2, 'Sanchez', 'Laura'),
-(4, 3, 4, 'Jimenez', 'Raul'),
-(4, 3, 4, 'Alvarez', 'Sonia'),
-(5, 3, 5, 'Campoz', 'Estevan'),
-(5, 3, 5, 'Duarte', 'Patricia'),
-(7, 3, 9, 'Morales', 'Raul'),
-(7, 3, 9, 'Salazar ', 'Claudio');
+INSERT INTO usuario (fk_responsable_id, fk_rol_id, apellidos, nombres)
+VALUES (NULL, 1, 'Perez', 'Ana'),
+(NULL, 2, 'Lopez', 'Carlos'),
+(NULL, 2, 'Garcia', 'Maria'),
+(NULL, 2, 'Hernandez', 'Jose'),
+(NULL, 2, 'Martinez', 'Luisa'),
+(NULL, 2, 'Gonzales', 'David'),
+(NULL, 2, 'Ramirez', 'Miguel'),
+(3, 2, 'Vargas', 'Sandra'),
+(3, 2, 'Roberto', 'Castillo'),
+(3, 2, 'Claudia', 'Ortega'),
+(4, 2, 'Silva', 'Andres'),
+(4, 2, 'Rios', 'Gabriel'),
+(4, 2, 'Fernandez', 'Sofia'),
+(5, 2, 'Pena', 'Tomas'),
+(5, 2, 'Duarte', 'Patricia'),
+(5, 2, 'Herrera', 'Ignacio'),
+(6, 2, 'Rojas', 'Pablo'),
+(6, 2, 'Salazar', 'Veronica'),
+(6, 2, 'Mejia', 'Ricardo'),
+(7, 2, 'Cervantes', 'Nataliza'),
+(7, 2, 'Ibarra', 'Gillermo'),
+(3, 3, 'Barrios', 'Javier'),
+(3, 3, 'Sanchez', 'Laura'),
+(4, 3, 'Jimenez', 'Raul'),
+(4, 3, 'Alvarez', 'Sonia'),
+(5, 3, 'Campoz', 'Estevan'),
+(5, 3, 'Duarte', 'Patricia'),
+(7, 3, 'Morales', 'Raul'),
+(7, 3, 'Salazar ', 'Claudio');
 
 
 
@@ -89,46 +89,54 @@ SELECT * FROM usuario;
 SELECT * FROM insumo;
 
 
+
+INSERT INTO prototipo.dashboard_config(fk_rol_id, nombre_componente)
+VALUES(1, 'administrador')
+
+SELECT * FROM dashboard_config;
+
+
+
 SELECT usuario.nombres, usuario.apellidos, unidad.nombre, usuario.fk_unidad_id
 FROM usuario, unidad
 WHERE unidad.id = usuario.fk_unidad_id;
 
 
 #INSETANDO A CREDENCIALES
-INSERT INTO prototipo.credencial(correo, password, fk_usuario_id)
-VALUES('ana.perez@dominio.com', 'password123', 1),    -- Ana Perez
-('carlos.lopez@dominio.com', 'password123', 2), -- Carlos Lopez
-('maria.garcia@dominio.com', 'password123', 3), -- Maria Garcia
-('jose.hernandez@dominio.com', 'password123', 4), -- Jose Hernandez
-('luisa.martinez@dominio.com', 'password123', 5), -- Luisa Martinez
-('david.gonzales@dominio.com', 'password123', 6), -- David Gonzales
-('miguel.ramirez@dominio.com', 'password123', 7), -- Miguel Ramirez
-('sandra.vargas@dominio.com', 'password123', 8), -- Sandra Vargas
-('roberto.castillo@dominio.com', 'password123', 9), -- Roberto Castillo
-('claudia.ortega@dominio.com', 'password123', 10), -- Claudia Ortega
-('andres.silva@dominio.com', 'password123', 11), -- Andres Silva
-('gabriel.rios@dominio.com', 'password123', 12), -- Gabriel Rios
-('sofia.fernandez@dominio.com', 'password123', 13), -- Sofia Fernandez
-('tomas.pena@dominio.com', 'password123', 14), -- Tomas Pena
-('patricia.duarte@dominio.com', 'password123', 15), -- Patricia Duarte
-('ignacio.herrera@dominio.com', 'password123', 16), -- Ignacio Herrera
-('pablo.rojas@dominio.com', 'password123', 17), -- Pablo Rojas
-('veronica.salazar@dominio.com', 'password123', 18), -- Veronica Salazar
-('ricardo.mejia@dominio.com', 'password123', 19), -- Ricardo Mejia
-('nataliza.cervantes@dominio.com', 'password123', 20), -- Nataliza Cervantes
-('gillermo.ibarra@dominio.com', 'password123', 21), -- Gillermo Ibarra
-('javier.barrios@dominio.com', 'password123', 22), -- Javier Barrios
-('laura.sanchez@dominio.com', 'password123', 23), -- Laura Sanchez
-('raul.jimenez@dominio.com', 'password123', 24), -- Raul Jimenez
-('sonia.alvarez@dominio.com', 'password123', 25), -- Sonia Alvarez
-('estevan.campoz@dominio.com', 'password123', 26), -- Estevan Campoz
-('patricia.duarte2@dominio.com', 'password123', 27), -- Patricia Duarte
-('raul.morales@dominio.com', 'password123', 28), -- Raul Morales
-('claudio.salazar@dominio.com', 'password123', 29); -- Claudio Salazar
-
-
+INSERT INTO prototipo.credencial(nombre_user , pass, fk_usuario_id)
+VALUES('ana.perez', 'password123', 1),    -- Ana Perez
+('carlos.lopez', 'password123', 2), -- Carlos Lopez
+('maria.garcia', 'password123', 3), -- Maria Garcia
+('jose.hernandez', 'password123', 4), -- Jose Hernandez
+('luisa.martinez', 'password123', 5), -- Luisa Martinez
+('david.gonzales', 'password123', 6), -- David Gonzales
+('miguel.ramirez', 'password123', 7), -- Miguel Ramirez
+('sandra.vargas', 'password123', 8), -- Sandra Vargas
+('roberto.castillo', 'password123', 9), -- Roberto Castillo
+('claudia.ortega', 'password123', 10), -- Claudia Ortega
+('andres.silva', 'password123', 11), -- Andres Silva
+('gabriel.rios', 'password123', 12), -- Gabriel Rios
+('sofia.fernandez', 'password123', 13), -- Sofia Fernandez
+('tomas.pena', 'password123', 14), -- Tomas Pena
+('patricia.duarte', 'password123', 15), -- Patricia Duarte
+('ignacio.herrera', 'password123', 16), -- Ignacio Herrera
+('pablo.rojas', 'password123', 17), -- Pablo Rojas
+('veronica.salazar', 'password123', 18), -- Veronica Salazar
+('ricardo.mejia', 'password123', 19), -- Ricardo Mejia
+('nataliza.cervantes', 'password123', 20), -- Nataliza Cervantes
+('gillermo.ibarra', 'password123', 21), -- Gillermo Ibarra
+('javier.barrios', 'password123', 22), -- Javier Barrios
+('laura.sanchez', 'password123', 23), -- Laura Sanchez
+('raul.jimenez', 'password123', 24), -- Raul Jimenez
+('sonia.alvarez', 'password123', 25), -- Sonia Alvarez
+('estevan.campoz', 'password123', 26), -- Estevan Campoz
+('patricia.duarte2', 'password123', 27), -- Patricia Duarte
+('raul.morales', 'password123', 28), -- Raul Morales
+('claudio.salazar', 'password123', 29); -- Claudio Salazar
 
 SELECT * FROM credencial;
+
+
 
 #INSERTAMOS REGISTROS A LA TABLA SOLICITUD
 INSERT INTO solicitud(fk_solicitante_id, nro_de_copias, nro_de_paginas, tipo_de_documento, notificacion_to_aprobar, estado_solicitud)

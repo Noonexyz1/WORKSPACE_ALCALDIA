@@ -1,53 +1,43 @@
 package com.prototipo.infrastructure.rest.controller;
 
-
+import com.prototipo.infrastructure.persistence.db.entity.Credencial;
+import com.prototipo.infrastructure.persistence.db.entity.DashboardConfig;
+import com.prototipo.infrastructure.persistence.db.entity.Rol;
+import com.prototipo.infrastructure.persistence.db.entity.Usuario;
+import com.prototipo.infrastructure.persistence.db.repository.CredencialRepository;
 import com.prototipo.infrastructure.rest.request.CredencialRequest;
-import com.prototipo.infrastructure.rest.response.DashboardConfigResponse;
-import com.prototipo.infrastructure.rest.response.RolResponse;
 import com.prototipo.infrastructure.rest.response.UsuarioResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
-//@CrossOrigin(origins = "*", maxAge = 86400)
+@CrossOrigin(origins = "*", maxAge = 86400)
 //@Validated
 @RestController
 @RequestMapping(path = "/dologin")
 public class LoginController {
 
+    @Autowired
+    private CredencialRepository credencialRepository;
+
     @PostMapping(path = {""}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UsuarioResponse> iniciarSesion(@RequestBody CredencialRequest request){
-        RolResponse rol = RolResponse.builder()
-                .id(23L)
-                .nombreRol("Administrador")
-                .build();
+        Credencial credencial = credencialRepository.findById(1L).get();
+        Usuario usuario = credencial.getFk_usuario();
+        Rol rol = usuario.getFk_rol();
+        List<DashboardConfig> dashboardConfig = rol.getListDashConfig();
 
-        UsuarioResponse jefe = UsuarioResponse.builder()
-                .id(23L)
-                .nombres("Juanito")
-                .apellidos("Hamburguesa")
-                .build();
-
-        //Mediante el ROl, un rol tiene varios componentes para verlos
-        //uno de ellos es el admin-option
-        List<DashboardConfigResponse> dashConfigList = new ArrayList<>();
-        dashConfigList.add(DashboardConfigResponse.builder()
-                        .id(1L)
-                        .nombreComponente("admin-option")
-                        .datosCompononente("todas mis opciones")
-                        .build());
+        List<String> listaConfig = dashboardConfig.stream().map(DashboardConfig::getNombreComponente).toList();
 
         UsuarioResponse usuarioResponse = UsuarioResponse.builder()
-                .id(23L)
-                .nombres("Pablito")
-                .apellidos("De la Roble")
-                .fk_responsable(jefe)
-                .fk_rol(rol)
-                .listDashConfig(dashConfigList)
+                .nombres(usuario.getNombres())
+                .apellidos(usuario.getApellidos())
+                .nombreRol(rol.getNombreRol())
+                .listDashConfig(listaConfig)
                 .build();
 
         return new ResponseEntity<>(usuarioResponse, HttpStatus.OK);
