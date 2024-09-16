@@ -1,18 +1,19 @@
-package com.prototipo.domain.model;
+package com.prototipo.application.modelDto;
 
 import com.prototipo.domain.enums.Rol;
+import com.prototipo.domain.model.Credencial;
 import lombok.Builder;
 import lombok.Getter;
 
 @Getter
 @Builder
-public class Usuario {
+public class UsuarioDto {
 
     private Long id;
     private String nombres;
     private String apellidos;
 
-    private Usuario responsable;
+    private UsuarioDto responsable;
     private Credencial credencial;
     private Rol rol;
 }

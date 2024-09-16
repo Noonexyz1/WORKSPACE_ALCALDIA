@@ -51,11 +51,6 @@ public class Usuario {
     private List<Aprobacion> listaAprobacion;
 
 
-
-
-
-
-
     @OneToMany(mappedBy = "fk_operador")
     private List<Aprobacion> listaOperaciones;
 

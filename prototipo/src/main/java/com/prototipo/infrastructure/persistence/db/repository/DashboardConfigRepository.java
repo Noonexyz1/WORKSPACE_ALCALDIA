@@ -1,10 +1,9 @@
 package com.prototipo.infrastructure.persistence.db.repository;
 
-import com.prototipo.infrastructure.persistence.db.entity.Usuario;
+import com.prototipo.infrastructure.persistence.db.entity.DashboardConfig;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface UsuarioRepository extends JpaRepository<Usuario, Long> {
-
+public interface DashboardConfigRepository extends JpaRepository<DashboardConfig, Long> {
 }

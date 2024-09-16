@@ -1,10 +1,8 @@
 package com.prototipo.infrastructure.rest.controller;
 
-import com.prototipo.infrastructure.persistence.db.entity.Credencial;
-import com.prototipo.infrastructure.persistence.db.entity.DashboardConfig;
-import com.prototipo.infrastructure.persistence.db.entity.Rol;
-import com.prototipo.infrastructure.persistence.db.entity.Usuario;
-import com.prototipo.infrastructure.persistence.db.repository.CredencialRepository;
+import com.prototipo.application.useCase.InicioSesionService;
+import com.prototipo.domain.model.Credencial;
+import com.prototipo.domain.model.Usuario;
 import com.prototipo.infrastructure.rest.request.CredencialRequest;
 import com.prototipo.infrastructure.rest.response.UsuarioResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @CrossOrigin(origins = "*", maxAge = 86400)
 //@Validated
 @RestController
@@ -22,22 +18,28 @@ import java.util.List;
 public class LoginController {
 
     @Autowired
-    private CredencialRepository credencialRepository;
+    private InicioSesionService inicioSesionService;
 
     @PostMapping(path = {""}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UsuarioResponse> iniciarSesion(@RequestBody CredencialRequest request){
-        Credencial credencial = credencialRepository.findById(1L).get();
-        Usuario usuario = credencial.getFk_usuario();
-        Rol rol = usuario.getFk_rol();
-        List<DashboardConfig> dashboardConfig = rol.getListDashConfig();
 
-        List<String> listaConfig = dashboardConfig.stream().map(DashboardConfig::getNombreComponente).toList();
+        /*Estoy usando el modelo Credencial del paquete Dominio directamente
+        con la escusa de que la Arquitectura Hexagonal se componete de una sola frontera,
+        Dominio y Applicacion como uno solo y la infraestrucura como Uno,
+        En total dos capas, por lo tanto, desde infraestructura puedo conocer los detalles de
+        Infraestrucutura y Dominio en la parte de las importaciones de paquetes*/
+        Credencial credencial = Credencial.builder()
+                .nombreUser(request.getNombreUser())
+                .pass(request.getPass())
+                .build();
+
+        Usuario usuario = inicioSesionService.iniciarSesionService(credencial);
 
         UsuarioResponse usuarioResponse = UsuarioResponse.builder()
                 .nombres(usuario.getNombres())
                 .apellidos(usuario.getApellidos())
-                .nombreRol(rol.getNombreRol())
-                .listDashConfig(listaConfig)
+                .nombreRol(inicioSesionService.rolDeUsuarioService())
+                .listDashConfig(inicioSesionService.configuracionDeUsuarioService())
                 .build();
 
         return new ResponseEntity<>(usuarioResponse, HttpStatus.OK);

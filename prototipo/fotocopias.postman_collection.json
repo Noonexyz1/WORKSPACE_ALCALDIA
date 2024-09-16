@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "9d4c5611-dde8-49d7-8b29-5145d37e1d94",
+		"_postman_id": "32035897-4675-4594-b1c8-2e2ee5ba9aca",
 		"name": "fotocopias",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "36222603"
+		"_exporter_id": "38349629"
 	},
 	"item": [
 		{
@@ -265,7 +265,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"correo\": \"diego@diego.com\",\n    \"password\": \"123\"\n}",
+							"raw": "{\n    \"nombreUser\": \"ana.perez\",\n    \"pass\": \"password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

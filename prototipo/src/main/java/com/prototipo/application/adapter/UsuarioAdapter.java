@@ -1,23 +1,23 @@
-package com.prototipo.application.impl;
+package com.prototipo.application.adapter;
 
-import com.prototipo.application.port.CredencialPersist;
-import com.prototipo.application.port.SolicitudPersist;
-import com.prototipo.application.port.TokenAbstract;
-import com.prototipo.application.port.UsuarioService;
+import com.prototipo.application.useCase.CredencialPersist;
+import com.prototipo.application.useCase.SolicitudPersist;
+import com.prototipo.application.useCase.TokenAbstract;
+import com.prototipo.application.useCase.UsuarioService;
 import com.prototipo.domain.model.Credencial;
 import com.prototipo.domain.model.Solicitud;
 
 import java.util.List;
 
-public class UsuarioImpl implements UsuarioService {
+public class UsuarioAdapter implements UsuarioService {
 
     private CredencialPersist credencialPersist;
     private TokenAbstract tokenAbstract;
     private SolicitudPersist solicitudPersist;
 
-    public UsuarioImpl(CredencialPersist credencialPersist,
-                       TokenAbstract tokenAbstract,
-                       SolicitudPersist solicitudPersist) {
+    public UsuarioAdapter(CredencialPersist credencialPersist,
+                          TokenAbstract tokenAbstract,
+                          SolicitudPersist solicitudPersist) {
 
         this.credencialPersist = credencialPersist;
         this.tokenAbstract = tokenAbstract;
