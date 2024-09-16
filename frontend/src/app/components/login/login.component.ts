@@ -22,8 +22,8 @@ export class LoginComponent {
     const url = 'http://localhost:8081/dologin'; // URL de tu API
 
     const credenciales: CredencialRequest = {
-      nombreUser: 'tu_usuario',
-      pass: 'tu_contraseña'
+      nombreUser: 'ana.perez',
+      pass: 'password123'
     };
 
     this.http.post<UsuarioResponse>(url, credenciales).subscribe(
