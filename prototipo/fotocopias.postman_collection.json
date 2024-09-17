@@ -259,13 +259,97 @@
 			"name": "Login",
 			"item": [
 				{
-					"name": "do login",
+					"name": "do login admin",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
 							"raw": "{\n    \"nombreUser\": \"ana.perez\",\n    \"pass\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/dologin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"dologin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "do login operador",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombreUser\": \"javier.barrios\",\n    \"pass\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/dologin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"dologin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "do login responsable",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombreUser\": \"raul.carlos\",\n    \"pass\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/dologin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"dologin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "do login solicitante",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombreUser\": \"sandra.vargas\",\n    \"pass\": \"password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

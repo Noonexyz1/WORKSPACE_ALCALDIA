@@ -1,279 +1,430 @@
-INSERT INTO prototipo.unidad(nombre)
-VALUES
-("Atención al Ciudadano"),
-("Registro Civil"),
-("Servicios Generales"),
-("Planeación Urbana"),
-("Transporte y Movilidad"),
-("Desarrollo Económico"),
-("Asesoría Jurídica"),
-("Recursos Humanos"),
-("Secretaría de Hacienda"),
-("Cultura y Deporte"),
-("Medio Ambiente"),
-("Obras Públicas"),
-("Desarrollo Social"),
-("Oficina de la Alcaldesa"),
-("Gabinete de Gobierno");
-
-
-insert into prototipo.rol(nombre_rol)
-values("Administrador"),
-("Solicitante"),
-("Operador"),
-("Responsable");
-
-INSERT INTO prototipo.dashboard_config (fk_rol_id, nombre_componente)
-VALUES(1 ID, 1 FK, "admin-option"),
-(2 ID, 2 FK, "solicitante-option"),
-(3 ID, 3 FK, "operador-option"),
-(4 ID, 4 FK, "responsable-option");
-
-
-INSERT INTO prototipo.insumo(detalle, fecha_reporte, formato, tipo_reporte)
-VALUES
-("Solicitud de 50 copias de contrato de arrendamiento", "2023-02-14", "A4", "contrato"),
-("Impresión de plan de desarrollo urbano", "2023-03-22", "A3", "plan"),
-("Copia de actas de reunión del gabinete", "2023-04-10", "legal", "actas"),
-("Duplicado de expediente de personal", "2023-05-05", "oficio", "expediente"),
-("Impresión de certificado de residencia", "2023-06-01", "A4", "certificado"),
-("Copias del reglamento interno de trabajo", "2023-06-15", "carta", "reglamento"),
-("Reproducción de planos de infraestructura", "2023-07-12", "A2", "plano"),
-("Duplicado de recibos de pago", "2023-07-22", "oficio", "recibo"),
-("Impresión de documentos de licitación", "2023-08-03", "A4", "licitación"),
-("Copia de manual de procedimientos", "2023-08-15", "A4", "manual"),
-("Impresión de permisos de construcción", "2023-09-01", "legal", "permiso"),
-("Duplicado de informes trimestrales", "2023-09-10", "carta", "informe"),
-("Copia de contrato de suministro", "2023-09-22", "A4", "contrato"),
-("Reproducción de documentos de auditoría", "2023-10-05", "A4", "auditoría"),
-("Impresión de guías de servicio comunitario", "2023-10-20", "carta", "guía");
-
-
-#INSERTAMOS USUARIOS
-INSERT INTO usuario (fk_responsable_id, fk_rol_id, apellidos, nombres)
-VALUES (NULL, 1, 'Perez', 'Ana'),
-(NULL, 2, 'Lopez', 'Carlos'),
-(NULL, 2, 'Garcia', 'Maria'),
-(NULL, 2, 'Hernandez', 'Jose'),
-(NULL, 2, 'Martinez', 'Luisa'),
-(NULL, 2, 'Gonzales', 'David'),
-(NULL, 2, 'Ramirez', 'Miguel'),
-(3, 2, 'Vargas', 'Sandra'),
-(3, 2, 'Roberto', 'Castillo'),
-(3, 2, 'Claudia', 'Ortega'),
-(4, 2, 'Silva', 'Andres'),
-(4, 2, 'Rios', 'Gabriel'),
-(4, 2, 'Fernandez', 'Sofia'),
-(5, 2, 'Pena', 'Tomas'),
-(5, 2, 'Duarte', 'Patricia'),
-(5, 2, 'Herrera', 'Ignacio'),
-(6, 2, 'Rojas', 'Pablo'),
-(6, 2, 'Salazar', 'Veronica'),
-(6, 2, 'Mejia', 'Ricardo'),
-(7, 2, 'Cervantes', 'Nataliza'),
-(7, 2, 'Ibarra', 'Gillermo'),
-(3, 3, 'Barrios', 'Javier'),
-(3, 3, 'Sanchez', 'Laura'),
-(4, 3, 'Jimenez', 'Raul'),
-(4, 3, 'Alvarez', 'Sonia'),
-(5, 3, 'Campoz', 'Estevan'),
-(5, 3, 'Duarte', 'Patricia'),
-(7, 3, 'Morales', 'Raul'),
-(7, 3, 'Salazar ', 'Claudio');
-
-
-
-SELECT * FROM unidad;
-SELECT * FROM rol;
-SELECT * FROM usuario;
-SELECT * FROM insumo;
-
-
-
-INSERT INTO prototipo.dashboard_config(fk_rol_id, nombre_componente)
-VALUES(1, 'administrador')
-
-SELECT * FROM dashboard_config;
-
-
-
-SELECT usuario.nombres, usuario.apellidos, unidad.nombre, usuario.fk_unidad_id
-FROM usuario, unidad
-WHERE unidad.id = usuario.fk_unidad_id;
-
-
-#INSETANDO A CREDENCIALES
-INSERT INTO prototipo.credencial(nombre_user , pass, fk_usuario_id)
-VALUES('ana.perez', 'password123', 1),    -- Ana Perez
-('carlos.lopez', 'password123', 2), -- Carlos Lopez
-('maria.garcia', 'password123', 3), -- Maria Garcia
-('jose.hernandez', 'password123', 4), -- Jose Hernandez
-('luisa.martinez', 'password123', 5), -- Luisa Martinez
-('david.gonzales', 'password123', 6), -- David Gonzales
-('miguel.ramirez', 'password123', 7), -- Miguel Ramirez
-('sandra.vargas', 'password123', 8), -- Sandra Vargas
-('roberto.castillo', 'password123', 9), -- Roberto Castillo
-('claudia.ortega', 'password123', 10), -- Claudia Ortega
-('andres.silva', 'password123', 11), -- Andres Silva
-('gabriel.rios', 'password123', 12), -- Gabriel Rios
-('sofia.fernandez', 'password123', 13), -- Sofia Fernandez
-('tomas.pena', 'password123', 14), -- Tomas Pena
-('patricia.duarte', 'password123', 15), -- Patricia Duarte
-('ignacio.herrera', 'password123', 16), -- Ignacio Herrera
-('pablo.rojas', 'password123', 17), -- Pablo Rojas
-('veronica.salazar', 'password123', 18), -- Veronica Salazar
-('ricardo.mejia', 'password123', 19), -- Ricardo Mejia
-('nataliza.cervantes', 'password123', 20), -- Nataliza Cervantes
-('gillermo.ibarra', 'password123', 21), -- Gillermo Ibarra
-('javier.barrios', 'password123', 22), -- Javier Barrios
-('laura.sanchez', 'password123', 23), -- Laura Sanchez
-('raul.jimenez', 'password123', 24), -- Raul Jimenez
-('sonia.alvarez', 'password123', 25), -- Sonia Alvarez
-('estevan.campoz', 'password123', 26), -- Estevan Campoz
-('patricia.duarte2', 'password123', 27), -- Patricia Duarte
-('raul.morales', 'password123', 28), -- Raul Morales
-('claudio.salazar', 'password123', 29); -- Claudio Salazar
-
-SELECT * FROM credencial;
-
-
-
-#INSERTAMOS REGISTROS A LA TABLA SOLICITUD
-INSERT INTO solicitud(fk_solicitante_id, nro_de_copias, nro_de_paginas, tipo_de_documento, notificacion_to_aprobar, estado_solicitud)
-VALUES
-(3, 1, 15, 'Licencia de Conducir', 'Aprobada', 'Pendiente'),
-(6, 2, 30, 'Cédula de Identidad', 'Aprobada', 'Completada'),
-(9, 1, 12, 'Certificado de Nacimiento', 'Aprobada', 'Pendiente'),
-(12, 2, 10, 'Licencia de Conducir', 'Aprobada', 'Completada'),
-(15, 5, 30, 'Constancia de Trabajo', 'Aprobada', 'Pendiente'),
-(18, 1, 10, 'Cédula de Identidad', 'Aprobada', 'Completada'),
-(21, 4, 8, 'Licencia de Conducir', 'Aprobada', 'Pendiente'),
-(24, 2, 10, 'Certificado de Estudios', 'Aprobada', 'Completada'),
-(27, 3, 10, 'Certificado de Nacimiento', 'Aprobada', 'Pendiente'),
-(2, 3, 15, 'Cédula de Identidad', 'Aprobada', 'Completada'),
-(5, 3, 20, 'Acta de Defunción', 'Aprobada', 'Pendiente'),
-(8, 5, 25, 'Cédula de Identidad', 'Aprobada', 'Completada'),
-(11, 3, 15, 'Licencia de Conducir', 'Aprobada', 'Pendiente'),
-(14, 5, 12, 'Cédula de Identidad', 'Aprobada', 'Completada'),
-(20, 3, 12, 'Acta de Defunción', 'Aprobada', 'Pendiente'),
-(17, 4, 25, 'Certificado de Nacimiento', 'Aprobada', 'Completada'),
-(2, 2, 10, 'Certificado de Nacimiento', 'Pendiente', 'Pendiente'),
-(4, 3, 5, 'Certificado de Estudios', 'Rechazada', 'Completada'),
-(5, 5, 20, 'Acta de Matrimonio', 'Pendiente', 'Pendiente'),
-(7, 4, 25, 'Constancia de Trabajo', 'Rechazada', 'Completada'),
-(8, 2, 10, 'Cédula de Identidad', 'Pendiente', 'Pendiente'),
-(10, 3, 8, 'Acta de Defunción', 'Rechazada', 'Completada'),
-(11, 4, 7, 'Cédula de Identidad', 'Pendiente', 'Pendiente'),
-(13, 3, 20, 'Acta de Matrimonio', 'Rechazada', 'Completada'),
-(14, 1, 10, 'Certificado de Nacimiento', 'Pendiente', 'Pendiente'),
-(16, 2, 12, 'Certificado de Estudios', 'Rechazada', 'Completada'),
-(17, 4, 15, 'Licencia de Conducir', 'Pendiente', 'Pendiente'),
-(19, 3, 25, 'Acta de Defunción', 'Rechazada', 'Completada'),
-(20, 2, 20, 'Certificado de Nacimiento', 'Pendiente', 'Pendiente'),
-(22, 5, 12, 'Acta de Matrimonio', 'Rechazada', 'Completada'),
-(23, 3, 7, 'Cédula de Identidad', 'Pendiente', 'Pendiente'),
-(25, 1, 15, 'Constancia de Trabajo', 'Rechazada', 'Completada'),
-(26, 4, 20, 'Acta de Defunción', 'Pendiente', 'Pendiente'),
-(28, 2, 18, 'Licencia de Conducir', 'Rechazada', 'Completada'),
-(29, 5, 25, 'Acta de Matrimonio', 'Pendiente', 'Pendiente'),
-(3, 1, 10, 'Constancia de Trabajo', 'Rechazada', 'Completada'),
-(4, 4, 30, 'Certificado de Estudios', 'Pendiente', 'Pendiente'),
-(6, 2, 10, 'Licencia de Conducir', 'Rechazada', 'Completada'),
-(7, 1, 8, 'Certificado de Nacimiento', 'Pendiente', 'Pendiente'),
-(9, 4, 12, 'Acta de Matrimonio', 'Rechazada', 'Completada'),
-(10, 2, 20, 'Constancia de Trabajo', 'Pendiente', 'Pendiente'),
-(12, 4, 18, 'Acta de Defunción', 'Rechazada', 'Completada'),
-(13, 2, 30, 'Certificado de Estudios', 'Pendiente', 'Pendiente'),
-(15, 1, 20, 'Constancia de Trabajo', 'Rechazada', 'Completada'),
-(16, 3, 10, 'Acta de Matrimonio', 'Pendiente', 'Pendiente'),
-(18, 2, 15, 'Licencia de Conducir', 'Rechazada', 'Completada'),
-(19, 1, 8, 'Cédula de Identidad', 'Pendiente', 'Pendiente'),
-(21, 5, 30, 'Certificado de Estudios', 'Pendiente', 'Completada');
-
-
-
-SELECT * from solicitud;
-
-
-#INSERTAMOS A LA TABLA ARCHIVO_PDF
-INSERT INTO prototipo.archivo_pdf(fk_solicitud_id, archivo)
-VALUES
-(1, 'U2FtcGxlU3RyaW5nMDE='),
-(2, 'U2FtcGxlU3RyaW5nMDI='),
-(3, 'U2FtcGxlU3RyaW5nMDM='),
-(4, 'U2FtcGxlU3RyaW5nMDQ='),
-(5, 'U2FtcGxlU3RyaW5nMDU='),
-(6, 'U2FtcGxlU3RyaW5nMDY='),
-(7, 'U2FtcGxlU3RyaW5nMDc='),
-(8, 'U2FtcGxlU3RyaW5nMDg='),
-(9, 'U2FtcGxlU3RyaW5nMDk='),
-(10, 'U2FtcGxlU3RyaW5nMTA='),
-(11, 'U2FtcGxlU3RyaW5nMTE='),
-(12, 'U2FtcGxlU3RyaW5nMTI='),
-(13, 'U2FtcGxlU3RyaW5nMTM='),
-(14, 'U2FtcGxlU3RyaW5nMTQ='),
-(15, 'U2FtcGxlU3RyaW5nMTU='),
-(16, 'U2FtcGxlU3RyaW5nMTY='),
-(17, 'U2FtcGxlU3RyaW5nMTc='),
-(18, 'U2FtcGxlU3RyaW5nMTg='),
-(19, 'U2FtcGxlU3RyaW5nMTk='),
-(20, 'U2FtcGxlU3RyaW5nMjA='),
-(21, 'U2FtcGxlU3RyaW5nMjE='),
-(22, 'U2FtcGxlU3RyaW5nMjI='),
-(23, 'U2FtcGxlU3RyaW5nMjM='),
-(24, 'U2FtcGxlU3RyaW5nMjQ='),
-(25, 'U2FtcGxlU3RyaW5nMjU='),
-(26, 'U2FtcGxlU3RyaW5nMjY='),
-(27, 'U2FtcGxlU3RyaW5nMjc='),
-(28, 'U2FtcGxlU3RyaW5nMjg='),
-(29, 'U2FtcGxlU3RyaW5nMjk='),
-(30, 'U2FtcGxlU3RyaW5nMzA='),
-(31, 'U2FtcGxlU3RyaW5nMzE='),
-(32, 'U2FtcGxlU3RyaW5nMzI='),
-(33, 'U2FtcGxlU3RyaW5nMzM='),
-(34, 'U2FtcGxlU3RyaW5nMzQ='),
-(35, 'U2FtcGxlU3RyaW5nMzU='),
-(36, 'U2FtcGxlU3RyaW5nMzY='),
-(37, 'U2FtcGxlU3RyaW5nMzc='),
-(38, 'U2FtcGxlU3RyaW5nMzg='),
-(39, 'U2FtcGxlU3RyaW5nMzk='),
-(40, 'U2FtcGxlU3RyaW5nNDA='),
-(41, 'U2FtcGxlU3RyaW5nNDE='),
-(42, 'U2FtcGxlU3RyaW5nNDI='),
-(43, 'U2FtcGxlU3RyaW5nNDM='),
-(44, 'U2FtcGxlU3RyaW5nNDQ='),
-(45, 'U2FtcGxlU3RyaW5nNDU='),
-(46, 'U2FtcGxlU3RyaW5nNDY='),
-(47, 'U2FtcGxlU3RyaW5nNDc='),
-(48, 'U2FtcGxlU3RyaW5nNDg=');
-
-
-SELECT * FROM archivo_pdf;
-
-
-
-/*INSERT INTO aprobacion (fk_solicitud_id, fk_solicitante_id, fk_operador_id, fk_insumo_id)
-VALUES
-(1, 4, 22, 1),
-(2, 5, 23, 2),
-(3, 6, 24, 3),
-(4, 7, 25, 4),
-(5, 8, 26, 5),
-(6, 9, 27, 6),
-(7, 10, 28, 7),
-(8, 11, 29, 8),
-(9, 12, 22, 9),
-(10, 13, 23, 10),
-(11, 14, 24, 11),
-(12, 15, 25, 12),
-(13, 16, 26, 13),
-(14, 17, 27, 14),
-(15, 18, 28, 15),
-(16, 19, 29, 1);*/
-
-
-SELECT * FROM usuario
-WHERE fk_rol_id = 3;
-
-
-SELECT * FROM aprobacion;
+{
+	"info": {
+		"_postman_id": "32035897-4675-4594-b1c8-2e2ee5ba9aca",
+		"name": "fotocopias",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38349629"
+	},
+	"item": [
+		{
+			"name": "Administrador",
+			"item": [
+				{
+					"name": "crear usuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 34,\n    \"nombres\": \"Diego\",\n    \"apellidos\": \"Mamani\",\n    \"fk_responsable\": 5,\n    \"fk_rol\": 7\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/administrador/creaUsuario",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"administrador",
+								"creaUsuario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "editar usuario",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 34,\n    \"nombres\": \"Diego\",\n    \"apellidos\": \"Mamani\",\n    \"fk_responsable\": 5,\n    \"fk_rol\": 7\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/administrador/editarUsuario",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"administrador",
+								"editarUsuario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "eliminar usuario",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Diego\",\n    \"direccion\": \"diego@diego.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/administrador/eliminarUsuario/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"administrador",
+								"eliminarUsuario",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "asignar operador",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Diego\",\n    \"direccion\": \"diego@diego.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/administrador/asignarOperador/8",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"administrador",
+								"asignarOperador",
+								"8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "generar reporte",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Diego\",\n    \"direccion\": \"diego@diego.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/administrador/generarReporte",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"administrador",
+								"generarReporte"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Operador",
+			"item": [
+				{
+					"name": "set estado soli",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 101,\n    \"nroDeCopias\": 2,\n    \"tipoDeDocumento\": \"Licencia de Conducir\",\n    \"nroDePaginas\": 15,\n    \"estadoSolicitud\": \"Pendiente\",\n    \"notificacionToAprobar\": \"Aprobada\",\n    \"fk_solicitante\": 34,\n    \"fk_unidad\": \"Unidad de Tránsito\",\n    \"archivoPdf\": \"licencia_conducir.pdf\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/operador/setEstadoSolicitud",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"operador",
+								"setEstadoSolicitud"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ver solicitudes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/operador/verSolicitudes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"operador",
+								"verSolicitudes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Responsable",
+			"item": [
+				{
+					"name": "aprobar solicitud",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 101,\n    \"nroDeCopias\": 2,\n    \"tipoDeDocumento\": \"Licencia de Conducir\",\n    \"nroDePaginas\": 15,\n    \"estadoSolicitud\": \"Pendiente\",\n    \"notificacionToAprobar\": \"Aprobada\",\n    \"fk_solicitante\": 34,\n    \"fk_unidad\": \"Unidad de Tránsito\",\n    \"archivoPdf\": \"licencia_conducir.pdf\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/responsable/aprobarSolicitud",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"responsable",
+								"aprobarSolicitud"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Login",
+			"item": [
+				{
+					"name": "do login admin",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombreUser\": \"ana.perez\",\n    \"pass\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/dologin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"dologin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "do login operador",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombreUser\": \"javier.barrios\",\n    \"pass\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/dologin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"dologin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "do login responsable",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombreUser\": \"raul.carlos\",\n    \"pass\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/dologin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"dologin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "do login solicitante",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombreUser\": \"sandra.vargas\",\n    \"pass\": \"password123\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/dologin",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"dologin"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Usuario Soli",
+			"item": [
+				{
+					"name": "set estado soli Copy",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"id\": 101,\n    \"nroDeCopias\": 2,\n    \"tipoDeDocumento\": \"Licencia de Conducir\",\n    \"nroDePaginas\": 15,\n    \"estadoSolicitud\": \"Pendiente\",\n    \"notificacionToAprobar\": \"Aprobada\",\n    \"fk_solicitante\": 34,\n    \"fk_unidad\": \"Unidad de Tránsito\",\n    \"archivoPdf\": \"licencia_conducir.pdf\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/usuario/solicitarFotocopiar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"usuario",
+								"solicitarFotocopiar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ver solicitudes Copy",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/usuario/verHistorialSolicitudes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"usuario",
+								"verHistorialSolicitudes"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
