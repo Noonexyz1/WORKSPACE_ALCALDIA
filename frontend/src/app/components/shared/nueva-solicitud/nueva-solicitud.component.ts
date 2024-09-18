@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SolicitudRequest } from '../../../models/SolicitudRequest';
-import { catchError, map, of } from 'rxjs';
+import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 
 @Component({
   selector: 'app-nueva-solicitud',
@@ -14,15 +14,12 @@ import { catchError, map, of } from 'rxjs';
 })
 export class NuevaSolicitudComponent {
 
-  //Angular
   private http: HttpClient;
   private formBuilder: FormBuilder;
   private router: Router;
 
   solicitudForm: FormGroup;
-
   archivosSeleccionados: File[] = []; // Archivos seleccionados
-
 
   constructor(http: HttpClient, formBuilder: FormBuilder, router: Router){
     this.http = http;
@@ -37,7 +34,6 @@ export class NuevaSolicitudComponent {
     this.router = router;
   }
 
-
   // Maneja la selección de archivos
   onFileSelected(event: any): void {
     const files: FileList = event.target.files;
@@ -45,49 +41,64 @@ export class NuevaSolicitudComponent {
     this.archivosSeleccionados = this.archivosSeleccionados.concat(Array.from(files));
   }
 
+  // Función para convertir un archivo a Base64
+  convertFileToBase64(file: File): Observable<string> {
+    return new Observable((observer) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        observer.next(reader.result as string);
+        observer.complete();
+      };
+      reader.onerror = (error) => {
+        observer.error(error);
+      };
+      reader.readAsDataURL(file); // Convertir a Base64
+    });
+  }
 
   botonNuevaSolicitud(): void {
-    //TODO---------------hacer el backend para esto---------
     const url = 'http://localhost:8081/dologin'; // URL de tu API
 
     // Extraer los valores del formulario
     const solicitudRequest: SolicitudRequest = {
-        nroDeCopias: this.solicitudForm.get('nroDeCopias')?.value,
-        tipoDeDocumento: this.solicitudForm.get('tipoDeDocumento')?.value,
-        nroDePaginas: this.solicitudForm.get('nroDePaginas')?.value,
-        nombreUnidad: this.solicitudForm.get('nombreUnidad')?.value,
-        
-        //TODO --------------------------------------------- hay que cambiar el formato a BASE_64        
-        archivosPdf: this.archivosSeleccionados.map(file => file.name), // Obtener los nombres de los archivos
+      nroDeCopias: this.solicitudForm.get('nroDeCopias')?.value,
+      tipoDeDocumento: this.solicitudForm.get('tipoDeDocumento')?.value,
+      nroDePaginas: this.solicitudForm.get('nroDePaginas')?.value,
+      nombreUnidad: this.solicitudForm.get('nombreUnidad')?.value,
+      archivosPdf: [], // Inicialmente vacío
     };
 
-    // Opcional: puedes usar alertas para verificar los valores
-    alert(solicitudRequest.nroDeCopias);
-    alert(solicitudRequest.tipoDeDocumento);
-    alert(solicitudRequest.nroDePaginas);
-    alert(solicitudRequest.nombreUnidad);
-    alert(`Archivos seleccionados: ${solicitudRequest.archivosPdf.join(', ')}`);
+    // Convertir los archivos a Base64
+    const conversiones = this.archivosSeleccionados.map(file => this.convertFileToBase64(file));
 
-    // Enviar la solicitud
-    this.http.post<SolicitudRequest>(url, solicitudRequest).pipe(
-      map((response: any) => {
-        // Mostrar la respuesta en un alert
-        //TODO----------------------------------------------------------
-        //const mensaje = `Usuario: ${response.nombres} ${response.apellidos}\nRol: ${response.nombreRol}\nDashboard: ${response.listDashConfig.join(', ')}`;
-        //alert(mensaje);
-        //--------------------------------------------------------------
-
-        //No esta bien hardcodear pero bueno, estoy aprendiendo
-        this.router.navigate(['/solicitante/misSolicitudes']);
-        
+    forkJoin(conversiones).pipe(
+      map(base64Array => {
+        // Inicialmente vacio pero luego lo llenamos con la convercion
+        solicitudRequest.archivosPdf = base64Array; // Almacena los valores base64
+        return solicitudRequest; // Retornar el objeto completo
       }),
       catchError(error => {
-        console.error('Error en la petición:', error);
-        alert('Hubo un error al hacer la solicitud');
-        return of(null); // Retornar un observable vacío en caso de error
+        console.error('Error en la conversión a Base64:', error);
+        alert('Error al convertir archivos a Base64');
+        return of(null);
       })
-    ).subscribe();
+    ).subscribe((solicitud) => {
+      if (solicitud) {
+        // Mostrar los datos antes de enviar
+        console.log('Solicitud a enviar:', solicitud);
 
+        // Enviar la solicitud
+        this.http.post<SolicitudRequest>(url, solicitud).pipe(
+          map((response: any) => {
+            this.router.navigate(['/solicitante/misSolicitudes']);
+          }),
+          catchError(error => {
+            console.error('Error en la petición:', error);
+            alert('Hubo un error al enviar la solicitud');
+            return of(null); // Retornar un observable vacío en caso de error
+          })
+        ).subscribe();
+      }
+    });
   }
-
 }
