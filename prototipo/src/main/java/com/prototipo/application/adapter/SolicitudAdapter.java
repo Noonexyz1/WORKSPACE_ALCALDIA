@@ -18,7 +18,14 @@ public class SolicitudAdapter implements SolicitudService {
 
     @Override
     public void solicitarFotocopiarService(Solicitud solicitud) {
-        solicitudAbstract.solicitarFotocopiarAbstract(null);
+        //TODO Mapeado de instancias
+        SolicitudDto solicitudDto = SolicitudDto.builder()
+                .nroDeCopias(solicitud.getNroDeCopias())
+                .tipoDeDocumento(solicitud.getTipoDeDocumento())
+                .nroDePaginas(solicitud.getNroDePaginas())
+                .build();
+
+        solicitudAbstract.solicitarFotocopiarAbstract(solicitudDto);
     }
 
     @Override

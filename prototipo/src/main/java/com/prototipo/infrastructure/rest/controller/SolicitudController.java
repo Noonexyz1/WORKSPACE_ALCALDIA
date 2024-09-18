@@ -22,19 +22,21 @@ public class SolicitudController {
 
     //TODO ----hacer este modulo para registrar la solicitud
     @PostMapping(path = {"/solicitarFotocopiar"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void solicitarFotocopiar(@RequestBody SolicitudRequest request) {
+    public void solicitarFotocopiar(@RequestBody SolicitudRequest solicitudRequest) {
         //Se esta recibiendo el modelo de request
 
         //Debo usar los mappeadores de mi Infraestrucutura
         Solicitud solicitud = Solicitud.builder()
-                .nroDeCopias(request.getNroDeCopias())
-                .tipoDeDocumento(request.getTipoDeDocumento())
-                .nroDePaginas(request.getNroDePaginas())
-                .listArvhicosPDF(request.getListArvhicosPDF())
+                .nroDeCopias(solicitudRequest.getNroDeCopias())
+                .tipoDeDocumento(solicitudRequest.getTipoDeDocumento())
+                .nroDePaginas(solicitudRequest.getNroDePaginas())
+                .listArvhicosPDF(solicitudRequest.getListArvhicosPDF())
                 .build();
 
         solicitudService.solicitarFotocopiarService(solicitud);
     }
+
+
 
     @GetMapping(path = {"/verHistorialSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudResponse>> verHistorialSolicitudes() {
