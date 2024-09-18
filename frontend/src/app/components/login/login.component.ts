@@ -54,7 +54,7 @@ export class LoginComponent {
         alert(mensaje);
 
         let toNavegate = this.rootNavigateService.valorParaNavegar(response.listDashConfig[0]);
-        this.router.navigate([toNavegate])
+        this.router.navigate([toNavegate]);
         
       }),
       catchError(error => {
