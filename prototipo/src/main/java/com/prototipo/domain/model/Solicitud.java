@@ -3,6 +3,8 @@ package com.prototipo.domain.model;
 import lombok.Builder;
 import lombok.Getter;
 
+import java.util.List;
+
 @Getter
 @Builder
 public class Solicitud {
@@ -15,6 +17,7 @@ public class Solicitud {
     //private EstadoSolicitud estadoSolicitud;
     /*private DPF archivoParaFotocopiar;*/
     //private Notificacion notificacionToAprobar;
+    private List<String> listArvhicosPDF;
 
     private Usuario usuarioEnvio;
 }
