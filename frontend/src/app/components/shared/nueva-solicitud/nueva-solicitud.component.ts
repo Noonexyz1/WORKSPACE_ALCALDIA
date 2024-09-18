@@ -3,6 +3,7 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SolicitudRequest } from '../../../models/SolicitudRequest';
+import { catchError, map, of } from 'rxjs';
 
 @Component({
   selector: 'app-nueva-solicitud',
@@ -31,7 +32,7 @@ export class NuevaSolicitudComponent {
       tipoDeDocumento: [],
       nroDePaginas: [],
       nombreUnidad: ['Selecciona una opción'],
-      archivoPdf: [],
+      archivosPdf: [],
     });
     this.router = router;
   }
@@ -46,33 +47,47 @@ export class NuevaSolicitudComponent {
 
 
   botonNuevaSolicitud(): void {
+    //TODO---------------hacer el backend para esto---------
     const url = 'http://localhost:8081/dologin'; // URL de tu API
 
     // Extraer los valores del formulario
     const solicitudRequest: SolicitudRequest = {
-      nroDeCopias: this.solicitudForm.get('nroDeCopias')?.value,
-      tipoDeDocumento: this.solicitudForm.get('tipoDeDocumento')?.value,
-      nroDePaginas: this.solicitudForm.get('nroDePaginas')?.value,
-      nombreUnidad: this.solicitudForm.get('nombreUnidad')?.value,
-      archivoPdf: this.solicitudForm.get('archivoPdf')?.value,
+        nroDeCopias: this.solicitudForm.get('nroDeCopias')?.value,
+        tipoDeDocumento: this.solicitudForm.get('tipoDeDocumento')?.value,
+        nroDePaginas: this.solicitudForm.get('nroDePaginas')?.value,
+        nombreUnidad: this.solicitudForm.get('nombreUnidad')?.value,
+        
+        //TODO --------------------------------------------- hay que cambiar el formato a BASE_64        
+        archivosPdf: this.archivosSeleccionados.map(file => file.name), // Obtener los nombres de los archivos
     };
 
+    // Opcional: puedes usar alertas para verificar los valores
     alert(solicitudRequest.nroDeCopias);
     alert(solicitudRequest.tipoDeDocumento);
     alert(solicitudRequest.nroDePaginas);
     alert(solicitudRequest.nombreUnidad);
+    alert(`Archivos seleccionados: ${solicitudRequest.archivosPdf.join(', ')}`);
 
-    const formData: FormData = new FormData();
-    this.archivosSeleccionados.forEach((file, index) => {
-      formData.append('archivoPdf' + index, file);
-    });
+    // Enviar la solicitud
+    this.http.post<SolicitudRequest>(url, solicitudRequest).pipe(
+      map((response: any) => {
+        // Mostrar la respuesta en un alert
+        //TODO----------------------------------------------------------
+        //const mensaje = `Usuario: ${response.nombres} ${response.apellidos}\nRol: ${response.nombreRol}\nDashboard: ${response.listDashConfig.join(', ')}`;
+        //alert(mensaje);
+        //--------------------------------------------------------------
 
-    this.http.post('http://localhost:8081/dologin', formData).subscribe(response => {
-      alert('Solicitud enviada exitosamente');
-      this.router.navigate(['/ruta-destino']);
-    }, error => {
-      alert('Error al enviar la solicitud');
-    });
+        //No esta bien hardcodear pero bueno, estoy aprendiendo
+        this.router.navigate(['/solicitante/misSolicitudes']);
+        
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al hacer la solicitud');
+        return of(null); // Retornar un observable vacío en caso de error
+      })
+    ).subscribe();
 
   }
+
 }

@@ -2,6 +2,8 @@ package com.prototipo.infrastructure.rest.request;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -12,8 +14,6 @@ public class SolicitudRequest {
     private Long nroDeCopias;
     private String tipoDeDocumento;
     private Long nroDePaginas;
-
     private String nombreUnidad;
-    private String archivoPdf;
-
+    private List<String> archivosPdf;
 }
