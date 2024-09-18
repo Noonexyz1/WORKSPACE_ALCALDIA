@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Configuration;
 public class SolicitudConfig {
 
     @Bean
-    public SolicitudService solicitudServiceBean(@Qualifier("solicitudImpl")SolicitudAbstract solicitudAbstract){
+    public SolicitudService solicitudServiceBean(@Qualifier("solicitudImpl") SolicitudAbstract solicitudAbstract){
         //Se mecesota una dependencia
         return new SolicitudAdapter(solicitudAbstract);
     }
