@@ -20,6 +20,9 @@ export class NuevaSolicitudComponent {
 
   solicitudForm: FormGroup;
 
+  archivosSeleccionados: File[] = []; // Archivos seleccionados
+
+
   constructor(http: HttpClient, formBuilder: FormBuilder, router: Router){
     this.http = http;
     this.formBuilder = formBuilder;
@@ -27,11 +30,20 @@ export class NuevaSolicitudComponent {
       nroDeCopias: [],
       tipoDeDocumento: [],
       nroDePaginas: [],
-      nombreUnidad: [],
+      nombreUnidad: ['Selecciona una opción'],
       archivoPdf: [],
     });
     this.router = router;
   }
+
+
+  // Maneja la selección de archivos
+  onFileSelected(event: any): void {
+    const files: FileList = event.target.files;
+    // Convierte el FileList a un array y concatena a los archivos ya seleccionados
+    this.archivosSeleccionados = this.archivosSeleccionados.concat(Array.from(files));
+  }
+
 
   botonNuevaSolicitud(): void {
     const url = 'http://localhost:8081/dologin'; // URL de tu API
@@ -48,5 +60,19 @@ export class NuevaSolicitudComponent {
     alert(solicitudRequest.nroDeCopias);
     alert(solicitudRequest.tipoDeDocumento);
     alert(solicitudRequest.nroDePaginas);
+    alert(solicitudRequest.nombreUnidad);
+
+    const formData: FormData = new FormData();
+    this.archivosSeleccionados.forEach((file, index) => {
+      formData.append('archivoPdf' + index, file);
+    });
+
+    this.http.post('http://localhost:8081/dologin', formData).subscribe(response => {
+      alert('Solicitud enviada exitosamente');
+      this.router.navigate(['/ruta-destino']);
+    }, error => {
+      alert('Error al enviar la solicitud');
+    });
+
   }
 }
