@@ -11,7 +11,8 @@ import org.springframework.context.annotation.Configuration;
 public class InicioSesionConfig {
 
     @Bean
-    public InicioSesionService inicioSesionService(@Qualifier("inicioSesionImpl") InicioSesionAbstract inicioSesionAbstract){
+    public InicioSesionService inicioSesionServiceBean(@Qualifier("inicioSesionImpl") InicioSesionAbstract inicioSesionAbstract){
         return new InicioSesionAdapter(inicioSesionAbstract);
     }
+
 }

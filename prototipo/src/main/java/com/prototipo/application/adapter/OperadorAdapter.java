@@ -1,7 +1,7 @@
 package com.prototipo.application.adapter;
 
 import com.prototipo.application.useCase.OperadorService;
-import com.prototipo.application.useCase.SolicitudPersist;
+import com.prototipo.application.useCase.SolicitudService;
 import com.prototipo.domain.enums.EstadoSolicitud;
 import com.prototipo.domain.model.Solicitud;
 
@@ -9,13 +9,13 @@ import java.util.List;
 
 public class OperadorAdapter implements OperadorService {
 
-    private SolicitudPersist solicitudPersist;
+    private SolicitudService solicitudPersist;
 
 
 
     @Override
     public List<Solicitud> verSolicitudes() {
-        return this.solicitudPersist.getSolicitudesOperador();
+        return List.of(null);
     }
 
     @Override

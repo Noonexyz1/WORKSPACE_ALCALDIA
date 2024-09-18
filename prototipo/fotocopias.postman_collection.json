@@ -373,16 +373,16 @@
 			]
 		},
 		{
-			"name": "Usuario Soli",
+			"name": "Solicitante",
 			"item": [
 				{
-					"name": "set estado soli Copy",
+					"name": "crear solicitud",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 101,\n    \"nroDeCopias\": 2,\n    \"tipoDeDocumento\": \"Licencia de Conducir\",\n    \"nroDePaginas\": 15,\n    \"estadoSolicitud\": \"Pendiente\",\n    \"notificacionToAprobar\": \"Aprobada\",\n    \"fk_solicitante\": 34,\n    \"fk_unidad\": \"Unidad de Tránsito\",\n    \"archivoPdf\": \"licencia_conducir.pdf\"\n}\n",
+							"raw": "{\n    \"nroDeCopias\": 2,\n    \"tipoDeDocumento\": \"Informe\",\n    \"nroDePaginas\": 10,\n    \"nombreUnidad\": \"Unidad de Proyectos\",\n    \"listArvhicosPDF\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\"\n    ]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -390,14 +390,14 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/usuario/solicitarFotocopiar",
+							"raw": "http://localhost:8081/solicitante/solicitarFotocopiar",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
-								"usuario",
+								"solicitante",
 								"solicitarFotocopiar"
 							]
 						}
