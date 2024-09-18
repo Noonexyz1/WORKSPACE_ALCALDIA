@@ -405,6 +405,38 @@
 					"response": []
 				},
 				{
+					"name": "get unidades",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nroDeCopias\": 2,\n    \"tipoDeDocumento\": \"Informe\",\n    \"nroDePaginas\": 10,\n    \"nombreUnidad\": \"Unidad de Proyectos\",\n    \"listArvhicosPDF\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\"\n    ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/solicitante/verListaUnidades",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"solicitante",
+								"verListaUnidades"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "ver solicitudes Copy",
 					"request": {
 						"method": "GET",
