@@ -7,4 +7,5 @@ import java.util.List;
 public interface UnidadAbstract {
 
     List<UnidadDto> listaDeUnidadesAbstract();
+    UnidadDto findUnidadPorIdAbstract(Long idUnidad);
 }

@@ -39,13 +39,10 @@ public class Solicitud {
     private Unidad fk_unidad;
 
 
-    @OneToOne(mappedBy = "fk_solicitud")
-    private ArchivoPdf archivoPdf;
-
+    @OneToMany(mappedBy = "fk_solicitud")
+    private List<ArchivoPdf> archivoPdf;
     @OneToMany(mappedBy = "fk_solicitud")
     private List<Aprobacion> listaAprobacion;
-
-
     @OneToMany(mappedBy = "fk_solicitud")
     private List<GastoInsumo> listGastoInsumos;
 }

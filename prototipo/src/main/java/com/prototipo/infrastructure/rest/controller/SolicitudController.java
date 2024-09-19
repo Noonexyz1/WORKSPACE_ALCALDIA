@@ -2,8 +2,11 @@ package com.prototipo.infrastructure.rest.controller;
 
 import com.prototipo.application.useCase.SolicitudService;
 import com.prototipo.application.useCase.UnidadService;
+import com.prototipo.application.useCase.UsuarioService;
+import com.prototipo.domain.model.ArchivoPdf;
 import com.prototipo.domain.model.Solicitud;
 import com.prototipo.domain.model.Unidad;
+import com.prototipo.domain.model.Usuario;
 import com.prototipo.infrastructure.rest.request.SolicitudRequest;
 import com.prototipo.infrastructure.rest.response.SolicitudResponse;
 import com.prototipo.infrastructure.rest.response.UnidadResponse;
@@ -24,18 +27,31 @@ public class SolicitudController {
     private SolicitudService solicitudService;
     @Autowired
     private UnidadService unidadService;
+    @Autowired
+    private UsuarioService usuarioService;
 
-    //TODO ----hacer este modulo para registrar la solicitud
+    //TODO PROBAR
     @PostMapping(path = {"/solicitarFotocopiar"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void solicitarFotocopiar(@RequestBody SolicitudRequest solicitudRequest) {
-        //Se esta recibiendo el modelo de request
+        //Debo encontrar el Usuario
+        Unidad unidad = unidadService.findUnidadPorIdService(solicitudRequest.getIdUnidad());
+        //Debo encontrar la unidad
+        Usuario usuario = usuarioService.findUsuarioPorIdService(solicitudRequest.getIdSolicitante());
+
+        List<ArchivoPdf> archivoPdfs = solicitudRequest.getListArvhicosPDF().stream().map(x ->
+                    ArchivoPdf.builder()
+                            .archivo(x)
+                            .build()
+                ).toList();
 
         //Debo usar los mappeadores de mi Infraestrucutura
         Solicitud solicitud = Solicitud.builder()
                 .nroDeCopias(solicitudRequest.getNroDeCopias())
                 .tipoDeDocumento(solicitudRequest.getTipoDeDocumento())
                 .nroDePaginas(solicitudRequest.getNroDePaginas())
-                .listArvhicosPDF(solicitudRequest.getListArvhicosPDF())
+                .unidad(unidad)
+                .usuario(usuario)
+                .listArvhicosPDF(archivoPdfs)
                 .build();
 
         solicitudService.solicitarFotocopiarService(solicitud);
