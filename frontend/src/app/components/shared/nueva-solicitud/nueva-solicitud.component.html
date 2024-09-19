@@ -38,13 +38,17 @@
 
         <div class="relative z-0 w-full mb-5 group">
             <label for="unidades" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Unidad</label>
-            <select formControlName="nombreUnidad" id="unidades"
-                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                <option selected>Selecciona una opción</option>
-                <option value="Legislativa">Legislativa</option>
-                <option value="Limites">Limites</option>
-                <option value="Asuntos Externos">Asuntos Externos</option>
-                <option value="Planificación">Planificación</option>
+            <select formControlName="idUnidad" id="unidades"
+              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+
+                <!-- El valor será el ID, pero el usuario verá el nombre -->
+                <option value="" disabled selected>Selecciona una opción</option>
+                @for (unidad of listaDeUnidades; track unidad.id) {
+                    <option [value]="unidad.id">
+                        {{ unidad.nombre }}
+                    </option>
+                }
+
             </select>
         </div>
 
