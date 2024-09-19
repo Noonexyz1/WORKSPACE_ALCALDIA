@@ -1,9 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SolicitudRequest } from '../../../models/SolicitudRequest';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
+import { UnidadResponse } from '../../../models/UnidadResponse';
 
 @Component({
   selector: 'app-nueva-solicitud',
@@ -12,7 +13,7 @@ import { catchError, forkJoin, map, Observable, of } from 'rxjs';
   templateUrl: './nueva-solicitud.component.html',
   styleUrl: './nueva-solicitud.component.css'
 })
-export class NuevaSolicitudComponent {
+export class NuevaSolicitudComponent implements OnInit{
 
   private http: HttpClient;
   private formBuilder: FormBuilder;
@@ -20,6 +21,7 @@ export class NuevaSolicitudComponent {
 
   solicitudForm: FormGroup;
   archivosSeleccionados: File[] = []; // Archivos seleccionados
+  listaDeUnidades: UnidadResponse[] = []; // Lista de unidades
 
   constructor(http: HttpClient, formBuilder: FormBuilder, router: Router){
     this.http = http;
@@ -28,33 +30,29 @@ export class NuevaSolicitudComponent {
       nroDeCopias: [],
       tipoDeDocumento: [],
       nroDePaginas: [],
-      nombreUnidad: ['Selecciona una opción'],
+      idUnidad: [], 
+      idSolicitante: [],
       archivosPdf: [],
     });
     this.router = router;
   }
+  
+  ngOnInit(): void {
+    //peticion GET a la lista de unidades que existen
+    const url = 'http://localhost:8081/solicitante/verListaUnidades'; // URL de tu API
 
-  // Maneja la selección de archivos
-  onFileSelected(event: any): void {
-    const files: FileList = event.target.files;
-    // Convierte el FileList a un array y concatena a los archivos ya seleccionados
-    this.archivosSeleccionados = this.archivosSeleccionados.concat(Array.from(files));
-  }
-
-  // Función para convertir un archivo a Base64
-  convertFileToBase64(file: File): Observable<string> {
-    return new Observable((observer) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        observer.next(reader.result as string);
-        observer.complete();
-      };
-      reader.onerror = (error) => {
-        observer.error(error);
-      };
-      reader.readAsDataURL(file); // Convertir a Base64
+    // Enviar la solicitud
+    this.http.get<UnidadResponse[]>(url).pipe(
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al traer la lista de unidades');
+        return of([]); // Retornar un array vacío en caso de error
+      })
+    ).subscribe((response: UnidadResponse[]) => {
+      this.listaDeUnidades = response; // Asignar la respuesta directamente
     });
   }
+
 
   botonNuevaSolicitud(): void {
     const url = 'http://localhost:8081/dologin'; // URL de tu API
@@ -64,7 +62,8 @@ export class NuevaSolicitudComponent {
       nroDeCopias: this.solicitudForm.get('nroDeCopias')?.value,
       tipoDeDocumento: this.solicitudForm.get('tipoDeDocumento')?.value,
       nroDePaginas: this.solicitudForm.get('nroDePaginas')?.value,
-      nombreUnidad: this.solicitudForm.get('nombreUnidad')?.value,
+      idUnidad: this.solicitudForm.get('idUnidad')?.value,
+      idSolicitante: this.solicitudForm.get('idSolicitante')?.value,
       archivosPdf: [], // Inicialmente vacío
     };
 
@@ -99,6 +98,29 @@ export class NuevaSolicitudComponent {
           })
         ).subscribe();
       }
+    });
+  }
+
+
+  // Maneja la selección de archivos
+  onFileSelected(event: any): void {
+    const files: FileList = event.target.files;
+    // Convierte el FileList a un array y concatena a los archivos ya seleccionados
+    this.archivosSeleccionados = this.archivosSeleccionados.concat(Array.from(files));
+  }
+
+  // Función para convertir un archivo a Base64
+  convertFileToBase64(file: File): Observable<string> {
+    return new Observable((observer) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        observer.next(reader.result as string);
+        observer.complete();
+      };
+      reader.onerror = (error) => {
+        observer.error(error);
+      };
+      reader.readAsDataURL(file); // Convertir a Base64
     });
   }
 }
