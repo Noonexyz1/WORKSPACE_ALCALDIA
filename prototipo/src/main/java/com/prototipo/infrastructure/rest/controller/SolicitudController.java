@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 86400)
 @RestController
 @RequestMapping(path = "/solicitante")
 public class SolicitudController {
