@@ -14,7 +14,7 @@ public class SolicitudRequest {
     private Long nroDeCopias;
     private String tipoDeDocumento;
     private Long nroDePaginas;
-    //Deberia enviar el id de la unidad
-    private String nombreUnidad;
+    private Long idUnidad;
+    private Long idSolicitante;
     private List<String> listArvhicosPDF;
 }

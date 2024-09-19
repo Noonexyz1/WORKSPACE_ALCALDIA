@@ -7,4 +7,5 @@ import java.util.List;
 public interface UnidadService {
 
     List<Unidad> listaDeUnidadesService();
+    Unidad findUnidadPorIdService(Long idUnidad);
 }

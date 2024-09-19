@@ -26,4 +26,18 @@ public class UnidadAdapter implements UnidadService {
                         .build()
         ).toList();
     }
+
+    @Override
+    public Unidad findUnidadPorIdService(Long idUnidad) {
+        UnidadDto unidadDto = unidadAbstract.findUnidadPorIdAbstract(idUnidad);
+        Unidad unidad = Unidad.builder()
+                .id(unidadDto.getId())
+                .nombre(unidadDto.getNombre())
+                .direccion(unidadDto.getDireccion())
+                .build();
+
+        return unidad;
+    }
+
+
 }

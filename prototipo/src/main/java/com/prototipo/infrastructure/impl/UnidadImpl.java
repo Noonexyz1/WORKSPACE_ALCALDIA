@@ -28,4 +28,15 @@ public class UnidadImpl implements UnidadAbstract {
         ).toList();
 
     }
+
+    @Override
+    public UnidadDto findUnidadPorIdAbstract(Long idUnidad) {
+        Unidad unidad = unidadRepository.findById(idUnidad).orElseThrow();
+        UnidadDto unidadDto = UnidadDto.builder()
+                .id(unidad.getId())
+                .nombre(unidad.getNombre())
+                .direccion(unidad.getDireccion())
+                .build();
+        return unidadDto;
+    }
 }

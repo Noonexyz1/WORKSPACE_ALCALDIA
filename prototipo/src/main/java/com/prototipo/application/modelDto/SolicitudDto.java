@@ -1,7 +1,8 @@
 package com.prototipo.application.modelDto;
 
-import com.prototipo.infrastructure.persistence.db.entity.*;
 import lombok.*;
+
+import java.util.List;
 
 @Getter
 @Builder
@@ -13,10 +14,10 @@ public class SolicitudDto {
     private Long nroDePaginas;
     private String estadoSolicitud;
     private String notificacionToAprobar;
-    private Usuario fk_solicitante;
-    private Unidad fk_unidad;
+    private UsuarioDto solicitante;
+    private UnidadDto unidad;
 
     //De momento, unicamente hare la prueba con insertar un solo archivo
     //en base64
-    private ArchivoPdf archivoPdf;
+    private List<ArchivoPdfDto> archivosPdf;
 }

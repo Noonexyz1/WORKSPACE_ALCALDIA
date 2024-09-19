@@ -199,6 +199,7 @@ VALUES
 
 SELECT * from solicitud;
 
+DELETE from solicitud;
 
 #INSERTAMOS A LA TABLA ARCHIVO_PDF
 INSERT INTO prototipo.archivo_pdf(fk_solicitud_id, archivo)
