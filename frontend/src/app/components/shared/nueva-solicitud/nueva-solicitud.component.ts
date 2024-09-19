@@ -62,13 +62,16 @@ export class NuevaSolicitudComponent implements OnInit{
       nroDeCopias: this.solicitudForm.get('nroDeCopias')?.value,
       tipoDeDocumento: this.solicitudForm.get('tipoDeDocumento')?.value,
       nroDePaginas: this.solicitudForm.get('nroDePaginas')?.value,
-      idUnidad: this.solicitudForm.get('idUnidad')?.value,
+      idUnidad: this.solicitudForm.get('idUnidad')?.value, // Aquí se captura el ID de la unidad seleccionada
+      //Me Parece que: este id del solicitante debe ser del que inicia session
       idSolicitante: this.solicitudForm.get('idSolicitante')?.value,
       archivosPdf: [], // Inicialmente vacío
     };
 
     // Convertir los archivos a Base64
     const conversiones = this.archivosSeleccionados.map(file => this.convertFileToBase64(file));
+    alert(solicitudRequest.idUnidad);
+
 
     forkJoin(conversiones).pipe(
       map(base64Array => {
