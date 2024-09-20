@@ -39,7 +39,7 @@ public class SolicitudController {
         //Debo encontrar la unidad
         Usuario usuario = usuarioService.findUsuarioPorIdService(solicitudRequest.getIdSolicitante());
 
-        List<ArchivoPdf> archivoPdfs = solicitudRequest.getListArvhicosPDF().stream().map(x ->
+        List<ArchivoPdf> archivoPdfs = solicitudRequest.getArchivosPdf().stream().map(x ->
                     ArchivoPdf.builder()
                             .archivo(x)
                             .build()

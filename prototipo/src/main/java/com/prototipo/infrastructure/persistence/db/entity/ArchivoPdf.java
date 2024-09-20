@@ -16,6 +16,9 @@ public class ArchivoPdf {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
+
+    //@Column(columnDefinition = "LONGTEXT")
+    @Column(columnDefinition = "MEDIUMTEXT")
     private String archivo;
 
     @ManyToOne

@@ -55,7 +55,7 @@ export class NuevaSolicitudComponent implements OnInit{
 
 
   botonNuevaSolicitud(): void {
-    const url = 'http://localhost:8081/dologin'; // URL de tu API
+    const url = 'http://localhost:8081/solicitante/solicitarFotocopiar'; // URL de tu API
 
     // Extraer los valores del formulario
     const solicitudRequest: SolicitudRequest = {
@@ -68,10 +68,13 @@ export class NuevaSolicitudComponent implements OnInit{
       archivosPdf: [], // Inicialmente vacío
     };
 
+    //ESTE ID DEBE VENIR DEL QUE HA INICADO SESION PREVIAMENTE COMO SOLICITANTE
+    solicitudRequest.idSolicitante = 9;
+    solicitudRequest.idUnidad = Number(solicitudRequest.idUnidad);
+    //-------------------ESTO ES SOLO UNA PRUEBA-------------------
+
     // Convertir los archivos a Base64
     const conversiones = this.archivosSeleccionados.map(file => this.convertFileToBase64(file));
-    alert(solicitudRequest.idUnidad);
-
 
     forkJoin(conversiones).pipe(
       map(base64Array => {

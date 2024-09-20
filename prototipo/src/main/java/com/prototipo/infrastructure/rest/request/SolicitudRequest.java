@@ -16,5 +16,5 @@ public class SolicitudRequest {
     private Long nroDePaginas;
     private Long idUnidad;
     private Long idSolicitante;
-    private List<String> listArvhicosPDF;
+    private List<String> archivosPdf;
 }
