@@ -77,7 +77,31 @@ public class SolicitudImpl implements SolicitudAbstract {
 
     @Override
     public List<SolicitudDto> getListaSolicitudesAbstract() {
-        return List.of();
+        List<Solicitud> list = solicitudRepository.findAll();
+        List<SolicitudDto> solicitudDtoList = list
+                .stream()
+                .map(x -> SolicitudDto.builder()
+                        .id(x.getId())
+                        .nroDeCopias(x.getNroDeCopias())
+                        .tipoDeDocumento(x.getTipoDeDocumento())
+                        .nroDePaginas(x.getNroDePaginas())
+                        .estadoSolicitud(x.getEstadoSolicitud())
+                        .notificacionToAprobar(x.getNotificacionToAprobar())
+                        .solicitante(UsuarioDto.builder()
+                                .id(x.getFk_solicitante().getId())
+                                .nombres(x.getFk_solicitante().getNombres())
+                                .apellidos(x.getFk_solicitante().getApellidos())
+                                .build())
+                        .unidad(UnidadDto.builder()
+                                .id(x.getFk_unidad().getId())
+                                .nombre(x.getFk_unidad().getNombre())
+                                .direccion(x.getFk_unidad().getDireccion())
+                                .build())
+                        .build()
+                )
+                .toList();
+
+        return solicitudDtoList;
     }
 
     @Override
