@@ -23,15 +23,12 @@ public class Solicitud {
     private String tipoDeDocumento;
     private Long nroDePaginas;
     //private Unidad nombreUnidad;
-
     //private EstadoSolicitud estadoSolicitud;
     private String estadoSolicitud;
     //private DPF archivoParaFotocopiar;
 
-
     //los estados posibles son Pendiente, Aprobada y Rechazada
     private String notificacionToAprobar;
-
 
     @ManyToOne
     private Usuario fk_solicitante;

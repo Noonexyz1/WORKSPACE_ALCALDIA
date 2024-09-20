@@ -59,8 +59,31 @@ public class SolicitudAdapter implements SolicitudService {
     @Override
     public List<Solicitud> getListaSolicitudesService() {
         //Hacer los mapeos correspondientes
-        List<SolicitudDto> solicitudDtoList = solicitudAbstract.getListaSolicitudesAbstract();
-        return List.of();
+        List<Solicitud> solicitud = solicitudAbstract.getListaSolicitudesAbstract()
+                .stream()
+                .map(x -> Solicitud.builder()
+                        .id(x.getId())
+                        .nroDeCopias(x.getNroDeCopias())
+                        .tipoDeDocumento(x.getTipoDeDocumento())
+                        .nroDePaginas(x.getNroDePaginas())
+                        .estadoSolicitud(x.getEstadoSolicitud())
+                        .notificacionToAprobar(x.getNotificacionToAprobar())
+                        .usuario(Usuario.builder()
+                                .id(x.getSolicitante().getId())
+                                .nombres(x.getSolicitante().getNombres())
+                                .apellidos(x.getSolicitante().getApellidos())
+                                .build()
+                        )
+                        .unidad(Unidad.builder()
+                                .id(x.getUnidad().getId())
+                                .nombre(x.getUnidad().getNombre())
+                                .direccion(x.getUnidad().getDireccion())
+                                .build())
+                        .build()
+                )
+                .toList();
+
+        return solicitud;
     }
 
     @Override

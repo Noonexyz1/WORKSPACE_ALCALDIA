@@ -13,11 +13,11 @@ public class Solicitud {
     //private TipoDocumento tipoDeDocumento;
     private String tipoDeDocumento;
     private Long nroDePaginas;
+    private String estadoSolicitud;
+    private String notificacionToAprobar;
 
     private Unidad unidad;
     private Usuario usuario;
-    //private EstadoSolicitud estadoSolicitud;
     /*private DPF archivoParaFotocopiar;*/
-    //private Notificacion notificacionToAprobar;
     private List<ArchivoPdf> listArvhicosPDF;
 }

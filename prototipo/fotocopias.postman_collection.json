@@ -252,6 +252,26 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "ver solicitudes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/responsable/verSolicitudes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"responsable",
+								"verSolicitudes"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
