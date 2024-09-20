@@ -209,53 +209,16 @@ VALUES
 (3, 'U2FtcGxlU3RyaW5nMDM='),
 (4, 'U2FtcGxlU3RyaW5nMDQ='),
 (5, 'U2FtcGxlU3RyaW5nMDU='),
-(6, 'U2FtcGxlU3RyaW5nMDY='),
-(7, 'U2FtcGxlU3RyaW5nMDc='),
-(8, 'U2FtcGxlU3RyaW5nMDg='),
-(9, 'U2FtcGxlU3RyaW5nMDk='),
-(10, 'U2FtcGxlU3RyaW5nMTA='),
-(11, 'U2FtcGxlU3RyaW5nMTE='),
-(12, 'U2FtcGxlU3RyaW5nMTI='),
-(13, 'U2FtcGxlU3RyaW5nMTM='),
-(14, 'U2FtcGxlU3RyaW5nMTQ='),
-(15, 'U2FtcGxlU3RyaW5nMTU='),
-(16, 'U2FtcGxlU3RyaW5nMTY='),
-(17, 'U2FtcGxlU3RyaW5nMTc='),
-(18, 'U2FtcGxlU3RyaW5nMTg='),
-(19, 'U2FtcGxlU3RyaW5nMTk='),
-(20, 'U2FtcGxlU3RyaW5nMjA='),
-(21, 'U2FtcGxlU3RyaW5nMjE='),
-(22, 'U2FtcGxlU3RyaW5nMjI='),
-(23, 'U2FtcGxlU3RyaW5nMjM='),
-(24, 'U2FtcGxlU3RyaW5nMjQ='),
-(25, 'U2FtcGxlU3RyaW5nMjU='),
-(26, 'U2FtcGxlU3RyaW5nMjY='),
-(27, 'U2FtcGxlU3RyaW5nMjc='),
-(28, 'U2FtcGxlU3RyaW5nMjg='),
-(29, 'U2FtcGxlU3RyaW5nMjk='),
-(30, 'U2FtcGxlU3RyaW5nMzA='),
-(31, 'U2FtcGxlU3RyaW5nMzE='),
-(32, 'U2FtcGxlU3RyaW5nMzI='),
-(33, 'U2FtcGxlU3RyaW5nMzM='),
-(34, 'U2FtcGxlU3RyaW5nMzQ='),
-(35, 'U2FtcGxlU3RyaW5nMzU='),
-(36, 'U2FtcGxlU3RyaW5nMzY='),
-(37, 'U2FtcGxlU3RyaW5nMzc='),
-(38, 'U2FtcGxlU3RyaW5nMzg='),
-(39, 'U2FtcGxlU3RyaW5nMzk='),
-(40, 'U2FtcGxlU3RyaW5nNDA='),
-(41, 'U2FtcGxlU3RyaW5nNDE='),
-(42, 'U2FtcGxlU3RyaW5nNDI='),
-(43, 'U2FtcGxlU3RyaW5nNDM='),
-(44, 'U2FtcGxlU3RyaW5nNDQ='),
-(45, 'U2FtcGxlU3RyaW5nNDU='),
-(46, 'U2FtcGxlU3RyaW5nNDY='),
-(47, 'U2FtcGxlU3RyaW5nNDc='),
-(48, 'U2FtcGxlU3RyaW5nNDg=');
+(6, 'U2FtcGxlU3RyaW5nMDY=');
 
+SHOW VARIABLES LIKE 'max_allowed_packet';
 
 SELECT * FROM archivo_pdf;
+DELETE FROM archivo_pdf;
 
+
+/*No se puede borrar una tabla fuerte si sus llaves primarias han sido propagadas a otras tablas,
+ * entonces hay que borrar la tabla esa que es con llaves foraneas para luego borrar la tabla fuerte*/
 
 
 /*INSERT INTO aprobacion (fk_solicitud_id, fk_solicitante_id, fk_operador_id, fk_insumo_id)

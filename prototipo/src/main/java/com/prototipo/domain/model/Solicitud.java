@@ -20,6 +20,4 @@ public class Solicitud {
     /*private DPF archivoParaFotocopiar;*/
     //private Notificacion notificacionToAprobar;
     private List<ArchivoPdf> listArvhicosPDF;
-
-    private Usuario usuarioEnvio;
 }

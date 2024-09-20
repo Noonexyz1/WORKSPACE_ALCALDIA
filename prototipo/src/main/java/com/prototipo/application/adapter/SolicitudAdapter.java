@@ -27,18 +27,11 @@ public class SolicitudAdapter implements SolicitudService {
         Unidad unidad = solicitud.getUnidad();
         UnidadDto unidadDto = UnidadDto.builder()
                 .id(unidad.getId())
-                .nombre(unidad.getNombre())
-                .direccion(unidad.getDireccion())
                 .build();
 
         Usuario usuario = solicitud.getUsuario();
         UsuarioDto usuarioDto = UsuarioDto.builder()
                 .id(usuario.getId())
-                .nombres(usuario.getNombres())
-                .apellidos(usuario.getApellidos())
-                //.responsable()
-                //.credencial()
-                //.rol()
                 .build();
 
         List<ArchivoPdfDto> archivoPdfDtos = solicitud.getListArvhicosPDF()

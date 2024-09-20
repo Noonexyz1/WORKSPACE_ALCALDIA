@@ -40,7 +40,6 @@ public class SolicitudImpl implements SolicitudAbstract {
                 .id(unidadDto.getId())
                 .build();
 
-
         Solicitud solicitud = Solicitud.builder()
                 .nroDeCopias(solicitudDto.getNroDeCopias())
                 .tipoDeDocumento(solicitudDto.getTipoDeDocumento())
@@ -64,13 +63,13 @@ public class SolicitudImpl implements SolicitudAbstract {
         List<ArchivoPdf> archivoPdfs = solicitudDto.getArchivosPdf()
                 .stream()
                 .map(x -> ArchivoPdf.builder()
-                                .archivo(x.getArchivo())
-                                .build()
+                        .archivo(x.getArchivo())
+                        .fk_solicitud(solicitudPersist)
+                        .build()
                 )
                 .toList();
 
         archivoPdfs.forEach(x -> {
-            x.setFk_solicitud(solicitudPersist);
             archivoPdfRepository.save(x);
         });
 
