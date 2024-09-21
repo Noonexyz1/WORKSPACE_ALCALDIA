@@ -21,6 +21,6 @@ public class Unidad {
     private String nombre;
     private String direccion;
 
-    @OneToMany(mappedBy = "fk_unidad")
+    @OneToMany(mappedBy = "fkUnidad")
     private List<Solicitud> listaUsuarios;
 }

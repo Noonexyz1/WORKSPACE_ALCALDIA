@@ -22,5 +22,5 @@ public class Credencial {
     private String pass;
 
     @OneToOne
-    private Usuario fk_usuario;
+    private Usuario fkUsuario;
 }

@@ -22,5 +22,5 @@ public class ArchivoPdf {
     private String archivo;
 
     @ManyToOne
-    private Solicitud fk_solicitud;
+    private Solicitud fkSolicitud;
 }

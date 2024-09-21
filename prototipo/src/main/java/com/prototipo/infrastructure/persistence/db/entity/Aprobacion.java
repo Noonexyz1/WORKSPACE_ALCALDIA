@@ -21,18 +21,12 @@ public class Aprobacion {
     @Column(updatable = false, nullable = false)
     private Long id;
 
-
     @ManyToOne
-    private Usuario fk_solicitante;
-
+    private Usuario fkSolicitante;
     @ManyToOne
-    private Solicitud fk_solicitud;
-
-
+    private Solicitud fkSolicitud;
     @ManyToOne
-    private Usuario fk_operador;
-
-
+    private Usuario fkOperador;
 
     /*@ManyToOne
     private Insumo fk_insumo;*/
