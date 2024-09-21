@@ -1,12 +1,12 @@
 package com.prototipo.domain.model;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
-@Builder
-public class Unidad {
-
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class UnidadDomain {
     private Long id;
     private String nombre;
     private String direccion;

@@ -1,12 +1,13 @@
 package com.prototipo.domain.enums;
 
-public enum EstadoSolicitud {
+public enum NotificacionEnum {
     PENDIENTE("Pendiente"),
-    COMPLETADA("Completada");
+    APROBADA("Aprobada"),
+    RECHAZADA("Rechazada");
 
     private final String nombre;
 
-    EstadoSolicitud(String nombre){
+    NotificacionEnum(String nombre){
         this.nombre = nombre;
     }
 

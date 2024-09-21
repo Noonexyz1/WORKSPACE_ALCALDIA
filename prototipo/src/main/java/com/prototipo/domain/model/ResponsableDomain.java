@@ -1,6 +1,12 @@
 package com.prototipo.domain.model;
 
-public class Responsable {
+import lombok.*;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ResponsableDomain {
     private String idResponsabe;
     private String nombreUnidadPerteneciente;
 }

@@ -1,13 +1,13 @@
 package com.prototipo.domain.enums;
 
-public enum Notificacion {
-    PENDIENTE("Pendiente"),
-    APROBADA("Aprobada"),
-    RECHAZADA("Rechazada");
+public enum RolEnum {
+    ADMINISTRADOR("Administrador"),
+    SOLICITANTE("Solicitante"),
+    OPERADOR("Operador");
 
     private final String nombre;
 
-    Notificacion(String nombre){
+    RolEnum(String nombre){
         this.nombre = nombre;
     }
 
