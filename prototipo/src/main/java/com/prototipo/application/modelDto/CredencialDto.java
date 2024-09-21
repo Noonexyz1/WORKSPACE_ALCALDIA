@@ -1,16 +1,15 @@
 package com.prototipo.application.modelDto;
 
-import com.prototipo.domain.model.Usuario;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
-@Builder
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CredencialDto {
 
     private Long id;
     private String nombreUser;
     private String pass;
-
-    private Usuario usuario;
+    private UsuarioDto fkUsuario;
 }

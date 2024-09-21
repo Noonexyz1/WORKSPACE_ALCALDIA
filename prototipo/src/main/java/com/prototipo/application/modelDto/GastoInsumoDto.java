@@ -6,9 +6,9 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DashboardConfigDto {
+public class GastoInsumoDto {
 
     private Long id;
-    private String nombreComponente;
-    private RolDto fkRol;
+    private SolicitudDto fkSolicitud;
+    private InsumoDto fkInsumo;
 }

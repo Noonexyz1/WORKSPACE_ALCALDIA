@@ -1,11 +1,14 @@
 package com.prototipo.application.modelDto;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
-@Builder
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class ArchivoPdfDto {
+
     private Long id;
     private String archivo;
+    private SolicitudDto fkSolicitud;
 }

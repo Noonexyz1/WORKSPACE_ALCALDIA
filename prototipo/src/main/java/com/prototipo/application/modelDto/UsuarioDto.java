@@ -1,19 +1,17 @@
 package com.prototipo.application.modelDto;
 
-import com.prototipo.domain.enums.Rol;
-import com.prototipo.domain.model.Credencial;
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
-@Builder
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class UsuarioDto {
 
     private Long id;
     private String nombres;
     private String apellidos;
-
-    private UsuarioDto responsable;
-    private Credencial credencial;
-    private Rol rol;
+    // Relación reflexiva: un empleado puede tener un gerente
+    private UsuarioDto fkResponsable;
+    private RolDto fkRol;
 }

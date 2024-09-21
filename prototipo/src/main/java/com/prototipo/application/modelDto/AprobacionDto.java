@@ -6,9 +6,11 @@ import lombok.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class DashboardConfigDto {
+public class AprobacionDto {
 
     private Long id;
-    private String nombreComponente;
-    private RolDto fkRol;
+    private UsuarioDto fkSolicitante;
+    private SolicitudDto fkSolicitud;
+    private UsuarioDto fkOperador;
 }
+
