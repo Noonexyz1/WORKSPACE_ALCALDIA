@@ -21,35 +21,21 @@ public class Usuario {
     private String nombres;
     private String apellidos;
 
-
-
     // Relación reflexiva: un empleado puede tener un gerente
     @ManyToOne
-    private Usuario fk_responsable;
+    private Usuario fkResponsable;
+    @ManyToOne
+    private Rol fkRol;
 
     // Relación reflexiva: un gerente puede tener múltiples empleados a su cargo
-    @OneToMany(mappedBy = "fk_responsable")
+    @OneToMany(mappedBy = "fkResponsable")
     private List<Usuario> listEmpleadosACargo;
-
-
-    /*@ManyToOne
-    private Unidad fk_unidad;*/
-
-
-    @OneToOne(mappedBy = "fk_usuario")
+    @OneToOne(mappedBy = "fkUsuario")
     private Credencial credencial;
-
-    @ManyToOne
-    private Rol fk_rol;
-
-    @OneToMany(mappedBy = "fk_solicitante")
+    @OneToMany(mappedBy = "fkSolicitante")
     private List<Solicitud> listaSolicitantes;
-
-    @OneToMany(mappedBy = "fk_solicitante")
+    @OneToMany(mappedBy = "fkSolicitante")
     private List<Aprobacion> listaAprobacion;
-
-
-    @OneToMany(mappedBy = "fk_operador")
+    @OneToMany(mappedBy = "fkOperador")
     private List<Aprobacion> listaOperaciones;
-
 }

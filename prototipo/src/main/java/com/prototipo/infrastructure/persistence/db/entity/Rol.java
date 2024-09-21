@@ -21,9 +21,9 @@ public class Rol {
     private Long id;
     private String nombreRol;
 
-    @OneToMany(mappedBy = "fk_rol")
+    @OneToMany(mappedBy = "fkRol")
     private List<Usuario> listRoles;
 
-    @OneToMany(mappedBy = "fk_rol")
+    @OneToMany(mappedBy = "fkRol")
     private List<DashboardConfig> listDashConfig;
 }

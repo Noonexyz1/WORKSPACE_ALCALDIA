@@ -20,16 +20,13 @@ public class Insumo {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
-
     private String tipo_reporte;
     private String fecha_reporte;
     private String formato; //ENUM('PDF', 'Excel') NOT NULL
     private String detalle;
 
-
-
     /*@OneToMany(mappedBy = "fk_insumo")
     private List<Aprobacion> listaAprobaciones;*/
-    @OneToMany(mappedBy = "fk_insumo")
+    @OneToMany(mappedBy = "fkInsumo")
     private List<GastoInsumo> listGastoInsumos;
 }

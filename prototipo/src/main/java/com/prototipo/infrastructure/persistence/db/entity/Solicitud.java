@@ -19,27 +19,20 @@ public class Solicitud {
     @Column(updatable = false, nullable = false)
     private Long id;
     private Long nroDeCopias;
-    //private TipoDocumento tipoDeDocumento;
     private String tipoDeDocumento;
     private Long nroDePaginas;
-    //private Unidad nombreUnidad;
-    //private EstadoSolicitud estadoSolicitud;
-    private String estadoSolicitud;
-    //private DPF archivoParaFotocopiar;
-
-    //los estados posibles son Pendiente, Aprobada y Rechazada
-    private String notificacionToAprobar;
+    private String estadoByResponsable;
+    private String estadoByOperador;
 
     @ManyToOne
-    private Usuario fk_solicitante;
+    private Usuario fkSolicitante;
     @ManyToOne
-    private Unidad fk_unidad;
+    private Unidad fkUnidad;
 
-
-    @OneToMany(mappedBy = "fk_solicitud")
+    @OneToMany(mappedBy = "fkSolicitud")
     private List<ArchivoPdf> archivoPdf;
-    @OneToMany(mappedBy = "fk_solicitud")
+    @OneToMany(mappedBy = "fkSolicitud")
     private List<Aprobacion> listaAprobacion;
-    @OneToMany(mappedBy = "fk_solicitud")
+    @OneToMany(mappedBy = "fkSolicitud")
     private List<GastoInsumo> listGastoInsumos;
 }

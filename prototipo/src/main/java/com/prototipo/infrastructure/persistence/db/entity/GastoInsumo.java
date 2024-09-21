@@ -19,10 +19,8 @@ public class GastoInsumo {
     @Column(updatable = false, nullable = false)
     private Long id;
 
-
-
     @ManyToOne
-    private Solicitud fk_solicitud;
+    private Solicitud fkSolicitud;
     @ManyToOne
-    private Insumo fk_insumo;
+    private Insumo fkInsumo;
 }
