@@ -43,4 +43,16 @@ public class SolicitudImpl implements SolicitudAbstract {
                 .map(x -> modelMapper.map(x, SolicitudDto.class))
                 .toList();
     }
+
+    @Override
+    public void guardarSolicitudAbstract(SolicitudDto solicitudDto) {
+        Solicitud solicitud = modelMapper.map(solicitudDto, Solicitud.class);
+        solicitudRepository.save(solicitud);
+    }
+
+    @Override
+    public SolicitudDto buscarSolicitudAbstract(Long id) {
+        Solicitud solicitud = solicitudRepository.findById(id).orElseThrow();
+        return modelMapper.map(solicitud, SolicitudDto.class);
+    }
 }
