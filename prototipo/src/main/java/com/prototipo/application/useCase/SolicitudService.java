@@ -1,11 +1,12 @@
 package com.prototipo.application.useCase;
 
-import com.prototipo.domain.model.Solicitud;
+import com.prototipo.domain.model.ArchivoPdfDomain;
+import com.prototipo.domain.model.SolicitudDomain;
 
 import java.util.List;
 
 public interface SolicitudService {
-    void solicitarFotocopiarService(Solicitud solicitud);
-    List<Solicitud> getListaSolicitudesService();
-    List<Solicitud> getSolicitudesOperadorService();
+    void solicitarFotocopiarService(SolicitudDomain solicitudDomain, List<ArchivoPdfDomain> list);
+    void guardarPdfDeLaSolicitudAbstract(ArchivoPdfDomain archivoPdfDomain);
+    List<SolicitudDomain> getListaSolicitudesService();
 }

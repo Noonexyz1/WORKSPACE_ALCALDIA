@@ -1,95 +1,62 @@
 package com.prototipo.application.adapter;
 
+import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.ArchivoPdfDto;
 import com.prototipo.application.modelDto.SolicitudDto;
 import com.prototipo.application.modelDto.UnidadDto;
 import com.prototipo.application.modelDto.UsuarioDto;
 import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.application.useCase.SolicitudService;
-import com.prototipo.domain.model.Solicitud;
-import com.prototipo.domain.model.Unidad;
-import com.prototipo.domain.model.Usuario;
+import com.prototipo.domain.enums.EstadoByOperadorEnum;
+import com.prototipo.domain.enums.EstadoByResponsableEnum;
+import com.prototipo.domain.model.ArchivoPdfDomain;
+import com.prototipo.domain.model.SolicitudDomain;
 
 import java.util.List;
 
 public class SolicitudAdapter implements SolicitudService {
 
     private SolicitudAbstract solicitudAbstract;
+    private MapperApplicationAbstract mapperApplicationAbstract;
 
-    public SolicitudAdapter(SolicitudAbstract solicitudAbstract){
+    public SolicitudAdapter(SolicitudAbstract solicitudAbstract,
+                            MapperApplicationAbstract mapperApplicationAbstract){
+
         this.solicitudAbstract = solicitudAbstract;
+        this.mapperApplicationAbstract = mapperApplicationAbstract;
     }
 
 
     @Override
-    public void solicitarFotocopiarService(Solicitud solicitud) {
-        //TODO Mapeado de instancias
-        Unidad unidad = solicitud.getUnidad();
-        UnidadDto unidadDto = UnidadDto.builder()
-                .id(unidad.getId())
-                .build();
+    public void solicitarFotocopiarService(SolicitudDomain solicitudDomain, List<ArchivoPdfDomain> listPdf) {
+        //Mapeo de instancias
+        UnidadDto unidadDto = mapperApplicationAbstract.mapearAbstract(solicitudDomain.getFkUnidad(), UnidadDto.class);
+        UsuarioDto usuarioDto = mapperApplicationAbstract.mapearAbstract(solicitudDomain.getFkSolicitante(), UsuarioDto.class);
 
-        Usuario usuario = solicitud.getUsuario();
-        UsuarioDto usuarioDto = UsuarioDto.builder()
-                .id(usuario.getId())
-                .build();
+        SolicitudDto solicitudDto = mapperApplicationAbstract.mapearAbstract(solicitudDomain, SolicitudDto.class);
+        solicitudDto.setEstadoByResponsable(EstadoByResponsableEnum.PENDIENTE.getNombre());
+        solicitudDto.setEstadoByOperador(EstadoByOperadorEnum.PENDIENTE.getNombre());
 
-        List<ArchivoPdfDto> archivoPdfDtos = solicitud.getListArvhicosPDF()
+        SolicitudDto solicitudDtoResp = solicitudAbstract.solicitarFotocopiarAbstract(solicitudDto);
+        SolicitudDomain solicitudDomainResp = mapperApplicationAbstract.mapearAbstract(solicitudDtoResp, SolicitudDomain.class);
+
+        listPdf.forEach(x -> {
+            x.setFkSolicitud(solicitudDomainResp);
+            guardarPdfDeLaSolicitudAbstract(x);
+        });
+    }
+
+    @Override
+    public void guardarPdfDeLaSolicitudAbstract(ArchivoPdfDomain archivoPdfDomain) {
+        ArchivoPdfDto archivoPdfDto = mapperApplicationAbstract.mapearAbstract(archivoPdfDomain, ArchivoPdfDto.class);
+        solicitudAbstract.guardarPdfDeLaSolicitudAbstract(archivoPdfDto);
+    }
+
+    @Override
+    public List<SolicitudDomain> getListaSolicitudesService() {
+        return solicitudAbstract.getListaSolicitudesAbstract()
                 .stream()
-                .map(x -> ArchivoPdfDto.builder()
-                        .archivo(x.getArchivo())
-                        .build()
-                )
+                .map(x -> mapperApplicationAbstract.mapearAbstract(x, SolicitudDomain.class))
                 .toList();
-
-        SolicitudDto solicitudDto = SolicitudDto.builder()
-                .nroDeCopias(solicitud.getNroDeCopias())
-                .tipoDeDocumento(solicitud.getTipoDeDocumento())
-                .nroDePaginas(solicitud.getNroDePaginas())
-                .estadoSolicitud("Pendiente")
-                .notificacionToAprobar("Pendiente")
-                .unidad(unidadDto)
-                .solicitante(usuarioDto)
-                .archivosPdf(archivoPdfDtos)
-                .build();
-
-        solicitudAbstract.solicitarFotocopiarAbstract(solicitudDto);
-    }
-
-    @Override
-    public List<Solicitud> getListaSolicitudesService() {
-        //Hacer los mapeos correspondientes
-        List<Solicitud> solicitud = solicitudAbstract.getListaSolicitudesAbstract()
-                .stream()
-                .map(x -> Solicitud.builder()
-                        .id(x.getId())
-                        .nroDeCopias(x.getNroDeCopias())
-                        .tipoDeDocumento(x.getTipoDeDocumento())
-                        .nroDePaginas(x.getNroDePaginas())
-                        .estadoSolicitud(x.getEstadoSolicitud())
-                        .notificacionToAprobar(x.getNotificacionToAprobar())
-                        .usuario(Usuario.builder()
-                                .id(x.getSolicitante().getId())
-                                .nombres(x.getSolicitante().getNombres())
-                                .apellidos(x.getSolicitante().getApellidos())
-                                .build()
-                        )
-                        .unidad(Unidad.builder()
-                                .id(x.getUnidad().getId())
-                                .nombre(x.getUnidad().getNombre())
-                                .direccion(x.getUnidad().getDireccion())
-                                .build())
-                        .build()
-                )
-                .toList();
-
-        return solicitud;
-    }
-
-    @Override
-    public List<Solicitud> getSolicitudesOperadorService() {
-        //Hacer los mapeos correspondientes
-        List<SolicitudDto> solicitudDtoList = solicitudAbstract.getSolicitudesOperadorAbstract();
-        return List.of();
     }
 }
