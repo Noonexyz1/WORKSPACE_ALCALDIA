@@ -45,6 +45,8 @@ VALUES
 
 
 #INSERTAMOS USUARIOS
+#No es necesario crear relaciones de reflexion, esto es solamente control de usuarios
+#Arreglar eso!!
 INSERT INTO usuario (fk_responsable_id, fk_rol_id, apellidos, nombres)
 VALUES (NULL, 1, 'Perez', 'Ana'),
 (NULL, 2, 'Lopez', 'Carlos'),
