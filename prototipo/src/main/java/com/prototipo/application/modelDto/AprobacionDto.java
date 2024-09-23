@@ -7,9 +7,11 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArchivoPdfDto {
+public class AprobacionDto {
 
     private Long id;
-    private String archivo;
+    private UsuarioDto fkSolicitante;
     private SolicitudDto fkSolicitud;
+    private UsuarioDto fkOperador;
 }
+

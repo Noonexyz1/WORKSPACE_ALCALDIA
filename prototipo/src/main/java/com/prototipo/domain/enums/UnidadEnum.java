@@ -1,4 +1,4 @@
 package com.prototipo.domain.enums;
 
-public enum TipoDocumento {
+public enum UnidadEnum {
 }

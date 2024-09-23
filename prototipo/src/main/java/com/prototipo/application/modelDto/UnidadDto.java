@@ -1,10 +1,12 @@
 package com.prototipo.application.modelDto;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Setter
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class UnidadDto {
 
     private Long id;

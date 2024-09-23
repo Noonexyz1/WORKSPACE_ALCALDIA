@@ -1,4 +1,4 @@
-package com.prototipo.application.modelDto;
+package com.prototipo.domain.model;
 
 import lombok.*;
 
@@ -7,9 +7,8 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ArchivoPdfDto {
-
+public class ArchivoPdfDomain {
     private Long id;
     private String archivo;
-    private SolicitudDto fkSolicitud;
+    private SolicitudDomain fkSolicitud;
 }

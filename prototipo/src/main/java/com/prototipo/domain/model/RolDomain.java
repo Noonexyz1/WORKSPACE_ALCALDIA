@@ -1,4 +1,4 @@
-package com.prototipo.application.modelDto;
+package com.prototipo.domain.model;
 
 import lombok.*;
 
@@ -7,8 +7,7 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class RolDto {
-
+public class RolDomain {
     private Long id;
     private String nombreRol;
 }

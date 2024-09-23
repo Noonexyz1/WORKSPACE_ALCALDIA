@@ -1,20 +1,20 @@
-package com.prototipo.application.modelDto;
+package com.prototipo.infrastructure.rest.response;
 
 import lombok.*;
 
 @Getter
 @Setter
-@Builder
-@NoArgsConstructor
 @AllArgsConstructor
-public class SolicitudDto {
+@NoArgsConstructor
+@Builder
+public class SolicitudSoliciResponse {
 
     private Long id;
     private Long nroDeCopias;
     private String tipoDeDocumento;
     private Long nroDePaginas;
     private String estadoByResponsable;
+    //los estados posibles son Pendiente, Aprobada y Rechazada
     private String estadoByOperador;
-    private UsuarioDto fkSolicitante;
-    private UnidadDto fkUnidad;
+    private String nombreUnidad;
 }

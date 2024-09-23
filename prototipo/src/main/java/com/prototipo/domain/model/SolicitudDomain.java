@@ -1,4 +1,4 @@
-package com.prototipo.application.modelDto;
+package com.prototipo.domain.model;
 
 import lombok.*;
 
@@ -7,14 +7,13 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class SolicitudDto {
-
+public class SolicitudDomain {
     private Long id;
     private Long nroDeCopias;
     private String tipoDeDocumento;
     private Long nroDePaginas;
     private String estadoByResponsable;
     private String estadoByOperador;
-    private UsuarioDto fkSolicitante;
-    private UnidadDto fkUnidad;
+    private UsuarioDomain fkSolicitante;
+    private UnidadDomain fkUnidad;
 }

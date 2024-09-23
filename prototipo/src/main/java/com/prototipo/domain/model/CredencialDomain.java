@@ -1,16 +1,15 @@
 package com.prototipo.domain.model;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 
 @Getter
+@Setter
 @Builder
-public class Credencial {
-
+@NoArgsConstructor
+@AllArgsConstructor
+public class CredencialDomain {
     private Long id;
     private String nombreUser;
     private String pass;
-
-    private Usuario usuario;
+    private UsuarioDomain fkUsuario;
 }
-
