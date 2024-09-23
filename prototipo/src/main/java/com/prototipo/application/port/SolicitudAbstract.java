@@ -9,4 +9,6 @@ public interface SolicitudAbstract {
     SolicitudDto solicitarFotocopiarAbstract(SolicitudDto solicitudDto);
     void guardarPdfDeLaSolicitudAbstract(ArchivoPdfDto archivoPdfDto);
     List<SolicitudDto> getListaSolicitudesAbstract();
+    void guardarSolicitudAbstract(SolicitudDto solicitudDto);
+    SolicitudDto buscarSolicitudAbstract(Long id);
 }

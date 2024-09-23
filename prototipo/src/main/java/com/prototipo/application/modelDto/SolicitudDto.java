@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class SolicitudDto {
-
     private Long id;
     private Long nroDeCopias;
     private String tipoDeDocumento;

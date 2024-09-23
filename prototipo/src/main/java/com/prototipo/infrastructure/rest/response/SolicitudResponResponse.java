@@ -8,11 +8,10 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class SolicitudResponResponse {
-
     private Long id;
     private Long nroDeCopias;
     private String tipoDeDocumento;
     private Long nroDePaginas;
+    private String estadoByResponsable;
     private String nombreUnidad;
-    private String estadoSolicitud;
 }
