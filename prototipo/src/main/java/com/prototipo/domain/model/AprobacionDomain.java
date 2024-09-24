@@ -9,8 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class AprobacionDomain {
     private Long id;
-    private UsuarioDomain fkSolicitante;
+    private String estadoByResponsable;
+    private UsuarioDomain fkResponsable;
     private SolicitudDomain fkSolicitud;
-    private UsuarioDomain fkOperador;
 }
-

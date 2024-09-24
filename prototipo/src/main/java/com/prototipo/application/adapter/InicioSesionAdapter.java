@@ -1,39 +1,35 @@
 package com.prototipo.application.adapter;
 
+import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.CredencialDto;
+import com.prototipo.application.modelDto.DashboardConfigDto;
 import com.prototipo.application.modelDto.UsuarioDto;
 import com.prototipo.application.port.InicioSesionAbstract;
 import com.prototipo.application.useCase.InicioSesionService;
-import com.prototipo.domain.model.Credencial;
-import com.prototipo.domain.model.Usuario;
+import com.prototipo.domain.model.CredencialDomain;
+import com.prototipo.domain.model.UsuarioDomain;
 
 import java.util.List;
 
 public class InicioSesionAdapter implements InicioSesionService {
 
     private InicioSesionAbstract inicioSesionAbstract;
+    private MapperApplicationAbstract mapperApplicationAbstract;
 
-    public InicioSesionAdapter(InicioSesionAbstract inicioSesionAbstract){
+    public InicioSesionAdapter(InicioSesionAbstract inicioSesionAbstract,
+                               MapperApplicationAbstract mapperApplicationAbstract){
+
         this.inicioSesionAbstract = inicioSesionAbstract;
+        this.mapperApplicationAbstract = mapperApplicationAbstract;
     }
 
     @Override
-    public Usuario iniciarSesionService(Credencial credencial) {
+    public UsuarioDomain iniciarSesionService(CredencialDomain credencial) {
         //Mapeamos de Credencial a CredencialDto
-        CredencialDto credencialDto = CredencialDto.builder()
-                .id(credencial.getId())
-                .nombreUser(credencial.getNombreUser())
-                .pass(credencial.getPass())
-                .build();
-
+        CredencialDto credencialDto = mapperApplicationAbstract.mapearAbstract(credencial, CredencialDto.class);
         //Mapeamos de Para devolver el usuario para cumplir con el dominio
         UsuarioDto usuarioDto = inicioSesionAbstract.iniciarSesionAbstract(credencialDto);
-
-        return Usuario.builder()
-                .id(usuarioDto.getId())
-                .nombres(usuarioDto.getNombres())
-                .apellidos(usuarioDto.getApellidos())
-                .build();
+        return mapperApplicationAbstract.mapearAbstract(usuarioDto, UsuarioDomain.class);
     }
 
     @Override
@@ -43,6 +39,9 @@ public class InicioSesionAdapter implements InicioSesionService {
 
     @Override
     public List<String> configuracionDeUsuarioService() {
-        return inicioSesionAbstract.configuracionDeUsuarioAbstract();
+        return inicioSesionAbstract.configuracionDeUsuarioAbstract()
+                .stream()
+                .map(DashboardConfigDto::getNombreComponente)
+                .toList();
     }
 }

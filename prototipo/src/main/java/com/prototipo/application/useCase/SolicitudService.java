@@ -9,4 +9,6 @@ public interface SolicitudService {
     void solicitarFotocopiarService(SolicitudDomain solicitudDomain, List<ArchivoPdfDomain> list);
     void guardarPdfDeLaSolicitudAbstract(ArchivoPdfDomain archivoPdfDomain);
     List<SolicitudDomain> getListaSolicitudesService();
+    void guardarSolicitudService(SolicitudDomain solicitudDomain);
+    SolicitudDomain buscarSolicitudService(Long id);
 }

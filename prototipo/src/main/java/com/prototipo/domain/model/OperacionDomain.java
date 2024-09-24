@@ -9,8 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class OperacionDomain {
     private Long id;
-    private String fechaAsignacion;
-    private String fechaCompletado;
-    private UsuarioDomain usuario;
-    private SolicitudDomain solicitud;
+    private String estadoByOperador;
+    private UsuarioDomain fkOperador;
+    private SolicitudDomain fkSolicitud;
 }

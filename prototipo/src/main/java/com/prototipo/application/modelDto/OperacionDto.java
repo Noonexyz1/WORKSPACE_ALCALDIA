@@ -7,9 +7,9 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class AprobacionDto {
+public class OperacionDto {
     private Long id;
-    private String estadoByResponsable;
-    private UsuarioDto fkResponsable;
+    private String estadoByOperador;
+    private UsuarioDto fkOperador;
     private SolicitudDto fkSolicitud;
 }

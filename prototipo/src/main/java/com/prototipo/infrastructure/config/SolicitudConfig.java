@@ -3,6 +3,7 @@ package com.prototipo.infrastructure.config;
 import com.prototipo.application.adapter.SolicitudAdapter;
 import com.prototipo.application.adapter.UsuarioAdapter;
 import com.prototipo.application.mapper.MapperApplicationAbstract;
+import com.prototipo.application.port.AprobacionAbstract;
 import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.application.port.UsuarioAbastract;
 import com.prototipo.application.useCase.SolicitudService;
@@ -18,10 +19,14 @@ public class SolicitudConfig {
     public SolicitudService solicitudServiceBean(@Qualifier("solicitudImpl")
                                                  SolicitudAbstract solicitudAbstract,
                                                  @Qualifier("mapperApplicationAbstractBean")
-                                                 MapperApplicationAbstract mapperApplicationAbstract){
+                                                 MapperApplicationAbstract mapperApplicationAbstract,
+                                                 @Qualifier("aprobacionImpl")
+                                                 AprobacionAbstract aprobacionAbstract){
 
         //Se necesita una dependencia
-        return new SolicitudAdapter(solicitudAbstract, mapperApplicationAbstract);
+        return new SolicitudAdapter(solicitudAbstract,
+                                    mapperApplicationAbstract,
+                                    aprobacionAbstract);
     }
 
     @Bean

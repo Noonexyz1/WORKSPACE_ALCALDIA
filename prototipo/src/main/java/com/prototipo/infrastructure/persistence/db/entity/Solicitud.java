@@ -21,8 +21,7 @@ public class Solicitud {
     private Long nroDeCopias;
     private String tipoDeDocumento;
     private Long nroDePaginas;
-    private String estadoByResponsable;
-    private String estadoByOperador;
+
 
     @ManyToOne
     private Usuario fkSolicitante;
@@ -33,6 +32,8 @@ public class Solicitud {
     private List<ArchivoPdf> archivoPdf;
     @OneToMany(mappedBy = "fkSolicitud")
     private List<Aprobacion> listaAprobacion;
+    @OneToMany(mappedBy = "fkSolicitud")
+    private List<Operacion> listaOperaciones;
     @OneToMany(mappedBy = "fkSolicitud")
     private List<GastoInsumo> listGastoInsumos;
 }

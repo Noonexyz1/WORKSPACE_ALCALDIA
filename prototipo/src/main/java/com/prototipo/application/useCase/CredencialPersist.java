@@ -1,7 +1,7 @@
 package com.prototipo.application.useCase;
 
-import com.prototipo.domain.model.Credencial;
+import com.prototipo.domain.model.CredencialDomain;
 
 public interface CredencialPersist {
-    void buscarUsuario(Credencial credencial);
+    void buscarUsuario(CredencialDomain credencial);
 }

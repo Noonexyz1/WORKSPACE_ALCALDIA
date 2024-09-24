@@ -6,25 +6,22 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "aprobacion")
-public class Aprobacion {
+@Table(name = "operacion")
+public class Operacion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
-    private String estadoByResponsable;
+    private String estadoByOperador;
 
     @ManyToOne
-    private Usuario fkResponsable;
+    private Usuario fkOperador;
     @ManyToOne
     private Solicitud fkSolicitud;
 }
-

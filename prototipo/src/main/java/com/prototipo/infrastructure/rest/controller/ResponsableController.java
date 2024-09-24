@@ -1,7 +1,9 @@
 package com.prototipo.infrastructure.rest.controller;
 
+import com.prototipo.application.useCase.AprobacionService;
 import com.prototipo.application.useCase.ResponsableService;
-import com.prototipo.application.useCase.SolicitudService;
+import com.prototipo.domain.model.AprobacionDomain;
+import com.prototipo.infrastructure.rest.request.AprobacionSoliRequest;
 import com.prototipo.infrastructure.rest.response.SolicitudResponResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,27 +19,40 @@ import java.util.List;
 public class ResponsableController {
 
     @Autowired
-    private SolicitudService solicitudService;
+    private AprobacionService aprobacionService;
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
     private ResponsableService responsableService;
 
-    @GetMapping(path = {"/aprobarSolicitud/{idSolicitud}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void aprobarSolicitud(@PathVariable Long idSolicitud) {
-        responsableService.aprobarSolicitudService(idSolicitud);
+    @PostMapping(path = {"/aprobarSolicitud"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void aprobarSolicitud(@RequestBody AprobacionSoliRequest aprobacionSoliRequest) {
+        Long idSolicitud = aprobacionSoliRequest.getIdSolicitud();
+        Long idResponsable = aprobacionSoliRequest.getIdResponsable();
+        responsableService.aprobarSolicitudService(idSolicitud, idResponsable);
     }
 
-    @GetMapping(path = {"/rechazarSolicitud/{idSolicitud}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void rechazarSolicitud(@PathVariable Long idSolicitud) {
-        responsableService.rechazarSolicitudService(idSolicitud);
+    @PostMapping(path = {"/rechazarSolicitud"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void rechazarSolicitud(@RequestBody AprobacionSoliRequest aprobacionSoliRequest) {
+        Long idSolicitud = aprobacionSoliRequest.getIdSolicitud();
+        Long idResponsable = aprobacionSoliRequest.getIdResponsable();
+        responsableService.rechazarSolicitudService(idSolicitud, idResponsable);
     }
 
     @GetMapping(path = {"/verSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudes() {
-        List<SolicitudResponResponse> listSolicitud = solicitudService.getListaSolicitudesService()
+        List<AprobacionDomain> aprobacionDomains = aprobacionService.listaDeSolicitudesService();
+        List<SolicitudResponResponse> listSolicitud = aprobacionDomains
                 .stream()
-                .map(x -> modelMapper.map(x, SolicitudResponResponse.class))
+                .map(x -> SolicitudResponResponse.builder()
+                        .id(x.getFkSolicitud().getId())
+                        .nroDeCopias(x.getFkSolicitud().getNroDeCopias())
+                        .tipoDeDocumento(x.getFkSolicitud().getTipoDeDocumento())
+                        .nroDePaginas(x.getFkSolicitud().getNroDePaginas())
+                        .estadoByResponsable(x.getEstadoByResponsable())
+                        .nombreUnidad(x.getFkSolicitud().getFkUnidad().getNombre())
+                        .build()
+                )
                 .toList();
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }

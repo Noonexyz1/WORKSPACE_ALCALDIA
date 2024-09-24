@@ -1,11 +1,10 @@
 package com.prototipo.application.useCase;
 
-import com.prototipo.domain.enums.EstadoSolicitud;
-import com.prototipo.domain.model.Solicitud;
+import com.prototipo.domain.model.SolicitudDomain;
 
 import java.util.List;
 
 public interface OperadorService {
-    List<Solicitud> verSolicitudes();
-    boolean cambiarEstadoDeSolicitud(Solicitud solicitud, EstadoSolicitud nuevoEstado);
+    List<SolicitudDomain> verSolicitudes();
+    void cambiarEstadoDeSolicitud(Long idSolicitud);
 }

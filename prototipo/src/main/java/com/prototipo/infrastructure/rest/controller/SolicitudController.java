@@ -1,13 +1,9 @@
 package com.prototipo.infrastructure.rest.controller;
 
-import com.prototipo.application.useCase.SolicitudService;
-import com.prototipo.application.useCase.UnidadService;
-import com.prototipo.application.useCase.UsuarioService;
-import com.prototipo.domain.model.ArchivoPdfDomain;
-import com.prototipo.domain.model.SolicitudDomain;
-import com.prototipo.domain.model.UnidadDomain;
-import com.prototipo.domain.model.UsuarioDomain;
+import com.prototipo.application.useCase.*;
+import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.rest.request.SolicitudRequest;
+import com.prototipo.infrastructure.rest.response.SolicitudResponResponse;
 import com.prototipo.infrastructure.rest.response.SolicitudSoliciResponse;
 import com.prototipo.infrastructure.rest.response.UnidadResponse;
 import org.modelmapper.ModelMapper;
@@ -32,7 +28,10 @@ public class SolicitudController {
     private UsuarioService usuarioService;
     @Autowired
     private ModelMapper modelMapper;
-
+    @Autowired
+    private AprobacionService aprobacionService;
+    @Autowired
+    private OperacionService operacionService;
 
     @PostMapping(path = {"/solicitarFotocopiar"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void solicitarFotocopiar(@RequestBody SolicitudRequest solicitudRequest) {
@@ -74,7 +73,18 @@ public class SolicitudController {
     public ResponseEntity<List<SolicitudSoliciResponse>> verHistorialSolicitudes() {
         List<SolicitudSoliciResponse> list = solicitudService.getListaSolicitudesService()
                 .stream()
-                .map(x -> modelMapper.map(x, SolicitudSoliciResponse.class))
+                .map(x -> {
+                    AprobacionDomain aprobacionDomain = aprobacionService.findAprovacionByIdSoliService(x.getId());
+                    String estadoByResponsable = aprobacionDomain.getEstadoByResponsable();
+
+                    OperacionDomain operacionDomain = operacionService.findOperacionByIdSoliService(x.getId());
+                    String estadoByOperador = operacionDomain.getEstadoByOperador();
+
+                    SolicitudSoliciResponse solicitudSoliciResponse = modelMapper.map(x, SolicitudSoliciResponse.class);
+                    solicitudSoliciResponse.setEstadoByResponsable(estadoByResponsable);
+                    solicitudSoliciResponse.setEstadoByOperador(estadoByOperador);
+                    return solicitudSoliciResponse;
+                })
                 .toList();
         return new ResponseEntity<>(list, HttpStatus.OK);
     }

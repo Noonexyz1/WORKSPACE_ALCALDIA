@@ -12,8 +12,6 @@ public class SolicitudDto {
     private Long nroDeCopias;
     private String tipoDeDocumento;
     private Long nroDePaginas;
-    private String estadoByResponsable;
-    private String estadoByOperador;
     private UsuarioDto fkSolicitante;
     private UnidadDto fkUnidad;
 }
