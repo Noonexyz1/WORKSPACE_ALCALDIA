@@ -14,4 +14,5 @@ public class SolicitudDto {
     private Long nroDePaginas;
     private UsuarioDto fkSolicitante;
     private UnidadDto fkUnidad;
+    private AprobacionDto aprobacion;
 }

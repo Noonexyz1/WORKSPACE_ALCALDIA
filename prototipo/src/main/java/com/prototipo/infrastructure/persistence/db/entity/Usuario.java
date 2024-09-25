@@ -29,6 +29,7 @@ public class Usuario {
 
     @OneToMany(mappedBy = "fkSolicitante")
     private List<Solicitud> listaSolicitantes;
+
     @OneToMany(mappedBy = "fkResponsable")
     private List<Aprobacion> listaAprobacion;
     @OneToMany(mappedBy = "fkOperador")

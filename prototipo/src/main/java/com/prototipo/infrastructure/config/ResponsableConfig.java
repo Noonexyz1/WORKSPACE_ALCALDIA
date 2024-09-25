@@ -2,6 +2,7 @@ package com.prototipo.infrastructure.config;
 
 import com.prototipo.application.adapter.ResponsableAdapter;
 import com.prototipo.application.port.AprobacionAbstract;
+import com.prototipo.application.port.OperacionAbstract;
 import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.application.port.UsuarioAbastract;
 import com.prototipo.application.useCase.ResponsableService;
@@ -18,8 +19,13 @@ public class ResponsableConfig {
                                                      @Qualifier("aprobacionImpl")
                                                      AprobacionAbstract aprobacionAbstract,
                                                      @Qualifier("usuarioImpl")
-                                                     UsuarioAbastract usuarioAbstract) {
+                                                     UsuarioAbastract usuarioAbstract,
+                                                     @Qualifier("operacionImpl")
+                                                     OperacionAbstract operacionAbstract) {
 
-        return new ResponsableAdapter(solicitudAbstract, aprobacionAbstract, usuarioAbstract);
+        return new ResponsableAdapter(solicitudAbstract,
+                                      aprobacionAbstract,
+                                      usuarioAbstract,
+                                      operacionAbstract);
     }
 }

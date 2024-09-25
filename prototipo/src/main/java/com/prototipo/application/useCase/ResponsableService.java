@@ -1,6 +1,6 @@
 package com.prototipo.application.useCase;
 
 public interface ResponsableService {
-    void aprobarSolicitudService(Long idSolicitud, Long idResponsable);
-    void rechazarSolicitudService(Long idSolicitud, Long idResponsable);
+    void aprobarSolicitudService(Long idAprobacion, Long idResponsable);
+    void rechazarSolicitudService(Long idAprobacion, Long idResponsable);
 }

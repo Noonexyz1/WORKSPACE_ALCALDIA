@@ -23,8 +23,10 @@ public class Aprobacion {
     private String estadoByResponsable;
 
     @ManyToOne
-    private Usuario fkResponsable;
-    @ManyToOne
     private Solicitud fkSolicitud;
-}
+    @ManyToOne
+    private Usuario fkResponsable;
 
+    @OneToMany(mappedBy = "fkAprobacion")
+    private List<Operacion> listOperaciones;
+}

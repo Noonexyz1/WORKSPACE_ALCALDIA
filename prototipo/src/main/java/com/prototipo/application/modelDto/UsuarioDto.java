@@ -8,9 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UsuarioDto {
-
     private Long id;
     private String nombres;
     private String apellidos;
     private RolDto fkRol;
+    private CredencialDto credencial;
 }

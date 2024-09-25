@@ -21,4 +21,12 @@ public class OperacionImpl implements OperacionAbstract {
         Operacion operacion = operacionRepository.findById(id).orElseThrow();
         return modelMapper.map(operacion, OperacionDto.class);
     }
+
+    @Override
+    public OperacionDto guardarOperacion(OperacionDto operacionDto) {
+        Operacion operacionToSave = modelMapper.map(operacionDto, Operacion.class);
+        Operacion operacion = operacionRepository.save(operacionToSave);
+        OperacionDto operacionDtoResp = modelMapper.map(operacion, OperacionDto.class);
+        return operacionDtoResp;
+    }
 }

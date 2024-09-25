@@ -23,7 +23,7 @@ public class AprobacionImpl implements AprobacionAbstract {
         Aprobacion aprobacion = modelMapper.map(aprobacionDto, Aprobacion.class);
         Aprobacion aprobacionResp = aprobacionRepository.save(aprobacion);
         AprobacionDto aprobacionDtoResp = modelMapper.map(aprobacionResp, AprobacionDto.class);
-        return aprobacionDto;
+        return aprobacionDtoResp;
     }
 
     @Override

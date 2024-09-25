@@ -12,4 +12,5 @@ public class UsuarioDomain {
     private String nombres;
     private String apellidos;
     private RolDomain fkRol;
+    private CredencialDomain credencial;
 }

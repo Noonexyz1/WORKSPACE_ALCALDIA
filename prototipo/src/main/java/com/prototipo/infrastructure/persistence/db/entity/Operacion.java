@@ -21,7 +21,7 @@ public class Operacion {
     private String estadoByOperador;
 
     @ManyToOne
-    private Usuario fkOperador;
+    private Aprobacion fkAprobacion;
     @ManyToOne
-    private Solicitud fkSolicitud;
+    private Usuario fkOperador;
 }

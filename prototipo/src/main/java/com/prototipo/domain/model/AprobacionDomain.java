@@ -10,6 +10,6 @@ import lombok.*;
 public class AprobacionDomain {
     private Long id;
     private String estadoByResponsable;
-    private UsuarioDomain fkResponsable;
     private SolicitudDomain fkSolicitud;
+    private UsuarioDomain fkResponsable;
 }

@@ -29,11 +29,12 @@ public class Solicitud {
     private Unidad fkUnidad;
 
     @OneToMany(mappedBy = "fkSolicitud")
+    private List<Aprobacion> listAprobaciones;
+
+    @OneToMany(mappedBy = "fkSolicitud")
     private List<ArchivoPdf> archivoPdf;
     @OneToMany(mappedBy = "fkSolicitud")
     private List<Aprobacion> listaAprobacion;
-    @OneToMany(mappedBy = "fkSolicitud")
-    private List<Operacion> listaOperaciones;
     @OneToMany(mappedBy = "fkSolicitud")
     private List<GastoInsumo> listGastoInsumos;
 }
