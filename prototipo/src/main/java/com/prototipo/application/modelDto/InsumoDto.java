@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class InsumoDto {
-
     private Long id;
     private String tipo_reporte;
     private String fecha_reporte;

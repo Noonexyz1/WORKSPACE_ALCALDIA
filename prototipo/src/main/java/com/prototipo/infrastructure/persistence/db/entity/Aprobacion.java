@@ -20,15 +20,13 @@ public class Aprobacion {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
+    private String estadoByResponsable;
 
-    @ManyToOne
-    private Usuario fkSolicitante;
     @ManyToOne
     private Solicitud fkSolicitud;
     @ManyToOne
-    private Usuario fkOperador;
+    private Usuario fkResponsable;
 
-    /*@ManyToOne
-    private Insumo fk_insumo;*/
+    @OneToMany(mappedBy = "fkAprobacion")
+    private List<Operacion> listOperaciones;
 }
-

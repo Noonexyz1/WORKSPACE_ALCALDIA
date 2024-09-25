@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class GastoInsumoDto {
-
     private Long id;
     private SolicitudDto fkSolicitud;
     private InsumoDto fkInsumo;

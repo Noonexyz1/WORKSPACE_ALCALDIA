@@ -1,10 +1,11 @@
 package com.prototipo.infrastructure.rest.controller;
 
 import com.prototipo.application.useCase.InicioSesionService;
-import com.prototipo.domain.model.Credencial;
-import com.prototipo.domain.model.Usuario;
+import com.prototipo.domain.model.CredencialDomain;
+import com.prototipo.domain.model.UsuarioDomain;
 import com.prototipo.infrastructure.rest.request.CredencialRequest;
 import com.prototipo.infrastructure.rest.response.UsuarioResponse;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -19,6 +20,8 @@ public class LoginController {
 
     @Autowired
     private InicioSesionService inicioSesionService;
+    @Autowired
+    private ModelMapper modelMapper;
 
     @PostMapping(path = {""}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UsuarioResponse> iniciarSesion(@RequestBody CredencialRequest request){
@@ -28,19 +31,11 @@ public class LoginController {
         Dominio y Applicacion como uno solo y la infraestrucura como Uno,
         En total dos capas, por lo tanto, desde infraestructura puedo conocer los detalles de
         Infraestrucutura y Dominio en la parte de las importaciones de paquetes*/
-        Credencial credencial = Credencial.builder()
-                .nombreUser(request.getNombreUser())
-                .pass(request.getPass())
-                .build();
-
-        Usuario usuario = inicioSesionService.iniciarSesionService(credencial);
-
-        UsuarioResponse usuarioResponse = UsuarioResponse.builder()
-                .nombres(usuario.getNombres())
-                .apellidos(usuario.getApellidos())
-                .nombreRol(inicioSesionService.rolDeUsuarioService())
-                .listDashConfig(inicioSesionService.configuracionDeUsuarioService())
-                .build();
+        CredencialDomain credencialDomain = modelMapper.map(request, CredencialDomain.class);
+        UsuarioDomain usuario = inicioSesionService.iniciarSesionService(credencialDomain);
+        UsuarioResponse usuarioResponse = modelMapper.map(usuario, UsuarioResponse.class);
+        usuarioResponse.setNombreRol(inicioSesionService.rolDeUsuarioService());
+        usuarioResponse.setListDashConfig(inicioSesionService.configuracionDeUsuarioService());
 
         return new ResponseEntity<>(usuarioResponse, HttpStatus.OK);
     }

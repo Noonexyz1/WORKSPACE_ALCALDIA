@@ -1,7 +1,10 @@
 package com.prototipo.infrastructure.config;
 
 import com.prototipo.application.adapter.ResponsableAdapter;
+import com.prototipo.application.port.AprobacionAbstract;
+import com.prototipo.application.port.OperacionAbstract;
 import com.prototipo.application.port.SolicitudAbstract;
+import com.prototipo.application.port.UsuarioAbastract;
 import com.prototipo.application.useCase.ResponsableService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -12,8 +15,17 @@ public class ResponsableConfig {
 
     @Bean
     public ResponsableService responsableServiceBean(@Qualifier("solicitudImpl")
-                                                     SolicitudAbstract solicitudAbstract) {
+                                                     SolicitudAbstract solicitudAbstract,
+                                                     @Qualifier("aprobacionImpl")
+                                                     AprobacionAbstract aprobacionAbstract,
+                                                     @Qualifier("usuarioImpl")
+                                                     UsuarioAbastract usuarioAbstract,
+                                                     @Qualifier("operacionImpl")
+                                                     OperacionAbstract operacionAbstract) {
 
-        return new ResponsableAdapter(solicitudAbstract);
+        return new ResponsableAdapter(solicitudAbstract,
+                                      aprobacionAbstract,
+                                      usuarioAbstract,
+                                      operacionAbstract);
     }
 }

@@ -8,10 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class AprobacionDto {
-
     private Long id;
-    private UsuarioDto fkSolicitante;
+    private String estadoByResponsable;
     private SolicitudDto fkSolicitud;
-    private UsuarioDto fkOperador;
+    private UsuarioDto fkResponsable;
 }
-

@@ -1,8 +1,7 @@
 package com.prototipo.application.useCase;
 
-import com.prototipo.domain.model.Usuario;
+import com.prototipo.domain.model.UsuarioDomain;
 
 public interface UsuarioService {
-
-    Usuario findUsuarioPorIdService(Long idUnidad);
+    UsuarioDomain findUsuarioPorIdService(Long idUnidad);
 }
