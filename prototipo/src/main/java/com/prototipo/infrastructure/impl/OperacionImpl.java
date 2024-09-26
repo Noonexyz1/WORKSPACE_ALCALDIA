@@ -8,6 +8,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class OperacionImpl implements OperacionAbstract {
 
@@ -28,5 +30,13 @@ public class OperacionImpl implements OperacionAbstract {
         Operacion operacion = operacionRepository.save(operacionToSave);
         OperacionDto operacionDtoResp = modelMapper.map(operacion, OperacionDto.class);
         return operacionDtoResp;
+    }
+
+    @Override
+    public List<OperacionDto> listaDeOperaciones() {
+        return operacionRepository.findAll()
+                .stream()
+                .map(x -> modelMapper.map(x, OperacionDto.class))
+                .toList();
     }
 }

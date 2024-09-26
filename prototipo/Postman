@@ -171,35 +171,6 @@
 			"name": "Operador",
 			"item": [
 				{
-					"name": "set estado soli",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"id\": 101,\n    \"nroDeCopias\": 2,\n    \"tipoDeDocumento\": \"Licencia de Conducir\",\n    \"nroDePaginas\": 15,\n    \"estadoSolicitud\": \"Pendiente\",\n    \"notificacionToAprobar\": \"Aprobada\",\n    \"fk_solicitante\": 34,\n    \"fk_unidad\": \"Unidad de Tránsito\",\n    \"archivoPdf\": \"licencia_conducir.pdf\"\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8081/operador/setEstadoSolicitud",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"operador",
-								"setEstadoSolicitud"
-							]
-						}
-					},
-					"response": []
-				},
-				{
 					"name": "ver solicitudes",
 					"request": {
 						"method": "GET",
@@ -218,6 +189,64 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "iniciar solicitud",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idSolicitud\": 1,\n    \"idOperador\": 11 \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/operador/iniciarOperacion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"operador",
+								"iniciarOperacion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "completar solicitud",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idSolicitud\": 1,\n    \"idOperador\": 11\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/operador/terminarOperacion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"operador",
+								"terminarOperacion"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -231,7 +260,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 101,\n    \"nroDeCopias\": 2,\n    \"tipoDeDocumento\": \"Licencia de Conducir\",\n    \"nroDePaginas\": 15,\n    \"estadoSolicitud\": \"Pendiente\",\n    \"notificacionToAprobar\": \"Aprobada\",\n    \"fk_solicitante\": 34,\n    \"fk_unidad\": \"Unidad de Tránsito\",\n    \"archivoPdf\": \"licencia_conducir.pdf\"\n}",
+							"raw": "{\n    \"idAprobacion\": 1,\n    \"idResponsable\": 16\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -248,6 +277,55 @@
 							"path": [
 								"responsable",
 								"aprobarSolicitud"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ver solicitudes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/responsable/verSolicitudes",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"responsable",
+								"verSolicitudes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "rechazar solicitud",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idAprobacion\": 3,\n    \"idResponsable\": 16\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/responsable/rechazarSolicitud",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"responsable",
+								"rechazarSolicitud"
 							]
 						}
 					},
@@ -293,7 +371,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombreUser\": \"javier.barrios\",\n    \"pass\": \"password123\"\n}",
+							"raw": "{\n    \"nombreUser\": \"claudio.salazar\",\n    \"pass\": \"password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -321,7 +399,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombreUser\": \"raul.carlos\",\n    \"pass\": \"password123\"\n}",
+							"raw": "{\n    \"nombreUser\": \"rey.castillo\",\n    \"pass\": \"password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -349,7 +427,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombreUser\": \"sandra.vargas\",\n    \"pass\": \"password123\"\n}",
+							"raw": "{\n    \"nombreUser\": \"carlos.lopez\",\n    \"pass\": \"password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -382,7 +460,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nroDeCopias\": 2,\n    \"tipoDeDocumento\": \"Informe\",\n    \"nroDePaginas\": 10,\n    //El solicitante debe poner la unidad del que pertenece, \n    //Digamos que este solicitante es de la unidad de Planeacion Urbana\n    \"idUnidad\": 4, \n    \"idSolicitante\": 9,\n    \"listArvhicosPDF\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
+							"raw": "{\n    \"nroDeCopias\": 500,\n    \"tipoDeDocumento\": \"Informe\",\n    \"nroDePaginas\": 500,\n    //El solicitante debe poner la unidad del que pertenece, \n    //Digamos que este solicitante es de la unidad de Planeacion Urbana\n    \"idUnidad\": 5, \n    \"idSolicitante\": 2,\n    \"archivosPdf\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -437,19 +515,19 @@
 					"response": []
 				},
 				{
-					"name": "ver solicitudes Copy",
+					"name": "ver mi histo solicitudes",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/usuario/verHistorialSolicitudes",
+							"raw": "http://localhost:8081/solicitante/verHistorialSolicitudes",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
-								"usuario",
+								"solicitante",
 								"verHistorialSolicitudes"
 							]
 						}

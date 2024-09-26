@@ -92,6 +92,7 @@ SELECT * from aprobacion;
 SELECT * from operacion;
 SELECT * from usuario;
 
+DELETE from solicitud;
 
 
 

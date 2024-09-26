@@ -9,6 +9,7 @@ import lombok.*;
 @Builder
 public class SolicitudOperaResponse {
     private Long id;
+    private Long idSolicitud;
     private Long nroDeCopias;
     private String tipoDeDocumento;
     private Long nroDePaginas;
