@@ -1,10 +1,11 @@
 package com.prototipo.application.useCase;
 
-import com.prototipo.domain.model.SolicitudDomain;
+import com.prototipo.domain.model.OperacionDomain;
 
 import java.util.List;
 
 public interface OperadorService {
-    List<SolicitudDomain> verSolicitudes();
-    void cambiarEstadoDeSolicitud(Long idSolicitud);
+    List<OperacionDomain> verSolicitudesDeOperador();
+    void iniciarSolicitarOperacion(Long idSolicitud, Long idOperador);
+    void terminarSolicitarOperacion(Long idSolicitud, Long idOperador);
 }
