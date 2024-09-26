@@ -14,18 +14,15 @@ import org.springframework.context.annotation.Configuration;
 public class OperadorConfig {
 
     @Bean
-    public OperadorService operadorServiceBean(@Qualifier("solicitudImpl")
-                                               SolicitudAbstract solicitudAbstract,
-                                               @Qualifier("mapperApplicationImpl")
+    public OperadorService operadorServiceBean(@Qualifier("mapperApplicationImpl")
                                                MapperApplicationAbstract mapperApplicationAbstract,
                                                @Qualifier("operacionImpl")
                                                OperacionAbstract operacionAbstract,
                                                @Qualifier("usuarioImpl")
                                                UsuarioAbastract usuarioAbastract){
 
-        return new OperadorAdapter(solicitudAbstract,
-                                   mapperApplicationAbstract,
+        return new OperadorAdapter(mapperApplicationAbstract,
                                    operacionAbstract,
-                                    usuarioAbastract);
+                                   usuarioAbastract);
     }
 }

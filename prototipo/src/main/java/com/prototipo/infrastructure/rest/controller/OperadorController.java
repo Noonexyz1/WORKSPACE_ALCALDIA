@@ -36,14 +36,34 @@ public class OperadorController {
     //TODO verificar los datos que se trae de la base de datos
     @GetMapping(path = {"/verSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudes() {
-        List<OperacionDomain> list = operadorService.verSolicitudesDeOperador();
-
+        //TODO, solamente estamos hardcodeando para fines de prueba 11L
+        List<OperacionDomain> list = operadorService.verSolicitudesDeOperador(11L);
         List<SolicitudOperaResponse> listSolicitud = list
                 .stream()
-                .filter(x -> x.getFkOperador() == null)
                 .map(this::funcion)
                 .toList();
+        return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
+    }
 
+    @GetMapping(path = {"/verSolicitudesIniciadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesIniciadas() {
+        //TODO, solamente estamos hardcodeando para fines de prueba 11L
+        List<OperacionDomain> list = operadorService.verSolicitudesDeOperadorIniciadas(11L);
+        List<SolicitudOperaResponse> listSolicitud = list
+                .stream()
+                .map(this::funcion)
+                .toList();
+        return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
+    }
+
+    @GetMapping(path = {"/verSolicitudesCompletadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesCompletadas() {
+        //TODO, solamente estamos hardcodeando para fines de prueba 11L
+        List<OperacionDomain> list = operadorService.verSolicitudesDeOperadorCompletadas(11L);
+        List<SolicitudOperaResponse> listSolicitud = list
+                .stream()
+                .map(this::funcion)
+                .toList();
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 

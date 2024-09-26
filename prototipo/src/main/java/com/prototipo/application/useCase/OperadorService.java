@@ -5,7 +5,9 @@ import com.prototipo.domain.model.OperacionDomain;
 import java.util.List;
 
 public interface OperadorService {
-    List<OperacionDomain> verSolicitudesDeOperador();
-    void iniciarSolicitarOperacion(Long idSolicitud, Long idOperador);
-    void terminarSolicitarOperacion(Long idSolicitud, Long idOperador);
+    List<OperacionDomain> verSolicitudesDeOperador(Long idOperador);
+    List<OperacionDomain> verSolicitudesDeOperadorIniciadas(Long idOperador);
+    List<OperacionDomain> verSolicitudesDeOperadorCompletadas(Long idOperador);
+    void iniciarSolicitarOperacion(Long idAprobacion, Long idOperador);
+    void terminarSolicitarOperacion(Long idAprobacion, Long idOperador);
 }
