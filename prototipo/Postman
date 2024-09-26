@@ -191,13 +191,33 @@
 					"response": []
 				},
 				{
+					"name": "ver solicitudes iniciadas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/operador/verSolicitudesIniciadas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"operador",
+								"verSolicitudesIniciadas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "iniciar solicitud",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"idSolicitud\": 1,\n    \"idOperador\": 11 \n}",
+							"raw": "{\n    \"idSolicitud\": 5,\n    \"idOperador\": 11 \n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -226,7 +246,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"idSolicitud\": 1,\n    \"idOperador\": 11\n}",
+							"raw": "{\n    \"idSolicitud\": 22,\n    \"idOperador\": 11\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -243,6 +263,26 @@
 							"path": [
 								"operador",
 								"terminarOperacion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ver solicitudes completadas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/operador/verSolicitudesCompletadas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"operador",
+								"verSolicitudesCompletadas"
 							]
 						}
 					},

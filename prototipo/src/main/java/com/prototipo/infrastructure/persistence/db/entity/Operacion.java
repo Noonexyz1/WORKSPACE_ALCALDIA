@@ -22,6 +22,6 @@ public class Operacion {
 
     @ManyToOne
     private Aprobacion fkAprobacion;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     private Usuario fkOperador;
 }
