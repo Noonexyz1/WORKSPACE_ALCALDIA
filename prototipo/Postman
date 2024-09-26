@@ -85,7 +85,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/administrador/eliminarUsuario/6",
+							"raw": "http://localhost:8081/administrador/listaDeUsuarios",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -93,41 +93,7 @@
 							"port": "8081",
 							"path": [
 								"administrador",
-								"eliminarUsuario",
-								"6"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "asignar operador",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"nombre\": \"Diego\",\n    \"direccion\": \"diego@diego.com\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8081/administrador/asignarOperador/8",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"administrador",
-								"asignarOperador",
-								"8"
+								"listaDeUsuarios"
 							]
 						}
 					},
@@ -160,6 +126,38 @@
 							"path": [
 								"administrador",
 								"generarReporte"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "lista usuarios",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombre\": \"Diego\",\n    \"direccion\": \"diego@diego.com\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/administrador/listaDeUsuarios",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"administrador",
+								"listaDeUsuarios"
 							]
 						}
 					},

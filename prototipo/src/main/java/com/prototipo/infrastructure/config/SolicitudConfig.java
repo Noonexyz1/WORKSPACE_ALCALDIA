@@ -30,7 +30,11 @@ public class SolicitudConfig {
     }
 
     @Bean
-    public UsuarioService usuarioServiceBean(@Qualifier("usuarioImpl") UsuarioAbastract usuarioAbastract) {
-        return new UsuarioAdapter(usuarioAbastract);
+    public UsuarioService usuarioServiceBean(@Qualifier("usuarioImpl")
+                                             UsuarioAbastract usuarioAbastract,
+                                             @Qualifier("mapperApplicationAbstractBean")
+                                             MapperApplicationAbstract mapperApplicationAbstract) {
+
+        return new UsuarioAdapter(usuarioAbastract, mapperApplicationAbstract);
     }
 }

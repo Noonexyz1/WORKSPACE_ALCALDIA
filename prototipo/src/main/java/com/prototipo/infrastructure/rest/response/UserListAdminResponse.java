@@ -2,16 +2,14 @@ package com.prototipo.infrastructure.rest.response;
 
 import lombok.*;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UsuarioResponse {
+public class UserListAdminResponse {
+    private Long id;
     private String nombres;
     private String apellidos;
     private String nombreRol;
-    private List<String> listDashConfig;
 }

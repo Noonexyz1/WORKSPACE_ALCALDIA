@@ -12,5 +12,4 @@ public class UsuarioDto {
     private String nombres;
     private String apellidos;
     private RolDto fkRol;
-    private CredencialDto credencial;
 }

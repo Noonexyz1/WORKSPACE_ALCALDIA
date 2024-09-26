@@ -8,6 +8,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class UsuarioImpl implements UsuarioAbastract {
 
@@ -20,5 +22,12 @@ public class UsuarioImpl implements UsuarioAbastract {
     public UsuarioDto findUsuarioPorIdAbastract(Long idUsuario) {
         Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow();
         return modelMapper.map(usuario, UsuarioDto.class);
+    }
+
+    @Override
+    public List<UsuarioDto> listaDeUsuarios() {
+        return usuarioRepository.findAll().stream()
+                .map(x -> modelMapper.map(x, UsuarioDto.class))
+                .toList();
     }
 }
