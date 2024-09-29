@@ -37,6 +37,7 @@ public class FotocopiaAdapter implements FotocopiaService {
         //2.- Creamos el usuario nuevo con el rol que se ha encontraoo
         UsuarioDto usuarioDto = mapperApplicationAbstract.mapearAbstract(nuevoUsuario, UsuarioDto.class);
         usuarioDto.setId(null);
+        usuarioDto.setIsActive(true);
         usuarioDto.setFkRol(rolDto);
 
         UsuarioDto usuarioDtoResp = usuarioAbastract.guardarUsuario(usuarioDto);
@@ -56,6 +57,7 @@ public class FotocopiaAdapter implements FotocopiaService {
     public UsuarioDomain editarUsuario(UsuarioDomain usuarioEditado, Long rolId) {
         RolDto rolDto = rolAbstract.encontrarRolPorId(rolId);
         UsuarioDto usuarioDto = mapperApplicationAbstract.mapearAbstract(usuarioEditado, UsuarioDto.class);
+        usuarioDto.setIsActive(true);
         usuarioDto.setFkRol(rolDto);
         UsuarioDto usuarioDtoResp = usuarioAbastract.guardarUsuario(usuarioDto);
         return mapperApplicationAbstract.mapearAbstract(usuarioDtoResp, UsuarioDomain.class);
