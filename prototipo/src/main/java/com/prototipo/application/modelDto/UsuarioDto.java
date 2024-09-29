@@ -11,5 +11,7 @@ public class UsuarioDto {
     private Long id;
     private String nombres;
     private String apellidos;
+    private String correo;
+    private Boolean isActive;
     private RolDto fkRol;
 }

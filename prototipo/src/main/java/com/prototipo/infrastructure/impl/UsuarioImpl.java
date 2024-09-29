@@ -2,6 +2,7 @@ package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.UsuarioDto;
 import com.prototipo.application.port.UsuarioAbastract;
+import com.prototipo.domain.model.UsuarioDomain;
 import com.prototipo.infrastructure.persistence.db.entity.Usuario;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioRepository;
 import org.modelmapper.ModelMapper;
@@ -29,5 +30,13 @@ public class UsuarioImpl implements UsuarioAbastract {
         return usuarioRepository.findAll().stream()
                 .map(x -> modelMapper.map(x, UsuarioDto.class))
                 .toList();
+    }
+
+    @Override
+    public UsuarioDto guardarUsuario(UsuarioDto usuarioDto) {
+        Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
+        Usuario userRespo = usuarioRepository.save(usuario);
+        UsuarioDto usuarioDtoResp = modelMapper.map(userRespo, UsuarioDto.class);
+        return usuarioDtoResp;
     }
 }

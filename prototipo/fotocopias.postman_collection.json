@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 34,\n    \"nombres\": \"Diego\",\n    \"apellidos\": \"Mamani\",\n    \"fk_responsable\": 5,\n    \"fk_rol\": 7\n}\n",
+							"raw": "{\n    \"nombres\": \"Diegoooo\",    \n    \"apellidos\": \"Diomir\",\n    \"correo\": \"asd@gmail.com\",\n    \"idRol\": 2 \n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -45,7 +45,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 34,\n    \"nombres\": \"Diego\",\n    \"apellidos\": \"Mamani\",\n    \"fk_responsable\": 5,\n    \"fk_rol\": 7\n}",
+							"raw": "{\n    \"id\": 20,\n    \"nombres\": \"D13\",\n    \"apellidos\": \"Diomir\",\n    \"correo\": \"asd@gmail.commmmm\",\n    //Tambien debe cambiar el rol\n    \"idRol\": 2\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -85,7 +85,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/administrador/eliminarUsuario/6",
+							"raw": "http://localhost:8081/administrador/eliminarUsuario/20",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -94,40 +94,7 @@
 							"path": [
 								"administrador",
 								"eliminarUsuario",
-								"6"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "asignar operador",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"nombre\": \"Diego\",\n    \"direccion\": \"diego@diego.com\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8081/administrador/asignarOperador/8",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"administrador",
-								"asignarOperador",
-								"8"
+								"20"
 							]
 						}
 					},
@@ -164,20 +131,18 @@
 						}
 					},
 					"response": []
-				}
-			]
-		},
-		{
-			"name": "Operador",
-			"item": [
+				},
 				{
-					"name": "set estado soli",
+					"name": "lista usuarios",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 101,\n    \"nroDeCopias\": 2,\n    \"tipoDeDocumento\": \"Licencia de Conducir\",\n    \"nroDePaginas\": 15,\n    \"estadoSolicitud\": \"Pendiente\",\n    \"notificacionToAprobar\": \"Aprobada\",\n    \"fk_solicitante\": 34,\n    \"fk_unidad\": \"Unidad de Tránsito\",\n    \"archivoPdf\": \"licencia_conducir.pdf\"\n}\n",
+							"raw": "{\n    \"nombre\": \"Diego\",\n    \"direccion\": \"diego@diego.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -185,20 +150,25 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/operador/setEstadoSolicitud",
+							"raw": "http://localhost:8081/administrador/listaDeUsuarios",
 							"protocol": "http",
 							"host": [
 								"localhost"
 							],
 							"port": "8081",
 							"path": [
-								"operador",
-								"setEstadoSolicitud"
+								"administrador",
+								"listaDeUsuarios"
 							]
 						}
 					},
 					"response": []
-				},
+				}
+			]
+		},
+		{
+			"name": "Operador",
+			"item": [
 				{
 					"name": "ver solicitudes",
 					"request": {
@@ -218,6 +188,104 @@
 						}
 					},
 					"response": []
+				},
+				{
+					"name": "ver solicitudes iniciadas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/operador/verSolicitudesIniciadas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"operador",
+								"verSolicitudesIniciadas"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "iniciar solicitud",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idSolicitud\": 5,\n    \"idOperador\": 11 \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/operador/iniciarOperacion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"operador",
+								"iniciarOperacion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "completar solicitud",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idSolicitud\": 22,\n    \"idOperador\": 11\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/operador/terminarOperacion",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"operador",
+								"terminarOperacion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ver solicitudes completadas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/operador/verSolicitudesCompletadas",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"operador",
+								"verSolicitudesCompletadas"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
@@ -226,15 +294,12 @@
 			"item": [
 				{
 					"name": "aprobar solicitud",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\n    \"idAprobacion\": 1,\n    \"idResponsable\": 16\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -242,7 +307,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/responsable/aprobarSolicitud/1",
+							"raw": "http://localhost:8081/responsable/aprobarSolicitud",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -250,8 +315,7 @@
 							"port": "8081",
 							"path": [
 								"responsable",
-								"aprobarSolicitud",
-								"1"
+								"aprobarSolicitud"
 							]
 						}
 					},
@@ -279,15 +343,12 @@
 				},
 				{
 					"name": "rechazar solicitud",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\n    \"idAprobacion\": 3,\n    \"idResponsable\": 16\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -295,7 +356,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/responsable/rechazarSolicitud/1",
+							"raw": "http://localhost:8081/responsable/rechazarSolicitud",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -303,8 +364,7 @@
 							"port": "8081",
 							"path": [
 								"responsable",
-								"rechazarSolicitud",
-								"1"
+								"rechazarSolicitud"
 							]
 						}
 					},
@@ -350,7 +410,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombreUser\": \"javier.barrios\",\n    \"pass\": \"password123\"\n}",
+							"raw": "{\n    \"nombreUser\": \"claudio.salazar\",\n    \"pass\": \"password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -378,7 +438,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombreUser\": \"raul.carlos\",\n    \"pass\": \"password123\"\n}",
+							"raw": "{\n    \"nombreUser\": \"rey.castillo\",\n    \"pass\": \"password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -406,7 +466,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombreUser\": \"sandra.vargas\",\n    \"pass\": \"password123\"\n}",
+							"raw": "{\n    \"nombreUser\": \"carlos.lopez\",\n    \"pass\": \"password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -439,7 +499,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nroDeCopias\": 2,\n    \"tipoDeDocumento\": \"Informe\",\n    \"nroDePaginas\": 10,\n    //El solicitante debe poner la unidad del que pertenece, \n    //Digamos que este solicitante es de la unidad de Planeacion Urbana\n    \"idUnidad\": 5, \n    \"idSolicitante\": 9,\n    \"archivosPdf\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
+							"raw": "{\n    \"nroDeCopias\": 500,\n    \"tipoDeDocumento\": \"Informe\",\n    \"nroDePaginas\": 500,\n    //El solicitante debe poner la unidad del que pertenece, \n    //Digamos que este solicitante es de la unidad de Planeacion Urbana\n    \"idUnidad\": 5, \n    \"idSolicitante\": 2,\n    \"archivosPdf\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
