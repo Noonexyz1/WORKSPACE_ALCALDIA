@@ -38,8 +38,8 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
-    public List<SolicitudDto> getListaSolicitudesAbstract() {
-        return solicitudRepository.findAll().stream()
+    public List<SolicitudDto> getListaSolicitudesAbstract(Long idUsuario) {
+        return solicitudRepository.findAllByFkSolicitante_Id(idUsuario).stream()
                 .map(x -> modelMapper.map(x, SolicitudDto.class))
                 .toList();
     }

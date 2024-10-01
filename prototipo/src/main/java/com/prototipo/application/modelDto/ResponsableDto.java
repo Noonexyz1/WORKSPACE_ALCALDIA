@@ -7,11 +7,9 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioDto {
+public class ResponsableDto {
     private Long id;
-    private String nombres;
-    private String apellidos;
-    private String correo;
     private Boolean isActive;
-    private RolDto fkRol;
+    private UsuarioDto fkUsuario;
+    private UnidadDto fkUnidad;
 }

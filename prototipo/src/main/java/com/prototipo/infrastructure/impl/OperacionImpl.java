@@ -20,7 +20,10 @@ public class OperacionImpl implements OperacionAbstract {
 
     @Override
     public OperacionDto findOperacionByIdSoliAbstract(Long id) {
-        Operacion operacion = operacionRepository.findById(id).orElseThrow();
+        Operacion operacion = operacionRepository.findById(id).orElse(null);
+        if (operacion == null) {
+            return null;
+        }
         return modelMapper.map(operacion, OperacionDto.class);
     }
 

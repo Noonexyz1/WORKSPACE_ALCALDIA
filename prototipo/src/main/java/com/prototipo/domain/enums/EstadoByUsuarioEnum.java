@@ -1,14 +1,12 @@
 package com.prototipo.domain.enums;
 
-public enum RolEnum {
-    ADMINISTRADOR("Administrador"),
-    RESPONSABLE("Responsable"),
-    SOLICITANTE("Solicitante"),
-    OPERADOR("Operador");
+public enum EstadoByUsuarioEnum {
+    ACTIVO("Activo"),
+    INACTIVO("Inactivo");
 
     private final String nombre;
 
-    RolEnum(String nombre){
+    EstadoByUsuarioEnum(String nombre){
         this.nombre = nombre;
     }
 

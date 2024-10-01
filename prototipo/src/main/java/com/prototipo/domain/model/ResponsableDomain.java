@@ -8,6 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ResponsableDomain {
-    private String idResponsabe;
-    private String nombreUnidadPerteneciente;
+    private Long id;
+    private Boolean isActive;
+    private UsuarioDomain fkUsuario;
+    private UnidadDomain fkUnidad;
 }

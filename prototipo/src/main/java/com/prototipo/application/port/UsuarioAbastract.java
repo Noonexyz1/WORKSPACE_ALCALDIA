@@ -7,4 +7,5 @@ import java.util.List;
 public interface UsuarioAbastract {
     UsuarioDto findUsuarioPorIdAbastract(Long idUsuario);
     List<UsuarioDto> listaDeUsuarios();
+    UsuarioDto guardarUsuario(UsuarioDto usuarioDto);
 }

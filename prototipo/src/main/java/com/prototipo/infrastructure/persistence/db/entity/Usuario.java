@@ -20,6 +20,8 @@ public class Usuario {
     private Long id;
     private String nombres;
     private String apellidos;
+    private String correo;
+    private Boolean isActive;
 
     @ManyToOne
     private Rol fkRol;
@@ -34,4 +36,6 @@ public class Usuario {
     private List<Aprobacion> listaAprobacion;
     @OneToMany(mappedBy = "fkOperador")
     private List<Operacion> listaOperaciones;
+    @OneToMany(mappedBy = "fkUsuario")
+    private List<Responsable> listaResponsables;
 }

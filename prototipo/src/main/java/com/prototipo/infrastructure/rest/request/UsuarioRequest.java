@@ -8,10 +8,10 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class UsuarioRequest {
-
     private Long id;
     private String nombres;
     private String apellidos;
-
-    private Long fk_rol;
+    private String correo;
+    private Long idRol;
+    private Long idUnidadResp;
 }
