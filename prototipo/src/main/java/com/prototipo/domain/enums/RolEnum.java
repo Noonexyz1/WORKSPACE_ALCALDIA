@@ -2,6 +2,7 @@ package com.prototipo.domain.enums;
 
 public enum RolEnum {
     ADMINISTRADOR("Administrador"),
+    RESPONSABLE("Responsable"),
     SOLICITANTE("Solicitante"),
     OPERADOR("Operador");
 

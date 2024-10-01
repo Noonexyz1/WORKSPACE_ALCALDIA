@@ -8,7 +8,7 @@ import java.util.List;
 public interface SolicitudService {
     void solicitarFotocopiarService(SolicitudDomain solicitudDomain, List<ArchivoPdfDomain> list);
     void guardarPdfDeLaSolicitudAbstract(ArchivoPdfDomain archivoPdfDomain);
-    List<SolicitudDomain> getListaSolicitudesService();
+    List<SolicitudDomain> getListaSolicitudesService(Long idUsuario);
     void guardarSolicitudService(SolicitudDomain solicitudDomain);
     SolicitudDomain buscarSolicitudService(Long id);
 }

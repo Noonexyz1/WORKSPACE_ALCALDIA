@@ -39,9 +39,10 @@ public class ResponsableController {
         responsableService.rechazarSolicitudService(idAprobacion, idResponsable);
     }
 
-    @GetMapping(path = {"/verSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudes() {
-        List<AprobacionDomain> aprobacionDomains = aprobacionService.listaDeSolicitudesService();
+    @GetMapping(path = {"/verSolicitudes/{idResponsable}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudes(@PathVariable Long idResponsable) {
+        //TODO---- Buscar por id de responsable todos aquellas solicitudes que le pertencen a su unidad
+        List<AprobacionDomain> aprobacionDomains = aprobacionService.listaDeSolicitudesService(idResponsable);
 
         //Las solicitudes solamente pueden tener dos estados, Pendiente - Aprobado o
         //Pendiente - Rechazado, del cual solamente hay que mostrar el ultimo estado.

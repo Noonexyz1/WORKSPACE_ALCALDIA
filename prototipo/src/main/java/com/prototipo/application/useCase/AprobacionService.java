@@ -6,5 +6,5 @@ import java.util.List;
 
 public interface AprobacionService {
     AprobacionDomain findAprovacionByIdSoliService(Long idAprobacion);
-    List<AprobacionDomain> listaDeSolicitudesService();
+    List<AprobacionDomain> listaDeSolicitudesService(Long idSupervisor);
 }

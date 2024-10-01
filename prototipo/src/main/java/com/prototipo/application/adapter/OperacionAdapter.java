@@ -21,6 +21,9 @@ public class OperacionAdapter implements OperacionService {
     @Override
     public OperacionDomain findOperacionByIdSoliService(Long id) {
         OperacionDto operacionDto = operacionAbstract.findOperacionByIdSoliAbstract(id);
+        if (operacionDto == null) {
+            return null;
+        }
         return mapperApplicationAbstract.mapearAbstract(operacionDto, OperacionDomain.class);
     }
 }

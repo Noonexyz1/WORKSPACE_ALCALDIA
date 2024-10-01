@@ -58,7 +58,6 @@ public class SolicitudController {
         solicitudService.solicitarFotocopiarService(solicitud, archivoPdfs);
     }
 
-
     @GetMapping(path = {"/verListaUnidades"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<UnidadResponse>> verListaDeUnidades() {
         List<UnidadResponse> unidadResponses = unidadService.listaDeUnidadesService()
@@ -68,24 +67,25 @@ public class SolicitudController {
         return new ResponseEntity<>(unidadResponses, HttpStatus.OK);
     }
 
-
-    @GetMapping(path = {"/verHistorialSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudSoliciResponse>> verHistorialSolicitudes() {
-        List<SolicitudSoliciResponse> list = solicitudService.getListaSolicitudesService()
-                .stream()
-                .map(x -> {
-                    AprobacionDomain aprobacionDomain = aprobacionService.findAprovacionByIdSoliService(x.getId());
-                    String estadoByResponsable = aprobacionDomain.getEstadoByResponsable();
-
-                    OperacionDomain operacionDomain = operacionService.findOperacionByIdSoliService(x.getId());
-                    String estadoByOperador = operacionDomain.getEstadoByOperador();
-
-                    SolicitudSoliciResponse solicitudSoliciResponse = modelMapper.map(x, SolicitudSoliciResponse.class);
-                    solicitudSoliciResponse.setEstadoByResponsable(estadoByResponsable);
-                    solicitudSoliciResponse.setEstadoByOperador(estadoByOperador);
-                    return solicitudSoliciResponse;
-                })
+    @GetMapping(path = {"/verHistorialSolicitudes/{idUsuario}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudSoliciResponse>> verHistorialSolicitudes(@PathVariable Long idUsuario) {
+        List<SolicitudDomain> listDomain = solicitudService.getListaSolicitudesService(idUsuario);
+        List<SolicitudSoliciResponse> list = listDomain.stream()
+                .map(this::funcToReturn)
                 .toList();
         return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    private SolicitudSoliciResponse funcToReturn(SolicitudDomain x) {
+        AprobacionDomain aprobacionDomain = aprobacionService.findAprovacionByIdSoliService(x.getId());
+        String estadoByResponsable = aprobacionDomain.getEstadoByResponsable();
+
+        OperacionDomain operacionDomain = operacionService.findOperacionByIdSoliService(x.getId());
+        String estadoByOperador = (operacionDomain == null)? "Pendiente": operacionDomain.getEstadoByOperador();
+
+        SolicitudSoliciResponse solicitudSoliciResponse = modelMapper.map(x, SolicitudSoliciResponse.class);
+        solicitudSoliciResponse.setEstadoByResponsable(estadoByResponsable);
+        solicitudSoliciResponse.setEstadoByOperador(estadoByOperador);
+        return solicitudSoliciResponse;
     }
 }
