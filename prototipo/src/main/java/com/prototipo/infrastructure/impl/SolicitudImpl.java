@@ -45,6 +45,14 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
+    public List<SolicitudDto> getListaSolicitudesByUnidad(Long idUnidad) {
+        List<Solicitud> listSoliResp = solicitudRepository.findAllByFkUnidad_Id(idUnidad);
+        return listSoliResp.stream()
+                .map(x -> modelMapper.map(x, SolicitudDto.class))
+                .toList();
+    }
+
+    @Override
     public void guardarSolicitudAbstract(SolicitudDto solicitudDto) {
         Solicitud solicitud = modelMapper.map(solicitudDto, Solicitud.class);
         solicitudRepository.save(solicitud);

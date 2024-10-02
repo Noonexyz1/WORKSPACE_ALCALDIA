@@ -1,23 +1,38 @@
 package com.prototipo.application.adapter;
 
 import com.prototipo.application.mapper.MapperApplicationAbstract;
-import com.prototipo.application.modelDto.AprobacionDto;
+import com.prototipo.application.modelDto.*;
 import com.prototipo.application.port.AprobacionAbstract;
+import com.prototipo.application.port.ResponsableAbstract;
+import com.prototipo.application.port.SolicitudAbstract;
+import com.prototipo.application.port.UsuarioAbastract;
 import com.prototipo.application.useCase.AprobacionService;
 import com.prototipo.domain.model.AprobacionDomain;
+import com.prototipo.domain.model.SolicitudDomain;
+import com.prototipo.infrastructure.persistence.db.entity.Solicitud;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AprobacionAdapter implements AprobacionService {
 
     private AprobacionAbstract aprobacionAbstract;
     private MapperApplicationAbstract mapperApplicationAbstract;
+    private ResponsableAbstract responsableAbstract;
+    private UsuarioAbastract usuarioAbastract;
+    private SolicitudAbstract solicitudAbstract;
 
     public AprobacionAdapter(AprobacionAbstract aprobacionAbstract,
-                             MapperApplicationAbstract mapperApplicationAbstract) {
+                             MapperApplicationAbstract mapperApplicationAbstract,
+                             ResponsableAbstract responsableAbstract,
+                             UsuarioAbastract usuarioAbastract,
+                             SolicitudAbstract solicitudAbstract) {
 
         this.aprobacionAbstract = aprobacionAbstract;
         this.mapperApplicationAbstract = mapperApplicationAbstract;
+        this.responsableAbstract = responsableAbstract;
+        this.usuarioAbastract = usuarioAbastract;
+        this.solicitudAbstract = solicitudAbstract;
     }
 
     @Override
@@ -28,20 +43,27 @@ public class AprobacionAdapter implements AprobacionService {
 
     @Override
     public List<AprobacionDomain> listaDeSolicitudesService(Long idSupervisor) {
-        //TODO---- Buscar por id de responsable todos aquellas solicitudes que le pertencen a su unidad
-        //1 buscar en la tabla Responsable
-        //2 encontrar el ID de la unida del que es responsable el idSupervisor
-        //3 encontrar todas las Solicitudes correspondientes a esa unidad
-        // aunque seria mucho mejor ir directamente a la tabla Aprobacion porque esta tabla tiene con el
-        // todos los campos foraneos como Id de solicitud, y esta arrastra consigo el id de unidad
+        // 1. Buscar los detalles del usuario por su ID (supervisor)
+        UsuarioDto usuarioDto = usuarioAbastract.findUsuarioPorIdAbastract(idSupervisor);
 
-        //busco directamente en la tabla Aprobacion y filtro todos los registros por fkSolicitud luego accedo
-        //a a traves de esta llave foranea, el fkUnidadId del cual ya se el Id de la unidad correspondiente
+        // 2. Obtener el responsable asociado al usuario (supervisor) usando su ID
+        ResponsableDto respDto = responsableAbstract.buscarResponsablePorFkUsuario(usuarioDto.getId());
 
-        List<AprobacionDto> aprobacionDtos = aprobacionAbstract.listaDeSolicitudesAbstract();
-        List<AprobacionDomain> aprobacionDomains = aprobacionDtos.stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, AprobacionDomain.class))
+        // 3. Obtener el ID de la unidad correspondiente al responsable
+        Long id = respDto.getFkUnidad().getId();
+
+        // 4. Buscar todas las solicitudes asociadas a la unidad del responsable
+        List<SolicitudDto> listDto = solicitudAbstract.getListaSolicitudesByUnidad(id);
+        List<Long> listIdSoli = listDto.stream().map(SolicitudDto::getId).toList();
+
+        // 5. Para cada solicitud, buscar su aprobación correspondiente
+        List<AprobacionDto> aprobacionDtos = listIdSoli.stream()
+                .map(x -> aprobacionAbstract.findAprovacionByIdSoliAbstract(x))
                 .toList();
-        return aprobacionDomains;
+
+        // 6. Convertir las aprobaciones obtenidas en objetos de dominio
+        return aprobacionDtos.stream()
+                .map(aprobacionDto -> mapperApplicationAbstract.mapearAbstract(aprobacionDto, AprobacionDomain.class))
+                .toList();
     }
 }

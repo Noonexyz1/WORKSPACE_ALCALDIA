@@ -19,4 +19,6 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
     * Este comportamiento es predeterminado en las listas devueltas por
     * métodos de repositorio en Spring Data JPA: nunca se retorna null,
     * siempre es una lista vacía si no hay resultados. */
+
+    List<Solicitud> findAllByFkUnidad_Id(Long fkUnidadId);
 }

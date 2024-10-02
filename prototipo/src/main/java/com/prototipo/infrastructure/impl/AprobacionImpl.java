@@ -39,4 +39,18 @@ public class AprobacionImpl implements AprobacionAbstract {
                 .map(x -> modelMapper.map(x, AprobacionDto.class))
                 .toList();
     }
+
+    @Override
+    public List<AprobacionDto> listaDeSolicitudesByFkSoliAbstract(Long idSoli) {
+        List<Aprobacion> listAproResp = aprobacionRepository.findByfkSolicitud_Id(idSoli);
+        return listAproResp.stream()
+                .map(x -> modelMapper.map(x, AprobacionDto.class))
+                .toList();
+    }
+
+    @Override
+    public List<AprobacionDto> listaDeSolicitudesByUnidad(String nombreUnidad) {
+        List<Aprobacion> listApro = aprobacionRepository.findAprobacionesByUnidadNombre(nombreUnidad);
+        return listApro.stream().map(x -> modelMapper.map(x, AprobacionDto.class)).toList();
+    }
 }

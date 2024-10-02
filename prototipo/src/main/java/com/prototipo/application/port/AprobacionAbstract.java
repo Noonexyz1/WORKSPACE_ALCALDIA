@@ -8,4 +8,7 @@ public interface AprobacionAbstract {
     AprobacionDto guardarAprobacionAbstract(AprobacionDto aprobacionDto);
     AprobacionDto findAprovacionByIdSoliAbstract(Long id);
     List<AprobacionDto> listaDeSolicitudesAbstract();
+    List<AprobacionDto> listaDeSolicitudesByFkSoliAbstract(Long idSoli);
+
+    List<AprobacionDto> listaDeSolicitudesByUnidad(String nombreUnidad);
 }
