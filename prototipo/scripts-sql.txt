@@ -1,10 +1,12 @@
 #----------------------MODULO DE GESTION DE USUARIOS-----------------------------
+#Esta tabla si o si para produccion
 INSERT INTO prototipo.rol(nombre_rol)
 values("Administrador"),
 ("Solicitante"),
 ("Operador"),
 ("Responsable");
 
+#Esta tabla si o si para produccion
 INSERT INTO prototipo.dashboard_config(fk_rol_id, nombre_componente)
 VALUES(1, 'administrador'),
 (2, 'solicitante'),
@@ -67,6 +69,7 @@ SELECT * FROM usuario;
 
 
 #----------------------MODULO DE SOLICITUDES-----------------------------
+#Esta tabla si o si para produccion
 INSERT INTO prototipo.unidad(nombre, direccion)
 VALUES
 ("Atención al Ciudadano", "Piso 1"),
@@ -91,6 +94,8 @@ SELECT * from archivo_pdf;
 SELECT * from aprobacion;
 SELECT * from operacion;
 SELECT * from usuario;
+SELECT * from responsable;
+SELECT * from credencial;
 
 DELETE from solicitud;
 

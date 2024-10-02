@@ -25,6 +25,13 @@ public class ResponsableImpl implements ResponsableAbstract {
     public ResponsableDto guardarResponsable(ResponsableDto respDto) {
         Responsable newResp = modelMapper.map(respDto, Responsable.class);
         Responsable respResp = responsableRepository.save(newResp);
-        return modelMapper.map(respDto, ResponsableDto.class);
+        return modelMapper.map(respResp, ResponsableDto.class);
+    }
+
+    @Override
+    public ResponsableDto buscarResponsablePorFkUsuario(Long idSupervisor) {
+        //Busqueda por columma
+        Responsable responsable = responsableRepository.findByfkUsuario_Id(idSupervisor);
+        return modelMapper.map(responsable, ResponsableDto.class);
     }
 }

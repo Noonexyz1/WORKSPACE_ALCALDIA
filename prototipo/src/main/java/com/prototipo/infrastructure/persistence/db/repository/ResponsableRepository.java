@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ResponsableRepository extends JpaRepository<Responsable, Long> {
+    Responsable findByfkUsuario_Id(Long fkResponsableId);
 }

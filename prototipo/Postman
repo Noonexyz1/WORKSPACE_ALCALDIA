@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 34,\n    \"nombres\": \"Diego\",\n    \"apellidos\": \"Mamani\",\n    \"fk_responsable\": 5,\n    \"fk_rol\": 7\n}\n",
+							"raw": "{\n    \"nombres\": \"Diego\",\n    \"apellidos\": \"Diomir\",\n    \"correo\": \"asd@gmail.com\",\n    \"idRol\": 2,\n    \"idUnidadResp\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -45,7 +45,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 34,\n    \"nombres\": \"Diego\",\n    \"apellidos\": \"Mamani\",\n    \"fk_responsable\": 5,\n    \"fk_rol\": 7\n}",
+							"raw": "{\n    \"id\": 1,\n    \"nombres\": \"El primero man\",\n    \"apellidos\": \"Diomir\",\n    \"correo\": \"asd@gmail.commmmm\",\n    //Tambien debe cambiar el rol\n    \"idRol\": 4\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -85,7 +85,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/administrador/listaDeUsuarios",
+							"raw": "http://localhost:8081/administrador/eliminarUsuario/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -93,7 +93,8 @@
 							"port": "8081",
 							"path": [
 								"administrador",
-								"listaDeUsuarios"
+								"eliminarUsuario",
+								"4"
 							]
 						}
 					},
@@ -158,6 +159,35 @@
 							"path": [
 								"administrador",
 								"listaDeUsuarios"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "crear usuario resp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombres\": \"Diego\",    \n    \"apellidos\": \"Diomir\",\n    \"correo\": \"asd@gmail.com\",\n    \"idRol\": 4,\n    \"idUnidadResp\": 4\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/administrador/creaUsuario",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"administrador",
+								"creaUsuario"
 							]
 						}
 					},
@@ -298,7 +328,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"idAprobacion\": 1,\n    \"idResponsable\": 16\n}",
+							"raw": "{\n    \"idAprobacion\": 1,\n    \"idResponsable\": 7\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -322,11 +352,23 @@
 				},
 				{
 					"name": "ver solicitudes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:8081/responsable/verSolicitudes",
+							"raw": "http://localhost:8081/responsable/verSolicitudes/7",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -334,7 +376,8 @@
 							"port": "8081",
 							"path": [
 								"responsable",
-								"verSolicitudes"
+								"verSolicitudes",
+								"7"
 							]
 						}
 					},
@@ -347,7 +390,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"idAprobacion\": 3,\n    \"idResponsable\": 16\n}",
+							"raw": "{\n    \"idAprobacion\": 1,\n    \"idResponsable\": 7\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -498,7 +541,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nroDeCopias\": 500,\n    \"tipoDeDocumento\": \"Informe\",\n    \"nroDePaginas\": 500,\n    //El solicitante debe poner la unidad del que pertenece, \n    //Digamos que este solicitante es de la unidad de Planeacion Urbana\n    \"idUnidad\": 5, \n    \"idSolicitante\": 2,\n    \"archivosPdf\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
+							"raw": "{\n    \"nroDeCopias\": 500,\n    \"tipoDeDocumento\": \"Informe Semestral\",\n    \"nroDePaginas\": 500,\n    //El solicitante debe poner la unidad del que pertenece, \n    //Digamos que este solicitante es de la unidad de Planeacion Urbana\n    \"idUnidad\": 4, \n    //Aqui todos tiene que ser solicitantes, osea todos los roles\n    \"idSolicitante\": 2,\n    \"archivosPdf\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -558,7 +601,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/solicitante/verHistorialSolicitudes",
+							"raw": "http://localhost:8081/solicitante/verHistorialSolicitudes/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -566,7 +609,8 @@
 							"port": "8081",
 							"path": [
 								"solicitante",
-								"verHistorialSolicitudes"
+								"verHistorialSolicitudes",
+								"2"
 							]
 						}
 					},
