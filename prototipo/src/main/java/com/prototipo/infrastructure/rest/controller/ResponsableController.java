@@ -41,7 +41,7 @@ public class ResponsableController {
 
     @GetMapping(path = {"/verSolicitudes/{idResponsable}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudes(@PathVariable Long idResponsable) {
-        //TODO---- Buscar por id de responsable todos aquellas solicitudes que le pertencen a su unidades
+        //Buscar por id de responsable todos aquellas solicitudes que le pertencen a su unidades
         List<AprobacionDomain> aprobacionDomains = aprobacionService.listaDeSolicitudesService(idResponsable);
 
         //Las solicitudes solamente pueden tener dos estados, Pendiente - Aprobado o
