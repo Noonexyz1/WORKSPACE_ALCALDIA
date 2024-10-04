@@ -11,18 +11,17 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "operacion")
-public class Operacion {
+@Table(name = "operador_unidad")
+public class OperadorUnidad {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
-    private String estadoByOperador;
+    private Boolean isActive;
 
     @ManyToOne
-    private Solicitud fkSolicitud;
-    //@ManyToOne(fetch = FetchType.EAGER)
+    private Usuario fkUsuario;
     @ManyToOne
-    private Usuario fkOperador;
+    private Unidad fkUnidad;
 }

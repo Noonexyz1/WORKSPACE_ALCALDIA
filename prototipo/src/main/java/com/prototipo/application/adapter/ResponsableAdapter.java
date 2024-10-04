@@ -51,7 +51,7 @@ public class ResponsableAdapter implements ResponsableService {
         OperacionDto operacionDto = OperacionDto.builder()
                 .id(null)
                 .estadoByOperador(EstadoByOperadorEnum.PENDIENTE.getNombre())
-                .fkAprobacion(newAprobacionToOpe)
+                //.fkAprobacion(newAprobacionToOpe)
                 .fkOperador(null)
                 .build();
 

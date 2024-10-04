@@ -37,4 +37,12 @@ public class UnidadImpl implements UnidadAbstract {
                 .build();
         return unidadDto;
     }
+
+    @Override
+    public List<UnidadDto> listaDeUnidadesByDireccionAbstract(String direccion) {
+        List<Unidad> listUnidades = unidadRepository.findByDireccion(direccion);
+        return listUnidades.stream()
+                .map(x -> modelMapper.map(x, UnidadDto.class))
+                .toList();
+    }
 }

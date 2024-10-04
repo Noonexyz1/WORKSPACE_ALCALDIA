@@ -34,7 +34,9 @@ public class Solicitud {
     @OneToMany(mappedBy = "fkSolicitud")
     private List<ArchivoPdf> archivoPdf;
     @OneToMany(mappedBy = "fkSolicitud")
+    private List<GastoInsumo> listGastoInsumos;
+    @OneToMany(mappedBy = "fkSolicitud")
     private List<Aprobacion> listaAprobacion;
     @OneToMany(mappedBy = "fkSolicitud")
-    private List<GastoInsumo> listGastoInsumos;
+    private List<Operacion> listaOperacion;
 }

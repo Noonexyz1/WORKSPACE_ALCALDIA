@@ -27,6 +27,6 @@ public class Aprobacion {
     @ManyToOne
     private Usuario fkResponsable;
 
-    @OneToMany(mappedBy = "fkAprobacion")
-    private List<Operacion> listOperaciones;
+    //@OneToMany(mappedBy = "fkAprobacion")
+    //private List<Operacion> listOperaciones;
 }

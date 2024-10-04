@@ -58,14 +58,14 @@ public class SolicitudController {
         solicitudService.solicitarFotocopiarService(solicitud, archivoPdfs);
     }
 
-    @GetMapping(path = {"/verListaUnidades"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    /*@GetMapping(path = {"/verListaUnidades"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<UnidadResponse>> verListaDeUnidades() {
         List<UnidadResponse> unidadResponses = unidadService.listaDeUnidadesService()
                 .stream()
                 .map(x -> modelMapper.map(x, UnidadResponse.class))
                 .toList();
         return new ResponseEntity<>(unidadResponses, HttpStatus.OK);
-    }
+    }*/
 
     @GetMapping(path = {"/verHistorialSolicitudes/{idUsuario}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudSoliciResponse>> verHistorialSolicitudes(@PathVariable Long idUsuario) {

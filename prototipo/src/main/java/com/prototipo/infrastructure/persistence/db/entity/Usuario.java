@@ -38,4 +38,6 @@ public class Usuario {
     private List<Operacion> listaOperaciones;
     @OneToMany(mappedBy = "fkUsuario")
     private List<Responsable> listaResponsables;
+    @OneToMany(mappedBy = "fkUsuario")
+    private List<OperadorUnidad> listaOpeUnidad;
 }
