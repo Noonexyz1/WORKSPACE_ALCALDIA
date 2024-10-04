@@ -63,4 +63,10 @@ public class SolicitudImpl implements SolicitudAbstract {
         Solicitud solicitud = solicitudRepository.findById(id).orElseThrow();
         return modelMapper.map(solicitud, SolicitudDto.class);
     }
+
+    @Override
+    public SolicitudDto buscarSolicitudByFkUnidad(Long idUnidad) {
+        Solicitud solicitudResp = solicitudRepository.findByFkUnidad_Id(idUnidad);
+        return modelMapper.map(solicitudResp, SolicitudDto.class);
+    }
 }

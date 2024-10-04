@@ -12,4 +12,5 @@ public interface SolicitudAbstract {
     List<SolicitudDto> getListaSolicitudesByUnidad(Long idUnidad);
     void guardarSolicitudAbstract(SolicitudDto solicitudDto);
     SolicitudDto buscarSolicitudAbstract(Long id);
+    SolicitudDto buscarSolicitudByFkUnidad(Long idUnidad);
 }

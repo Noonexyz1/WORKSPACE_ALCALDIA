@@ -3,6 +3,7 @@ package com.prototipo.infrastructure.config;
 import com.prototipo.application.adapter.OperadorAdapter;
 import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.port.OperacionAbstract;
+import com.prototipo.application.port.OperadorUnidadAbstract;
 import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.application.port.UsuarioAbastract;
 import com.prototipo.application.useCase.OperadorService;
@@ -19,10 +20,11 @@ public class OperadorConfig {
                                                @Qualifier("operacionImpl")
                                                OperacionAbstract operacionAbstract,
                                                @Qualifier("usuarioImpl")
-                                               UsuarioAbastract usuarioAbastract){
+                                               UsuarioAbastract usuarioAbastract) {
 
         return new OperadorAdapter(mapperApplicationAbstract,
-                                   operacionAbstract,
-                                   usuarioAbastract);
+                operacionAbstract,
+                usuarioAbastract);
     }
+
 }

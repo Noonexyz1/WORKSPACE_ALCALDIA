@@ -1,5 +1,9 @@
 package com.prototipo.application.modelDto;
 
+import com.prototipo.domain.model.SolicitudDomain;
+import com.prototipo.infrastructure.persistence.db.entity.Solicitud;
+import com.prototipo.infrastructure.persistence.db.entity.Usuario;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 
 @Getter
@@ -10,6 +14,6 @@ import lombok.*;
 public class OperacionDto {
     private Long id;
     private String estadoByOperador;
-    private AprobacionDto fkAprobacion;
+    private SolicitudDto fkSolicitud;
     private UsuarioDto fkOperador;
 }

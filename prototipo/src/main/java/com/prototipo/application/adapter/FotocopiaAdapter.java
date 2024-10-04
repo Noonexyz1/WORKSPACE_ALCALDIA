@@ -7,6 +7,8 @@ import com.prototipo.application.useCase.FotocopiaService;
 import com.prototipo.domain.enums.EstadoByResponsableEnum;
 import com.prototipo.domain.model.*;
 
+import java.util.List;
+
 public class FotocopiaAdapter implements FotocopiaService {
 
     private UsuarioAbastract usuarioAbastract;
@@ -15,13 +17,15 @@ public class FotocopiaAdapter implements FotocopiaService {
     private CredencialAbstract credencialAbstract;
     private ResponsableAbstract responsableAbstract;
     private UnidadAbstract unidadAbstract;
+    private OperadorUnidadAbstract operadorUnidadAbstract;
 
     public FotocopiaAdapter(UsuarioAbastract usuarioAbastract,
                             RolAbstract rolAbstract,
                             MapperApplicationAbstract mapperApplicationAbstract,
                             CredencialAbstract credencialAbstract,
                             ResponsableAbstract responsableAbstract,
-                            UnidadAbstract unidadAbstract) {
+                            UnidadAbstract unidadAbstract,
+                            OperadorUnidadAbstract operadorUnidadAbstract) {
 
         this.usuarioAbastract = usuarioAbastract;
         this.rolAbstract = rolAbstract;
@@ -29,10 +33,11 @@ public class FotocopiaAdapter implements FotocopiaService {
         this.credencialAbstract = credencialAbstract;
         this.responsableAbstract = responsableAbstract;
         this.unidadAbstract = unidadAbstract;
+        this.operadorUnidadAbstract = operadorUnidadAbstract;
     }
 
     @Override
-    public void crearUsuario(UsuarioDomain nuevoUsuario, Long rolId, Long idUnidadResp) {
+    public void crearUsuario(UsuarioDomain nuevoUsuario, Long rolId, Long idUnidadResp, String direccion) {
         //1.- Encontrar el Rol,
         RolDto rolDto = rolAbstract.encontrarRolPorId(rolId);
 
@@ -48,6 +53,9 @@ public class FotocopiaAdapter implements FotocopiaService {
         //Registramos en la tabla Responsable si este rol es de Responsable
         if (idUnidadResp != null) {
             guardarResponsable(usuarioDtoResp, idUnidadResp);
+        }
+        if (direccion != null) {
+            guardarOperadorUnidad(usuarioDtoResp, direccion);
         }
 
         //3.- Teniendo el Usuario con el Rol, le creamos su credencial
@@ -73,6 +81,20 @@ public class FotocopiaAdapter implements FotocopiaService {
         responsableAbstract.guardarResponsable(responsableDto);
     }
 
+    //TODO, Probar este metodo
+    private void guardarOperadorUnidad(UsuarioDto usuarioDtoResp, String direccion) {
+        List<UnidadDto> unidadDtos = unidadAbstract.listaDeUnidadesByDireccionAbstract(direccion);
+        unidadDtos.forEach(x -> {
+            //TODO, guardarOperadorUnidad, esto meterlo en un Stream enviando x
+            OperadorUnidadDto newOpeUniDto = OperadorUnidadDto.builder()
+                    .id(null)
+                    .isActive(true)
+                    .fkUsuario(usuarioDtoResp)
+                    .fkUnidad(x)
+                    .build();
+            operadorUnidadAbstract.guardarOperadorUnidadAbstract(newOpeUniDto);
+        });
+    }
 
     @Override
     public UsuarioDomain editarUsuario(UsuarioDomain usuarioEditado, Long rolId) {

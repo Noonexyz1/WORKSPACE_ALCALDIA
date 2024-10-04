@@ -10,13 +10,71 @@
 			"name": "Administrador",
 			"item": [
 				{
-					"name": "crear usuario",
+					"name": "crear usuario soli",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombres\": \"Diegoooo\",    \n    \"apellidos\": \"Diomir\",\n    \"correo\": \"asd@gmail.com\",\n    \"idRol\": 2 \n}",
+							"raw": "{\n    \"nombres\": \"Diego Solicitante\",\n    \"apellidos\": \"Diomir Solicitante\",\n    \"correo\": \"solicitante@gmail.com\",\n    \"idRol\": 2,\n    \"idUnidadResp\": null,\n    \"direccion\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/administrador/creaUsuario",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"administrador",
+								"creaUsuario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "crear usuario resp",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombres\": \"Diego Responsable\",    \n    \"apellidos\": \"Diomir Responsable\",\n    \"correo\": \"responsable@gmail.com\",\n    \"idRol\": 4,\n    \"idUnidadResp\": 7,\n    \"direccion\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/administrador/creaUsuario",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"administrador",
+								"creaUsuario"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "crear usuario ope",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nombres\": \"Diego Operador 2\",    \n    \"apellidos\": \"Diomir Operador 2\",\n    \"correo\": \"operador@gmail.com\",\n    \"idRol\": 3,\n    \"idUnidadResp\": null,\n    \"direccion\": \"Piso 4\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -45,7 +103,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 20,\n    \"nombres\": \"D13\",\n    \"apellidos\": \"Diomir\",\n    \"correo\": \"asd@gmail.commmmm\",\n    //Tambien debe cambiar el rol\n    \"idRol\": 2\n}",
+							"raw": "{\n    \"id\": 1,\n    \"nombres\": \"El primero man\",\n    \"apellidos\": \"Diomir\",\n    \"correo\": \"asd@gmail.commmmm\",\n    //Tambien debe cambiar el rol\n    \"idRol\": 4\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -85,7 +143,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/administrador/eliminarUsuario/20",
+							"raw": "http://localhost:8081/administrador/eliminarUsuario/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -94,7 +152,7 @@
 							"path": [
 								"administrador",
 								"eliminarUsuario",
-								"20"
+								"4"
 							]
 						}
 					},
@@ -175,7 +233,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/operador/verSolicitudes",
+							"raw": "http://localhost:8081/operador/verSolicitudes/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -183,7 +241,8 @@
 							"port": "8081",
 							"path": [
 								"operador",
-								"verSolicitudes"
+								"verSolicitudes",
+								"4"
 							]
 						}
 					},
@@ -195,7 +254,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/operador/verSolicitudesIniciadas",
+							"raw": "http://localhost:8081/operador/verSolicitudesIniciadas/4",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -203,7 +262,29 @@
 							"port": "8081",
 							"path": [
 								"operador",
-								"verSolicitudesIniciadas"
+								"verSolicitudesIniciadas",
+								"4"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "ver solicitudes completadas",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8081/operador/verSolicitudesCompletas/4",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"operador",
+								"verSolicitudesCompletas",
+								"4"
 							]
 						}
 					},
@@ -216,7 +297,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"idSolicitud\": 5,\n    \"idOperador\": 11 \n}",
+							"raw": "{\n    //ID de la tabla Operacion \n    \"idSolicitud\": 1,\n    //ID del operador de cuando vemos solicitudes\n    \"idOperador\": 4  \n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -245,7 +326,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"idSolicitud\": 22,\n    \"idOperador\": 11\n}",
+							"raw": "{\n    \"idSolicitud\": 9,\n    \"idOperador\": 4\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -266,26 +347,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "ver solicitudes completadas",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "http://localhost:8081/operador/verSolicitudesCompletadas",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"operador",
-								"verSolicitudesCompletadas"
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
@@ -299,7 +360,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"idAprobacion\": 1,\n    \"idResponsable\": 16\n}",
+							"raw": "{\n    \"idAprobacion\": 4,\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    \"idResponsable\": 2\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -323,11 +384,23 @@
 				},
 				{
 					"name": "ver solicitudes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:8081/responsable/verSolicitudes",
+							"raw": "http://localhost:8081/responsable/verSolicitudes/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -335,7 +408,8 @@
 							"port": "8081",
 							"path": [
 								"responsable",
-								"verSolicitudes"
+								"verSolicitudes",
+								"2"
 							]
 						}
 					},
@@ -348,7 +422,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"idAprobacion\": 3,\n    \"idResponsable\": 16\n}",
+							"raw": "{\n    \"idAprobacion\": 1,\n    \"idResponsable\": 7\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -382,7 +456,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombreUser\": \"ana.perez\",\n    \"pass\": \"password123\"\n}",
+							"raw": "{\n    //todavia no hay admin ;)\n    \"nombreUser\": \"ana.perez\",\n    \"pass\": \"password123\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -410,7 +484,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombreUser\": \"claudio.salazar\",\n    \"pass\": \"password123\"\n}",
+							"raw": "{\n    \"nombreUser\": \"operador@gmail.com\",\n    \"pass\": \"Diomir Operador 1\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -438,7 +512,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombreUser\": \"rey.castillo\",\n    \"pass\": \"password123\"\n}",
+							"raw": "{\n    \"nombreUser\": \"responsable@gmail.com\",\n    \"pass\": \"Diomir Responsable\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -466,7 +540,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombreUser\": \"carlos.lopez\",\n    \"pass\": \"password123\"\n}",
+							"raw": "{\n    \"nombreUser\": \"solicitante@gmail.com\",\n    \"pass\": \"Diomir Solicitante\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -493,13 +567,13 @@
 			"name": "Solicitante",
 			"item": [
 				{
-					"name": "crear solicitud",
+					"name": "crear solicitud 1",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nroDeCopias\": 500,\n    \"tipoDeDocumento\": \"Informe\",\n    \"nroDePaginas\": 500,\n    //El solicitante debe poner la unidad del que pertenece, \n    //Digamos que este solicitante es de la unidad de Planeacion Urbana\n    \"idUnidad\": 5, \n    \"idSolicitante\": 2,\n    \"archivosPdf\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
+							"raw": "{\n    \"nroDeCopias\": 500,\n    \"tipoDeDocumento\": \"Informe Semestral\",\n    \"nroDePaginas\": 20,\n    //El solicitante debe poner la unidad del que pertenece, \n    //Digamos que este solicitante es de la unidad de Planeacion Urbana\n    //puede ser de ejemplo, 2,5,6,7,89,14, osea yo solicitante 2, trabajo en la unidad 5.\n    \"idUnidad\": 5, \n    //Aqui todos tiene que ser solicitantes, osea todos los roles\n    \"idSolicitante\": 2,\n    \"archivosPdf\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -522,16 +596,13 @@
 					"response": []
 				},
 				{
-					"name": "get unidades",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
+					"name": "crear solicitud 2",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nroDeCopias\": 2,\n    \"tipoDeDocumento\": \"Informe\",\n    \"nroDePaginas\": 10,\n    \"nombreUnidad\": \"Unidad de Proyectos\",\n    \"listArvhicosPDF\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\"\n    ]\n}\n",
+							"raw": "{\n    \"nroDeCopias\": 500,\n    \"tipoDeDocumento\": \"Informe Semestral\",\n    \"nroDePaginas\": 20,\n    //El solicitante debe poner la unidad del que pertenece, \n    //Digamos que este solicitante es de la unidad de Planeacion Urbana\n    //puede ser de ejemplo, 2,5,6,7,89,14, osea yo solicitante 2, trabajo en la unidad 5.\n    \"idUnidad\": 5, \n    //Aqui todos tiene que ser solicitantes, osea todos los roles\n    \"idSolicitante\": 6,\n    \"archivosPdf\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -539,7 +610,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/solicitante/verListaUnidades",
+							"raw": "http://localhost:8081/solicitante/solicitarFotocopiar",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -547,7 +618,36 @@
 							"port": "8081",
 							"path": [
 								"solicitante",
-								"verListaUnidades"
+								"solicitarFotocopiar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "crear solicitud 3",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"nroDeCopias\": 500,\n    \"tipoDeDocumento\": \"Informe Semestral\",\n    \"nroDePaginas\": 20,\n    //El solicitante debe poner la unidad del que pertenece, \n    //Digamos que este solicitante es de la unidad de Planeacion Urbana\n    //puede ser de ejemplo, 2,5,6,7,89,14, osea yo solicitante 2, trabajo en la unidad 5.\n    \"idUnidad\": 7, \n    //Aqui todos tiene que ser solicitantes, osea todos los roles\n    \"idSolicitante\": 7,\n    \"archivosPdf\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/solicitante/solicitarFotocopiar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"solicitante",
+								"solicitarFotocopiar"
 							]
 						}
 					},
@@ -559,7 +659,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://localhost:8081/solicitante/verHistorialSolicitudes",
+							"raw": "http://localhost:8081/solicitante/verHistorialSolicitudes/2",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -567,7 +667,8 @@
 							"port": "8081",
 							"path": [
 								"solicitante",
-								"verHistorialSolicitudes"
+								"verHistorialSolicitudes",
+								"2"
 							]
 						}
 					},

@@ -21,4 +21,5 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
     * siempre es una lista vacía si no hay resultados. */
 
     List<Solicitud> findAllByFkUnidad_Id(Long fkUnidadId);
+    Solicitud findByFkUnidad_Id(Long fkUnidadId);
 }

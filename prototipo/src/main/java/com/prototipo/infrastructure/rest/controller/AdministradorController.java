@@ -48,7 +48,8 @@ public class AdministradorController {
     public void crearUsuario(@RequestBody UsuarioRequest request){
         Long idRol = request.getIdRol();
         Long idUniResp = request.getIdUnidadResp();
-        fotocopiaService.crearUsuario(modelMapper.map(request, UsuarioDomain.class), idRol, idUniResp);
+        String direccion = request.getDireccion();
+        fotocopiaService.crearUsuario(modelMapper.map(request, UsuarioDomain.class), idRol, idUniResp, direccion);
     }
 
     @PostMapping(path = {"/editarUsuario"}, produces = {MediaType.APPLICATION_JSON_VALUE})

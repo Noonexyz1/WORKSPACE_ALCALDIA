@@ -2,8 +2,12 @@ package com.prototipo.application.adapter;
 
 import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.OperacionDto;
+import com.prototipo.application.modelDto.OperadorUnidadDto;
+import com.prototipo.application.modelDto.SolicitudDto;
 import com.prototipo.application.modelDto.UsuarioDto;
 import com.prototipo.application.port.OperacionAbstract;
+import com.prototipo.application.port.OperadorUnidadAbstract;
+import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.application.port.UsuarioAbastract;
 import com.prototipo.application.useCase.OperadorService;
 import com.prototipo.domain.enums.EstadoByOperadorEnum;
@@ -29,22 +33,47 @@ public class OperadorAdapter implements OperadorService {
     }
 
     @Override
-    public List<OperacionDomain> verSolicitudesDeOperador(Long idOperador) {
+    public List<OperacionDomain> verSolicitudesDeOperador(Long idOperador, String estadoOperador) {
         //Si algun registro objeto es null en la base de datos, aunque unicamente sea uno,
-        //pues al hacer x.getFkOperador(), toDo el stream falla
-        return funcionToReturn(idOperador, EstadoByOperadorEnum.PENDIENTE.getNombre());
+        //pues al hacer x.getFkOperador(), to-do el stream falla
+        return funcionToReturn(idOperador, estadoOperador);
     }
 
-    @Override
-    public List<OperacionDomain> verSolicitudesDeOperadorIniciadas(Long idOperador) {
-        return funcionToReturn(idOperador, EstadoByOperadorEnum.INICIADO.getNombre());
+    private List<OperacionDomain> funcionToReturn(Long idOperador, String estadoOpe){
+        /*//Tengo que enviar el id del usuario anterior, para luego buscar por fkUsuarioId en
+        //tabla OperadorUnidad, tengo que encontrar por FK
+        //List<OperadorUnidadDto> listOperadorUnidadDto = operadorUnidadAbstract.encontrarOperadorUnidadById(idOperador);
+
+        //TODO, ahora traemos los fk de de las unidades de listOperadorUnidadDto
+        //List<Long> listFkUnidades = listOperadorUnidadDto.stream()
+        //        .map(x -> x.getFkUnidad().getId()).toList();
+        //Funciona, me esta traendo todos los id de unidad Correspondientes al operador que los sirve
+        //entonces necesito buscar todas aquellas coincidencias que existen en Solicitudes con list listFkUnidades
+
+
+        //TODO, luego busco directamente en la tabla Solicitud por campo fkUnidad, traigo sus Ids de esta
+        //List<SolicitudDto> listSolicitudes = listFkUnidades.stream()
+        //        .map(x -> solicitudAbstract.buscarSolicitudByFkUnidad(x))
+        //        .toList();
+
+        //TODO, con esos Ids busco en el Aprobaciones por fkSolicitud, luego saco los ID de aprobacion
+        //TODO, y busco en en Operacion por fkAprobaciones.
+
+
+        List<OperacionDto> operacionDtoList = operacionAbstract.listaDeOperaciones()
+                .stream()
+                .filter(x -> x.getFkOperador() != null && x.getFkOperador().getId() == idOperador)
+                .filter(x -> x.getEstadoByOperador().equals(estadoOpe))
+                .toList();*/
+
+        List<OperacionDto> listOpe = operacionAbstract.findOperacionByIdOperadorAbstract(idOperador, estadoOpe);
+
+        return  listOpe.stream()
+                .map(x -> mapperApplicationAbstract.mapearAbstract(x, OperacionDomain.class))
+                .toList();
     }
 
-    @Override
-    public List<OperacionDomain> verSolicitudesDeOperadorCompletadas(Long idOperador) {
-        return funcionToReturn(idOperador, EstadoByOperadorEnum.COMPLETADO.getNombre());
-    }
-
+    //TODO, revisar este metodo
     @Override
     public void iniciarSolicitarOperacion(Long idAprobacion, Long idOperador) {
         //Aqui debe ir toda la logica
@@ -55,7 +84,7 @@ public class OperadorAdapter implements OperadorService {
         OperacionDto operadorDtoSave = OperacionDto.builder()
                 .id(null)
                 .estadoByOperador(EstadoByOperadorEnum.INICIADO.getNombre())
-                .fkAprobacion(operacionDto.getFkAprobacion())
+                .fkSolicitud(operacionDto.getFkSolicitud())
                 .fkOperador(usuarioOperador)
                 .build();
 
@@ -63,8 +92,8 @@ public class OperadorAdapter implements OperadorService {
         //si operador es null de Operacion, entonces le actualizamos a usuarioOperador que significa
         //que esta operacion ya ha sido inicado por el operador y que ese inicio ha sido registrado
         //como nuevo registro
-        operacionDto.setFkOperador(usuarioOperador);
-        operacionAbstract.guardarOperacion(operacionDto);
+        //operacionDto.setFkOperador(usuarioOperador);
+        //operacionAbstract.guardarOperacion(operacionDto);
     }
 
     @Override
@@ -74,19 +103,8 @@ public class OperadorAdapter implements OperadorService {
 
         operacionDto.setId(null);
         operacionDto.setEstadoByOperador(EstadoByOperadorEnum.COMPLETADO.getNombre());
+        operacionDto.setFkSolicitud(operacionDto.getFkSolicitud());
         operacionDto.setFkOperador(usuarioDto);
         operacionAbstract.guardarOperacion(operacionDto);
-    }
-
-    private List<OperacionDomain> funcionToReturn(Long idOperador, String opcion){
-        List<OperacionDto> operacionDtoList = operacionAbstract.listaDeOperaciones()
-                .stream()
-                .filter(x -> x.getFkOperador() != null && x.getFkOperador().getId() == idOperador)
-                .filter(x -> x.getEstadoByOperador().equals(opcion))
-                .toList();
-
-        return operacionDtoList.stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, OperacionDomain.class))
-                .toList();
     }
 }

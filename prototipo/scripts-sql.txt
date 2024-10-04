@@ -13,62 +13,6 @@ VALUES(1, 'administrador'),
 (3, 'operador'),
 (4, 'responsable');
 
-#INSERTAMOS USUARIOS
-#No es necesario crear relaciones de reflexion, esto es solamente control de usuarios
-#Arreglar eso!!
-INSERT INTO usuario (fk_rol_id, apellidos, nombres)
-VALUES (1, 'Perez', 'Ana'),
-(2, 'Lopez', 'Carlos'),
-(2, 'Garcia', 'Maria'),
-(2, 'Hernandez', 'Jose'),
-(2, 'Martinez', 'Luisa'),
-(2, 'Gonzales', 'David'),
-(3, 'Barrios', 'Javier'),
-(3, 'Sanchez', 'Laura'),
-(3, 'Jimenez', 'Raul'),
-(3, 'Alvarez', 'Sonia'),
-(3, 'Campoz', 'Estevan'),
-(3, 'Duarte', 'Patricia'),
-(3, 'Morales', 'Raul'),
-(3, 'Salazar ', 'Claudio'),
-(4, 'Carlos', 'Raul'),
-(4, 'Salas', 'Laura'),
-(4, 'Jardines', 'Jose'),
-(4, 'Castillo', 'Rey');
-
-
-#INSETANDO A CREDENCIALES
-INSERT INTO prototipo.credencial(nombre_user , pass, fk_usuario_id)
-VALUES('ana.perez', 'password123', 1),    -- Ana Perez
-('carlos.lopez', 'password123', 2), -- Carlos Lopez
-('maria.garcia', 'password123', 3), -- Maria Garcia
-('jose.hernandez', 'password123', 4), -- Jose Hernandez
-('luisa.martinez', 'password123', 5), -- Luisa Martinez
-('david.gonzales', 'password123', 6), -- David Gonzales
-('javier.barrios', 'password123', 7), -- Javier Barrios
-('laura.sanchez', 'password123', 8), -- Laura Sanchez
-('raul.jimenez', 'password123', 9), -- Raul Jimenez
-('sonia.alvarez', 'password123', 10), -- Sonia Alvarez
-('estevan.campoz', 'password123', 11), -- Estevan Campoz
-('patricia.duarte2', 'password123', 12), -- Patricia Duarte
-('raul.morales', 'password123', 13), -- Raul Morales
-('claudio.salazar', 'password123', 14), -- Claudio Salazar
-('raul.carlos', 'password123', 15),
-('laura.salas', 'password123', 16),
-('jose.jardines', 'password123', 17),
-('rey.castillo', 'password123', 18);
-
-
-SELECT * FROM dashboard_config;
-SELECT * FROM credencial;
-SELECT * FROM rol;
-SELECT * FROM usuario;
-
-
-
-
-
-#----------------------MODULO DE SOLICITUDES-----------------------------
 #Esta tabla si o si para produccion
 INSERT INTO prototipo.unidad(nombre, direccion)
 VALUES
@@ -88,22 +32,42 @@ VALUES
 ("Oficina de la Alcaldesa", "Piso 3"),
 ("Gabinete de Gobierno", "Piso 5");
 
+
+SELECT * FROM rol;
+SELECT * FROM dashboard_config;
 SELECT * FROM unidad;
+
 SELECT * from solicitud;
-SELECT * from archivo_pdf;
 SELECT * from aprobacion;
+SELECT * from archivo_pdf;
 SELECT * from operacion;
 SELECT * from usuario;
 SELECT * from responsable;
 SELECT * from credencial;
+SELECT * from operador_unidad;
+
+
+DELETE FROM operador_unidad;
 
 DELETE from solicitud;
+DELETE FROM operacion;
 
 
-
-
-
-
+#CONSULTA FINAL
+SELECT *
+FROM operacion o
+WHERE fk_solicitud_id IN (
+	SELECT s.id
+	FROM solicitud s
+	WHERE fk_unidad_id IN (
+		SELECT u.id
+		FROM operador_unidad ou, unidad u
+		WHERE ou.fk_unidad_id = u.id
+		AND ou.fk_usuario_id = 4
+		AND ou.is_active = TRUE
+	)
+)
+AND o.estado_by_operador = "Pendiente";
 
 
 

@@ -1,6 +1,7 @@
 package com.prototipo.infrastructure.rest.controller;
 
 import com.prototipo.application.useCase.OperadorService;
+import com.prototipo.domain.enums.EstadoByOperadorEnum;
 import com.prototipo.domain.model.OperacionDomain;
 import com.prototipo.infrastructure.rest.request.OperacionSoliRequest;
 import com.prototipo.infrastructure.rest.response.SolicitudOperaResponse;
@@ -23,6 +24,7 @@ public class OperadorController {
     private ModelMapper modelMapper;
 
 
+    //TODO, verificar este metodo
     @PostMapping(path = {"/iniciarOperacion"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void iniciarSolicitudOperacion(@RequestBody OperacionSoliRequest opeSoliRequest) {
         operadorService.iniciarSolicitarOperacion(opeSoliRequest.getIdSolicitud(), opeSoliRequest.getIdOperador());
@@ -33,11 +35,13 @@ public class OperadorController {
         operadorService.terminarSolicitarOperacion(opeSoliRequest.getIdSolicitud(), opeSoliRequest.getIdOperador());
     }
 
-    //TODO verificar los datos que se trae de la base de datos
-    @GetMapping(path = {"/verSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudes() {
-        //TODO, solamente estamos hardcodeando para fines de prueba 11L
-        List<OperacionDomain> list = operadorService.verSolicitudesDeOperador(11L);
+    //Este operador tiene una forma de trabajar, y es por piso,
+    //entonces se deberia mostrar las solicitudes correspondientes a su piso
+    @GetMapping(path = {"/verSolicitudes/{idOperador}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudes(@PathVariable Long idOperador) {
+        String nombre = EstadoByOperadorEnum.PENDIENTE.getNombre();
+
+        List<OperacionDomain> list = operadorService.verSolicitudesDeOperador(idOperador, nombre);
         List<SolicitudOperaResponse> listSolicitud = list
                 .stream()
                 .map(this::funcion)
@@ -45,10 +49,11 @@ public class OperadorController {
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    @GetMapping(path = {"/verSolicitudesIniciadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesIniciadas() {
-        //TODO, solamente estamos hardcodeando para fines de prueba 11L
-        List<OperacionDomain> list = operadorService.verSolicitudesDeOperadorIniciadas(11L);
+    @GetMapping(path = {"/verSolicitudesIniciadas/{idOperador}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesIniciadas(@PathVariable Long idOperador) {
+        String nombre = EstadoByOperadorEnum.INICIADO.getNombre();
+
+        List<OperacionDomain> list = operadorService.verSolicitudesDeOperador(idOperador, nombre);
         List<SolicitudOperaResponse> listSolicitud = list
                 .stream()
                 .map(this::funcion)
@@ -56,10 +61,11 @@ public class OperadorController {
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    @GetMapping(path = {"/verSolicitudesCompletadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesCompletadas() {
-        //TODO, solamente estamos hardcodeando para fines de prueba 11L
-        List<OperacionDomain> list = operadorService.verSolicitudesDeOperadorCompletadas(11L);
+    @GetMapping(path = {"/verSolicitudesCompletas/{idOperador}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesCompletadas(@PathVariable Long idOperador) {
+        String nombre = EstadoByOperadorEnum.COMPLETADO.getNombre();
+
+        List<OperacionDomain> list = operadorService.verSolicitudesDeOperador(idOperador, nombre);
         List<SolicitudOperaResponse> listSolicitud = list
                 .stream()
                 .map(this::funcion)
@@ -71,12 +77,11 @@ public class OperadorController {
         return SolicitudOperaResponse.builder()
                 //No el ID de la solicitud, sino el id del registro Aprobacion
                 .id(x.getId())
-                .idSolicitud(x.getFkAprobacion().getFkSolicitud().getId())
-                .nroDeCopias(x.getFkAprobacion().getFkSolicitud().getNroDeCopias())
-                .tipoDeDocumento(x.getFkAprobacion().getFkSolicitud().getTipoDeDocumento())
-                .nroDePaginas(x.getFkAprobacion().getFkSolicitud().getNroDePaginas())
-                .nombreUnidad(x.getFkAprobacion().getFkSolicitud().getFkUnidad().getNombre())
-                .estadoByResponsable(x.getFkAprobacion().getEstadoByResponsable())
+                .idSolicitud(x.getFkSolicitud().getId())
+                .nroDeCopias(x.getFkSolicitud().getNroDeCopias())
+                .tipoDeDocumento(x.getFkSolicitud().getTipoDeDocumento())
+                .nroDePaginas(x.getFkSolicitud().getNroDePaginas())
+                .nombreUnidad(x.getFkSolicitud().getFkUnidad().getNombre())
                 .estadoByOperador(x.getEstadoByOperador())
                 .build();
     }

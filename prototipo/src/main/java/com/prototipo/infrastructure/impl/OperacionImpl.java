@@ -42,4 +42,11 @@ public class OperacionImpl implements OperacionAbstract {
                 .map(x -> modelMapper.map(x, OperacionDto.class))
                 .toList();
     }
+
+    @Override
+    public List<OperacionDto> findOperacionByIdOperadorAbstract(Long idOperador, String estadoOpe) {
+        List<Operacion> listOpe = operacionRepository
+                .findOperacionesByOperadorAndEstado(idOperador, estadoOpe);
+        return listOpe.stream().map(x -> modelMapper.map(x, OperacionDto.class)).toList();
+    }
 }

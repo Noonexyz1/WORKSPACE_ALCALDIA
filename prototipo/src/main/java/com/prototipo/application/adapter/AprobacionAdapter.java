@@ -43,20 +43,18 @@ public class AprobacionAdapter implements AprobacionService {
 
     @Override
     public List<AprobacionDomain> listaDeSolicitudesService(Long idSupervisor) {
-        // 1. Buscar los detalles del usuario por su ID (supervisor)
-        UsuarioDto usuarioDto = usuarioAbastract.findUsuarioPorIdAbastract(idSupervisor);
-
         // 2. Obtener el responsable asociado al usuario (supervisor) usando su ID
-        ResponsableDto respDto = responsableAbstract.buscarResponsablePorFkUsuario(usuarioDto.getId());
+        ResponsableDto respDto = responsableAbstract.buscarResponsablePorFkUsuario(idSupervisor);
 
         // 3. Obtener el ID de la unidad correspondiente al responsable
         Long id = respDto.getFkUnidad().getId();
+        //ya tengo el ID de la unidad, ahora me voy a buscar a la tabla solicitud
 
         // 4. Buscar todas las solicitudes asociadas a la unidad del responsable
         List<SolicitudDto> listDto = solicitudAbstract.getListaSolicitudesByUnidad(id);
         List<Long> listIdSoli = listDto.stream().map(SolicitudDto::getId).toList();
 
-        // 5. Para cada solicitud, buscar su aprobación correspondiente
+        // 5. Para cada solicitud, buscar su aprobación correspondiente, PERO AQUELLOS UE SON "Pendiente"
         List<AprobacionDto> aprobacionDtos = listIdSoli.stream()
                 .map(x -> aprobacionAbstract.findAprovacionByIdSoliAbstract(x))
                 .toList();
