@@ -3,7 +3,10 @@ package com.prototipo.infrastructure.rest.controller;
 import com.prototipo.application.useCase.FotocopiaService;
 import com.prototipo.application.useCase.UsuarioService;
 import com.prototipo.domain.model.UsuarioDomain;
+import com.prototipo.infrastructure.rest.request.UsuarioOpeRequest;
 import com.prototipo.infrastructure.rest.request.UsuarioRequest;
+import com.prototipo.infrastructure.rest.request.UsuarioResponRequest;
+import com.prototipo.infrastructure.rest.request.UsuarioSoliRequest;
 import com.prototipo.infrastructure.rest.response.ReporteResponse;
 import com.prototipo.infrastructure.rest.response.UserListAdminResponse;
 import org.modelmapper.ModelMapper;
@@ -44,12 +47,27 @@ public class AdministradorController {
         return new ResponseEntity<>(listResponse, HttpStatus.OK);
     }
 
-    @PostMapping(path = {"/creaUsuario"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void crearUsuario(@RequestBody UsuarioRequest request){
-        Long idRol = request.getIdRol();
-        Long idUniResp = request.getIdUnidadResp();
-        String direccion = request.getDireccion();
-        fotocopiaService.crearUsuario(modelMapper.map(request, UsuarioDomain.class), idRol, idUniResp, direccion);
+    @PostMapping(path = {"/creaUsuarioSolicitante"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void creaUsuarioSolicitante(@RequestBody UsuarioSoliRequest newUserSoli){
+        Long rolId = newUserSoli.getIdRol();
+        UsuarioDomain usuarioDomain = modelMapper.map(newUserSoli, UsuarioDomain.class);
+        fotocopiaService.creaUsuarioSolicitante(usuarioDomain, rolId);
+    }
+
+    @PostMapping(path = {"/creaUsuarioResponsable"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void creaUsuarioResponsable(@RequestBody UsuarioResponRequest newUserRespon){
+        Long rolId = newUserRespon.getIdRol();
+        Long idUniResp = newUserRespon.getIdUnidadResp();
+        UsuarioDomain usuarioDomain = modelMapper.map(newUserRespon, UsuarioDomain.class);
+        fotocopiaService.creaUsuarioResponsable(usuarioDomain, rolId, idUniResp);
+    }
+
+    @PostMapping(path = {"/creaUsuarioOperador"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void creaUsuarioOperador(@RequestBody UsuarioOpeRequest newUserOpe){
+        Long rolId = newUserOpe.getIdRol();
+        String pisoAsignado = newUserOpe.getPisoAsignado();
+        UsuarioDomain usuarioDomain = modelMapper.map(newUserOpe, UsuarioDomain.class);
+        fotocopiaService.creaUsuarioOperador(usuarioDomain, rolId, pisoAsignado);
     }
 
     @PostMapping(path = {"/editarUsuario"}, produces = {MediaType.APPLICATION_JSON_VALUE})

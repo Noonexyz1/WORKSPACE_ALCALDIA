@@ -7,11 +7,11 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UsuarioRequest {
+public class UsuarioOpeRequest {
     private Long id;
     private String nombres;
     private String apellidos;
     private String correo;
-    private Boolean isActive;
     private Long idRol;
+    private String pisoAsignado;
 }
