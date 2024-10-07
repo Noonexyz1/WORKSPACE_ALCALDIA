@@ -27,8 +27,22 @@ public class UsuarioAdapter implements UsuarioService {
     }
 
     @Override
-    public List<UsuarioDomain> listaDeUsuarios() {
-        return usuarioAbastract.listaDeUsuarios().stream()
+    public List<UsuarioDomain> listaDeUsuariosServiceDef(Long page, Long size) {
+        return usuarioAbastract.listaDeUsuariosAbsDef(page, size).stream()
+                .map(x -> mapperApplicationAbstract.mapearAbstract(x, UsuarioDomain.class))
+                .toList();
+    }
+
+    @Override
+    public List<UsuarioDomain> listaDeUsuariosServiceAsc(Long page, Long size, String byColumName) {
+        return usuarioAbastract.listaDeUsuariosAbsAsc(page, size, byColumName).stream()
+                .map(x -> mapperApplicationAbstract.mapearAbstract(x, UsuarioDomain.class))
+                .toList();
+    }
+
+    @Override
+    public List<UsuarioDomain> listaDeUsuariosServiceDesc(Long page, Long size, String byColumName) {
+        return usuarioAbastract.listaDeUsuariosAbsDesc(page, size, byColumName).stream()
                 .map(x -> mapperApplicationAbstract.mapearAbstract(x, UsuarioDomain.class))
                 .toList();
     }
