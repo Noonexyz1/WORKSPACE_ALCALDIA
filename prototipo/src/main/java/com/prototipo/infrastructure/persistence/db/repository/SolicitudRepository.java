@@ -1,6 +1,7 @@
 package com.prototipo.infrastructure.persistence.db.repository;
 
 import com.prototipo.infrastructure.persistence.db.entity.Solicitud;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +15,7 @@ public interface SolicitudRepository extends JpaRepository<Solicitud, Long> {
     * valor proporcionado. La sintaxis FkSolicitante_Id le indica a
     * Spring Data JPA que debe usar el campo id de la entidad Usuario
     * relacionada con fkSolicitante. */
-    List<Solicitud> findAllByFkSolicitante_Id(Long fkSolicitanteId);
+    List<Solicitud> findAllByFkSolicitante_Id(Long fkSolicitanteId, Pageable pageable);
     /*Si no hay elementos coincidentes, retorna una lista vacía ([])
     * Este comportamiento es predeterminado en las listas devueltas por
     * métodos de repositorio en Spring Data JPA: nunca se retorna null,

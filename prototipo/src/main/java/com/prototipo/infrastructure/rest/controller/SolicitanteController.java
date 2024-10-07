@@ -2,10 +2,9 @@ package com.prototipo.infrastructure.rest.controller;
 
 import com.prototipo.application.useCase.*;
 import com.prototipo.domain.model.*;
+import com.prototipo.infrastructure.rest.request.PaginacionSoliRequest;
 import com.prototipo.infrastructure.rest.request.SolicitudRequest;
-import com.prototipo.infrastructure.rest.response.SolicitudResponResponse;
 import com.prototipo.infrastructure.rest.response.SolicitudSoliciResponse;
-import com.prototipo.infrastructure.rest.response.UnidadResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,7 +17,7 @@ import java.util.List;
 @CrossOrigin(origins = "*", maxAge = 86400)
 @RestController
 @RequestMapping(path = "/solicitante")
-public class SolicitudController {
+public class SolicitanteController {
 
     @Autowired
     private SolicitudService solicitudService;
@@ -58,18 +57,15 @@ public class SolicitudController {
         solicitudService.solicitarFotocopiarService(solicitud, archivoPdfs);
     }
 
-    /*@GetMapping(path = {"/verListaUnidades"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<UnidadResponse>> verListaDeUnidades() {
-        List<UnidadResponse> unidadResponses = unidadService.listaDeUnidadesService()
-                .stream()
-                .map(x -> modelMapper.map(x, UnidadResponse.class))
-                .toList();
-        return new ResponseEntity<>(unidadResponses, HttpStatus.OK);
-    }*/
+    @GetMapping(path = {"/verHistorialSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudSoliciResponse>> verHistorialSolicitudes(@RequestBody PaginacionSoliRequest pageArg) {
+        Long idUsuario = pageArg.getIdUsuario();
 
-    @GetMapping(path = {"/verHistorialSolicitudes/{idUsuario}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudSoliciResponse>> verHistorialSolicitudes(@PathVariable Long idUsuario) {
-        List<SolicitudDomain> listDomain = solicitudService.getListaSolicitudesService(idUsuario);
+        Long page = pageArg.getPage();
+        Long size = pageArg.getSize();
+        //String byColumName = pageArg.getByColumName();
+
+        List<SolicitudDomain> listDomain = solicitudService.getListaSolicitudesService(idUsuario, page, size);
         List<SolicitudSoliciResponse> list = listDomain.stream()
                 .map(this::funcToReturn)
                 .toList();

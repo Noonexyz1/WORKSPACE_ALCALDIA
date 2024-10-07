@@ -9,6 +9,8 @@ import com.prototipo.infrastructure.persistence.db.repository.ArchivoPdfReposito
 import com.prototipo.infrastructure.persistence.db.repository.SolicitudRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -38,8 +40,10 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
-    public List<SolicitudDto> getListaSolicitudesAbstract(Long idUsuario) {
-        return solicitudRepository.findAllByFkSolicitante_Id(idUsuario).stream()
+    public List<SolicitudDto> getListaSolicitudesAbstract(Long idUsuario, Long page, Long size) {
+        //TODO, probar si te trae los paginados, FUNCIONA CON QUERY_METODH
+        Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
+        return solicitudRepository.findAllByFkSolicitante_Id(idUsuario, pageable).stream()
                 .map(x -> modelMapper.map(x, SolicitudDto.class))
                 .toList();
     }

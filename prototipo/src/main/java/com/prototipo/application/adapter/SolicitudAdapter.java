@@ -63,9 +63,9 @@ public class SolicitudAdapter implements SolicitudService {
     }
 
     @Override
-    public List<SolicitudDomain> getListaSolicitudesService(Long idUsuario) {
+    public List<SolicitudDomain> getListaSolicitudesService(Long idUsuario, Long page, Long size) {
         //Quiero filtar las solicitudes segun el Usuario que lo esta pidiendo
-        return solicitudAbstract.getListaSolicitudesAbstract(idUsuario)
+        return solicitudAbstract.getListaSolicitudesAbstract(idUsuario, page, size)
                 .stream()
                 .map(x -> mapperApplicationAbstract.mapearAbstract(x, SolicitudDomain.class))
                 .toList();

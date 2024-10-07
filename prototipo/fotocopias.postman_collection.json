@@ -662,7 +662,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id del usuario solicitante\n    \"idUsuario\": 7,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
