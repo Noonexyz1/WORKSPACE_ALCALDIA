@@ -8,9 +8,6 @@ import com.prototipo.infrastructure.rest.response.ReporteResponse;
 import com.prototipo.infrastructure.rest.response.UserListAdminResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +28,7 @@ public class AdministradorController {
 
     //TODO, con Pageables POST O GET??
     @GetMapping(path = {"/listaDeUsuarios"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<UserListAdminResponse>> listaDeUsuarios(@RequestBody PaginadorRequest pageReq){
+    public ResponseEntity<List<UserListAdminResponse>> listaDeUsuarios(@RequestBody PaginacionAdminRequest pageReq){
         List<UsuarioDomain> listUserDomain = usuarioService.listaDeUsuariosServiceDef(pageReq.getPage(), pageReq.getSize());
         List<UserListAdminResponse> listResponse = listUserDomain.stream()
                 .map(x ->

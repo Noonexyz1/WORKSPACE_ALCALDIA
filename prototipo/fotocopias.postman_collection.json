@@ -392,7 +392,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "",
+							"raw": "{\n    \"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -400,7 +400,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/responsable/verSolicitudes/2",
+							"raw": "http://localhost:8081/responsable/verSolicitudes",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -408,8 +408,7 @@
 							"port": "8081",
 							"path": [
 								"responsable",
-								"verSolicitudes",
-								"2"
+								"verSolicitudes"
 							]
 						}
 					},
@@ -655,11 +654,23 @@
 				},
 				{
 					"name": "ver mi histo solicitudes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:8081/solicitante/verHistorialSolicitudes/2",
+							"raw": "http://localhost:8081/solicitante/verHistorialSolicitudes",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -667,8 +678,7 @@
 							"port": "8081",
 							"path": [
 								"solicitante",
-								"verHistorialSolicitudes",
-								"2"
+								"verHistorialSolicitudes"
 							]
 						}
 					},
