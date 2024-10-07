@@ -37,28 +37,49 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     @Override
-    public void crearUsuario(UsuarioDomain nuevoUsuario, Long rolId, Long idUnidadResp, String direccion) {
-        //1.- Encontrar el Rol,
-        RolDto rolDto = rolAbstract.encontrarRolPorId(rolId);
-
-        //2.- Creamos el usuario nuevo con el rol que se ha encontraoo
-        UsuarioDto usuarioDto = mapperApplicationAbstract.mapearAbstract(nuevoUsuario, UsuarioDto.class);
-        usuarioDto.setId(null);
-        usuarioDto.setIsActive(true);
-        usuarioDto.setFkRol(rolDto);
-
+    public void creaUsuarioSolicitante(UsuarioDomain userSoli, Long rolId){
+        UsuarioDto usuarioDto = crearUsuarioConRol(userSoli, rolId);
         UsuarioDto usuarioDtoResp = usuarioAbastract.guardarUsuario(usuarioDto);
+        crearCredencial(usuarioDtoResp);
+    }
 
-        //2.5.-
-        //Registramos en la tabla Responsable si este rol es de Responsable
-        if (idUnidadResp != null) {
-            guardarResponsable(usuarioDtoResp, idUnidadResp);
-        }
-        if (direccion != null) {
-            guardarOperadorUnidad(usuarioDtoResp, direccion);
-        }
+    @Override
+    public void creaUsuarioResponsable(UsuarioDomain userRespon, Long rolId, Long idUniRespon){
+        UsuarioDto usuarioDto = crearUsuarioConRol(userRespon, rolId);
 
-        //3.- Teniendo el Usuario con el Rol, le creamos su credencial
+        UnidadDto unidadDto = unidadAbstract.findUnidadPorIdAbstract(idUniRespon);
+        ResponsableDto responsableDto = ResponsableDto.builder()
+                .id(null)
+                //Se deberia controloar cuales ya no son responsable no?
+                .isActive(true)
+                .fkUsuario(usuarioDto)
+                .fkUnidad(unidadDto)
+                .build();
+        responsableAbstract.guardarResponsable(responsableDto);
+
+        crearCredencial(usuarioDto);
+    }
+
+    @Override
+    public void creaUsuarioOperador(UsuarioDomain userOpe, Long rolId, String direccionPiso){
+        UsuarioDto usuarioDto = crearUsuarioConRol(userOpe, rolId);
+
+        List<UnidadDto> unidadDtos = unidadAbstract.listaDeUnidadesByDireccionAbstract(direccionPiso);
+        unidadDtos.forEach(x -> {
+            //TODO, guardarOperadorUnidad, esto meterlo en un Stream enviando x
+            OperadorUnidadDto newOpeUniDto = OperadorUnidadDto.builder()
+                    .id(null)
+                    .isActive(true)
+                    .fkUsuario(usuarioDto)
+                    .fkUnidad(x)
+                    .build();
+            operadorUnidadAbstract.guardarOperadorUnidadAbstract(newOpeUniDto);
+        });
+
+        crearCredencial(usuarioDto);
+    }
+
+    private void crearCredencial(UsuarioDto usuarioDtoResp) {
         CredencialDto newCredencialDto = CredencialDto.builder()
                 .id(null)
                 .nombreUser(usuarioDtoResp.getCorreo())
@@ -69,31 +90,13 @@ public class FotocopiaAdapter implements FotocopiaService {
         credencialAbstract.guardarCredencialAbstract(newCredencialDto);
     }
 
-    private void guardarResponsable(UsuarioDto usuarioDtoResp, Long idUnidadResp){
-        UnidadDto unidadDto = unidadAbstract.findUnidadPorIdAbstract(idUnidadResp);
-        ResponsableDto responsableDto = ResponsableDto.builder()
-                .id(null)
-                //Se deberia controloar cuales ya no son responsable no?
-                .isActive(true)
-                .fkUsuario(usuarioDtoResp)
-                .fkUnidad(unidadDto)
-                .build();
-        responsableAbstract.guardarResponsable(responsableDto);
-    }
-
-    //TODO, Probar este metodo
-    private void guardarOperadorUnidad(UsuarioDto usuarioDtoResp, String direccion) {
-        List<UnidadDto> unidadDtos = unidadAbstract.listaDeUnidadesByDireccionAbstract(direccion);
-        unidadDtos.forEach(x -> {
-            //TODO, guardarOperadorUnidad, esto meterlo en un Stream enviando x
-            OperadorUnidadDto newOpeUniDto = OperadorUnidadDto.builder()
-                    .id(null)
-                    .isActive(true)
-                    .fkUsuario(usuarioDtoResp)
-                    .fkUnidad(x)
-                    .build();
-            operadorUnidadAbstract.guardarOperadorUnidadAbstract(newOpeUniDto);
-        });
+    private UsuarioDto crearUsuarioConRol(UsuarioDomain user, Long rolId) {
+        RolDto rolDto = rolAbstract.encontrarRolPorId(rolId);
+        UsuarioDto usuarioDto = mapperApplicationAbstract.mapearAbstract(user, UsuarioDto.class);
+        usuarioDto.setId(null);
+        usuarioDto.setIsActive(true);
+        usuarioDto.setFkRol(rolDto);
+        return usuarioAbastract.guardarUsuario(usuarioDto);
     }
 
     @Override

@@ -16,7 +16,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombres\": \"Diego Solicitante\",\n    \"apellidos\": \"Diomir Solicitante\",\n    \"correo\": \"solicitante@gmail.com\",\n    \"idRol\": 2,\n    \"idUnidadResp\": null,\n    \"direccion\": null\n}",
+							"raw": "{\n    \"nombres\": \"Diego Solicitante\",\n    \"apellidos\": \"Diomir Solicitante\",\n    \"correo\": \"solicitante@gmail.com\",\n    \"idRol\": 2\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -24,7 +24,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/administrador/creaUsuario",
+							"raw": "http://localhost:8081/administrador/creaUsuarioSolicitante",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -32,7 +32,7 @@
 							"port": "8081",
 							"path": [
 								"administrador",
-								"creaUsuario"
+								"creaUsuarioSolicitante"
 							]
 						}
 					},
@@ -45,7 +45,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombres\": \"Diego Responsable\",    \n    \"apellidos\": \"Diomir Responsable\",\n    \"correo\": \"responsable@gmail.com\",\n    \"idRol\": 4,\n    \"idUnidadResp\": 7,\n    \"direccion\": null\n}",
+							"raw": "{\n    \"nombres\": \"Diego Responsable Test\",    \n    \"apellidos\": \"Diomir Responsable Test\",\n    \"correo\": \"responsableTest@gmail.com\",\n    \"idRol\": 4,\n    \"idUnidadResp\": 7\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -53,7 +53,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/administrador/creaUsuario",
+							"raw": "http://localhost:8081/administrador/creaUsuarioResponsable",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -61,7 +61,7 @@
 							"port": "8081",
 							"path": [
 								"administrador",
-								"creaUsuario"
+								"creaUsuarioResponsable"
 							]
 						}
 					},
@@ -74,7 +74,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombres\": \"Diego Operador 2\",    \n    \"apellidos\": \"Diomir Operador 2\",\n    \"correo\": \"operador@gmail.com\",\n    \"idRol\": 3,\n    \"idUnidadResp\": null,\n    \"direccion\": \"Piso 4\"\n}",
+							"raw": "{\n    \"nombres\": \"Diego Operador 2 Test\",    \n    \"apellidos\": \"Diomir Operador 2 Test\",\n    \"correo\": \"operador@gmail.com\",\n    \"idRol\": 3,\n    \"pisoAsignado\": \"Piso 4\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -82,7 +82,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/administrador/creaUsuario",
+							"raw": "http://localhost:8081/administrador/creaUsuarioOperador",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -90,7 +90,7 @@
 							"port": "8081",
 							"path": [
 								"administrador",
-								"creaUsuario"
+								"creaUsuarioOperador"
 							]
 						}
 					},
@@ -103,7 +103,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 1,\n    \"nombres\": \"El primero man\",\n    \"apellidos\": \"Diomir\",\n    \"correo\": \"asd@gmail.commmmm\",\n    //Tambien debe cambiar el rol\n    \"idRol\": 4\n}",
+							"raw": "{\n    \"id\": 1,\n    \"nombres\": \"El primero mannn\",\n    \"apellidos\": \"Diomir\",\n    \"correo\": \"asd@gmail.commmmm\",\n    \"isActive\": null,\n    //Tambien debe cambiar el rol\n    \"idRol\": 4\n}",
 							"options": {
 								"raw": {
 									"language": "json"
