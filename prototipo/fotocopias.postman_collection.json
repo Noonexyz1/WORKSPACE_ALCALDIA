@@ -200,7 +200,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombre\": \"Diego\",\n    \"direccion\": \"diego@diego.com\"\n}",
+							"raw": "{\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null \n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -540,7 +540,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombreUser\": \"solicitante@gmail.com\",\n    \"pass\": \"Diomir Solicitante\"\n}",
+							"raw": "{\n    \"nombreUser\": \"solicitante@gmail.com\",\n    \"pass\": \"Diomir Solicitante 2\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"

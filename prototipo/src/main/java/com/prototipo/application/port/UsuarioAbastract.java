@@ -6,6 +6,8 @@ import java.util.List;
 
 public interface UsuarioAbastract {
     UsuarioDto findUsuarioPorIdAbastract(Long idUsuario);
-    List<UsuarioDto> listaDeUsuarios();
-    UsuarioDto guardarUsuario(UsuarioDto usuarioDto);
+    UsuarioDto guardarUsuarioAbastract(UsuarioDto usuarioDto);
+    List<UsuarioDto> listaDeUsuariosAbsDef(Long page, Long size);
+    List<UsuarioDto> listaDeUsuariosAbsAsc(Long page, Long size, String byColumName);
+    List<UsuarioDto> listaDeUsuariosAbsDesc(Long page, Long size, String byColumName);
 }

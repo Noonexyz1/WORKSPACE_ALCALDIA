@@ -3,14 +3,14 @@ package com.prototipo.infrastructure.rest.controller;
 import com.prototipo.application.useCase.FotocopiaService;
 import com.prototipo.application.useCase.UsuarioService;
 import com.prototipo.domain.model.UsuarioDomain;
-import com.prototipo.infrastructure.rest.request.UsuarioOpeRequest;
-import com.prototipo.infrastructure.rest.request.UsuarioRequest;
-import com.prototipo.infrastructure.rest.request.UsuarioResponRequest;
-import com.prototipo.infrastructure.rest.request.UsuarioSoliRequest;
+import com.prototipo.infrastructure.rest.request.*;
 import com.prototipo.infrastructure.rest.response.ReporteResponse;
 import com.prototipo.infrastructure.rest.response.UserListAdminResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -29,10 +29,10 @@ public class AdministradorController {
     @Autowired
     private ModelMapper modelMapper;
 
-
+    //TODO, con Pageables POST O GET??
     @GetMapping(path = {"/listaDeUsuarios"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<UserListAdminResponse>> listaDeUsuarios(){
-        List<UsuarioDomain> listUserDomain = usuarioService.listaDeUsuarios();
+    public ResponseEntity<List<UserListAdminResponse>> listaDeUsuarios(@RequestBody PaginadorRequest pageReq){
+        List<UsuarioDomain> listUserDomain = usuarioService.listaDeUsuariosServiceDef(pageReq.getPage(), pageReq.getSize());
         List<UserListAdminResponse> listResponse = listUserDomain.stream()
                 .map(x ->
                         UserListAdminResponse.builder()
@@ -43,7 +43,6 @@ public class AdministradorController {
                                 .build()
                 )
                 .toList();
-
         return new ResponseEntity<>(listResponse, HttpStatus.OK);
     }
 

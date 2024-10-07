@@ -6,5 +6,7 @@ import java.util.List;
 
 public interface UsuarioService {
     UsuarioDomain findUsuarioPorIdService(Long idUnidad);
-    List<UsuarioDomain> listaDeUsuarios();
+    List<UsuarioDomain> listaDeUsuariosServiceDef(Long page, Long size);
+    List<UsuarioDomain> listaDeUsuariosServiceAsc(Long page, Long size, String byColumName);
+    List<UsuarioDomain> listaDeUsuariosServiceDesc(Long page, Long size, String byColumName);
 }

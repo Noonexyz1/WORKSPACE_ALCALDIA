@@ -39,7 +39,7 @@ public class FotocopiaAdapter implements FotocopiaService {
     @Override
     public void creaUsuarioSolicitante(UsuarioDomain userSoli, Long rolId){
         UsuarioDto usuarioDto = crearUsuarioConRol(userSoli, rolId);
-        UsuarioDto usuarioDtoResp = usuarioAbastract.guardarUsuario(usuarioDto);
+        UsuarioDto usuarioDtoResp = usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
         crearCredencial(usuarioDtoResp);
     }
 
@@ -96,7 +96,7 @@ public class FotocopiaAdapter implements FotocopiaService {
         usuarioDto.setId(null);
         usuarioDto.setIsActive(true);
         usuarioDto.setFkRol(rolDto);
-        return usuarioAbastract.guardarUsuario(usuarioDto);
+        return usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
     }
 
     @Override
@@ -105,7 +105,7 @@ public class FotocopiaAdapter implements FotocopiaService {
         UsuarioDto usuarioDto = mapperApplicationAbstract.mapearAbstract(usuarioEditado, UsuarioDto.class);
         usuarioDto.setIsActive(true);
         usuarioDto.setFkRol(rolDto);
-        UsuarioDto usuarioDtoResp = usuarioAbastract.guardarUsuario(usuarioDto);
+        UsuarioDto usuarioDtoResp = usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
         return mapperApplicationAbstract.mapearAbstract(usuarioDtoResp, UsuarioDomain.class);
     }
 
@@ -113,7 +113,7 @@ public class FotocopiaAdapter implements FotocopiaService {
     public void eliminarUsuario(Long idUsuario) {
         UsuarioDto usuarioDto = usuarioAbastract.findUsuarioPorIdAbastract(idUsuario);
         usuarioDto.setIsActive(false);
-        usuarioAbastract.guardarUsuario(usuarioDto);
+        usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
     }
 
     @Override
