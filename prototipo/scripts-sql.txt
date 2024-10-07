@@ -70,6 +70,42 @@ WHERE fk_solicitud_id IN (
 AND o.estado_by_operador = "Pendiente";
 
 
+#CONSULTA FINAL
+SELECT *
+FROM aprobacion a
+WHERE a.fk_solicitud_id IN (
+	SELECT s.id
+	FROM solicitud s
+	WHERE s.fk_unidad_id IN (
+		SELECT u.id
+		FROM unidad u
+		WHERE u.id IN (
+			SELECT r.fk_unidad_id
+			FROM responsable r
+			#Los ids de responables
+			WHERE fk_usuario_id = 10
+		)
+	)
+);
+
+SELECT *
+FROM aprobacion a
+WHERE a.fk_solicitud_id = (
+	SELECT s.id
+	FROM solicitud s
+	WHERE s.fk_unidad_id = (
+		SELECT u.id
+		FROM unidad u
+		WHERE u.id = (
+			SELECT r.fk_unidad_id
+			FROM responsable r
+			#Los ids de responables
+			WHERE r.fk_usuario_id = 2
+			AND r.is_active = TRUE
+		)
+	)
+)
+AND a.estado_by_responsable = "Pendiente";
 
 
 

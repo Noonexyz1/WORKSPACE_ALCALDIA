@@ -6,6 +6,10 @@ import com.prototipo.infrastructure.persistence.db.entity.Aprobacion;
 import com.prototipo.infrastructure.persistence.db.repository.AprobacionRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -52,5 +56,14 @@ public class AprobacionImpl implements AprobacionAbstract {
     public List<AprobacionDto> listaDeSolicitudesByUnidad(String nombreUnidad) {
         List<Aprobacion> listApro = aprobacionRepository.findAprobacionesByUnidadNombre(nombreUnidad);
         return listApro.stream().map(x -> modelMapper.map(x, AprobacionDto.class)).toList();
+    }
+
+    @Override
+    public List<AprobacionDto> listaDeAprobacionesAbstractPage(Long idSupervisor, Long page, Long size, String byColumName) {
+        //Sort sort = Sort.by(Sort.Direction.DESC, byColumName);
+        Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
+        //Cuando le envias un pageable, este te retorna un pageable
+        List<Aprobacion> listAprobacion = aprobacionRepository.findAprobacionesByRepon(idSupervisor, pageable);
+        return listAprobacion.stream().map(x -> modelMapper.map(x, AprobacionDto.class)).toList();
     }
 }

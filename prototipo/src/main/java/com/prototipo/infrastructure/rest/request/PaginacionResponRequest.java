@@ -7,7 +7,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PaginadorRequest {
+public class PaginacionResponRequest {
+    private Long idUsuario;
     private Long page;
     private Long size;
     private String byColumName;
