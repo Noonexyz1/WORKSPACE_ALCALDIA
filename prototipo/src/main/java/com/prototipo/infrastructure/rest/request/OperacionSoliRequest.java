@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class OperacionSoliRequest {
-    private Long idSolicitud;
+    private Long idOperacion;
     private Long idOperador;
 }

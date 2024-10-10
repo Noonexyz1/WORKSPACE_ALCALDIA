@@ -10,5 +10,5 @@ public interface OperacionAbstract {
     List<OperacionDto> listaDeOperaciones();
 
     //TODO, metodo para probar
-    List<OperacionDto> findOperacionByIdOperadorAbstract(Long idOperador, String estadoOpe);
+    List<OperacionDto> findOperacionByIdOperadorAbstract(Long idOperador, String estadoOperador, Long page, Long size);
 }

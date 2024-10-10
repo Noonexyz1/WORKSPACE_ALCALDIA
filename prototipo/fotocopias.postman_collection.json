@@ -228,12 +228,24 @@
 			"name": "Operador",
 			"item": [
 				{
-					"name": "ver solicitudes",
+					"name": "ver solicitudes pendientes",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    //Debo probar estos paginables\n    \"idUsuario\": 14,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:8081/operador/verSolicitudes/4",
+							"raw": "http://localhost:8081/operador/verSolicitudesPendientes",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -241,8 +253,7 @@
 							"port": "8081",
 							"path": [
 								"operador",
-								"verSolicitudes",
-								"4"
+								"verSolicitudesPendientes"
 							]
 						}
 					},
@@ -250,11 +261,23 @@
 				},
 				{
 					"name": "ver solicitudes iniciadas",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    //Debo probar estos paginables\n    \"idUsuario\": 14,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:8081/operador/verSolicitudesIniciadas/4",
+							"raw": "http://localhost:8081/operador/verSolicitudesIniciadas",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -262,8 +285,7 @@
 							"port": "8081",
 							"path": [
 								"operador",
-								"verSolicitudesIniciadas",
-								"4"
+								"verSolicitudesIniciadas"
 							]
 						}
 					},
@@ -271,11 +293,23 @@
 				},
 				{
 					"name": "ver solicitudes completadas",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
 						"method": "GET",
 						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    //Debo probar estos paginables\n    \"idUsuario\": 14,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
 						"url": {
-							"raw": "http://localhost:8081/operador/verSolicitudesCompletas/4",
+							"raw": "http://localhost:8081/operador/verSolicitudesCompletas",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -283,8 +317,7 @@
 							"port": "8081",
 							"path": [
 								"operador",
-								"verSolicitudesCompletas",
-								"4"
+								"verSolicitudesCompletas"
 							]
 						}
 					},
@@ -297,7 +330,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //ID de la tabla Operacion \n    \"idSolicitud\": 1,\n    //ID del operador de cuando vemos solicitudes\n    \"idOperador\": 4  \n}",
+							"raw": "{\n    //ID de la tabla Operacion \n    \"idOperacion\": 12,\n    //ID del operador de cuando vemos solicitudes\n    \"idOperador\": 4  \n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -326,7 +359,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"idSolicitud\": 9,\n    \"idOperador\": 4\n}",
+							"raw": "{\n    //ID de la tabla Operacion \n    \"idOperacion\": 12,\n    //ID del operador de cuando vemos solicitudes\n    \"idOperador\": 4  \n}",
 							"options": {
 								"raw": {
 									"language": "json"
