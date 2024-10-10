@@ -1,6 +1,8 @@
 package com.prototipo.infrastructure.persistence.db.repository;
 
 import com.prototipo.infrastructure.persistence.db.entity.Operacion;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -28,6 +30,7 @@ public interface OperacionRepository extends JpaRepository<Operacion, Long> {
         )
         AND o.estado_by_operador = :estadoOpe
         """, nativeQuery = true)
-    List<Operacion> findOperacionesByOperadorAndEstado(@Param("idOperador") Long idOperador,
-                                                       @Param("estadoOpe") String estadoOpe);
+    Page<Operacion> findOperacionesByOperadorAndEstado(@Param("idOperador") Long idOperador,
+                                                       @Param("estadoOpe") String estadoOpe,
+                                                       Pageable pageable);
 }

@@ -6,6 +6,9 @@ import com.prototipo.infrastructure.persistence.db.entity.Operacion;
 import com.prototipo.infrastructure.persistence.db.repository.OperacionRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -44,9 +47,12 @@ public class OperacionImpl implements OperacionAbstract {
     }
 
     @Override
-    public List<OperacionDto> findOperacionByIdOperadorAbstract(Long idOperador, String estadoOpe) {
-        List<Operacion> listOpe = operacionRepository
-                .findOperacionesByOperadorAndEstado(idOperador, estadoOpe);
+    public List<OperacionDto> findOperacionByIdOperadorAbstract(Long idOperador, String estadoOperador, Long page, Long size) {
+        //TODO, probar este paginable
+        Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
+        Page<Operacion> listOpe = operacionRepository
+                .findOperacionesByOperadorAndEstado(idOperador, estadoOperador, pageable);
+
         return listOpe.stream().map(x -> modelMapper.map(x, OperacionDto.class)).toList();
     }
 }

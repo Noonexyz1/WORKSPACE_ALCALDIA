@@ -4,6 +4,7 @@ import com.prototipo.application.useCase.OperadorService;
 import com.prototipo.domain.enums.EstadoByOperadorEnum;
 import com.prototipo.domain.model.OperacionDomain;
 import com.prototipo.infrastructure.rest.request.OperacionSoliRequest;
+import com.prototipo.infrastructure.rest.request.PaginacionOpeRequest;
 import com.prototipo.infrastructure.rest.response.SolicitudOperaResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,24 +25,31 @@ public class OperadorController {
     private ModelMapper modelMapper;
 
 
-    //TODO, verificar este metodo
     @PostMapping(path = {"/iniciarOperacion"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void iniciarSolicitudOperacion(@RequestBody OperacionSoliRequest opeSoliRequest) {
-        operadorService.iniciarSolicitarOperacion(opeSoliRequest.getIdSolicitud(), opeSoliRequest.getIdOperador());
+        Long idOperacion = opeSoliRequest.getIdOperacion();
+        Long idOperador = opeSoliRequest.getIdOperador();
+        operadorService.iniciarSolicitudOperacion(idOperacion, idOperador);
     }
 
     @PostMapping(path = {"/terminarOperacion"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void finalizarSolicitudOperacion(@RequestBody OperacionSoliRequest opeSoliRequest) {
-        operadorService.terminarSolicitarOperacion(opeSoliRequest.getIdSolicitud(), opeSoliRequest.getIdOperador());
+        Long idOperacion = opeSoliRequest.getIdOperacion();
+        Long idOperador = opeSoliRequest.getIdOperador();
+        operadorService.terminarSolicitudOperacion(idOperacion, idOperador);
     }
 
     //Este operador tiene una forma de trabajar, y es por piso,
     //entonces se deberia mostrar las solicitudes correspondientes a su piso
-    @GetMapping(path = {"/verSolicitudes/{idOperador}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudes(@PathVariable Long idOperador) {
-        String nombre = EstadoByOperadorEnum.PENDIENTE.getNombre();
+    @GetMapping(path = {"/verSolicitudesPendientes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudes(@RequestBody PaginacionOpeRequest pageParam) {
+        String estado = EstadoByOperadorEnum.PENDIENTE.getNombre();
+        Long idOperador = pageParam.getIdUsuario();
+        Long page = pageParam.getPage();
+        Long size = pageParam.getSize();
+        String byColumName = pageParam.getByColumName();
 
-        List<OperacionDomain> list = operadorService.verSolicitudesDeOperador(idOperador, nombre);
+        List<OperacionDomain> list = operadorService.verSolicitudesDeOperador(idOperador, estado, page, size);
         List<SolicitudOperaResponse> listSolicitud = list
                 .stream()
                 .map(this::funcion)
@@ -49,11 +57,15 @@ public class OperadorController {
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    @GetMapping(path = {"/verSolicitudesIniciadas/{idOperador}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesIniciadas(@PathVariable Long idOperador) {
-        String nombre = EstadoByOperadorEnum.INICIADO.getNombre();
+    @GetMapping(path = {"/verSolicitudesIniciadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesIniciadas(@RequestBody PaginacionOpeRequest pageParam) {
+        String estado = EstadoByOperadorEnum.INICIADO.getNombre();
+        Long idOperador = pageParam.getIdUsuario();
+        Long page = pageParam.getPage();
+        Long size = pageParam.getSize();
+        String byColumName = pageParam.getByColumName();
 
-        List<OperacionDomain> list = operadorService.verSolicitudesDeOperador(idOperador, nombre);
+        List<OperacionDomain> list = operadorService.verSolicitudesDeOperador(idOperador, estado, page, size);
         List<SolicitudOperaResponse> listSolicitud = list
                 .stream()
                 .map(this::funcion)
@@ -61,11 +73,15 @@ public class OperadorController {
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    @GetMapping(path = {"/verSolicitudesCompletas/{idOperador}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesCompletadas(@PathVariable Long idOperador) {
-        String nombre = EstadoByOperadorEnum.COMPLETADO.getNombre();
+    @GetMapping(path = {"/verSolicitudesCompletas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesCompletadas(@RequestBody PaginacionOpeRequest pageParam) {
+        String estado = EstadoByOperadorEnum.COMPLETADO.getNombre();
+        Long idOperador = pageParam.getIdUsuario();
+        Long page = pageParam.getPage();
+        Long size = pageParam.getSize();
+        String byColumName = pageParam.getByColumName();
 
-        List<OperacionDomain> list = operadorService.verSolicitudesDeOperador(idOperador, nombre);
+        List<OperacionDomain> list = operadorService.verSolicitudesDeOperador(idOperador, estado, page, size);
         List<SolicitudOperaResponse> listSolicitud = list
                 .stream()
                 .map(this::funcion)
