@@ -7,9 +7,9 @@ import lombok.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class CredencialDto {
+public class SolicitanteDto {
     private Long id;
-    private String correo;
-    private String pass;
+    private Boolean isActive;
     private UsuarioDto fkUsuario;
+    private UnidadDto fkUnidad;
 }

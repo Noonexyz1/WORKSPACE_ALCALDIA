@@ -13,4 +13,5 @@ public class UsuarioSoliRequest {
     private String apellidos;
     private String correo;
     private Long idRol;
+    private Long idUniSoli;
 }

@@ -10,11 +10,10 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class SolicitudRequest {
-
     private Long nroDeCopias;
     private String tipoDeDocumento;
     private Long nroDePaginas;
     private Long idUnidad;
     private Long idSolicitante;
-    private List<String> archivosPdf;
+    private List<ArchivoPdfRequest> archivosPdf;
 }

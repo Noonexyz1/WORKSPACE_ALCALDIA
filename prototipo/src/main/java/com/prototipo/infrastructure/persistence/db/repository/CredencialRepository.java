@@ -11,7 +11,8 @@ import java.util.Optional;
 @Repository
 public interface CredencialRepository extends JpaRepository<Credencial, Long> {
 
-    @Query(value = "SELECT * FROM credencial WHERE nombre_user = :username AND pass = :password", nativeQuery = true)
-    Optional<Credencial> findByUsernameAndPassword(@Param("username") String username, @Param("password") String password);
+    @Query(value = "SELECT * FROM credencial c WHERE c.correo = :correo AND c.pass = :password", nativeQuery = true)
+    Optional<Credencial> findByUsernameAndPassword(@Param("correo") String correo,
+                                                   @Param("password") String password);
 }
 

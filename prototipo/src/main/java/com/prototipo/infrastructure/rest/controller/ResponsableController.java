@@ -25,7 +25,8 @@ public class ResponsableController {
     private ModelMapper modelMapper;
     @Autowired
     private ResponsableService responsableService;
-    
+
+    //TODO, verificar este metodo
     @PostMapping(path = {"/aprobarSolicitud"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void aprobarSolicitud(@RequestBody AprobacionSoliRequest aprobacionSoliRequest) {
         Long idAprobacion = aprobacionSoliRequest.getIdAprobacion();
@@ -40,18 +41,50 @@ public class ResponsableController {
         responsableService.rechazarSolicitudService(idAprobacion, idResponsable);
     }
 
-    @GetMapping(path = {"/verSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudes(@RequestBody PaginacionResponRequest pageParam) {
+    @GetMapping(path = {"/verSolicitudesPendientes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudesPendientes(@RequestBody PaginacionResponRequest pageParam) {
         Long idResponsable = pageParam.getIdUsuario();
 
         Long page = pageParam.getPage();
         Long size = pageParam.getSize();
         String byColumName = pageParam.getByColumName();
 
-        List<AprobacionDomain> aprobacionDomains = aprobacionService.listaDeSolicitudesService(idResponsable, page, size, byColumName);
+        List<AprobacionDomain> aprobacionDomains = aprobacionService.listaDeSolicitudesPendientesService(idResponsable, page, size, byColumName);
         List<SolicitudResponResponse> listSolicitud = aprobacionDomains
                 .stream()
                 .filter(x -> x.getFkResponsable() == null)
+                .map(this::funcion)
+                .toList();
+        return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
+    }
+
+    @GetMapping(path = {"/verSolicitudesAprobadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudesAprobadas(@RequestBody PaginacionResponRequest pageParam) {
+        Long idResponsable = pageParam.getIdUsuario();
+
+        Long page = pageParam.getPage();
+        Long size = pageParam.getSize();
+        String byColumName = pageParam.getByColumName();
+
+        List<AprobacionDomain> aprobacionDomains = aprobacionService.listaDeSolicitudesAprobadasService(idResponsable, page, size, byColumName);
+        List<SolicitudResponResponse> listSolicitud = aprobacionDomains
+                .stream()
+                .map(this::funcion)
+                .toList();
+        return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
+    }
+
+    @GetMapping(path = {"/verSolicitudesRechazadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudesRechazadas(@RequestBody PaginacionResponRequest pageParam) {
+        Long idResponsable = pageParam.getIdUsuario();
+
+        Long page = pageParam.getPage();
+        Long size = pageParam.getSize();
+        String byColumName = pageParam.getByColumName();
+
+        List<AprobacionDomain> aprobacionDomains = aprobacionService.listaDeSolicitudesRechazadasService(idResponsable, page, size, byColumName);
+        List<SolicitudResponResponse> listSolicitud = aprobacionDomains
+                .stream()
                 .map(this::funcion)
                 .toList();
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);

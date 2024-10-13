@@ -12,7 +12,6 @@ public class UsuarioDomain {
     private String nombres;
     private String apellidos;
     private String correo;
-    private Boolean isActive; //para eliminar
     private RolDomain fkRol;
     //private CredencialDomain credencial;
 }

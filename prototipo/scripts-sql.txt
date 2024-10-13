@@ -17,20 +17,37 @@ VALUES(1, 'administrador'),
 INSERT INTO prototipo.unidad(nombre, direccion)
 VALUES
 ("Atención al Ciudadano", "Piso 1"),
+("Atención al Estudiante", "Piso 1"),
+("Atención al Projimo", "Piso 1"),
+("Obras Públicas", "Piso 2"),
+("Obras Comunitarias", "Piso 2"),
 ("Registro Civil", "Piso 3"),
-("Servicios Generales", "Piso 7"),
-("Planeación Urbana", "Piso 4"),
 ("Transporte y Movilidad", "Piso 3"),
 ("Desarrollo Económico", "Piso 3"),
 ("Asesoría Jurídica", "Piso 3"),
 ("Recursos Humanos", "Piso 3"),
 ("Secretaría de Hacienda", "Piso 3"),
-("Cultura y Deporte", "Piso 6"),
-("Medio Ambiente", "Piso 4"),
-("Obras Públicas", "Piso 2"),
-("Desarrollo Social", "Piso 7"),
 ("Oficina de la Alcaldesa", "Piso 3"),
-("Gabinete de Gobierno", "Piso 5");
+("Planeación Urbana", "Piso 4"),
+("Medio Ambiente", "Piso 4"),
+("Sumariante", "Piso 4"),
+("Sistemas", "Piso 4"),
+("Gabinete de Gobierno", "Piso 5"),
+("Cultura y Deporte", "Piso 6"),
+("Desarrollo Social", "Piso 7"),
+("Servicios Generales", "Piso 7");
+
+#Esta tabla si o si para produccion
+INSERT INTO usuario(fk_rol_id, apellidos, correo, nombres)
+VALUES(1, "Jefis", "jefa@gmail.com", "Tania");
+
+#Esta tabla si o si para produccion
+INSERT INTO credencial(fk_usuario_id, correo, pass)
+VALUES(1, "jefa@gmail.com", "123");
+#El administrador debe poder iniciar con el sistema
+
+#El is_active de Usuario, Responsable y Operador_Unidad
+#se ve reduntante
 
 
 SELECT * FROM rol;
@@ -44,8 +61,8 @@ SELECT * from operacion;
 SELECT * from usuario;
 SELECT * from responsable;
 SELECT * from credencial;
-SELECT * from operador_unidad;
-
+SELECT * from operador_unidad; #cambiar de nombre a Operador
+SELECT * from solicitante;
 
 DELETE FROM operador_unidad;
 
@@ -53,7 +70,54 @@ DELETE from solicitud;
 DELETE FROM operacion;
 
 
+
+
+
+SELECT *
+FROM operacion o;
+
+SELECT *
+FROM operacion o
+WHERE o.fk_operador_id = 3;
+
+#si por cada uno de estos fkSolicitudes se repite dos veces o mas
+#entonces esta solicitudes ya a sido Completado
+#El resultado de esto es otro subconjunto nuevo
+SELECT *
+FROM operacion o
+WHERE o.fk_operador_id = 3
+AND o.estado_by_operador = "Iniciado";
+
+SELECT o.fk_solicitud_id
+FROM operacion o
+WHERE o.fk_operador_id = 3
+AND o.estado_by_operador = "Iniciado";
+
+/*quiero hacer una consulta donde me devuelva unicamente las operaciones
+con etsado Iniciado, el fkSolicitud es un 5 por ejemplo, pero esta
+solicitud 5 ya ha sido registrado a Completado, entonces si en la misma
+tabla se repite dos veces el 5 quiere decir que esta solicitud ya ha sido
+completada, pero si este 5 solamente aparece una vez, entonces quiero que me muestre
+esta operacion*/
+#CONSULTA DEFINITIVA
+SELECT *
+FROM operacion o
+WHERE o.fk_operador_id = 3
+AND o.estado_by_operador = 'Iniciado'
+AND o.fk_solicitud_id NOT IN (
+    SELECT o2.fk_solicitud_id
+    FROM operacion o2
+    WHERE o2.fk_operador_id = 3
+    AND o2.estado_by_operador = 'Completado'
+);
+
+
+
+
+
+
 #CONSULTA FINAL
+#se comporta de misma manera que la paginacion
 SELECT *
 FROM operacion o
 WHERE fk_solicitud_id IN (
@@ -63,7 +127,7 @@ WHERE fk_solicitud_id IN (
 		SELECT u.id
 		FROM operador_unidad ou, unidad u
 		WHERE ou.fk_unidad_id = u.id
-		AND ou.fk_usuario_id = 4
+		AND ou.fk_usuario_id = 14
 		AND ou.is_active = TRUE
 	)
 )
@@ -88,24 +152,24 @@ WHERE a.fk_solicitud_id IN (
 	)
 );
 
+#consulta definitiva
 SELECT *
 FROM aprobacion a
-WHERE a.fk_solicitud_id = (
+WHERE a.fk_solicitud_id IN (
 	SELECT s.id
 	FROM solicitud s
 	WHERE s.fk_unidad_id = (
-		SELECT u.id
-		FROM unidad u
-		WHERE u.id = (
-			SELECT r.fk_unidad_id
-			FROM responsable r
-			#Los ids de responables
-			WHERE r.fk_usuario_id = 2
-			AND r.is_active = TRUE
-		)
+		SELECT r.fk_unidad_id
+		FROM responsable r
+		WHERE r.fk_usuario_id = 4
+		AND r.is_active = TRUE
 	)
 )
 AND a.estado_by_responsable = "Pendiente";
+
+
+
+
 
 
 

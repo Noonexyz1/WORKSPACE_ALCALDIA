@@ -21,7 +21,6 @@ public class Usuario {
     private String nombres;
     private String apellidos;
     private String correo;
-    private Boolean isActive;
 
     @ManyToOne
     private Rol fkRol;
@@ -40,4 +39,6 @@ public class Usuario {
     private List<Responsable> listaResponsables;
     @OneToMany(mappedBy = "fkUsuario")
     private List<OperadorUnidad> listaOpeUnidad;
+    @OneToMany(mappedBy = "fkUsuario")
+    private List<Solicitante> listaSolicUnidad;
 }

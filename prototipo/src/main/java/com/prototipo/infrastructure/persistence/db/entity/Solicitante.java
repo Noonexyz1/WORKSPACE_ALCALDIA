@@ -1,27 +1,26 @@
 package com.prototipo.infrastructure.persistence.db.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Getter
 @Setter
-@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "archivo_pdf")
-public class ArchivoPdf {
-
+@Table(name = "solicitante")
+public class Solicitante {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
-    private String nombreArchivo;
-
-    //@Column(columnDefinition = "LONGTEXT")
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String archivo;
+    private Boolean isActive;
 
     @ManyToOne
-    private Solicitud fkSolicitud;
+    private Usuario fkUsuario;
+    @ManyToOne
+    private Unidad fkUnidad;
 }

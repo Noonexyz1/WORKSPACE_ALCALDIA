@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface DashboardConfigRepository extends JpaRepository<DashboardConfig, Long> {
+    DashboardConfig findByFkRol_Id(Long idFkRol);
 }

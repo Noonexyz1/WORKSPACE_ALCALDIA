@@ -43,7 +43,8 @@ public class SolicitudImpl implements SolicitudAbstract {
     public List<SolicitudDto> getListaSolicitudesAbstract(Long idUsuario, Long page, Long size) {
         //TODO, probar si te trae los paginados, FUNCIONA CON QUERY_METODH
         Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
-        return solicitudRepository.findAllByFkSolicitante_Id(idUsuario, pageable).stream()
+        List<Solicitud> listSoliResp = solicitudRepository.findAllByFkSolicitante_Id(idUsuario, pageable);
+        return listSoliResp.stream()
                 .map(x -> modelMapper.map(x, SolicitudDto.class))
                 .toList();
     }

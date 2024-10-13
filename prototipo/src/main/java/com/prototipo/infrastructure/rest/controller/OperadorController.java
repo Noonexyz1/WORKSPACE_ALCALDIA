@@ -2,9 +2,11 @@ package com.prototipo.infrastructure.rest.controller;
 
 import com.prototipo.application.useCase.OperadorService;
 import com.prototipo.domain.enums.EstadoByOperadorEnum;
+import com.prototipo.domain.model.ArchivoPdfDomain;
 import com.prototipo.domain.model.OperacionDomain;
 import com.prototipo.infrastructure.rest.request.OperacionSoliRequest;
 import com.prototipo.infrastructure.rest.request.PaginacionOpeRequest;
+import com.prototipo.infrastructure.rest.response.ArchivoPdfResponse;
 import com.prototipo.infrastructure.rest.response.SolicitudOperaResponse;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,11 +27,16 @@ public class OperadorController {
     private ModelMapper modelMapper;
 
 
+    //TODO, cuando inicie la operacion, el archivo o los archivos pdf se deben descargar
     @PostMapping(path = {"/iniciarOperacion"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void iniciarSolicitudOperacion(@RequestBody OperacionSoliRequest opeSoliRequest) {
+    public ResponseEntity<List<ArchivoPdfResponse>> iniciarSolicitudOperacion(@RequestBody OperacionSoliRequest opeSoliRequest) {
         Long idOperacion = opeSoliRequest.getIdOperacion();
         Long idOperador = opeSoliRequest.getIdOperador();
-        operadorService.iniciarSolicitudOperacion(idOperacion, idOperador);
+        List<ArchivoPdfDomain> listArchivos = operadorService.iniciarSolicitudOperacion(idOperacion, idOperador);
+        List<ArchivoPdfResponse> listArchivosResp = listArchivos.stream()
+                .map(x -> modelMapper.map(x, ArchivoPdfResponse.class))
+                .toList();
+        return new ResponseEntity<>(listArchivosResp, HttpStatus.OK);
     }
 
     @PostMapping(path = {"/terminarOperacion"}, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -49,7 +56,7 @@ public class OperadorController {
         Long size = pageParam.getSize();
         String byColumName = pageParam.getByColumName();
 
-        List<OperacionDomain> list = operadorService.verSolicitudesDeOperador(idOperador, estado, page, size);
+        List<OperacionDomain> list = operadorService.verSolicitudesDeOperadorPendientes(idOperador, page, size);
         List<SolicitudOperaResponse> listSolicitud = list
                 .stream()
                 .map(this::funcion)
@@ -65,7 +72,7 @@ public class OperadorController {
         Long size = pageParam.getSize();
         String byColumName = pageParam.getByColumName();
 
-        List<OperacionDomain> list = operadorService.verSolicitudesDeOperador(idOperador, estado, page, size);
+        List<OperacionDomain> list = operadorService.verSolicitudesDeOperadorIniciadas(idOperador, page, size);
         List<SolicitudOperaResponse> listSolicitud = list
                 .stream()
                 .map(this::funcion)
@@ -81,7 +88,7 @@ public class OperadorController {
         Long size = pageParam.getSize();
         String byColumName = pageParam.getByColumName();
 
-        List<OperacionDomain> list = operadorService.verSolicitudesDeOperador(idOperador, estado, page, size);
+        List<OperacionDomain> list = operadorService.verSolicitudesDeOperadorCompletadas(idOperador, page, size);
         List<SolicitudOperaResponse> listSolicitud = list
                 .stream()
                 .map(this::funcion)
