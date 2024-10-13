@@ -9,5 +9,5 @@ import java.util.List;
 public interface InicioSesionAbstract {
     UsuarioDto iniciarSesionAbstract(CredencialDto credencialDto);
     String rolDeUsuarioAbstract();
-    List<DashboardConfigDto> configuracionDeUsuarioAbstract();
+    DashboardConfigDto configuracionDeUsuarioAbstract(Long idRolUsuario);
 }

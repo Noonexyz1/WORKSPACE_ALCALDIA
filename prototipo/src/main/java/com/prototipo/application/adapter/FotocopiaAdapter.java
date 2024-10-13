@@ -18,6 +18,7 @@ public class FotocopiaAdapter implements FotocopiaService {
     private ResponsableAbstract responsableAbstract;
     private UnidadAbstract unidadAbstract;
     private OperadorUnidadAbstract operadorUnidadAbstract;
+    private SolicitanteAbstract solicitanteAbstract;
 
     public FotocopiaAdapter(UsuarioAbastract usuarioAbastract,
                             RolAbstract rolAbstract,
@@ -25,7 +26,8 @@ public class FotocopiaAdapter implements FotocopiaService {
                             CredencialAbstract credencialAbstract,
                             ResponsableAbstract responsableAbstract,
                             UnidadAbstract unidadAbstract,
-                            OperadorUnidadAbstract operadorUnidadAbstract) {
+                            OperadorUnidadAbstract operadorUnidadAbstract,
+                            SolicitanteAbstract solicitanteAbstract) {
 
         this.usuarioAbastract = usuarioAbastract;
         this.rolAbstract = rolAbstract;
@@ -34,13 +36,23 @@ public class FotocopiaAdapter implements FotocopiaService {
         this.responsableAbstract = responsableAbstract;
         this.unidadAbstract = unidadAbstract;
         this.operadorUnidadAbstract = operadorUnidadAbstract;
+        this.solicitanteAbstract = solicitanteAbstract;
     }
 
     @Override
-    public void creaUsuarioSolicitante(UsuarioDomain userSoli, Long rolId){
+    public void creaUsuarioSolicitante(UsuarioDomain userSoli, Long rolId, Long idUniSoli){
         UsuarioDto usuarioDto = crearUsuarioConRol(userSoli, rolId);
-        UsuarioDto usuarioDtoResp = usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
-        crearCredencial(usuarioDtoResp);
+        UnidadDto unidadDto = unidadAbstract.findUnidadPorIdAbstract(idUniSoli);
+        SolicitanteDto solicitanteDto = SolicitanteDto.builder()
+                .id(null)
+                .isActive(true)
+                .fkUsuario(usuarioDto)
+                .fkUnidad(unidadDto)
+                .build();
+
+        solicitanteAbstract.guardarSolicitanteAbstract(solicitanteDto);
+
+        crearCredencial(usuarioDto);
     }
 
     @Override
@@ -55,6 +67,7 @@ public class FotocopiaAdapter implements FotocopiaService {
                 .fkUsuario(usuarioDto)
                 .fkUnidad(unidadDto)
                 .build();
+
         responsableAbstract.guardarResponsable(responsableDto);
 
         crearCredencial(usuarioDto);
@@ -82,7 +95,7 @@ public class FotocopiaAdapter implements FotocopiaService {
     private void crearCredencial(UsuarioDto usuarioDtoResp) {
         CredencialDto newCredencialDto = CredencialDto.builder()
                 .id(null)
-                .nombreUser(usuarioDtoResp.getCorreo())
+                .correo(usuarioDtoResp.getCorreo())
                 .pass(usuarioDtoResp.getApellidos())
                 .fkUsuario(usuarioDtoResp)
                 .build();
@@ -94,7 +107,6 @@ public class FotocopiaAdapter implements FotocopiaService {
         RolDto rolDto = rolAbstract.encontrarRolPorId(rolId);
         UsuarioDto usuarioDto = mapperApplicationAbstract.mapearAbstract(user, UsuarioDto.class);
         usuarioDto.setId(null);
-        usuarioDto.setIsActive(true);
         usuarioDto.setFkRol(rolDto);
         return usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
     }
@@ -103,7 +115,6 @@ public class FotocopiaAdapter implements FotocopiaService {
     public UsuarioDomain editarUsuario(UsuarioDomain usuarioEditado, Long rolId) {
         RolDto rolDto = rolAbstract.encontrarRolPorId(rolId);
         UsuarioDto usuarioDto = mapperApplicationAbstract.mapearAbstract(usuarioEditado, UsuarioDto.class);
-        usuarioDto.setIsActive(true);
         usuarioDto.setFkRol(rolDto);
         UsuarioDto usuarioDtoResp = usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
         return mapperApplicationAbstract.mapearAbstract(usuarioDtoResp, UsuarioDomain.class);
@@ -112,7 +123,6 @@ public class FotocopiaAdapter implements FotocopiaService {
     @Override
     public void eliminarUsuario(Long idUsuario) {
         UsuarioDto usuarioDto = usuarioAbastract.findUsuarioPorIdAbastract(idUsuario);
-        usuarioDto.setIsActive(false);
         usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
     }
 

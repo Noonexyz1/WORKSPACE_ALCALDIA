@@ -8,8 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ArchivoPdfDto {
-
     private Long id;
+    private String nombreArchivo;
     private String archivo;
     private SolicitudDto fkSolicitud;
 }

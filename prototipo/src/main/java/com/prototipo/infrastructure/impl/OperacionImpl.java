@@ -47,11 +47,31 @@ public class OperacionImpl implements OperacionAbstract {
     }
 
     @Override
-    public List<OperacionDto> findOperacionByIdOperadorAbstract(Long idOperador, String estadoOperador, Long page, Long size) {
+    public List<OperacionDto> findOperacionByIdOperadorPendientesAbstract(Long idOperador, Long page, Long size) {
         //TODO, probar este paginable
         Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
         Page<Operacion> listOpe = operacionRepository
-                .findOperacionesByOperadorAndEstado(idOperador, estadoOperador, pageable);
+                .findOperacionesByOperadorAndEstadoPendiente(idOperador, pageable);
+
+        return listOpe.stream().map(x -> modelMapper.map(x, OperacionDto.class)).toList();
+    }
+
+    @Override
+    public List<OperacionDto> findOperacionByIdOperadorIniciadasAbstract(Long idOperador, Long page, Long size) {
+        //TODO, probar este paginable
+        Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
+        Page<Operacion> listOpe = operacionRepository
+                .findOperacionesByOperadorAndEstadoIniciado(idOperador, pageable);
+
+        return listOpe.stream().map(x -> modelMapper.map(x, OperacionDto.class)).toList();
+    }
+
+    @Override
+    public List<OperacionDto> findOperacionByIdOperadorCompletadasAbstract(Long idOperador, Long page, Long size) {
+        //TODO, probar este paginable
+        Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
+        Page<Operacion> listOpe = operacionRepository
+                .findOperacionesByOperadorAndEstadoCompletado(idOperador, pageable);
 
         return listOpe.stream().map(x -> modelMapper.map(x, OperacionDto.class)).toList();
     }

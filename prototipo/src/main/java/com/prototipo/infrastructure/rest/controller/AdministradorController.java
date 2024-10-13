@@ -46,8 +46,9 @@ public class AdministradorController {
     @PostMapping(path = {"/creaUsuarioSolicitante"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void creaUsuarioSolicitante(@RequestBody UsuarioSoliRequest newUserSoli){
         Long rolId = newUserSoli.getIdRol();
+        Long idUniSoli = newUserSoli.getIdUniSoli();
         UsuarioDomain usuarioDomain = modelMapper.map(newUserSoli, UsuarioDomain.class);
-        fotocopiaService.creaUsuarioSolicitante(usuarioDomain, rolId);
+        fotocopiaService.creaUsuarioSolicitante(usuarioDomain, rolId, idUniSoli);
     }
 
     @PostMapping(path = {"/creaUsuarioResponsable"}, produces = {MediaType.APPLICATION_JSON_VALUE})

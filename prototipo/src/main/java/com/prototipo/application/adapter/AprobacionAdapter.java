@@ -42,9 +42,27 @@ public class AprobacionAdapter implements AprobacionService {
     }
 
     @Override
-    public List<AprobacionDomain> listaDeSolicitudesService(Long idSupervisor, Long page, Long size, String byColumName){
+    public List<AprobacionDomain> listaDeSolicitudesPendientesService(Long idSupervisor, Long page, Long size, String byColumName){
         List<AprobacionDto> aprobacionDtos = aprobacionAbstract
-                .listaDeAprobacionesAbstractPage(idSupervisor, page, size, byColumName);
+                .listaDeAprobacionesPendientesAbstractPage(idSupervisor, page, size, byColumName);
+        return aprobacionDtos.stream()
+                .map(aprobacionDto -> mapperApplicationAbstract.mapearAbstract(aprobacionDto, AprobacionDomain.class))
+                .toList();
+    }
+
+    @Override
+    public List<AprobacionDomain> listaDeSolicitudesAprobadasService(Long idSupervisor, Long page, Long size, String byColumName) {
+        List<AprobacionDto> aprobacionDtos = aprobacionAbstract
+                .listaDeAprobacionesAprobadasAbstractPage(idSupervisor, page, size, byColumName);
+        return aprobacionDtos.stream()
+                .map(aprobacionDto -> mapperApplicationAbstract.mapearAbstract(aprobacionDto, AprobacionDomain.class))
+                .toList();
+    }
+
+    @Override
+    public List<AprobacionDomain> listaDeSolicitudesRechazadasService(Long idSupervisor, Long page, Long size, String byColumName) {
+        List<AprobacionDto> aprobacionDtos = aprobacionAbstract
+                .listaDeAprobacionesRechazadasAbstractPage(idSupervisor, page, size, byColumName);
         return aprobacionDtos.stream()
                 .map(aprobacionDto -> mapperApplicationAbstract.mapearAbstract(aprobacionDto, AprobacionDomain.class))
                 .toList();

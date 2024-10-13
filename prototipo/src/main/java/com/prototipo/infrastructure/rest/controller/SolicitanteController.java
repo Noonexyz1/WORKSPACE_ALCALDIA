@@ -39,11 +39,10 @@ public class SolicitanteController {
         //Debo encontrar la unidad
         UsuarioDomain usuario = usuarioService.findUsuarioPorIdService(solicitudRequest.getIdSolicitante());
 
-        List<ArchivoPdfDomain> archivoPdfs = solicitudRequest.getArchivosPdf().stream().map(x ->
-                    ArchivoPdfDomain.builder()
-                            .archivo(x)
-                            .build()
-                ).toList();
+        List<ArchivoPdfDomain> archivoPdfs = solicitudRequest.getArchivosPdf()
+                .stream()
+                .map(x -> modelMapper.map(x, ArchivoPdfDomain.class))
+                .toList();
 
         //Debo usar los mappeadores de mi Infraestrucutura
         SolicitudDomain solicitud = SolicitudDomain.builder()
@@ -69,19 +68,12 @@ public class SolicitanteController {
         List<SolicitudSoliciResponse> list = listDomain.stream()
                 .map(this::funcToReturn)
                 .toList();
+
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
     private SolicitudSoliciResponse funcToReturn(SolicitudDomain x) {
-        AprobacionDomain aprobacionDomain = aprobacionService.findAprovacionByIdSoliService(x.getId());
-        String estadoByResponsable = aprobacionDomain.getEstadoByResponsable();
-
-        OperacionDomain operacionDomain = operacionService.findOperacionByIdSoliService(x.getId());
-        String estadoByOperador = (operacionDomain == null)? "Pendiente": operacionDomain.getEstadoByOperador();
-
         SolicitudSoliciResponse solicitudSoliciResponse = modelMapper.map(x, SolicitudSoliciResponse.class);
-        solicitudSoliciResponse.setEstadoByResponsable(estadoByResponsable);
-        solicitudSoliciResponse.setEstadoByOperador(estadoByOperador);
         return solicitudSoliciResponse;
     }
 }

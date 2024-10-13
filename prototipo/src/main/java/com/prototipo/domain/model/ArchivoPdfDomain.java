@@ -9,6 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class ArchivoPdfDomain {
     private Long id;
+    private String nombreArchivo;
     private String archivo;
     private SolicitudDomain fkSolicitud;
 }

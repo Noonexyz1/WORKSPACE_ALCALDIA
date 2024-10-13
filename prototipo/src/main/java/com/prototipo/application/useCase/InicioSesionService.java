@@ -7,6 +7,6 @@ import java.util.List;
 
 public interface InicioSesionService {
     UsuarioDomain iniciarSesionService(CredencialDomain credencial);
+    String configuracionDeUsuarioService(Long idRolUsuario);
     String rolDeUsuarioService();
-    List<String> configuracionDeUsuarioService();
 }

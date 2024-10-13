@@ -59,11 +59,29 @@ public class AprobacionImpl implements AprobacionAbstract {
     }
 
     @Override
-    public List<AprobacionDto> listaDeAprobacionesAbstractPage(Long idSupervisor, Long page, Long size, String byColumName) {
+    public List<AprobacionDto> listaDeAprobacionesPendientesAbstractPage(Long idSupervisor, Long page, Long size, String byColumName) {
         //Sort sort = Sort.by(Sort.Direction.DESC, byColumName);
         Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
         //Cuando le envias un pageable, este te retorna un pageable
-        List<Aprobacion> listAprobacion = aprobacionRepository.findAprobacionesByRepon(idSupervisor, pageable);
+        List<Aprobacion> listAprobacion = aprobacionRepository.findAprobacionesByResponPendiente(idSupervisor, pageable);
+        return listAprobacion.stream().map(x -> modelMapper.map(x, AprobacionDto.class)).toList();
+    }
+
+    @Override
+    public List<AprobacionDto> listaDeAprobacionesAprobadasAbstractPage(Long idSupervisor, Long page, Long size, String byColumName) {
+        //Sort sort = Sort.by(Sort.Direction.DESC, byColumName);
+        Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
+        //Cuando le envias un pageable, este te retorna un pageable
+        List<Aprobacion> listAprobacion = aprobacionRepository.findAprobacionesByResponAprobadas(idSupervisor, pageable);
+        return listAprobacion.stream().map(x -> modelMapper.map(x, AprobacionDto.class)).toList();
+    }
+
+    @Override
+    public List<AprobacionDto> listaDeAprobacionesRechazadasAbstractPage(Long idSupervisor, Long page, Long size, String byColumName) {
+        //Sort sort = Sort.by(Sort.Direction.DESC, byColumName);
+        Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
+        //Cuando le envias un pageable, este te retorna un pageable
+        List<Aprobacion> listAprobacion = aprobacionRepository.findAprobacionesByResponRechazadas(idSupervisor, pageable);
         return listAprobacion.stream().map(x -> modelMapper.map(x, AprobacionDto.class)).toList();
     }
 }

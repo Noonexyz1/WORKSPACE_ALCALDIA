@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CredencialRequest {
-    private String correo;
-    private String pass;
+public class ArchivoPdfRequest {
+    private String nombreArchivo;
+    private String archivo;
 }

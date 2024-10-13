@@ -27,4 +27,6 @@ public class Unidad {
     private List<Responsable> listaResponsables;
     @OneToMany(mappedBy = "fkUnidad")
     private List<OperadorUnidad> listaOpeUnidad;
+    @OneToMany(mappedBy = "fkUnidad")
+    private List<Solicitante> listaSolicUnidad;
 }

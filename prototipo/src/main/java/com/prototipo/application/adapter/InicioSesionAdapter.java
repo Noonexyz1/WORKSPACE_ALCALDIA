@@ -33,15 +33,14 @@ public class InicioSesionAdapter implements InicioSesionService {
     }
 
     @Override
-    public String rolDeUsuarioService() {
-        return inicioSesionAbstract.rolDeUsuarioAbstract();
+    public String configuracionDeUsuarioService(Long idRolUsuario) {
+        return inicioSesionAbstract.configuracionDeUsuarioAbstract(idRolUsuario)
+                .getNombreComponente();
     }
 
     @Override
-    public List<String> configuracionDeUsuarioService() {
-        return inicioSesionAbstract.configuracionDeUsuarioAbstract()
-                .stream()
-                .map(DashboardConfigDto::getNombreComponente)
-                .toList();
+    public String rolDeUsuarioService() {
+        //TODO, ???????
+        return null;
     }
 }

@@ -39,7 +39,7 @@ public class SolicitudAdapter implements SolicitudService {
         SolicitudDto solicitudDtoResp = solicitudAbstract.solicitarFotocopiarAbstract(solicitudDto);
         SolicitudDomain solicitudDomainResp = mapperApplicationAbstract.mapearAbstract(solicitudDtoResp, SolicitudDomain.class);
 
-        //Hacemos la persistencia de los archivos
+        //TODO, Hacemos la persistencia de los archivos
         listPdf.forEach(x -> {
             x.setFkSolicitud(solicitudDomainResp);
             guardarPdfDeLaSolicitudAbstract(x);
@@ -64,9 +64,9 @@ public class SolicitudAdapter implements SolicitudService {
 
     @Override
     public List<SolicitudDomain> getListaSolicitudesService(Long idUsuario, Long page, Long size) {
+        List<SolicitudDto> listSoli = solicitudAbstract.getListaSolicitudesAbstract(idUsuario, page, size);
         //Quiero filtar las solicitudes segun el Usuario que lo esta pidiendo
-        return solicitudAbstract.getListaSolicitudesAbstract(idUsuario, page, size)
-                .stream()
+        return listSoli.stream()
                 .map(x -> mapperApplicationAbstract.mapearAbstract(x, SolicitudDomain.class))
                 .toList();
     }

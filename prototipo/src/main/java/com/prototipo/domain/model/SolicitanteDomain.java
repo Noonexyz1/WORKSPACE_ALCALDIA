@@ -9,4 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class SolicitanteDomain {
     private Long id;
+    private Boolean isActive;
+    private UsuarioDomain fkUsuario;
+    private UnidadDomain fkUnidad;
 }
