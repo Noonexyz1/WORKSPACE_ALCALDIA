@@ -13,7 +13,6 @@ public class SolicitudOperaResponse {
     private Long nroDeCopias;
     private String tipoDeDocumento;
     private Long nroDePaginas;
-    private String nombreUnidad;
-    private String estadoByResponsable;
     private String estadoByOperador;
+    private String nombreUnidad;
 }

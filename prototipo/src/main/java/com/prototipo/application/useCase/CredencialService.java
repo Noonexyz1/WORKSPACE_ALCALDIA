@@ -1,8 +1,8 @@
 package com.prototipo.application.useCase;
 
-import com.prototipo.domain.model.CredencialDomain;
+import com.prototipo.domain.model.Credencial;
 
 public interface CredencialService {
-    void buscarUsuarioService(CredencialDomain credencial);
-    CredencialDomain guardarCredencialService(CredencialDomain nuevaCred);
+    void buscarUsuarioService(Credencial credencial);
+    Credencial guardarCredencialService(Credencial nuevaCred);
 }

@@ -1,12 +1,13 @@
 package com.prototipo.application.useCase;
 
-import com.prototipo.domain.model.UsuarioDomain;
+import com.prototipo.domain.model.Usuario;
+import com.prototipo.domain.model.UsuarioUnidad;
 
 import java.util.List;
 
 public interface UsuarioService {
-    UsuarioDomain findUsuarioPorIdService(Long idUnidad);
-    List<UsuarioDomain> listaDeUsuariosServiceDef(Long page, Long size);
-    List<UsuarioDomain> listaDeUsuariosServiceAsc(Long page, Long size, String byColumName);
-    List<UsuarioDomain> listaDeUsuariosServiceDesc(Long page, Long size, String byColumName);
+    Usuario findUsuarioPorIdService(Long idUnidad);
+    List<UsuarioUnidad> listaDeUsuariosServiceDef(Long page, Long size);
+    List<Usuario> listaDeUsuariosServiceAsc(Long page, Long size, String byColumName);
+    List<Usuario> listaDeUsuariosServiceDesc(Long page, Long size, String byColumName);
 }

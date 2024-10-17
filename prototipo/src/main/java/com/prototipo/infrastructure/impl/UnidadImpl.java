@@ -2,7 +2,7 @@ package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.UnidadDto;
 import com.prototipo.application.port.UnidadAbstract;
-import com.prototipo.infrastructure.persistence.db.entity.Unidad;
+import com.prototipo.infrastructure.persistence.db.entity.UnidadEntity;
 import com.prototipo.infrastructure.persistence.db.repository.UnidadRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,20 +29,21 @@ public class UnidadImpl implements UnidadAbstract {
     @Override
     public UnidadDto findUnidadPorIdAbstract(Long idUnidad) {
         //TODO
-        Unidad unidad = unidadRepository.findById(idUnidad).orElseThrow();
+        UnidadEntity unidadEntity = unidadRepository.findById(idUnidad).orElseThrow();
         UnidadDto unidadDto = UnidadDto.builder()
-                .id(unidad.getId())
-                .nombre(unidad.getNombre())
-                .direccion(unidad.getDireccion())
+                .id(unidadEntity.getId())
+                .nombre(unidadEntity.getNombre())
+                .direccion(unidadEntity.getDireccion())
                 .build();
         return unidadDto;
     }
 
     @Override
     public List<UnidadDto> listaDeUnidadesByDireccionAbstract(String direccion) {
-        List<Unidad> listUnidades = unidadRepository.findByDireccion(direccion);
+        /*List<UnidadEntity> listUnidades = unidadRepository.findByDireccion(direccion);
         return listUnidades.stream()
                 .map(x -> modelMapper.map(x, UnidadDto.class))
-                .toList();
+                .toList();*/
+        return null;
     }
 }

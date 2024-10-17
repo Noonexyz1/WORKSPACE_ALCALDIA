@@ -10,6 +10,8 @@ import lombok.*;
 public class AprobacionDto {
     private Long id;
     private String estadoByResponsable;
+    private Boolean estadoCambio;
+
     private SolicitudDto fkSolicitud;
     private UsuarioDto fkResponsable;
 }

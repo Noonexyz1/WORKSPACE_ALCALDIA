@@ -34,18 +34,21 @@ public class SolicitanteController {
 
     @PostMapping(path = {"/solicitarFotocopiar"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void solicitarFotocopiar(@RequestBody SolicitudRequest solicitudRequest) {
-        //Debo encontrar el Usuario
-        UnidadDomain unidad = unidadService.findUnidadPorIdService(solicitudRequest.getIdUnidad());
-        //Debo encontrar la unidad
-        UsuarioDomain usuario = usuarioService.findUsuarioPorIdService(solicitudRequest.getIdSolicitante());
+        //Truco de los Ids
+        Unidad unidad = Unidad.builder()
+                .id(solicitudRequest.getIdUnidad())
+                .build();
+        Usuario usuario = Usuario.builder()
+                .id(solicitudRequest.getIdSolicitante())
+                .build();
 
-        List<ArchivoPdfDomain> archivoPdfs = solicitudRequest.getArchivosPdf()
+        List<ArchivoPdf> archivoPdfs = solicitudRequest.getArchivosPdf()
                 .stream()
-                .map(x -> modelMapper.map(x, ArchivoPdfDomain.class))
+                .map(x -> modelMapper.map(x, ArchivoPdf.class))
                 .toList();
 
         //Debo usar los mappeadores de mi Infraestrucutura
-        SolicitudDomain solicitud = SolicitudDomain.builder()
+        Solicitud solicitud = Solicitud.builder()
                 .nroDeCopias(solicitudRequest.getNroDeCopias())
                 .tipoDeDocumento(solicitudRequest.getTipoDeDocumento())
                 .nroDePaginas(solicitudRequest.getNroDePaginas())
@@ -64,7 +67,7 @@ public class SolicitanteController {
         Long size = pageArg.getSize();
         //String byColumName = pageArg.getByColumName();
 
-        List<SolicitudDomain> listDomain = solicitudService.getListaSolicitudesService(idUsuario, page, size);
+        List<Solicitud> listDomain = solicitudService.getListaSolicitudesService(idUsuario, page, size);
         List<SolicitudSoliciResponse> list = listDomain.stream()
                 .map(this::funcToReturn)
                 .toList();
@@ -72,7 +75,7 @@ public class SolicitanteController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
-    private SolicitudSoliciResponse funcToReturn(SolicitudDomain x) {
+    private SolicitudSoliciResponse funcToReturn(Solicitud x) {
         SolicitudSoliciResponse solicitudSoliciResponse = modelMapper.map(x, SolicitudSoliciResponse.class);
         return solicitudSoliciResponse;
     }

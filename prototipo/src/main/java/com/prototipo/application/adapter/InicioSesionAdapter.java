@@ -2,19 +2,20 @@ package com.prototipo.application.adapter;
 
 import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.CredencialDto;
-import com.prototipo.application.modelDto.DashboardConfigDto;
 import com.prototipo.application.modelDto.UsuarioDto;
+import com.prototipo.application.modelDto.UsuarioUnidadDto;
+import com.prototipo.application.port.CredencialAbstract;
 import com.prototipo.application.port.InicioSesionAbstract;
 import com.prototipo.application.useCase.InicioSesionService;
-import com.prototipo.domain.model.CredencialDomain;
-import com.prototipo.domain.model.UsuarioDomain;
-
-import java.util.List;
+import com.prototipo.domain.model.Credencial;
+import com.prototipo.domain.model.Usuario;
+import com.prototipo.domain.model.UsuarioUnidad;
 
 public class InicioSesionAdapter implements InicioSesionService {
 
     private InicioSesionAbstract inicioSesionAbstract;
     private MapperApplicationAbstract mapperApplicationAbstract;
+    private CredencialAbstract credencialAbstract;
 
     public InicioSesionAdapter(InicioSesionAbstract inicioSesionAbstract,
                                MapperApplicationAbstract mapperApplicationAbstract){
@@ -24,18 +25,9 @@ public class InicioSesionAdapter implements InicioSesionService {
     }
 
     @Override
-    public UsuarioDomain iniciarSesionService(CredencialDomain credencial) {
-        //Mapeamos de Credencial a CredencialDto
-        CredencialDto credencialDto = mapperApplicationAbstract.mapearAbstract(credencial, CredencialDto.class);
-        //Mapeamos de Para devolver el usuario para cumplir con el dominio
-        UsuarioDto usuarioDto = inicioSesionAbstract.iniciarSesionAbstract(credencialDto);
-        return mapperApplicationAbstract.mapearAbstract(usuarioDto, UsuarioDomain.class);
-    }
-
-    @Override
-    public String configuracionDeUsuarioService(Long idRolUsuario) {
-        return inicioSesionAbstract.configuracionDeUsuarioAbstract(idRolUsuario)
-                .getNombreComponente();
+    public UsuarioUnidad iniciarSesionService(String correo, String pass) {
+        UsuarioUnidadDto usuarioUnidadDto = inicioSesionAbstract.iniciarSesionAbstract(correo, pass);
+        return mapperApplicationAbstract.mapearAbstract(usuarioUnidadDto, UsuarioUnidad.class);
     }
 
     @Override

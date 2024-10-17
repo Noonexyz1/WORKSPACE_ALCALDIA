@@ -2,7 +2,7 @@ package com.prototipo.infrastructure.rest.controller;
 
 import com.prototipo.application.useCase.AprobacionService;
 import com.prototipo.application.useCase.ResponsableService;
-import com.prototipo.domain.model.AprobacionDomain;
+import com.prototipo.domain.model.Aprobacion;
 import com.prototipo.infrastructure.rest.request.AprobacionSoliRequest;
 import com.prototipo.infrastructure.rest.request.PaginacionResponRequest;
 import com.prototipo.infrastructure.rest.response.SolicitudResponResponse;
@@ -49,7 +49,8 @@ public class ResponsableController {
         Long size = pageParam.getSize();
         String byColumName = pageParam.getByColumName();
 
-        List<AprobacionDomain> aprobacionDomains = aprobacionService.listaDeSolicitudesPendientesService(idResponsable, page, size, byColumName);
+        List<Aprobacion> aprobacionDomains = aprobacionService
+                .listaDeSolicitudesPendientesService(idResponsable, page, size, byColumName);
         List<SolicitudResponResponse> listSolicitud = aprobacionDomains
                 .stream()
                 .filter(x -> x.getFkResponsable() == null)
@@ -66,7 +67,8 @@ public class ResponsableController {
         Long size = pageParam.getSize();
         String byColumName = pageParam.getByColumName();
 
-        List<AprobacionDomain> aprobacionDomains = aprobacionService.listaDeSolicitudesAprobadasService(idResponsable, page, size, byColumName);
+        List<Aprobacion> aprobacionDomains = aprobacionService
+                .listaDeSolicitudesAprobadasService(idResponsable, page, size, byColumName);
         List<SolicitudResponResponse> listSolicitud = aprobacionDomains
                 .stream()
                 .map(this::funcion)
@@ -82,7 +84,8 @@ public class ResponsableController {
         Long size = pageParam.getSize();
         String byColumName = pageParam.getByColumName();
 
-        List<AprobacionDomain> aprobacionDomains = aprobacionService.listaDeSolicitudesRechazadasService(idResponsable, page, size, byColumName);
+        List<Aprobacion> aprobacionDomains = aprobacionService
+                .listaDeSolicitudesRechazadasService(idResponsable, page, size, byColumName);
         List<SolicitudResponResponse> listSolicitud = aprobacionDomains
                 .stream()
                 .map(this::funcion)
@@ -90,7 +93,7 @@ public class ResponsableController {
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    private SolicitudResponResponse funcion(AprobacionDomain x){
+    private SolicitudResponResponse funcion(Aprobacion x){
         return SolicitudResponResponse.builder()
                 //No el ID de la solicitud, sino el id del registro Aprobacion
                 .id(x.getId())

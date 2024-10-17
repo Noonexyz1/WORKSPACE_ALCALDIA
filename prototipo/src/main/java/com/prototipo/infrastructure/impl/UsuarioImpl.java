@@ -1,9 +1,11 @@
 package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.UsuarioDto;
+import com.prototipo.application.modelDto.UsuarioUnidadDto;
 import com.prototipo.application.port.UsuarioAbastract;
-import com.prototipo.infrastructure.persistence.db.entity.Usuario;
+import com.prototipo.infrastructure.persistence.db.entity.UsuarioEntity;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioRepository;
+import com.prototipo.infrastructure.persistence.db.repository.UsuarioUnidadRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -19,27 +21,29 @@ public class UsuarioImpl implements UsuarioAbastract {
     @Autowired
     private UsuarioRepository usuarioRepository;
     @Autowired
+    private UsuarioUnidadRepository usuarioUnidadRepository;
+    @Autowired
     private ModelMapper modelMapper;
 
     @Override
     public UsuarioDto findUsuarioPorIdAbastract(Long idUsuario) {
-        Usuario usuario = usuarioRepository.findById(idUsuario).orElseThrow();
-        return modelMapper.map(usuario, UsuarioDto.class);
+        UsuarioEntity usuarioEntity = usuarioRepository.findById(idUsuario).orElseThrow();
+        return modelMapper.map(usuarioEntity, UsuarioDto.class);
     }
 
     @Override
     public UsuarioDto guardarUsuarioAbastract(UsuarioDto usuarioDto) {
-        Usuario usuario = modelMapper.map(usuarioDto, Usuario.class);
-        Usuario userRespo = usuarioRepository.save(usuario);
+        UsuarioEntity usuarioEntity = modelMapper.map(usuarioDto, UsuarioEntity.class);
+        UsuarioEntity userRespo = usuarioRepository.save(usuarioEntity);
         UsuarioDto usuarioDtoResp = modelMapper.map(userRespo, UsuarioDto.class);
         return usuarioDtoResp;
     }
 
     @Override
-    public List<UsuarioDto> listaDeUsuariosAbsDef(Long page, Long size) {
+    public List<UsuarioUnidadDto> listaDeUsuariosAbsDef(Long page, Long size) {
         Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
-        return usuarioRepository.findAll(pageable).stream()
-                .map(x -> modelMapper.map(x, UsuarioDto.class))
+        return usuarioUnidadRepository.findAll(pageable).stream()
+                .map(x -> modelMapper.map(x, UsuarioUnidadDto.class))
                 .toList();
     }
 
@@ -59,5 +63,11 @@ public class UsuarioImpl implements UsuarioAbastract {
         return usuarioRepository.findAll(pageable).stream()
                 .map(x -> modelMapper.map(x, UsuarioDto.class))
                 .toList();
+    }
+
+    @Override
+    public UsuarioDto buscarUsuarioPorEmail(String email) {
+        UsuarioEntity usuarioResp = usuarioRepository.encontrarUsuarioPorEmail(email);
+        return (usuarioResp != null)? modelMapper.map(usuarioResp, UsuarioDto.class): null;
     }
 }

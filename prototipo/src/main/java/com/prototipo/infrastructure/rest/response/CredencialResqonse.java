@@ -1,6 +1,6 @@
 package com.prototipo.infrastructure.rest.response;
 
-import com.prototipo.infrastructure.persistence.db.entity.Usuario;
+import com.prototipo.infrastructure.persistence.db.entity.UsuarioEntity;
 import lombok.*;
 
 @Getter
@@ -14,5 +14,5 @@ public class CredencialResqonse {
     private String correo;
     private String password;
 
-    private Usuario usuario;
+    private UsuarioEntity usuarioEntity;
 }

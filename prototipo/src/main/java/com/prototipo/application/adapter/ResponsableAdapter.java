@@ -35,19 +35,24 @@ public class ResponsableAdapter implements ResponsableService {
     public void aprobarSolicitudService(Long idAprobacion, Long idResponsable) {
         //Esto me debe traer las informacion de la tabla de Aprobacion para que el
         //Responsable cambie el estado de la solicitud
-        UsuarioDto usuarioDto = usuarioAbastract.findUsuarioPorIdAbastract(idResponsable);
+        UsuarioDto usuarioDto = UsuarioDto.builder().id(idResponsable).build();
 
         AprobacionDto aprobacionDto = aprobacionAbstract.findAprovacionByIdSoliAbstract(idAprobacion);
+        aprobacionDto.setEstadoCambio(true);
+        aprobacionDto = aprobacionAbstract.guardarAprobacionAbstract(aprobacionDto);
+        aprobacionDto.setId(null);
         aprobacionDto.setEstadoByResponsable(EstadoByResponsableEnum.APROBADA.getNombre());
         aprobacionDto.setFkResponsable(usuarioDto);
 
         //Guardamos la solicitud con es estado cambiado
         AprobacionDto newAprobacionToOpe = aprobacionAbstract.guardarAprobacionAbstract(aprobacionDto);
+
         OperacionDto operacionDto = OperacionDto.builder()
                 .id(null)
                 .estadoByOperador(EstadoByOperadorEnum.PENDIENTE.getNombre())
                 .fkSolicitud(newAprobacionToOpe.getFkSolicitud())
                 .fkOperador(null)
+                .estadoCambio(0)
                 .build();
 
         //Guardamos la solicitud si el estado cambia a aprobado, en la tabla Operacion
@@ -56,9 +61,12 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public void rechazarSolicitudService(Long idAprobacion, Long idResponsable) {
-        UsuarioDto usuarioDto = usuarioAbastract.findUsuarioPorIdAbastract(idResponsable);
+        UsuarioDto usuarioDto = UsuarioDto.builder().id(idResponsable).build();
 
         AprobacionDto aprobacionDto = aprobacionAbstract.findAprovacionByIdSoliAbstract(idAprobacion);
+        aprobacionDto.setEstadoCambio(true);
+        aprobacionDto = aprobacionAbstract.guardarAprobacionAbstract(aprobacionDto);
+        aprobacionDto.setId(null);
         aprobacionDto.setEstadoByResponsable(EstadoByResponsableEnum.RECHAZADA.getNombre());
         aprobacionDto.setFkResponsable(usuarioDto);
 

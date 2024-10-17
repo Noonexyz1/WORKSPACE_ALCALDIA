@@ -2,7 +2,7 @@ package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.OperacionDto;
 import com.prototipo.application.port.OperacionAbstract;
-import com.prototipo.infrastructure.persistence.db.entity.Operacion;
+import com.prototipo.infrastructure.persistence.db.entity.OperacionEntity;
 import com.prototipo.infrastructure.persistence.db.repository.OperacionRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,18 +23,18 @@ public class OperacionImpl implements OperacionAbstract {
 
     @Override
     public OperacionDto findOperacionByIdSoliAbstract(Long id) {
-        Operacion operacion = operacionRepository.findById(id).orElse(null);
-        if (operacion == null) {
+        OperacionEntity operacionEntity = operacionRepository.findById(id).orElse(null);
+        if (operacionEntity == null) {
             return null;
         }
-        return modelMapper.map(operacion, OperacionDto.class);
+        return modelMapper.map(operacionEntity, OperacionDto.class);
     }
 
     @Override
     public OperacionDto guardarOperacion(OperacionDto operacionDto) {
-        Operacion operacionToSave = modelMapper.map(operacionDto, Operacion.class);
-        Operacion operacion = operacionRepository.save(operacionToSave);
-        OperacionDto operacionDtoResp = modelMapper.map(operacion, OperacionDto.class);
+        OperacionEntity operacionEntityToSave = modelMapper.map(operacionDto, OperacionEntity.class);
+        OperacionEntity operacionEntity = operacionRepository.save(operacionEntityToSave);
+        OperacionDto operacionDtoResp = modelMapper.map(operacionEntity, OperacionDto.class);
         return operacionDtoResp;
     }
 
@@ -50,9 +50,8 @@ public class OperacionImpl implements OperacionAbstract {
     public List<OperacionDto> findOperacionByIdOperadorPendientesAbstract(Long idOperador, Long page, Long size) {
         //TODO, probar este paginable
         Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
-        Page<Operacion> listOpe = operacionRepository
+        Page<OperacionEntity> listOpe = operacionRepository
                 .findOperacionesByOperadorAndEstadoPendiente(idOperador, pageable);
-
         return listOpe.stream().map(x -> modelMapper.map(x, OperacionDto.class)).toList();
     }
 
@@ -60,9 +59,8 @@ public class OperacionImpl implements OperacionAbstract {
     public List<OperacionDto> findOperacionByIdOperadorIniciadasAbstract(Long idOperador, Long page, Long size) {
         //TODO, probar este paginable
         Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
-        Page<Operacion> listOpe = operacionRepository
+        Page<OperacionEntity> listOpe = operacionRepository
                 .findOperacionesByOperadorAndEstadoIniciado(idOperador, pageable);
-
         return listOpe.stream().map(x -> modelMapper.map(x, OperacionDto.class)).toList();
     }
 
@@ -70,7 +68,7 @@ public class OperacionImpl implements OperacionAbstract {
     public List<OperacionDto> findOperacionByIdOperadorCompletadasAbstract(Long idOperador, Long page, Long size) {
         //TODO, probar este paginable
         Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
-        Page<Operacion> listOpe = operacionRepository
+        Page<OperacionEntity> listOpe = operacionRepository
                 .findOperacionesByOperadorAndEstadoCompletado(idOperador, pageable);
 
         return listOpe.stream().map(x -> modelMapper.map(x, OperacionDto.class)).toList();

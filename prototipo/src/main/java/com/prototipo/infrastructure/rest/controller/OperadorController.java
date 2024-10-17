@@ -2,8 +2,8 @@ package com.prototipo.infrastructure.rest.controller;
 
 import com.prototipo.application.useCase.OperadorService;
 import com.prototipo.domain.enums.EstadoByOperadorEnum;
-import com.prototipo.domain.model.ArchivoPdfDomain;
-import com.prototipo.domain.model.OperacionDomain;
+import com.prototipo.domain.model.ArchivoPdf;
+import com.prototipo.domain.model.Operacion;
 import com.prototipo.infrastructure.rest.request.OperacionSoliRequest;
 import com.prototipo.infrastructure.rest.request.PaginacionOpeRequest;
 import com.prototipo.infrastructure.rest.response.ArchivoPdfResponse;
@@ -32,7 +32,7 @@ public class OperadorController {
     public ResponseEntity<List<ArchivoPdfResponse>> iniciarSolicitudOperacion(@RequestBody OperacionSoliRequest opeSoliRequest) {
         Long idOperacion = opeSoliRequest.getIdOperacion();
         Long idOperador = opeSoliRequest.getIdOperador();
-        List<ArchivoPdfDomain> listArchivos = operadorService.iniciarSolicitudOperacion(idOperacion, idOperador);
+        List<ArchivoPdf> listArchivos = operadorService.iniciarSolicitudOperacion(idOperacion, idOperador);
         List<ArchivoPdfResponse> listArchivosResp = listArchivos.stream()
                 .map(x -> modelMapper.map(x, ArchivoPdfResponse.class))
                 .toList();
@@ -42,8 +42,7 @@ public class OperadorController {
     @PostMapping(path = {"/terminarOperacion"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void finalizarSolicitudOperacion(@RequestBody OperacionSoliRequest opeSoliRequest) {
         Long idOperacion = opeSoliRequest.getIdOperacion();
-        Long idOperador = opeSoliRequest.getIdOperador();
-        operadorService.terminarSolicitudOperacion(idOperacion, idOperador);
+        operadorService.terminarSolicitudOperacion(idOperacion);
     }
 
     //Este operador tiene una forma de trabajar, y es por piso,
@@ -56,7 +55,8 @@ public class OperadorController {
         Long size = pageParam.getSize();
         String byColumName = pageParam.getByColumName();
 
-        List<OperacionDomain> list = operadorService.verSolicitudesDeOperadorPendientes(idOperador, page, size);
+        List<Operacion> list = operadorService
+                .verSolicitudesDeOperadorPendientes(idOperador, page, size);
         List<SolicitudOperaResponse> listSolicitud = list
                 .stream()
                 .map(this::funcion)
@@ -72,7 +72,7 @@ public class OperadorController {
         Long size = pageParam.getSize();
         String byColumName = pageParam.getByColumName();
 
-        List<OperacionDomain> list = operadorService.verSolicitudesDeOperadorIniciadas(idOperador, page, size);
+        List<Operacion> list = operadorService.verSolicitudesDeOperadorIniciadas(idOperador, page, size);
         List<SolicitudOperaResponse> listSolicitud = list
                 .stream()
                 .map(this::funcion)
@@ -88,7 +88,8 @@ public class OperadorController {
         Long size = pageParam.getSize();
         String byColumName = pageParam.getByColumName();
 
-        List<OperacionDomain> list = operadorService.verSolicitudesDeOperadorCompletadas(idOperador, page, size);
+        List<Operacion> list = operadorService
+                .verSolicitudesDeOperadorCompletadas(idOperador, page, size);
         List<SolicitudOperaResponse> listSolicitud = list
                 .stream()
                 .map(this::funcion)
@@ -96,7 +97,7 @@ public class OperadorController {
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    private SolicitudOperaResponse funcion(OperacionDomain x){
+    private SolicitudOperaResponse funcion(Operacion x){
         return SolicitudOperaResponse.builder()
                 //No el ID de la solicitud, sino el id del registro Aprobacion
                 .id(x.getId())

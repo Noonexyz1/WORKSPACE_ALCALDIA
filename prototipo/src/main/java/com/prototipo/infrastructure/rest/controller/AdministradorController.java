@@ -2,7 +2,8 @@ package com.prototipo.infrastructure.rest.controller;
 
 import com.prototipo.application.useCase.FotocopiaService;
 import com.prototipo.application.useCase.UsuarioService;
-import com.prototipo.domain.model.UsuarioDomain;
+import com.prototipo.domain.model.Usuario;
+import com.prototipo.domain.model.UsuarioUnidad;
 import com.prototipo.infrastructure.rest.request.*;
 import com.prototipo.infrastructure.rest.response.ReporteResponse;
 import com.prototipo.infrastructure.rest.response.UserListAdminResponse;
@@ -26,58 +27,56 @@ public class AdministradorController {
     @Autowired
     private ModelMapper modelMapper;
 
-    //TODO, con Pageables POST O GET??
     @GetMapping(path = {"/listaDeUsuarios"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<UserListAdminResponse>> listaDeUsuarios(@RequestBody PaginacionAdminRequest pageReq){
-        List<UsuarioDomain> listUserDomain = usuarioService.listaDeUsuariosServiceDef(pageReq.getPage(), pageReq.getSize());
+        List<UsuarioUnidad> listUserDomain = usuarioService
+                .listaDeUsuariosServiceDef(pageReq.getPage(), pageReq.getSize());
+
         List<UserListAdminResponse> listResponse = listUserDomain.stream()
-                .map(x ->
-                        UserListAdminResponse.builder()
-                                .id(x.getId())
-                                .nombres(x.getNombres())
-                                .apellidos(x.getApellidos())
-                                .nombreRol(x.getFkRol().getNombreRol())
-                                .build()
-                )
+                .map(this::mapeoUsuarioUnidadToResponse)
+                .distinct()
                 .toList();
         return new ResponseEntity<>(listResponse, HttpStatus.OK);
     }
 
-    @PostMapping(path = {"/creaUsuarioSolicitante"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void creaUsuarioSolicitante(@RequestBody UsuarioSoliRequest newUserSoli){
-        Long rolId = newUserSoli.getIdRol();
-        Long idUniSoli = newUserSoli.getIdUniSoli();
-        UsuarioDomain usuarioDomain = modelMapper.map(newUserSoli, UsuarioDomain.class);
-        fotocopiaService.creaUsuarioSolicitante(usuarioDomain, rolId, idUniSoli);
+    private UserListAdminResponse mapeoUsuarioUnidadToResponse(UsuarioUnidad userUni) {
+        return UserListAdminResponse.builder()
+                .id(userUni.getFkUsuario().getId())
+                .nombres(userUni.getFkUsuario().getNombres())
+                .apellidos(userUni.getFkUsuario().getApellidos())
+                .nombreRol(userUni.getFkRol().getNombreRol())
+                .nombreUnidad(
+                        (userUni.getFkUnidad() != null)?
+                                userUni.getFkUnidad().getNombre():
+                                "Administrador"
+                )
+                .build();
     }
 
-    @PostMapping(path = {"/creaUsuarioResponsable"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void creaUsuarioResponsable(@RequestBody UsuarioResponRequest newUserRespon){
-        Long rolId = newUserRespon.getIdRol();
-        Long idUniResp = newUserRespon.getIdUnidadResp();
-        UsuarioDomain usuarioDomain = modelMapper.map(newUserRespon, UsuarioDomain.class);
-        fotocopiaService.creaUsuarioResponsable(usuarioDomain, rolId, idUniResp);
-    }
+    @PostMapping(path = {"/creaUsuario"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void creaUsuario(@RequestBody UsuarioSoliRequest newUser){
+        /* TODO, para el caso del operador, pues un piso esta lleno de unidades/area
+        * asi que tendria que guardarse todas las unidades/area que sea han asigando a un operador,
+        * en definitiva, este metodo deberia repetirse desde el frontend N unidades/area asignadas */
 
-    @PostMapping(path = {"/creaUsuarioOperador"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void creaUsuarioOperador(@RequestBody UsuarioOpeRequest newUserOpe){
-        Long rolId = newUserOpe.getIdRol();
-        String pisoAsignado = newUserOpe.getPisoAsignado();
-        UsuarioDomain usuarioDomain = modelMapper.map(newUserOpe, UsuarioDomain.class);
-        fotocopiaService.creaUsuarioOperador(usuarioDomain, rolId, pisoAsignado);
-    }
-
-    @PostMapping(path = {"/editarUsuario"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void editarUsuario(@RequestBody UsuarioRequest request){
-        Long idRol = request.getIdRol();
-        UsuarioDomain usuarioDomain = modelMapper.map(request, UsuarioDomain.class);
-        fotocopiaService.editarUsuario(usuarioDomain, idRol);
+        Long rolId = newUser.getIdRol();
+        Long idUni = newUser.getIdUni();
+        Usuario usuario = modelMapper.map(newUser, Usuario.class);
+        fotocopiaService.creaUsuario(usuario, rolId, idUni);
     }
 
     @GetMapping(path = {"/eliminarUsuario/{idUsuario}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void eliminarUsuario(@PathVariable Long idUsuario){
         fotocopiaService.eliminarUsuario(idUsuario);
     }
+
+    @PostMapping(path = {"/editarUsuario"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void editarUsuario(@RequestBody UsuarioRequest request){
+        //TODO, hacer para Auditoria
+        Usuario usuarioDomain = modelMapper.map(request, Usuario.class);
+        fotocopiaService.editarUsuario(usuarioDomain);
+    }
+
 
     @GetMapping(path = {"/generarReporte"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ReporteResponse> generarReporte(){

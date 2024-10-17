@@ -2,16 +2,9 @@
 #Esta tabla si o si para produccion
 INSERT INTO prototipo.rol(nombre_rol)
 values("Administrador"),
-("Solicitante"),
+("Responsable"),
 ("Operador"),
-("Responsable");
-
-#Esta tabla si o si para produccion
-INSERT INTO prototipo.dashboard_config(fk_rol_id, nombre_componente)
-VALUES(1, 'administrador'),
-(2, 'solicitante'),
-(3, 'operador'),
-(4, 'responsable');
+("Solicitante");
 
 #Esta tabla si o si para produccion
 INSERT INTO prototipo.unidad(nombre, direccion)
@@ -38,38 +31,327 @@ VALUES
 ("Servicios Generales", "Piso 7");
 
 #Esta tabla si o si para produccion
-INSERT INTO usuario(fk_rol_id, apellidos, correo, nombres)
-VALUES(1, "Jefis", "jefa@gmail.com", "Tania");
+INSERT INTO usuario(apellidos, correo, nombres)
+VALUES("Jefis", "jefa@gmail.com", "Tania");
 
 #Esta tabla si o si para produccion
 INSERT INTO credencial(fk_usuario_id, correo, pass)
 VALUES(1, "jefa@gmail.com", "123");
 #El administrador debe poder iniciar con el sistema
 
-#El is_active de Usuario, Responsable y Operador_Unidad
-#se ve reduntante
+#Esta tabla si o si para produccion
+INSERT INTO usuario_unidad(is_active, fk_rol_id, fk_unidad_id, fk_usuario_id)
+VALUES(TRUE, 1, NULL, 1);
+
 
 
 SELECT * FROM rol;
-SELECT * FROM dashboard_config;
+#NO todas las unidades estan juntas en un piso,
+#estan dispersas en distintos lugares
 SELECT * FROM unidad;
 
+SELECT * from usuario;
+SELECT * from credencial;
+SELECT * from usuario_unidad;
+
+SELECT * from archivo_pdf;
 SELECT * from solicitud;
 SELECT * from aprobacion;
-SELECT * from archivo_pdf;
 SELECT * from operacion;
-SELECT * from usuario;
-SELECT * from responsable;
-SELECT * from credencial;
-SELECT * from operador_unidad; #cambiar de nombre a Operador
-SELECT * from solicitante;
-
-DELETE FROM operador_unidad;
 
 DELETE from solicitud;
 DELETE FROM operacion;
 
 
+######Consulta de prueba
+#@ consulta 1
+
+#Consulta mas simple pero mas potente
+SELECT * #a.fk_solicitud_id
+FROM aprobacion a
+WHERE a.fk_solicitud_id IN (
+	SELECT s.id
+	FROM solicitud s
+	WHERE s.fk_unidad_id = (
+		SELECT uu.fk_unidad_id
+		FROM usuario_unidad uu
+		WHERE uu.fk_usuario_id = 6
+		AND uu.is_active = TRUE
+	)
+)
+AND a.estado_by_responsable = 'Pendiente'
+AND a.estado_cambio = 0;
+
+
+#Consulta mas simple para operadores
+SELECT *
+FROM operacion o
+WHERE fk_solicitud_id IN (
+    SELECT s.id
+	FROM solicitud s
+	WHERE s.fk_unidad_id IN (
+		SELECT uu.fk_unidad_id
+		FROM usuario_unidad uu
+		WHERE uu.fk_usuario_id = 3
+		AND uu.is_active = TRUE
+	)
+)
+AND o.estado_by_operador = 'Pendiente'
+AND o.estado_cambio = 0
+
+SELECT *
+FROM operacion o
+WHERE fk_solicitud_id IN (
+    SELECT s.id
+	FROM solicitud s
+	WHERE s.fk_unidad_id IN (
+		SELECT uu.fk_unidad_id
+		FROM usuario_unidad uu
+		WHERE uu.fk_usuario_id = 3
+		AND uu.is_active = TRUE
+	)
+)
+AND o.estado_by_operador = 'Iniciado'
+AND o.estado_cambio = 1
+
+SELECT *
+FROM operacion o
+WHERE fk_solicitud_id IN (
+    SELECT s.id
+	FROM solicitud s
+	WHERE s.fk_unidad_id IN (
+		SELECT uu.fk_unidad_id
+		FROM usuario_unidad uu
+		WHERE uu.fk_usuario_id = 3
+		AND uu.is_active = TRUE
+	)
+)
+AND o.estado_by_operador = 'Iniciado'
+AND o.estado_cambio = 1
+
+SELECT *
+FROM operacion o
+WHERE fk_solicitud_id IN (
+    SELECT s.id
+	FROM solicitud s
+	WHERE s.fk_unidad_id IN (
+		SELECT uu.fk_unidad_id
+		FROM usuario_unidad uu
+		WHERE uu.fk_usuario_id = 3
+		AND uu.is_active = TRUE
+	)
+)
+AND o.estado_by_operador = 'Completado'
+AND o.estado_cambio = 2
+
+SELECT *
+FROM operacion o
+
+
+
+######Consulta de prueba
+
+
+
+
+
+
+
+
+
+
+#consulta final
+SELECT *
+FROM aprobacion a
+WHERE a.fk_solicitud_id IN (
+	SELECT *
+	FROM solicitud s
+	WHERE s.fk_unidad_id = (
+		SELECT uu.fk_unidad_id
+		FROM usuario_unidad uu
+		WHERE uu.fk_usuario_id = 6
+		AND uu.is_active = TRUE
+	)
+)
+AND a.estado_by_responsable = "Pendiente"
+
+
+
+#######################################
+
+SELECT o2.fk_solicitud_id
+FROM operacion o2
+WHERE o2.fk_operador_id = :idOperador
+AND o2.estado_by_operador = 'Completado'
+
+SELECT *
+FROM operacion o
+WHERE o.fk_operador_id = :idOperador
+AND o.estado_by_operador = 'Iniciado'
+AND o.fk_solicitud_id NOT IN (
+    SELECT o2.fk_solicitud_id
+    FROM operacion o2
+    WHERE o2.fk_operador_id = :idOperador
+    AND o2.estado_by_operador = 'Completado'
+)
+
+SELECT *
+FROM aprobacion a
+
+SELECT *
+FROM aprobacion a2
+WHERE a2.fk_solicitud_id = 1
+AND (a2.estado_by_responsable = "Aprobada"
+	OR a2.estado_by_responsable = "Rechazada"
+)
+
+#consulta final
+SELECT *
+FROM aprobacion a
+WHERE a.fk_solicitud_id NOT IN (
+    SELECT a2.fk_solicitud_id
+    FROM aprobacion a2
+    WHERE a2.fk_solicitud_id = 1
+    AND (a2.estado_by_responsable = "Aprobada"
+    	OR a2.estado_by_responsable = "Rechazada"
+    )
+)
+AND a.fk_solicitud_id = 1
+AND a.estado_by_responsable = "Pendiente"
+
+SELECT uu.fk_unidad_id
+FROM usuario_unidad uu
+WHERE uu.fk_usuario_id = 2###
+
+SELECT *
+FROM aprobacion a
+WHERE a.fk_solicitud_id NOT IN (
+    SELECT a2.fk_solicitud_id
+    FROM aprobacion a2
+    WHERE a2.fk_solicitud_id = 1
+    AND (a2.estado_by_responsable = "Aprobada"
+    	OR a2.estado_by_responsable = "Rechazada"
+    )
+)
+AND a.fk_solicitud_id = 1
+AND a.estado_by_responsable = "Pendiente"
+
+SELECT s.id
+FROM solicitud s
+WHERE s.fk_unidad_id = (
+	SELECT uu.fk_unidad_id
+	FROM usuario_unidad uu
+	WHERE uu.fk_usuario_id = 2###
+)
+
+SELECT *
+FROM aprobacion a
+WHERE a.fk_solicitud_id IN (
+	SELECT s.id
+	FROM solicitud s
+	WHERE s.fk_unidad_id = (
+		SELECT uu.fk_unidad_id
+		FROM usuario_unidad uu
+		WHERE uu.fk_usuario_id = 2###
+	)
+);
+
+#consulta final
+SELECT *
+FROM aprobacion a
+WHERE a.fk_solicitud_id NOT IN (
+    SELECT a2.fk_solicitud_id
+    FROM aprobacion a2
+    WHERE a2.fk_solicitud_id IN (
+        SELECT s.id
+        FROM solicitud s
+        WHERE s.fk_unidad_id = (
+            SELECT uu.fk_unidad_id
+            FROM usuario_unidad uu
+            WHERE uu.fk_usuario_id = 2
+        )
+    )
+    AND (a2.estado_by_responsable = 'Aprobada'
+    	OR a2.estado_by_responsable = 'Rechazada'
+    )
+)
+AND a.estado_by_responsable = 'Pendiente';
+
+SELECT *
+FROM aprobacion a
+WHERE a.fk_solicitud_id NOT IN (
+    SELECT a2.fk_solicitud_id
+    FROM aprobacion a2
+    WHERE a2.fk_solicitud_id IN (
+        SELECT s.id
+        FROM solicitud s
+        WHERE s.fk_unidad_id = (
+            SELECT uu.fk_unidad_id
+            FROM usuario_unidad uu
+            WHERE uu.fk_usuario_id = 2
+        )
+    )
+    AND (a2.estado_by_responsable = 'Aprobada'
+        OR a2.estado_by_responsable = 'Rechazada'
+    )
+)
+AND a.estado_by_responsable = 'Pendiente'
+
+SELECT *
+FROM aprobacion a
+WHERE a.fk_responsable_id = 2
+AND a.estado_by_responsable = "Aprobada"
+
+
+SELECT *
+FROM aprobacion a
+WHERE a.fk_solicitud_id IN (
+    SELECT s.id
+    FROM solicitud s
+    WHERE s.fk_unidad_id = (
+        SELECT uu.fk_unidad_id
+        FROM usuario_unidad uu
+        WHERE uu.fk_usuario_id = 2
+    )
+)
+AND a.estado_by_responsable = "Aprobada";
+
+#######################################
+
+
+#consulta final
+SELECT *
+FROM usuario_unidad uu
+WHERE uu.fk_usuario_id = (
+    SELECT u.id
+    FROM usuario u
+    WHERE u.id = (
+        SELECT c.fk_usuario_id
+        FROM credencial c
+        WHERE c.correo = "OliviaOliveira@gmail.com"
+        AND c.pass = "Oliveira"
+    )
+)
+AND uu.is_active = TRUE
+LIMIT 1
+
+
+
+
+
+#consulta final
+SELECT *
+FROM usuario_unidad uu
+WHERE uu.fk_usuario_id = (
+	SELECT u.id
+	FROM usuario u
+	WHERE u.id = (
+		SELECT c.fk_usuario_id
+		FROM credencial c
+		WHERE c.correo = "jefa@gmail.com"
+		AND c.pass = "123"
+	)
+);
 
 
 
@@ -112,174 +394,3 @@ AND o.fk_solicitud_id NOT IN (
 );
 
 
-
-
-
-
-#CONSULTA FINAL
-#se comporta de misma manera que la paginacion
-SELECT *
-FROM operacion o
-WHERE fk_solicitud_id IN (
-	SELECT s.id
-	FROM solicitud s
-	WHERE fk_unidad_id IN (
-		SELECT u.id
-		FROM operador_unidad ou, unidad u
-		WHERE ou.fk_unidad_id = u.id
-		AND ou.fk_usuario_id = 14
-		AND ou.is_active = TRUE
-	)
-)
-AND o.estado_by_operador = "Pendiente";
-
-
-#CONSULTA FINAL
-SELECT *
-FROM aprobacion a
-WHERE a.fk_solicitud_id IN (
-	SELECT s.id
-	FROM solicitud s
-	WHERE s.fk_unidad_id IN (
-		SELECT u.id
-		FROM unidad u
-		WHERE u.id IN (
-			SELECT r.fk_unidad_id
-			FROM responsable r
-			#Los ids de responables
-			WHERE fk_usuario_id = 10
-		)
-	)
-);
-
-#consulta definitiva
-SELECT *
-FROM aprobacion a
-WHERE a.fk_solicitud_id IN (
-	SELECT s.id
-	FROM solicitud s
-	WHERE s.fk_unidad_id = (
-		SELECT r.fk_unidad_id
-		FROM responsable r
-		WHERE r.fk_usuario_id = 4
-		AND r.is_active = TRUE
-	)
-)
-AND a.estado_by_responsable = "Pendiente";
-
-
-
-
-
-
-
-
-
-
-
-
-
-INSERT INTO prototipo.insumo(detalle, fecha_reporte, formato, tipo_reporte)
-VALUES
-("Solicitud de 50 copias de contrato de arrendamiento", "2023-02-14", "A4", "contrato"),
-("Impresión de plan de desarrollo urbano", "2023-03-22", "A3", "plan"),
-("Copia de actas de reunión del gabinete", "2023-04-10", "legal", "actas"),
-("Duplicado de expediente de personal", "2023-05-05", "oficio", "expediente"),
-("Impresión de certificado de residencia", "2023-06-01", "A4", "certificado"),
-("Copias del reglamento interno de trabajo", "2023-06-15", "carta", "reglamento"),
-("Reproducción de planos de infraestructura", "2023-07-12", "A2", "plano"),
-("Duplicado de recibos de pago", "2023-07-22", "oficio", "recibo"),
-("Impresión de documentos de licitación", "2023-08-03", "A4", "licitación"),
-("Copia de manual de procedimientos", "2023-08-15", "A4", "manual"),
-("Impresión de permisos de construcción", "2023-09-01", "legal", "permiso"),
-("Duplicado de informes trimestrales", "2023-09-10", "carta", "informe"),
-("Copia de contrato de suministro", "2023-09-22", "A4", "contrato"),
-("Reproducción de documentos de auditoría", "2023-10-05", "A4", "auditoría"),
-("Impresión de guías de servicio comunitario", "2023-10-20", "carta", "guía");
-
-SELECT * FROM unidad;
-SELECT * FROM insumo;
-SELECT usuario.nombres, usuario.apellidos, unidad.nombre, usuario.fk_unidad_id
-FROM usuario, unidad
-WHERE unidad.id = usuario.fk_unidad_id;
-
-
-#INSERTAMOS REGISTROS A LA TABLA SOLICITUD
-INSERT INTO solicitud(fk_solicitante_id, nro_de_copias, nro_de_paginas, tipo_de_documento, notificacion_to_aprobar, estado_solicitud)
-VALUES
-(3, 1, 15, 'Licencia de Conducir', 'Aprobada', 'Pendiente'),
-(6, 2, 30, 'Cédula de Identidad', 'Aprobada', 'Completada'),
-(9, 1, 12, 'Certificado de Nacimiento', 'Aprobada', 'Pendiente'),
-(12, 2, 10, 'Licencia de Conducir', 'Aprobada', 'Completada'),
-(15, 5, 30, 'Constancia de Trabajo', 'Aprobada', 'Pendiente'),
-(18, 1, 10, 'Cédula de Identidad', 'Aprobada', 'Completada'),
-(21, 4, 8, 'Licencia de Conducir', 'Aprobada', 'Pendiente'),
-(24, 2, 10, 'Certificado de Estudios', 'Aprobada', 'Completada'),
-(27, 3, 10, 'Certificado de Nacimiento', 'Aprobada', 'Pendiente'),
-(2, 3, 15, 'Cédula de Identidad', 'Aprobada', 'Completada'),
-(5, 3, 20, 'Acta de Defunción', 'Aprobada', 'Pendiente'),
-(8, 5, 25, 'Cédula de Identidad', 'Aprobada', 'Completada'),
-(11, 3, 15, 'Licencia de Conducir', 'Aprobada', 'Pendiente'),
-(14, 5, 12, 'Cédula de Identidad', 'Aprobada', 'Completada'),
-(20, 3, 12, 'Acta de Defunción', 'Aprobada', 'Pendiente'),
-(17, 4, 25, 'Certificado de Nacimiento', 'Aprobada', 'Completada'),
-(2, 2, 10, 'Certificado de Nacimiento', 'Pendiente', 'Pendiente'),
-(4, 3, 5, 'Certificado de Estudios', 'Rechazada', 'Completada'),
-(5, 5, 20, 'Acta de Matrimonio', 'Pendiente', 'Pendiente');
-
-
-
-
-
-/*La tabla de Solicitud debe tener el campo de Estao de solicitud porque
- * este valor o campo es fruto de esa relacion, fruto de la operacion, nada que ver
- * con la solicitud*/
-
-/*En lugar del campo tipo_de_documento, deberia ser descripcion de los documentos en conjunto*/
-
-DELETE from solicitud;
-
-#INSERTAMOS A LA TABLA ARCHIVO_PDF
-INSERT INTO prototipo.archivo_pdf(fk_solicitud_id, archivo)
-VALUES
-(1, 'U2FtcGxlU3RyaW5nMDE='),
-(2, 'U2FtcGxlU3RyaW5nMDI='),
-(3, 'U2FtcGxlU3RyaW5nMDM='),
-(4, 'U2FtcGxlU3RyaW5nMDQ='),
-(5, 'U2FtcGxlU3RyaW5nMDU='),
-(6, 'U2FtcGxlU3RyaW5nMDY=');
-
-SHOW VARIABLES LIKE 'max_allowed_packet';
-
-SELECT * FROM archivo_pdf;
-DELETE FROM archivo_pdf;
-
-SELECT * FROM aprobacion;
-
-/*No se puede borrar una tabla fuerte si sus llaves primarias han sido propagadas a otras tablas,
- * entonces hay que borrar la tabla esa que es con llaves foraneas para luego borrar la tabla fuerte*/
-
-
-/*INSERT INTO aprobacion (fk_solicitud_id, fk_solicitante_id, fk_operador_id, fk_insumo_id)
-VALUES
-(1, 4, 22, 1),
-(2, 5, 23, 2),
-(3, 6, 24, 3),
-(4, 7, 25, 4),
-(5, 8, 26, 5),
-(6, 9, 27, 6),
-(7, 10, 28, 7),
-(8, 11, 29, 8),
-(9, 12, 22, 9),
-(10, 13, 23, 10),
-(11, 14, 24, 11),
-(12, 15, 25, 12),
-(13, 16, 26, 13),
-(14, 17, 27, 14),
-(15, 18, 28, 15),
-(16, 19, 29, 1);*/
-
-SELECT * FROM usuario
-WHERE fk_rol_id = 3;
-
-SELECT * FROM aprobacion;

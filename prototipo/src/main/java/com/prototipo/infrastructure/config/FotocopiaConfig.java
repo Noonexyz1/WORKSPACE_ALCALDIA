@@ -20,23 +20,17 @@ public class FotocopiaConfig {
                                                  RolAbstract rolAbstract,
                                                  @Qualifier("credencialImpl")
                                                  CredencialAbstract credencialAbstract,
-                                                 @Qualifier("responsableImpl")
-                                                 ResponsableAbstract responsableAbstract,
                                                  @Qualifier("unidadImpl")
                                                  UnidadAbstract unidadAbstract,
-                                                 @Qualifier("operadorUnidadImpl")
-                                                 OperadorUnidadAbstract operadorUnidadAbstract,
-                                                 @Qualifier("solicitanteImpl")
-                                                 SolicitanteAbstract solicitanteAbstract){
+                                                 @Qualifier("usuarioUnidadImpl")
+                                                 UsuarioUnidadAbstract usuarioUnidadAbstract){
 
         //En los construntores, EL ORDEN IMPORTA
         return new FotocopiaAdapter(usuarioAbastract,
                                     rolAbstract,
                                     mapperApplicationAbstract,
                                     credencialAbstract,
-                                    responsableAbstract,
                                     unidadAbstract,
-                                    operadorUnidadAbstract,
-                                    solicitanteAbstract);
+                                    usuarioUnidadAbstract);
     }
 }
