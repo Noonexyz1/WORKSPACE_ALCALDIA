@@ -4,16 +4,12 @@ import com.prototipo.domain.enums.EstadoByResponsableEnum;
 import com.prototipo.domain.model.*;
 
 public interface FotocopiaService {
-    void creaUsuarioSolicitante(UsuarioDomain userSoli, Long rolId, Long idUniSoli);
-    void creaUsuarioResponsable(UsuarioDomain userRespon, Long rolId, Long idUniRespon);
-    void creaUsuarioOperador(UsuarioDomain userOpe, Long rolId, String direccionPiso);
-    UsuarioDomain editarUsuario(UsuarioDomain usuarioEditado, Long rolId);
+    void creaUsuario(Usuario userSoli, Long rolId, Long idUni);
+    Usuario editarUsuario(Usuario usuarioEditado);
     void eliminarUsuario(Long idUsuario);
     void subirArchivoPdf();
     EstadoByResponsableEnum enviarNotificacionEstado();
-    OperadorDomain asignarOperador();
-    void guardarRegistroInsumosUtilizado(InsumoDomain insumoUtilizado);
+    void guardarRegistroInsumosUtilizado(Insumo insumoUtilizado);
     void generarAlertaInsumosBajos();
-    ReporteDomain generarReporte();
-    SolicitudDomain enviarNotificacionEstadoSoli();
+    Solicitud enviarNotificacionEstadoSoli();
 }

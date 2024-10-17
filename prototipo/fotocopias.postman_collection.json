@@ -44,7 +44,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"correo\": \"olivia@gmail.com\",\n    \"pass\": \"Lopez\"\n}",
+							"raw": "{\n    \"correo\": \"OliviaOliveira@gmail.com\",\n    \"pass\": \"Oliveira\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -72,7 +72,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"correo\": \"diegoGoitia@gmail.com\",\n    \"pass\": \"Goitia\"\n}",
+							"raw": "{\n    \"correo\": \"DiegoGoitia@gmail.com\",\n    \"pass\": \"Goitia\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -100,7 +100,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    /*\"correo\": \"diego@gmail.com\",\n    \"pass\": \"Mamani\"*/\n\n    /*\"correo\": \"moisesMoi@gmail.com\",\n    \"pass\": \"Moi\"*/\n\n    \"correo\": \"rodrigoWill@gmail.com\",\n    \"pass\": \"Will\"\n}",
+							"raw": "{\n    /*\"correo\": \"diego@gmail.com\",\n    \"pass\": \"Mamani\"*/\n\n    /*\"correo\": \"MoisesMoi@gmail.com\",\n    \"pass\": \"Moi\"*/\n\n    \"correo\": \"WillmerMoi@gmail.com\",\n    \"pass\": \"Moi\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -127,13 +127,16 @@
 			"name": "Administrador",
 			"item": [
 				{
-					"name": "crear usuario soli",
+					"name": "lista usuarios",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
 					"request": {
-						"method": "POST",
+						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombres\": \"Rodrigo\",\n    \"apellidos\": \"Will\",\n    \"correo\": \"rodrigoWill@gmail.com\",\n    \"idRol\": 2,\n    \"idUniSoli\": 16\n\n    /*\"nombres\": \"Moises\",\n    \"apellidos\": \"Moi\",\n    \"correo\": \"moisesMoi@gmail.com\",\n    \"idRol\": 2,\n    \"idUniSoli\": 16*/\n\n    /*\"nombres\": \"Diego\",\n    \"apellidos\": \"Diomir\",\n    \"correo\": \"diegoDiomir@gmail.com\",\n    \"idRol\": 2,\n    \"idUniSoli\": 16*/\n\n    /*\"nombres\": \"Carlos\",\n    \"apellidos\": \"Gonzalez\",\n    \"correo\": \"carlosGonzalez@gmail.com\",\n    \"idRol\": 2,\n    \"idUniSoli\": 15*/\n\n    /*\"nombres\": \"Laura\",\n    \"apellidos\": \"Martinez\",\n    \"correo\": \"lauraMartinez@gmail.com\",\n    \"idRol\": 2,\n    \"idUniSoli\": 15*/\n\n    /*\"nombres\": \"Diego\",\n    \"apellidos\": \"Fernandez\",\n    \"correo\": \"diegoFernandez@gmail.com\",\n    \"idRol\": 2,\n    \"idUniSoli\": 15*/\n\n    /*\"nombres\": \"Ana\",\n    \"apellidos\": \"Lopez\",\n    \"correo\": \"anaLopez@gmail.com\",\n    \"idRol\": 2,\n    \"idUniSoli\": 14*/\n\n    /*\"nombres\": \"Mariana\",\n    \"apellidos\": \"Ruiz\",\n    \"correo\": \"marianaRuiz@gmail.com\",\n    \"idRol\": 2,\n    \"idUniSoli\": 14*/\n\n    /*\"nombres\": \"Javier\",\n    \"apellidos\": \"Perez\",\n    \"correo\": \"javierPerez@gmail.com\",\n    \"idRol\": 2,\n    \"idUniSoli\": 14*/\n}",
+							"raw": "{\n    \"page\": 0,\n    \"size\": 20,\n    \"byColumName\": null \n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -141,7 +144,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/administrador/creaUsuarioSolicitante",
+							"raw": "http://localhost:8081/administrador/listaDeUsuarios",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -149,20 +152,20 @@
 							"port": "8081",
 							"path": [
 								"administrador",
-								"creaUsuarioSolicitante"
+								"listaDeUsuarios"
 							]
 						}
 					},
 					"response": []
 				},
 				{
-					"name": "crear usuario resp",
+					"name": "crear usuario",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Todo sera por areas, osea, por responsables de areas\n    \"nombres\": \"Diego\",    \n    \"apellidos\": \"Goitia\",\n    \"correo\": \"diegoGoitia@gmail.com\",\n    \"idRol\": 4,\n    \"idUnidadResp\": 16\n\n    /*\"nombres\": \"Jose\",    \n    \"apellidos\": \"Alvarez\",\n    \"correo\": \"joseAlvarez@gmail.com\",\n    \"idRol\": 4,\n    \"idUnidadResp\": 15*/\n\n    /*\"nombres\": \"Luis\",    \n    \"apellidos\": \"Sanchez\",\n    \"correo\": \"luisSanchez@gmail.com\",\n    \"idRol\": 4,\n    \"idUnidadResp\": 14*/\n}",
+							"raw": "{\n    /*\"nombres\": \"Franz\",\n    \"apellidos\": \"Franz\",\n    \"correo\": \"FranzFranz@gmail.com\",\n    \"idRol\": 2,\n    \"idUni\": 15*/\n\n    /*\"nombres\": \"Olivia\",\n    \"apellidos\": \"Oliveira\",\n    \"correo\": \"OliviaOliveira@gmail.com\",\n    \"idRol\": 3,\n    \"idUni\": 13 //16, 15, 14, 13*/\n\n    /*\"nombres\": \"Rodrigo\",\n    \"apellidos\": \"Moi\",\n    \"correo\": \"RodrigoMoi@gmail.com\",\n    \"idRol\": 4,\n    \"idUni\": 15*/\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -170,7 +173,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/administrador/creaUsuarioResponsable",
+							"raw": "http://localhost:8081/administrador/creaUsuario",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -178,36 +181,7 @@
 							"port": "8081",
 							"path": [
 								"administrador",
-								"creaUsuarioResponsable"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "crear usuario ope",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"nombres\": \"Olivia\",\n    \"apellidos\": \"Lopez\",\n    \"correo\": \"olivia@gmail.com\",\n    \"idRol\": 3,\n    \"pisoAsignado\": \"Piso 4\"\n\n    /*\"nombres\": \"Oriana\",\n    \"apellidos\": \"Olivera\",\n    \"correo\": \"oriana@gmail.com\",\n    \"idRol\": 3,\n    \"pisoAsignado\": \"Piso 1\"*/\n\n    /*\"nombres\": \"Odalys\",   \n    \"apellidos\": \"Sanchez\",\n    \"correo\": \"odalys@gmail.com\",\n    \"idRol\": 3,\n    \"pisoAsignado\": \"Piso 3\"*/\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8081/administrador/creaUsuarioOperador",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"administrador",
-								"creaUsuarioOperador"
+								"creaUsuario"
 							]
 						}
 					},
@@ -220,7 +194,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 1,\n    \"nombres\": \"El primero mannn\",\n    \"apellidos\": \"Diomir\",\n    \"correo\": \"asd@gmail.commmmm\",\n    \"isActive\": null,\n    //Tambien debe cambiar el rol\n    \"idRol\": 4\n}",
+							"raw": "{\n    \"id\": 4,\n    \"nombres\": \"Diego\",\n    \"apellidos\": \"Diomir\",\n    \"correo\": \"diego@gmail.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -306,38 +280,6 @@
 						}
 					},
 					"response": []
-				},
-				{
-					"name": "lista usuarios",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"page\": 0,\n    \"size\": 20,\n    \"byColumName\": null \n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8081/administrador/listaDeUsuarios",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"administrador",
-								"listaDeUsuarios"
-							]
-						}
-					},
-					"response": []
 				}
 			]
 		},
@@ -354,7 +296,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Debo probar estos paginables\n    //Id de usuario responsable\n    \"idUsuario\": 3,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id de usuario responsable\n    \"idUsuario\": 3,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -447,7 +389,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Operacion \n    \"idOperacion\": 1\n}",
+							"raw": "{\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Operacion \n    \"idOperacion\": 10\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -476,7 +418,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //ID del operador\n    /*\"idOperador\": 4,\n    //ID de la tabla Operacion \n    \"idOperacion\": 3*/\n\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Operacion \n    \"idOperacion\": 1\n}",
+							"raw": "{\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Operacion \n    \"idOperacion\": 11\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -513,7 +455,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Id de usuario responsable\n    /*\"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null*/\n\n    \"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id de usuario responsable\n    \"idUsuario\": 6,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -545,7 +487,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Id de usuario responsable\n    /*\"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null*/\n\n    \"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id de usuario responsable\n    \"idUsuario\": 6,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -577,7 +519,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Id de usuario responsable\n    /*\"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null*/\n\n    \"idUsuario\": 4,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id de usuario responsable\n    /*\"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null*/\n\n    \"idUsuario\": 6,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -606,7 +548,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n\n    \"idResponsable\": 2,\n    \"idAprobacion\": 1\n\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n}",
+							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n\n    \"idResponsable\": 6,\n    \"idAprobacion\": 14\n\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -635,7 +577,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n\n    \"idResponsable\": 4,\n    \"idAprobacion\": 7\n\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n}",
+							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n\n    \"idResponsable\": 6,\n    \"idAprobacion\": 2\n\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -669,7 +611,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "/*{\n    \"nroDeCopias\": 600,\n    \"tipoDeDocumento\": \"Tramite de produccion\",\n    \"nroDePaginas\": 10,\n    //El solicitante debe poner la unidad del que pertenece, \n    //Digamos que este solicitante es de la unidad de Planeacion Urbana\n    //puede ser de ejemplo, 2,5,6,7,89,14, osea yo solicitante 2, trabajo en la unidad 5.\n    \"idUnidad\": 15,\n    //Aqui todos tiene que ser solicitantes, osea todos los roles\n    \"idSolicitante\": 11,\n    \"archivosPdf\": [\n        {\n            \"nonbrePdf\": \"archivo1.pdf\",\n            \"archivoPdf\": \"asdijacvn234234k2l34nksdf234234\"\n        },\n        {\n            \"nonbrePdf\": \"archivo1.pdf\",\n            \"archivoPdf\": \"asdijacvn234234k2l34nksdf234234\"\n        },\n        {\n            \"nonbrePdf\": \"archivo1.pdf\",\n            \"archivoPdf\": \"asdijacvn234234k2l34nksdf234234\"\n        }\n    ]\n}*/\n{\n    \"nroDeCopias\": 600,\n    \"tipoDeDocumento\": \"Tramite de Operacion\",\n    \"nroDePaginas\": 10,\n    \"idUnidad\": 16,\n    \"idSolicitante\": 4,\n    \"archivosPdf\": [\n        {\n            \"nombreArchivo\": \"archivo1.pdf\",\n            \"archivo\": \"asdijacvn234234k2l34nksdf234234\"\n        },\n        {\n            \"nombreArchivo\": \"archivo2.pdf\",\n            \"archivo\": \"sdkjvn23423lk2kl23njsdf23423\"\n        },\n        {\n            \"nombreArchivo\": \"archivo3.pdf\",\n            \"archivo\": \"fdsknv234234knlk23jvnlk234324\"\n        }\n    ]\n}\n",
+							"raw": "{\n    \"idSolicitante\": 7,\n    \"idUnidad\": 15,\n    \"nroDeCopias\": 1300,\n    \"tipoDeDocumento\": \"Cartas de Invitacion\",\n    \"nroDePaginas\": 50,\n    \"archivosPdf\": [\n        {\n            \"nombreArchivo\": \"archivo1.pdf\",\n            \"archivo\": \"asdijacvn234234k2l34nksdf234234\"\n        },\n        {\n            \"nombreArchivo\": \"archivo2.pdf\",\n            \"archivo\": \"sdkjvn23423lk2kl23njsdf23423\"\n        },\n        {\n            \"nombreArchivo\": \"archivo3.pdf\",\n            \"archivo\": \"fdsknv234234knlk23jvnlk234324\"\n        }\n    ]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -701,7 +643,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Id del usuario solicitante\n    \"idUsuario\": 4,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id del usuario solicitante\n    \"idUsuario\": 7,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"

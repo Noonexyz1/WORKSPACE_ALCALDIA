@@ -1,12 +1,12 @@
 package com.prototipo.application.useCase;
 
-import com.prototipo.domain.model.AprobacionDomain;
+import com.prototipo.domain.model.Aprobacion;
 
 import java.util.List;
 
 public interface AprobacionService {
-    AprobacionDomain findAprovacionByIdSoliService(Long idAprobacion);
-    List<AprobacionDomain> listaDeSolicitudesPendientesService(Long idSupervisor, Long page, Long size, String byColumName);
-    List<AprobacionDomain> listaDeSolicitudesAprobadasService(Long idSupervisor, Long page, Long size, String byColumName);
-    List<AprobacionDomain> listaDeSolicitudesRechazadasService(Long idSupervisor, Long page, Long size, String byColumName);
+    Aprobacion findAprovacionByIdSoliService(Long idAprobacion);
+    List<Aprobacion> listaDeSolicitudesPendientesService(Long idSupervisor, Long page, Long size, String byColumName);
+    List<Aprobacion> listaDeSolicitudesAprobadasService(Long idSupervisor, Long page, Long size, String byColumName);
+    List<Aprobacion> listaDeSolicitudesRechazadasService(Long idSupervisor, Long page, Long size, String byColumName);
 }

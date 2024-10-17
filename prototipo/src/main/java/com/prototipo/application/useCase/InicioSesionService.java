@@ -1,12 +1,8 @@
 package com.prototipo.application.useCase;
 
-import com.prototipo.domain.model.CredencialDomain;
-import com.prototipo.domain.model.UsuarioDomain;
-
-import java.util.List;
+import com.prototipo.domain.model.UsuarioUnidad;
 
 public interface InicioSesionService {
-    UsuarioDomain iniciarSesionService(CredencialDomain credencial);
-    String configuracionDeUsuarioService(Long idRolUsuario);
+    UsuarioUnidad iniciarSesionService(String correo, String pass);
     String rolDeUsuarioService();
 }

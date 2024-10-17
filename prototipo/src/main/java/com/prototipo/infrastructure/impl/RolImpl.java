@@ -2,7 +2,7 @@ package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.RolDto;
 import com.prototipo.application.port.RolAbstract;
-import com.prototipo.infrastructure.persistence.db.entity.Rol;
+import com.prototipo.infrastructure.persistence.db.entity.RolEntity;
 import com.prototipo.infrastructure.persistence.db.repository.RolRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,7 +18,7 @@ public class RolImpl implements RolAbstract {
 
     @Override
     public RolDto encontrarRolPorId(Long idRol) {
-        Rol rol = rolRepository.findById(idRol).orElseThrow();
-        return modelMapper.map(rol, RolDto.class);
+        RolEntity rolEntity = rolRepository.findById(idRol).orElseThrow();
+        return modelMapper.map(rolEntity, RolDto.class);
     }
 }

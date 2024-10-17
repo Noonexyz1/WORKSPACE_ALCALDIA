@@ -1,7 +1,7 @@
 package com.prototipo.application.useCase;
 
-import com.prototipo.domain.model.OperacionDomain;
+import com.prototipo.domain.model.Operacion;
 
 public interface OperacionService {
-    OperacionDomain findOperacionByIdSoliService(Long id);
+    Operacion findOperacionByIdSoliService(Long id);
 }

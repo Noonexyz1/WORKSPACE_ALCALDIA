@@ -7,123 +7,92 @@ import com.prototipo.application.useCase.FotocopiaService;
 import com.prototipo.domain.enums.EstadoByResponsableEnum;
 import com.prototipo.domain.model.*;
 
-import java.util.List;
-
 public class FotocopiaAdapter implements FotocopiaService {
 
     private UsuarioAbastract usuarioAbastract;
     private RolAbstract rolAbstract;
     private MapperApplicationAbstract mapperApplicationAbstract;
     private CredencialAbstract credencialAbstract;
-    private ResponsableAbstract responsableAbstract;
     private UnidadAbstract unidadAbstract;
-    private OperadorUnidadAbstract operadorUnidadAbstract;
-    private SolicitanteAbstract solicitanteAbstract;
+    private UsuarioUnidadAbstract usuarioUnidadAbstract;
 
     public FotocopiaAdapter(UsuarioAbastract usuarioAbastract,
                             RolAbstract rolAbstract,
                             MapperApplicationAbstract mapperApplicationAbstract,
                             CredencialAbstract credencialAbstract,
-                            ResponsableAbstract responsableAbstract,
                             UnidadAbstract unidadAbstract,
-                            OperadorUnidadAbstract operadorUnidadAbstract,
-                            SolicitanteAbstract solicitanteAbstract) {
+                            UsuarioUnidadAbstract usuarioUnidadAbstract) {
 
         this.usuarioAbastract = usuarioAbastract;
         this.rolAbstract = rolAbstract;
         this.mapperApplicationAbstract = mapperApplicationAbstract;
         this.credencialAbstract = credencialAbstract;
-        this.responsableAbstract = responsableAbstract;
         this.unidadAbstract = unidadAbstract;
-        this.operadorUnidadAbstract = operadorUnidadAbstract;
-        this.solicitanteAbstract = solicitanteAbstract;
+        this.usuarioUnidadAbstract = usuarioUnidadAbstract;
     }
 
     @Override
-    public void creaUsuarioSolicitante(UsuarioDomain userSoli, Long rolId, Long idUniSoli){
-        UsuarioDto usuarioDto = crearUsuarioConRol(userSoli, rolId);
-        UnidadDto unidadDto = unidadAbstract.findUnidadPorIdAbstract(idUniSoli);
-        SolicitanteDto solicitanteDto = SolicitanteDto.builder()
+    public void creaUsuario(Usuario user, Long rolId, Long idUni){
+        // Insertamos al usuario en la tabla 'usuario'
+        UsuarioDto usuarioDtoResp = crearUsuario(user);
+
+        // Creamos las credenciales correspondientes para el nuevo usuario
+        crearCredencial(usuarioDtoResp);
+
+        // Creamos instancias de RolDto y UnidadDto usando únicamente sus IDs.
+        // No es necesario realizar consultas adicionales a la base de datos para obtener el Rol o la Unidad
+        // a partir de sus IDs, ya que JPA puede manejar estas referencias directamente con los IDs proporcionados.
+        // Esto mejora el rendimiento al evitar llamadas innecesarias a la BD.
+        // Que trucaso no????? jaja
+        RolDto rolDto = RolDto.builder().id(rolId).build();
+        UnidadDto unidadDto = UnidadDto.builder().id(idUni).build();
+
+        UsuarioUnidadDto userUni = UsuarioUnidadDto.builder()
                 .id(null)
                 .isActive(true)
-                .fkUsuario(usuarioDto)
+                .fkRol(rolDto)
                 .fkUnidad(unidadDto)
-                .build();
-
-        solicitanteAbstract.guardarSolicitanteAbstract(solicitanteDto);
-
-        crearCredencial(usuarioDto);
-    }
-
-    @Override
-    public void creaUsuarioResponsable(UsuarioDomain userRespon, Long rolId, Long idUniRespon){
-        UsuarioDto usuarioDto = crearUsuarioConRol(userRespon, rolId);
-
-        UnidadDto unidadDto = unidadAbstract.findUnidadPorIdAbstract(idUniRespon);
-        ResponsableDto responsableDto = ResponsableDto.builder()
-                .id(null)
-                //Se deberia controloar cuales ya no son responsable no?
-                .isActive(true)
-                .fkUsuario(usuarioDto)
-                .fkUnidad(unidadDto)
-                .build();
-
-        responsableAbstract.guardarResponsable(responsableDto);
-
-        crearCredencial(usuarioDto);
-    }
-
-    @Override
-    public void creaUsuarioOperador(UsuarioDomain userOpe, Long rolId, String direccionPiso){
-        UsuarioDto usuarioDto = crearUsuarioConRol(userOpe, rolId);
-
-        List<UnidadDto> unidadDtos = unidadAbstract.listaDeUnidadesByDireccionAbstract(direccionPiso);
-        unidadDtos.forEach(x -> {
-            //TODO, guardarOperadorUnidad, esto meterlo en un Stream enviando x
-            OperadorUnidadDto newOpeUniDto = OperadorUnidadDto.builder()
-                    .id(null)
-                    .isActive(true)
-                    .fkUsuario(usuarioDto)
-                    .fkUnidad(x)
-                    .build();
-            operadorUnidadAbstract.guardarOperadorUnidadAbstract(newOpeUniDto);
-        });
-
-        crearCredencial(usuarioDto);
-    }
-
-    private void crearCredencial(UsuarioDto usuarioDtoResp) {
-        CredencialDto newCredencialDto = CredencialDto.builder()
-                .id(null)
-                .correo(usuarioDtoResp.getCorreo())
-                .pass(usuarioDtoResp.getApellidos())
                 .fkUsuario(usuarioDtoResp)
                 .build();
 
-        credencialAbstract.guardarCredencialAbstract(newCredencialDto);
+        usuarioUnidadAbstract.guardarUsuarioUnidad(userUni);
     }
 
-    private UsuarioDto crearUsuarioConRol(UsuarioDomain user, Long rolId) {
-        RolDto rolDto = rolAbstract.encontrarRolPorId(rolId);
-        UsuarioDto usuarioDto = mapperApplicationAbstract.mapearAbstract(user, UsuarioDto.class);
-        usuarioDto.setId(null);
-        usuarioDto.setFkRol(rolDto);
-        return usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
+    private void crearCredencial(UsuarioDto usuarioDtoResp) {
+        CredencialDto credencialDtoResp = credencialAbstract
+                .encontrarCredencialPorUsuarioId(usuarioDtoResp.getId());
+        if (credencialDtoResp == null) {
+            CredencialDto newCredencialDto = CredencialDto.builder()
+                    .correo(usuarioDtoResp.getCorreo())
+                    .pass(usuarioDtoResp.getApellidos())
+                    .fkUsuario(usuarioDtoResp)
+                    .build();
+            credencialAbstract.guardarCredencialAbstract(newCredencialDto);
+        }
     }
 
-    @Override
-    public UsuarioDomain editarUsuario(UsuarioDomain usuarioEditado, Long rolId) {
-        RolDto rolDto = rolAbstract.encontrarRolPorId(rolId);
-        UsuarioDto usuarioDto = mapperApplicationAbstract.mapearAbstract(usuarioEditado, UsuarioDto.class);
-        usuarioDto.setFkRol(rolDto);
-        UsuarioDto usuarioDtoResp = usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
-        return mapperApplicationAbstract.mapearAbstract(usuarioDtoResp, UsuarioDomain.class);
+    private UsuarioDto crearUsuario(Usuario user) {
+        //Primero encontramos si existe este registro o no
+        UsuarioDto usuarioRes = usuarioAbastract.buscarUsuarioPorEmail(user.getCorreo());
+        if (usuarioRes == null) {
+            UsuarioDto usuarioDto = mapperApplicationAbstract.mapearAbstract(user, UsuarioDto.class);
+            return usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
+        }
+        return usuarioRes;
     }
 
     @Override
     public void eliminarUsuario(Long idUsuario) {
-        UsuarioDto usuarioDto = usuarioAbastract.findUsuarioPorIdAbastract(idUsuario);
-        usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
+        UsuarioUnidadDto usuarioUnidadDto = usuarioUnidadAbstract.encontrarUsuarioUnidadByUsuarioId(idUsuario);
+        usuarioUnidadDto.setIsActive(false);
+        usuarioUnidadAbstract.guardarUsuarioUnidad(usuarioUnidadDto);
+    }
+
+    @Override
+    public Usuario editarUsuario(Usuario usuarioEditado) {
+        UsuarioDto usuarioDto = mapperApplicationAbstract.mapearAbstract(usuarioEditado, UsuarioDto.class);
+        UsuarioDto usuarioDtoResp = usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
+        return mapperApplicationAbstract.mapearAbstract(usuarioDtoResp, Usuario.class);
     }
 
     @Override
@@ -138,13 +107,7 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     @Override
-    public OperadorDomain asignarOperador() {
-        //TODO
-        return null;
-    }
-
-    @Override
-    public void guardarRegistroInsumosUtilizado(InsumoDomain insumoUtilizado) {
+    public void guardarRegistroInsumosUtilizado(Insumo insumoUtilizado) {
         //TODO
     }
 
@@ -154,13 +117,7 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     @Override
-    public ReporteDomain generarReporte() {
-        //TODO
-        return null;
-    }
-
-    @Override
-    public SolicitudDomain enviarNotificacionEstadoSoli() {
+    public Solicitud enviarNotificacionEstadoSoli() {
         //TODO
         return null;
     }

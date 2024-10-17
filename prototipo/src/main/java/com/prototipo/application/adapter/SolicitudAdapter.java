@@ -6,8 +6,8 @@ import com.prototipo.application.port.AprobacionAbstract;
 import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.application.useCase.SolicitudService;
 import com.prototipo.domain.enums.EstadoByResponsableEnum;
-import com.prototipo.domain.model.ArchivoPdfDomain;
-import com.prototipo.domain.model.SolicitudDomain;
+import com.prototipo.domain.model.ArchivoPdf;
+import com.prototipo.domain.model.Solicitud;
 
 import java.util.List;
 
@@ -27,21 +27,17 @@ public class SolicitudAdapter implements SolicitudService {
     }
 
     @Override
-    public void solicitarFotocopiarService(SolicitudDomain solicitudDomain, List<ArchivoPdfDomain> listPdf) {
-        //Mapeo de instancias
-        UnidadDto unidadDto = mapperApplicationAbstract.mapearAbstract(solicitudDomain.getFkUnidad(), UnidadDto.class);
-
+    public void solicitarFotocopiarService(Solicitud solicitudDomain, List<ArchivoPdf> listPdf) {
+        //TODO, Puede que esta operacion de registro de archivos tarde un poco
         //LLaves necesarias para las tablas
         SolicitudDto solicitudDto = mapperApplicationAbstract.mapearAbstract(solicitudDomain, SolicitudDto.class);
-        UsuarioDto usuarioDto = mapperApplicationAbstract.mapearAbstract(solicitudDomain.getFkSolicitante(), UsuarioDto.class);
 
         //Aqui hacemos la percistencia
         SolicitudDto solicitudDtoResp = solicitudAbstract.solicitarFotocopiarAbstract(solicitudDto);
-        SolicitudDomain solicitudDomainResp = mapperApplicationAbstract.mapearAbstract(solicitudDtoResp, SolicitudDomain.class);
+        Solicitud solicitudResp = mapperApplicationAbstract.mapearAbstract(solicitudDtoResp, Solicitud.class);
 
-        //TODO, Hacemos la persistencia de los archivos
         listPdf.forEach(x -> {
-            x.setFkSolicitud(solicitudDomainResp);
+            x.setFkSolicitud(solicitudResp);
             guardarPdfDeLaSolicitudAbstract(x);
         });
 
@@ -52,32 +48,33 @@ public class SolicitudAdapter implements SolicitudService {
                 //.fkResponsable()
                 .fkSolicitud(solicitudDtoResp)
                 .estadoByResponsable(EstadoByResponsableEnum.PENDIENTE.getNombre())
+                .estadoCambio(false)
                 .build();
         aprobacionAbstract.guardarAprobacionAbstract(aprobacionDto);
     }
 
     @Override
-    public void guardarPdfDeLaSolicitudAbstract(ArchivoPdfDomain archivoPdfDomain) {
+    public void guardarPdfDeLaSolicitudAbstract(ArchivoPdf archivoPdfDomain) {
         ArchivoPdfDto archivoPdfDto = mapperApplicationAbstract.mapearAbstract(archivoPdfDomain, ArchivoPdfDto.class);
         solicitudAbstract.guardarPdfDeLaSolicitudAbstract(archivoPdfDto);
     }
 
     @Override
-    public List<SolicitudDomain> getListaSolicitudesService(Long idUsuario, Long page, Long size) {
+    public List<Solicitud> getListaSolicitudesService(Long idUsuario, Long page, Long size) {
         List<SolicitudDto> listSoli = solicitudAbstract.getListaSolicitudesAbstract(idUsuario, page, size);
         //Quiero filtar las solicitudes segun el Usuario que lo esta pidiendo
         return listSoli.stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, SolicitudDomain.class))
+                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
                 .toList();
     }
 
     @Override
-    public void guardarSolicitudService(SolicitudDomain solicitudDomain) {
+    public void guardarSolicitudService(Solicitud solicitudDomain) {
         //TODO
     }
 
     @Override
-    public SolicitudDomain buscarSolicitudService(Long id) {
+    public Solicitud buscarSolicitudService(Long id) {
         //TODO
         return null;
     }

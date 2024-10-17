@@ -10,7 +10,7 @@
 			"name": "Administrador",
 			"item": [
 				{
-					"name": "crear usuario soli",
+					"name": "crear usuarioEntity soli",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -39,7 +39,7 @@
 					"response": []
 				},
 				{
-					"name": "crear usuario resp",
+					"name": "crear usuarioEntity resp",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -68,7 +68,7 @@
 					"response": []
 				},
 				{
-					"name": "crear usuario ope",
+					"name": "crear usuarioEntity ope",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -97,13 +97,13 @@
 					"response": []
 				},
 				{
-					"name": "editar usuario",
+					"name": "editar usuarioEntity",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 1,\n    \"nombres\": \"El primero mannn\",\n    \"apellidos\": \"Diomir\",\n    \"correo\": \"asd@gmail.commmmm\",\n    \"isActive\": null,\n    //Tambien debe cambiar el rol\n    \"idRol\": 4\n}",
+							"raw": "{\n    \"id\": 1,\n    \"nombres\": \"El primero mannn\",\n    \"apellidos\": \"Diomir\",\n    \"correo\": \"asd@gmail.commmmm\",\n    \"isActive\": null,\n    //Tambien debe cambiar el rolEntity\n    \"idRol\": 4\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -126,7 +126,7 @@
 					"response": []
 				},
 				{
-					"name": "eliminar usuario",
+					"name": "eliminar usuarioEntity",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
 					},
@@ -324,7 +324,7 @@
 					"response": []
 				},
 				{
-					"name": "iniciar solicitud",
+					"name": "iniciar solicitudEntity",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -353,7 +353,7 @@
 					"response": []
 				},
 				{
-					"name": "completar solicitud",
+					"name": "completar solicitudEntity",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -387,7 +387,7 @@
 			"name": "Responsable",
 			"item": [
 				{
-					"name": "aprobar solicitud",
+					"name": "aprobar solicitudEntity",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -448,7 +448,7 @@
 					"response": []
 				},
 				{
-					"name": "rechazar solicitud",
+					"name": "rechazar solicitudEntity",
 					"request": {
 						"method": "POST",
 						"header": [],
@@ -599,13 +599,13 @@
 			"name": "Solicitante",
 			"item": [
 				{
-					"name": "crear solicitud 1",
+					"name": "crear solicitudEntity 1",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nroDeCopias\": 500,\n    \"tipoDeDocumento\": \"Informe Semestral\",\n    \"nroDePaginas\": 20,\n    //El solicitante debe poner la unidad del que pertenece, \n    //Digamos que este solicitante es de la unidad de Planeacion Urbana\n    //puede ser de ejemplo, 2,5,6,7,89,14, osea yo solicitante 2, trabajo en la unidad 5.\n    \"idUnidad\": 5, \n    //Aqui todos tiene que ser solicitantes, osea todos los roles\n    \"idSolicitante\": 2,\n    \"archivosPdf\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
+							"raw": "{\n    \"nroDeCopias\": 500,\n    \"tipoDeDocumento\": \"Informe Semestral\",\n    \"nroDePaginas\": 20,\n    //El solicitante debe poner la unidadEntity del que pertenece, \n    //Digamos que este solicitante es de la unidadEntity de Planeacion Urbana\n    //puede ser de ejemplo, 2,5,6,7,89,14, osea yo solicitante 2, trabajo en la unidadEntity 5.\n    \"idUnidad\": 5, \n    //Aqui todos tiene que ser solicitantes, osea todos los roles\n    \"idSolicitante\": 2,\n    \"archivosPdf\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -628,13 +628,13 @@
 					"response": []
 				},
 				{
-					"name": "crear solicitud 2",
+					"name": "crear solicitudEntity 2",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nroDeCopias\": 500,\n    \"tipoDeDocumento\": \"Informe Semestral\",\n    \"nroDePaginas\": 20,\n    //El solicitante debe poner la unidad del que pertenece, \n    //Digamos que este solicitante es de la unidad de Planeacion Urbana\n    //puede ser de ejemplo, 2,5,6,7,89,14, osea yo solicitante 2, trabajo en la unidad 5.\n    \"idUnidad\": 5, \n    //Aqui todos tiene que ser solicitantes, osea todos los roles\n    \"idSolicitante\": 6,\n    \"archivosPdf\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
+							"raw": "{\n    \"nroDeCopias\": 500,\n    \"tipoDeDocumento\": \"Informe Semestral\",\n    \"nroDePaginas\": 20,\n    //El solicitante debe poner la unidadEntity del que pertenece, \n    //Digamos que este solicitante es de la unidadEntity de Planeacion Urbana\n    //puede ser de ejemplo, 2,5,6,7,89,14, osea yo solicitante 2, trabajo en la unidadEntity 5.\n    \"idUnidad\": 5, \n    //Aqui todos tiene que ser solicitantes, osea todos los roles\n    \"idSolicitante\": 6,\n    \"archivosPdf\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -657,13 +657,13 @@
 					"response": []
 				},
 				{
-					"name": "crear solicitud 3",
+					"name": "crear solicitudEntity 3",
 					"request": {
 						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nroDeCopias\": 500,\n    \"tipoDeDocumento\": \"Informe Semestral\",\n    \"nroDePaginas\": 20,\n    //El solicitante debe poner la unidad del que pertenece, \n    //Digamos que este solicitante es de la unidad de Planeacion Urbana\n    //puede ser de ejemplo, 2,5,6,7,89,14, osea yo solicitante 2, trabajo en la unidad 5.\n    \"idUnidad\": 7, \n    //Aqui todos tiene que ser solicitantes, osea todos los roles\n    \"idSolicitante\": 7,\n    \"archivosPdf\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
+							"raw": "{\n    \"nroDeCopias\": 500,\n    \"tipoDeDocumento\": \"Informe Semestral\",\n    \"nroDePaginas\": 20,\n    //El solicitante debe poner la unidadEntity del que pertenece, \n    //Digamos que este solicitante es de la unidadEntity de Planeacion Urbana\n    //puede ser de ejemplo, 2,5,6,7,89,14, osea yo solicitante 2, trabajo en la unidadEntity 5.\n    \"idUnidad\": 7, \n    //Aqui todos tiene que ser solicitantes, osea todos los roles\n    \"idSolicitante\": 7,\n    \"archivosPdf\": [\n        \"archivo1.pdf\",\n        \"archivo2.pdf\",\n        \"archivo3.pdf\"\n    ]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -695,7 +695,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Id del usuario solicitante\n    \"idUsuario\": 7,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id del usuarioEntity solicitante\n    \"idUsuario\": 7,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"

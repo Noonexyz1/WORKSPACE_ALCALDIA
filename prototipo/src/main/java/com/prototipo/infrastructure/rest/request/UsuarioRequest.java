@@ -12,6 +12,4 @@ public class UsuarioRequest {
     private String nombres;
     private String apellidos;
     private String correo;
-    private Boolean isActive;
-    private Long idRol;
 }

@@ -1,10 +1,10 @@
 package com.prototipo.application.useCase;
 
-import com.prototipo.domain.model.UnidadDomain;
+import com.prototipo.domain.model.Unidad;
 
 import java.util.List;
 
 public interface UnidadService {
-    List<UnidadDomain> listaDeUnidadesService();
-    UnidadDomain findUnidadPorIdService(Long idUnidad);
+    List<Unidad> listaDeUnidadesService();
+    Unidad findUnidadPorIdService(Long idUnidad);
 }

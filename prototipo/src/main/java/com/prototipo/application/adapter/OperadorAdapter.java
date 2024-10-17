@@ -9,8 +9,8 @@ import com.prototipo.application.port.OperacionAbstract;
 import com.prototipo.application.port.UsuarioAbastract;
 import com.prototipo.application.useCase.OperadorService;
 import com.prototipo.domain.enums.EstadoByOperadorEnum;
-import com.prototipo.domain.model.ArchivoPdfDomain;
-import com.prototipo.domain.model.OperacionDomain;
+import com.prototipo.domain.model.ArchivoPdf;
+import com.prototipo.domain.model.Operacion;
 
 import java.util.List;
 
@@ -35,57 +35,61 @@ public class OperadorAdapter implements OperadorService {
     }
 
     @Override
-    public List<OperacionDomain> verSolicitudesDeOperadorPendientes(Long idOperador, Long page, Long size) {
-        List<OperacionDto> listOpe = operacionAbstract.findOperacionByIdOperadorPendientesAbstract(idOperador, page, size);
+    public List<Operacion> verSolicitudesDeOperadorPendientes(Long idOperador, Long page, Long size) {
+        List<OperacionDto> listOpe = operacionAbstract
+                .findOperacionByIdOperadorPendientesAbstract(idOperador, page, size);
         return  listOpe.stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, OperacionDomain.class))
+                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Operacion.class))
                 .toList();
     }
 
     @Override
-    public List<OperacionDomain> verSolicitudesDeOperadorIniciadas(Long idOperador, Long page, Long size) {
-        List<OperacionDto> listOpe = operacionAbstract.findOperacionByIdOperadorIniciadasAbstract(idOperador, page, size);
+    public List<Operacion> verSolicitudesDeOperadorIniciadas(Long idOperador, Long page, Long size) {
+        List<OperacionDto> listOpe = operacionAbstract
+                .findOperacionByIdOperadorIniciadasAbstract(idOperador, page, size);
         return  listOpe.stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, OperacionDomain.class))
+                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Operacion.class))
                 .toList();
     }
 
     @Override
-    public List<OperacionDomain> verSolicitudesDeOperadorCompletadas(Long idOperador, Long page, Long size) {
-        List<OperacionDto> listOpe = operacionAbstract.findOperacionByIdOperadorCompletadasAbstract(idOperador, page, size);
+    public List<Operacion> verSolicitudesDeOperadorCompletadas(Long idOperador, Long page, Long size) {
+        List<OperacionDto> listOpe = operacionAbstract
+                .findOperacionByIdOperadorCompletadasAbstract(idOperador, page, size);
         return  listOpe.stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, OperacionDomain.class))
+                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Operacion.class))
                 .toList();
     }
 
     @Override
-    public List<ArchivoPdfDomain> iniciarSolicitudOperacion(Long idOperacion, Long idOperador) {
+    public List<ArchivoPdf> iniciarSolicitudOperacion(Long idOperacion, Long idOperador) {
         //Aqui debe ir toda la logica
         //Modificamos esta instancia para poder cambiar el estado de esta Operacion a iniciado
-        UsuarioDto usuarioOperador = usuarioAbastract.findUsuarioPorIdAbastract(idOperador);
+        UsuarioDto usuarioOperador = UsuarioDto.builder().id(idOperador).build();
+
         OperacionDto operacionDto = operacionAbstract.findOperacionByIdSoliAbstract(idOperacion);
+        operacionDto.setEstadoCambio(1);
+        operacionDto = operacionAbstract.guardarOperacion(operacionDto);
+        operacionDto.setId(null);
         operacionDto.setEstadoByOperador(EstadoByOperadorEnum.INICIADO.getNombre());
         operacionDto.setFkOperador(usuarioOperador);
 
         OperacionDto operacionDtoResp = operacionAbstract.guardarOperacion(operacionDto);
+
+        //Para descargar los archivos PDFs que son de un ID
         Long idSolicitud = operacionDtoResp.getFkSolicitud().getId();
         List<ArchivoPdfDto> listArchResp = archivoPdfAbstract.listaDePdfsById(idSolicitud);
 
-        //si operador es null de Operacion, entonces le actualizamos a usuarioOperador que significa
-        //que esta operacion ya ha sido inicado por el operador y que ese inicio ha sido registrado
-        //como nuevo registro
-        //operacionDto.setFkOperador(usuarioOperador);
-        //operacionAbstract.guardarOperacion(operacionDto);
-
         return listArchResp.stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, ArchivoPdfDomain.class))
+                .map(x -> mapperApplicationAbstract.mapearAbstract(x, ArchivoPdf.class))
                 .toList();
     }
 
     @Override
-    public void terminarSolicitudOperacion(Long idOperacion, Long idOperador) {
-        UsuarioDto usuarioDto = usuarioAbastract.findUsuarioPorIdAbastract(idOperador);
+    public void terminarSolicitudOperacion(Long idOperacion) {
         OperacionDto operacionDto = operacionAbstract.findOperacionByIdSoliAbstract(idOperacion);
+        operacionDto.setEstadoCambio(2);
+        operacionDto = operacionAbstract.guardarOperacion(operacionDto);
         operacionDto.setId(null);
         operacionDto.setEstadoByOperador(EstadoByOperadorEnum.COMPLETADO.getNombre());
 
