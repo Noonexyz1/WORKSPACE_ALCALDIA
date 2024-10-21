@@ -37,12 +37,6 @@ public class AdministradorController {
 
         List<UsuarioUnidadResponse> listResponse = listUserDomain.stream()
                 .map(this::mapeoUsuarioUnidadToResponse)
-                .collect(Collectors.toMap(
-                        UsuarioUnidadResponse::getIdUser,  // Clave para agrupar, aquí usamos idUser
-                        usuario -> usuario,               // Valor, el propio usuario
-                        (existing, replacement) -> existing)) // Si hay duplicados, mantén el primero encontrado
-                .values()                             // Obtenemos los valores del Map
-                .stream()                             // Los convertimos de nuevo a stream
                 .toList();
         return new ResponseEntity<>(listResponse, HttpStatus.OK);
     }

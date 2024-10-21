@@ -162,7 +162,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    /*\"nombres\": \"Franz\",\n    \"apellidos\": \"Franz\",\n    \"correo\": \"FranzFranz@gmail.com\",\n    \"idRol\": 2,\n    \"idUni\": 15*/\n\n    /*\"nombres\": \"Olivia\",\n    \"apellidos\": \"Oliveira\",\n    \"correo\": \"OliviaOliveira@gmail.com\",\n    \"idRol\": 3,\n    \"idUni\": 13 //16, 15, 14, 13*/\n\n    /*\"nombres\": \"Rodrigo\",\n    \"apellidos\": \"Moi\",\n    \"correo\": \"RodrigoMoi@gmail.com\",\n    \"idRol\": 4,\n    \"idUni\": 15*/\n}",
+							"raw": "{\n    /*\"nombres\": \"Diego\",\n    \"apellidos\": \"Goitia\",\n    \"correo\": \"DiegoGoitia@gmail.com\",\n    \"idRol\": 2,\n    \"idUni\": 16*/\n\n    /*\"nombres\": \"Olivia\",\n    \"apellidos\": \"Oliveira\",\n    \"correo\": \"OliviaOliveira@gmail.com\",\n    \"idRol\": 3,\n    \"idUni\": 16 //16, 15, 14, 13*/\n\n    /*\"nombres\": \"Rodrigo\",\n    \"apellidos\": \"Moi\",\n    \"correo\": \"RodrigoMoi@gmail.com\",\n    \"idRol\": 4,\n    \"idUni\": 16*/\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -260,7 +260,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/administrador/eliminarUsuario/3",
+							"raw": "http://localhost:8081/administrador/eliminarUsuario/6",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -269,7 +269,7 @@
 							"path": [
 								"administrador",
 								"eliminarUsuario",
-								"3"
+								"6"
 							]
 						}
 					},
@@ -386,7 +386,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Id de usuario responsable\n    \"idUsuario\": 3,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id de usuario operador\n    \"idUsuario\": 3,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -479,7 +479,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Operacion \n    \"idOperacion\": 13\n}",
+							"raw": "{\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Operacion \n    \"idOperacion\": 2\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -508,7 +508,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Operacion \n    \"idOperacion\": 14\n}",
+							"raw": "{\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Operacion \n    \"idOperacion\": 4\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -545,7 +545,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Id de usuario responsable\n    \"idUsuario\": 9,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id de usuario responsable\n    \"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -577,7 +577,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Id de usuario responsable\n    \"idUsuario\": 9,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id de usuario responsable\n    \"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -609,7 +609,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Id de usuario responsable\n    /*\"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null*/\n\n    \"idUsuario\": 9,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id de usuario responsable\n    /*\"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null*/\n\n    \"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -638,7 +638,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n\n    \"idResponsable\": 6,\n    \"idAprobacion\": 17\n\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n}",
+							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n\n    \"idResponsable\": 2,\n    \"idAprobacion\": 7\n\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -667,7 +667,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n\n    \"idResponsable\": 6,\n    \"idAprobacion\": 19\n\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n}",
+							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    \"idResponsable\": 2,\n    \"idAprobacion\": 5\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -701,7 +701,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"idSolicitante\": 11,\n    \"idUnidad\": 14,\n    \"nroDeCopias\": 1300,\n    \"tipoDeDocumento\": \"Feria Ambiental\",\n    \"nroDePaginas\": 50,\n    \"archivosPdf\": [\n        {\n            \"nombreArchivo\": \"archivo1.pdf\",\n            \"archivo\": \"asdijacvn234234k2l34nksdf234234\"\n        },\n        {\n            \"nombreArchivo\": \"archivo2.pdf\",\n            \"archivo\": \"sdkjvn23423lk2kl23njsdf23423\"\n        },\n        {\n            \"nombreArchivo\": \"archivo3.pdf\",\n            \"archivo\": \"fdsknv234234knlk23jvnlk234324\"\n        }\n    ]\n}\n",
+							"raw": "{\n    \"idSolicitante\": 4,\n    \"idUnidad\": 16,\n    \"nroDeCopias\": 1300,\n    \"tipoDeDocumento\": \"Documentacion\",\n    \"nroDePaginas\": 50,\n    \"archivosPdf\": [\n        {\n            \"nombreArchivo\": \"archivo1.pdf\",\n            \"archivo\": \"asdijacvn234234k2l34nksdf234234\"\n        },\n        {\n            \"nombreArchivo\": \"archivo2.pdf\",\n            \"archivo\": \"sdkjvn23423lk2kl23njsdf23423\"\n        },\n        {\n            \"nombreArchivo\": \"archivo3.pdf\",\n            \"archivo\": \"fdsknv234234knlk23jvnlk234324\"\n        }\n    ]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -733,7 +733,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Id del usuario solicitante\n    \"idUsuario\": 10,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id del usuario solicitante\n    \"idUsuario\": 4,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
