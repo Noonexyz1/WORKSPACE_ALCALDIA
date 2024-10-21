@@ -1,4 +1,4 @@
-#----------------------MODULO DE GESTION DE USUARIOS-----------------------------
+#----------------------DATOS INICIALES-----------------------------
 #Esta tabla si o si para produccion
 INSERT INTO prototipo.rol(nombre_rol)
 values("Administrador"),
@@ -44,7 +44,7 @@ INSERT INTO usuario_unidad(is_active, fk_rol_id, fk_unidad_id, fk_usuario_id)
 VALUES(TRUE, 1, NULL, 1);
 
 
-
+#----------------------PRUEBAS-----------------------------
 SELECT * FROM rol;
 #NO todas las unidades estan juntas en un piso,
 #estan dispersas en distintos lugares
@@ -81,6 +81,7 @@ WHERE a.fk_solicitud_id IN (
 )
 AND a.estado_by_responsable = 'Pendiente'
 AND a.estado_cambio = 0;
+
 
 
 #Consulta mas simple para operadores
@@ -392,5 +393,3 @@ AND o.fk_solicitud_id NOT IN (
     WHERE o2.fk_operador_id = 3
     AND o2.estado_by_operador = 'Completado'
 );
-
-

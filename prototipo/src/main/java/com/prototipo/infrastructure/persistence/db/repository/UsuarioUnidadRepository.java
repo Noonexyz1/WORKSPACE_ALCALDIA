@@ -1,10 +1,13 @@
 package com.prototipo.infrastructure.persistence.db.repository;
 
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioUnidadEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEntity, Long> {
@@ -33,7 +36,15 @@ public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEnti
             """
             SELECT *
             FROM usuario_unidad uu
-            WHERE uu.fk_usuario_id = :idUsuario;
+            WHERE uu.fk_usuario_id = :idUsuario
             """, nativeQuery = true)
-    UsuarioUnidadEntity encontrarUsuarioUnidadPorUsuarioId(@Param("idUsuario") Long idUsuario);
+    List<UsuarioUnidadEntity> encontrarUsuariosUnidadPorUsuarioId(@Param("idUsuario") Long idUsuario);
+
+    @Query(value =
+            """
+            SELECT *
+            FROM usuario_unidad uu
+            WHERE uu.is_active = TRUE
+            """, nativeQuery = true)
+    List<UsuarioUnidadEntity> getListaUsuarioUnidad(Pageable pageable);
 }

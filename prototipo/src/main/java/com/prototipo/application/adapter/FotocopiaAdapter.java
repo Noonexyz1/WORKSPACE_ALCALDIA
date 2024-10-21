@@ -7,6 +7,8 @@ import com.prototipo.application.useCase.FotocopiaService;
 import com.prototipo.domain.enums.EstadoByResponsableEnum;
 import com.prototipo.domain.model.*;
 
+import java.util.List;
+
 public class FotocopiaAdapter implements FotocopiaService {
 
     private UsuarioAbastract usuarioAbastract;
@@ -73,9 +75,11 @@ public class FotocopiaAdapter implements FotocopiaService {
 
     private UsuarioDto crearUsuario(Usuario user) {
         //Primero encontramos si existe este registro o no
-        UsuarioDto usuarioRes = usuarioAbastract.buscarUsuarioPorEmail(user.getCorreo());
+        UsuarioDto usuarioRes = usuarioAbastract
+                .buscarUsuarioPorEmail(user.getCorreo());
         if (usuarioRes == null) {
-            UsuarioDto usuarioDto = mapperApplicationAbstract.mapearAbstract(user, UsuarioDto.class);
+            UsuarioDto usuarioDto = mapperApplicationAbstract
+                    .mapearAbstract(user, UsuarioDto.class);
             return usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
         }
         return usuarioRes;
@@ -83,16 +87,56 @@ public class FotocopiaAdapter implements FotocopiaService {
 
     @Override
     public void eliminarUsuario(Long idUsuario) {
-        UsuarioUnidadDto usuarioUnidadDto = usuarioUnidadAbstract.encontrarUsuarioUnidadByUsuarioId(idUsuario);
-        usuarioUnidadDto.setIsActive(false);
-        usuarioUnidadAbstract.guardarUsuarioUnidad(usuarioUnidadDto);
+        List<UsuarioUnidadDto> usuariosUnidadDto = usuarioUnidadAbstract
+                .encontrarUsuariosUnidadByUsuarioId(idUsuario);
+
+        usuariosUnidadDto.forEach(x -> {
+            x.setIsActive(false);
+            usuarioUnidadAbstract.guardarUsuarioUnidad(x);
+        });
     }
 
     @Override
-    public Usuario editarUsuario(Usuario usuarioEditado) {
-        UsuarioDto usuarioDto = mapperApplicationAbstract.mapearAbstract(usuarioEditado, UsuarioDto.class);
-        UsuarioDto usuarioDtoResp = usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
-        return mapperApplicationAbstract.mapearAbstract(usuarioDtoResp, Usuario.class);
+    public UsuarioUnidad editarUsuarioUnidad(UsuarioUnidad usuarioEditado) {
+        UsuarioUnidadDto usuarioUnidadDto = mapperApplicationAbstract
+                .mapearAbstract(usuarioEditado, UsuarioUnidadDto.class);
+
+        UsuarioDto usuarioDto = usuarioAbastract
+                .guardarUsuarioAbastract(usuarioUnidadDto.getFkUsuario());
+
+        usuarioUnidadDto.setFkUsuario(usuarioDto);
+
+        UsuarioUnidadDto usuarioDtoResp = usuarioAbastract
+                .guardarUsuarioUnidadAbastract(usuarioUnidadDto);
+        return mapperApplicationAbstract
+                .mapearAbstract(usuarioDtoResp, UsuarioUnidad.class);
+    }
+
+    @Override
+    public List<Rol> listarRolesService() {
+        List<RolDto> listaRolesDto = rolAbstract.listarRoles();
+        return listaRolesDto.stream()
+                .map(x -> mapperApplicationAbstract
+                        .mapearAbstract(x, Rol.class))
+                .toList();
+    }
+
+    @Override
+    public List<Unidad> listarUnidadesService() {
+        List<UnidadDto> listaUnidades = unidadAbstract.listaDeUnidadesAbstract();
+        return listaUnidades.stream()
+                .map(x -> mapperApplicationAbstract
+                        .mapearAbstract(x, Unidad.class))
+                .toList();
+    }
+
+    @Override
+    public void cambiarPass(Credencial credencial, String newPass) {
+        String correo = credencial.getCorreo();
+        String pass = credencial.getPass();
+        CredencialDto credencialDto = credencialAbstract.encontrarCredencial(correo, pass);
+        credencialDto.setPass(newPass);
+        credencialAbstract.guardarCredencialAbstract(credencialDto);
     }
 
     @Override
@@ -121,4 +165,6 @@ public class FotocopiaAdapter implements FotocopiaService {
         //TODO
         return null;
     }
+
+
 }

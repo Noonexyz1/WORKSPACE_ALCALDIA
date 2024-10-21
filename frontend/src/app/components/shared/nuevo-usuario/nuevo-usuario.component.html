@@ -1,11 +1,11 @@
-<form class="w-full max-w-2xl mx-auto">
+<form [formGroup]="nuevoUsuario" class="w-full max-w-2xl mx-auto">
     <div class="relative z-0 w-full mb-5 group">
         <span class="self-center text-4xl font-semibold whitespace-nowrap dark:text-white">Nuevo usuario</span>
     </div>
 
     <div class="grid md:grid-cols-2 md:gap-6">
         <div class="relative z-0 w-full mb-5 group">
-            <input type="text" name="floating_first_name" id="floating_first_name"
+            <input formControlName="nombres" type="text" name="floating_first_name" id="floating_first_name"
                 class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" " required />
             <label for="floating_first_name"
@@ -13,7 +13,7 @@
                 Nombres</label>
         </div>
         <div class="relative z-0 w-full mb-5 group">
-            <input type="text" name="floating_last_name" id="floating_last_name"
+            <input formControlName="apellidos" type="text" name="floating_last_name" id="floating_last_name"
                 class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
                 placeholder=" " required />
             <label for="floating_last_name"
@@ -23,7 +23,7 @@
     </div>
 
     <div class="relative z-0 w-full mb-5 group">
-        <input type="email" name="floating_email" id="floating_email"
+        <input formControlName="correo" type="email" name="floating_email" id="floating_email"
             class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
             placeholder=" " required />
         <label for="floating_email"
@@ -34,29 +34,14 @@
     <div class="grid md:grid-cols-2 md:gap-6">
         <div class="relative z-0 w-full mb-5 group">
             <form class="max-w-sm mx-auto">
-                <label for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Unidad</label>
-                <select id="countries"
+                <label for="selectRol" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccione Rol</label>
+                <select formControlName="idRol" id="selectRol"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option selected>Selecciona una opcion</option>
-                    <option value="US">Legislativa</option>
-                    <option value="CA">Limites</option>
-                    <option value="FR">Asuntos Externos</option>
-                    <option value="DE">Planificación</option>
-                </select>
-            </form>
-        </div>
-        <div class="relative z-0 w-full mb-5 group">
-            <form class="max-w-sm mx-auto">
-                <label for="countries"
-                    class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cargo</label>
-                <select id="countries"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option selected>Selecciona una opcion</option>
-                    <option value="US">Cargo 1</option>
-                    <option value="CA">Cargo 2</option>
-                    <option value="FR">Cargo 3</option>
-                    <option value="DE">Cargo 4</option>
+                    @if (listaRoles != null && listaRoles.length > 0) {
+                        @for (rol of listaRoles; track rol.id) {
+                            <option value="{{rol.id}}">{{rol.nombreRol}}</option>
+                        }
+                    }
                 </select>
             </form>
         </div>
@@ -65,21 +50,28 @@
     <div class="grid md:grid-cols-2 md:gap-6">
         <div class="relative z-0 w-full mb-5 group">
             <form class="max-w-sm mx-auto">
-                <label for="countries" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Rol</label>
-                <select id="countries"
-                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                    <option selected>Selecciona una opcion</option>
-                    <option value="US">Administrador</option>
-                    <option value="CA">Solicitante</option>
-                    <option value="FR">Operador</option>
-                    <option value="DE">Responsable</option>
+                <label for="selectUnidad" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Seleccione Unidad</label>
+                <select formControlName="idUni" id="selectUnidad"
+                    class="scrollable-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    @if (listaUnidades != null && listaUnidades.length > 0) {
+                        @for (rol of listaUnidades; track rol.id) {
+                            <option value="{{rol.id}}">{{rol.direccion}} - {{rol.nombre}}</option>
+                        }
+                        <!-- Puedes agregar más opciones aquí -->
+                    }
                 </select>
             </form>
+            <style>
+                /* Estilo del select que se ajusta según el tamaño vertical de la ventana */
+                .scrollable-select {
+                    max-height: 50vh; /* El menú se ajusta a la mitad de la altura de la pantalla */
+                    overflow-y: auto;  /* Barra de desplazamiento cuando sea necesario */
+                }
+            </style>
         </div>
-
     </div>
 
-    <button type="submit"
+    <button type="button" (click)="botonRegistrarUsuario()"
         class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
         Registrar
     </button>

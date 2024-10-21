@@ -21,4 +21,8 @@ export class AdministradorComponent implements OnInit{
   ngOnInit(): void {
     this.modoDarkService.metodoModoDark();
   }
+
+  crearUsuario(): void {}
+  editarUsuario(): void {}
+  eliminarUsuario(): void {}
 }

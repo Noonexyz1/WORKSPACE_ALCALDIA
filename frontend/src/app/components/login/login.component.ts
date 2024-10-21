@@ -30,7 +30,7 @@ export class LoginComponent {
     this.http = http;
     this.formBuilder = formBuilder;
     this.loginForm = this.formBuilder.group({
-      userName: [],
+      correo: [],
       pass: [],
     });
     this.router = router;
@@ -43,17 +43,18 @@ export class LoginComponent {
 
     // Extraer los valores del formulario
     const credenciales: CredencialRequest = {
-      nombreUser: this.loginForm.get('userName')?.value, // Obtener el valor de userName
+      correo: this.loginForm.get('correo')?.value, // Obtener el valor de correo
       pass: this.loginForm.get('pass')?.value           // Obtener el valor de pass
     };
 
     this.http.post<UsuarioResponse>(url, credenciales).pipe(
       map((response: UsuarioResponse) => {
         // Mostrar la respuesta en un alert
-        const mensaje = `Usuario: ${response.nombres} ${response.apellidos}\nRol: ${response.nombreRol}\nDashboard: ${response.listDashConfig.join(', ')}`;
+        const mensaje = `Usuario: ${response.nombres} ${response.apellidos}\nRol: ${response.nombreRol}\nDashboard: ${response.dashConfig}`;
         alert(mensaje);
+        alert('Ta funcionando');
 
-        let toNavegate = this.rootNavigateService.valorParaNavegar(response.listDashConfig[0]);
+        let toNavegate = this.rootNavigateService.valorParaNavegar(response.dashConfig);
         this.router.navigate([toNavegate]);
         
       }),

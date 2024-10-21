@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UsuarioSoliRequest {
+public class UsuarioNuevoRequest {
     private Long id;
     private String nombres;
     private String apellidos;

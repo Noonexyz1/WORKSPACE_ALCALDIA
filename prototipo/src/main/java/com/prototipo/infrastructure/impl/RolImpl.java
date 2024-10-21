@@ -8,6 +8,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.List;
+
 @Component
 public class RolImpl implements RolAbstract {
 
@@ -20,5 +22,13 @@ public class RolImpl implements RolAbstract {
     public RolDto encontrarRolPorId(Long idRol) {
         RolEntity rolEntity = rolRepository.findById(idRol).orElseThrow();
         return modelMapper.map(rolEntity, RolDto.class);
+    }
+
+    @Override
+    public List<RolDto> listarRoles() {
+        List<RolEntity> listRoles = rolRepository.findAll();
+        return listRoles.stream()
+                .map(x -> modelMapper.map(x, RolDto.class))
+                .toList();
     }
 }

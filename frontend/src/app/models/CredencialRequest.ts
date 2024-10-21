@@ -1,5 +1,5 @@
 export interface CredencialRequest {
-    nombreUser: string;
+    correo: string;
     pass: string;
 }
   

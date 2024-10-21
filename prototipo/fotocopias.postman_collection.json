@@ -128,11 +128,8 @@
 			"item": [
 				{
 					"name": "lista usuarios",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -173,7 +170,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/administrador/creaUsuario",
+							"raw": "http://localhost:8081/administrador/crearUsuario",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -181,7 +178,7 @@
 							"port": "8081",
 							"path": [
 								"administrador",
-								"creaUsuario"
+								"crearUsuario"
 							]
 						}
 					},
@@ -217,6 +214,35 @@
 					"response": []
 				},
 				{
+					"name": "nuevo pass",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"correo\": \"jefa@gmail.com\",\n    \"pass\": \"123\",\n    \"nuevoPass\": \"234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/administrador/cambiarPass",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"administrador",
+								"cambiarPass"
+							]
+						}
+					},
+					"response": []
+				},
+				{
 					"name": "eliminar usuario",
 					"protocolProfileBehavior": {
 						"disableBodyPruning": true
@@ -226,7 +252,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"nombre\": \"Diego\",\n    \"direccion\": \"diego@diego.com\"\n}",
+							"raw": "",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -234,7 +260,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/administrador/eliminarUsuario/4",
+							"raw": "http://localhost:8081/administrador/eliminarUsuario/3",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -243,7 +269,7 @@
 							"path": [
 								"administrador",
 								"eliminarUsuario",
-								"4"
+								"3"
 							]
 						}
 					},
@@ -276,6 +302,70 @@
 							"path": [
 								"administrador",
 								"generarReporte"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar roles",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"page\": 0,\n    \"size\": 20,\n    \"byColumName\": null \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/administrador/listarRoles",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"administrador",
+								"listarRoles"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "listar unidades",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true
+					},
+					"request": {
+						"method": "GET",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"page\": 0,\n    \"size\": 20,\n    \"byColumName\": null \n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/administrador/listarUnidades",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"administrador",
+								"listarUnidades"
 							]
 						}
 					},
@@ -389,7 +479,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Operacion \n    \"idOperacion\": 10\n}",
+							"raw": "{\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Operacion \n    \"idOperacion\": 13\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -418,7 +508,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Operacion \n    \"idOperacion\": 11\n}",
+							"raw": "{\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Operacion \n    \"idOperacion\": 14\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -455,7 +545,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Id de usuario responsable\n    \"idUsuario\": 6,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id de usuario responsable\n    \"idUsuario\": 9,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -487,7 +577,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Id de usuario responsable\n    \"idUsuario\": 6,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id de usuario responsable\n    \"idUsuario\": 9,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -519,7 +609,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Id de usuario responsable\n    /*\"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null*/\n\n    \"idUsuario\": 6,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id de usuario responsable\n    /*\"idUsuario\": 2,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null*/\n\n    \"idUsuario\": 9,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -548,7 +638,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n\n    \"idResponsable\": 6,\n    \"idAprobacion\": 14\n\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n}",
+							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n\n    \"idResponsable\": 6,\n    \"idAprobacion\": 17\n\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -577,7 +667,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n\n    \"idResponsable\": 6,\n    \"idAprobacion\": 2\n\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n}",
+							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n\n    \"idResponsable\": 6,\n    \"idAprobacion\": 19\n\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -611,7 +701,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"idSolicitante\": 7,\n    \"idUnidad\": 15,\n    \"nroDeCopias\": 1300,\n    \"tipoDeDocumento\": \"Cartas de Invitacion\",\n    \"nroDePaginas\": 50,\n    \"archivosPdf\": [\n        {\n            \"nombreArchivo\": \"archivo1.pdf\",\n            \"archivo\": \"asdijacvn234234k2l34nksdf234234\"\n        },\n        {\n            \"nombreArchivo\": \"archivo2.pdf\",\n            \"archivo\": \"sdkjvn23423lk2kl23njsdf23423\"\n        },\n        {\n            \"nombreArchivo\": \"archivo3.pdf\",\n            \"archivo\": \"fdsknv234234knlk23jvnlk234324\"\n        }\n    ]\n}\n",
+							"raw": "{\n    \"idSolicitante\": 11,\n    \"idUnidad\": 14,\n    \"nroDeCopias\": 1300,\n    \"tipoDeDocumento\": \"Feria Ambiental\",\n    \"nroDePaginas\": 50,\n    \"archivosPdf\": [\n        {\n            \"nombreArchivo\": \"archivo1.pdf\",\n            \"archivo\": \"asdijacvn234234k2l34nksdf234234\"\n        },\n        {\n            \"nombreArchivo\": \"archivo2.pdf\",\n            \"archivo\": \"sdkjvn23423lk2kl23njsdf23423\"\n        },\n        {\n            \"nombreArchivo\": \"archivo3.pdf\",\n            \"archivo\": \"fdsknv234234knlk23jvnlk234324\"\n        }\n    ]\n}\n",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -643,7 +733,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Id del usuario solicitante\n    \"idUsuario\": 7,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
+							"raw": "{\n    //Id del usuario solicitante\n    \"idUsuario\": 10,\n    \"page\": 0,\n    \"size\": 10,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"

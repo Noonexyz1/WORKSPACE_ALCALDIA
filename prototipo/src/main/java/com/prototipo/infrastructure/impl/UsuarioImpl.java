@@ -4,6 +4,7 @@ import com.prototipo.application.modelDto.UsuarioDto;
 import com.prototipo.application.modelDto.UsuarioUnidadDto;
 import com.prototipo.application.port.UsuarioAbastract;
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioEntity;
+import com.prototipo.infrastructure.persistence.db.entity.UsuarioUnidadEntity;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioRepository;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioUnidadRepository;
 import org.modelmapper.ModelMapper;
@@ -32,6 +33,15 @@ public class UsuarioImpl implements UsuarioAbastract {
     }
 
     @Override
+    public UsuarioUnidadDto guardarUsuarioUnidadAbastract(UsuarioUnidadDto usuarioUnidadDto) {
+        UsuarioUnidadEntity usuarioUnidadReq = modelMapper
+                .map(usuarioUnidadDto, UsuarioUnidadEntity.class);
+        UsuarioUnidadEntity usuarioUnidadResp = usuarioUnidadRepository
+                .save(usuarioUnidadReq);
+        return modelMapper.map(usuarioUnidadResp, UsuarioUnidadDto.class);
+    }
+
+    @Override
     public UsuarioDto guardarUsuarioAbastract(UsuarioDto usuarioDto) {
         UsuarioEntity usuarioEntity = modelMapper.map(usuarioDto, UsuarioEntity.class);
         UsuarioEntity userRespo = usuarioRepository.save(usuarioEntity);
@@ -42,7 +52,7 @@ public class UsuarioImpl implements UsuarioAbastract {
     @Override
     public List<UsuarioUnidadDto> listaDeUsuariosAbsDef(Long page, Long size) {
         Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
-        return usuarioUnidadRepository.findAll(pageable).stream()
+        return usuarioUnidadRepository.getListaUsuarioUnidad(pageable).stream()
                 .map(x -> modelMapper.map(x, UsuarioUnidadDto.class))
                 .toList();
     }

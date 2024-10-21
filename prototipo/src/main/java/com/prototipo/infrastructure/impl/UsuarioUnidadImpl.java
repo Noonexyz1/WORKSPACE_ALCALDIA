@@ -2,12 +2,13 @@ package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.UsuarioUnidadDto;
 import com.prototipo.application.port.UsuarioUnidadAbstract;
-import com.prototipo.domain.model.UsuarioUnidad;
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioUnidadEntity;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioUnidadRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class UsuarioUnidadImpl implements UsuarioUnidadAbstract {
@@ -25,9 +26,11 @@ public class UsuarioUnidadImpl implements UsuarioUnidadAbstract {
     }
 
     @Override
-    public UsuarioUnidadDto encontrarUsuarioUnidadByUsuarioId(Long idUsuario) {
-        UsuarioUnidadEntity usuarioUnidad = usuarioUnidadRepository
-                .encontrarUsuarioUnidadPorUsuarioId(idUsuario);
-        return mapper.map(usuarioUnidad, UsuarioUnidadDto.class);
+    public List<UsuarioUnidadDto> encontrarUsuariosUnidadByUsuarioId(Long idUsuario) {
+        List<UsuarioUnidadEntity> usuarioUnidad = usuarioUnidadRepository
+                .encontrarUsuariosUnidadPorUsuarioId(idUsuario);
+        return usuarioUnidad.stream()
+                .map(x -> mapper.map(x, UsuarioUnidadDto.class))
+                .toList();
     }
 }
