@@ -86,14 +86,11 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     @Override
-    public void eliminarUsuario(Long idUsuario) {
-        List<UsuarioUnidadDto> usuariosUnidadDto = usuarioUnidadAbstract
-                .encontrarUsuariosUnidadByUsuarioId(idUsuario);
-
-        usuariosUnidadDto.forEach(x -> {
-            x.setIsActive(false);
-            usuarioUnidadAbstract.guardarUsuarioUnidad(x);
-        });
+    public void eliminarUsuario(Long idUsuarioUnidad) {
+        UsuarioUnidadDto usuarioUnidadDto = usuarioUnidadAbstract
+                .encontarUsuarioUnidadId(idUsuarioUnidad);
+        usuarioUnidadDto.setIsActive(false);
+        usuarioUnidadAbstract.guardarUsuarioUnidad(usuarioUnidadDto);
     }
 
     @Override

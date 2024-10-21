@@ -33,4 +33,12 @@ public class UsuarioUnidadImpl implements UsuarioUnidadAbstract {
                 .map(x -> mapper.map(x, UsuarioUnidadDto.class))
                 .toList();
     }
+
+    @Override
+    public UsuarioUnidadDto encontarUsuarioUnidadId(Long idUsuarioUnidad) {
+        UsuarioUnidadEntity usuarioUnidad = usuarioUnidadRepository
+                .findById(idUsuarioUnidad)
+                .orElse(null);
+        return mapper.map(usuarioUnidad, UsuarioUnidadDto.class);
+    }
 }
