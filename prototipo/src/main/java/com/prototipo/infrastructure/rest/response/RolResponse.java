@@ -7,8 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UnidadResponse {
+public class RolResponse {
     private Long id;
-    private String nombre;
-    private String direccion;
+    private String nombreRol;
 }

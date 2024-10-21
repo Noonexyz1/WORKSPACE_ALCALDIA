@@ -7,17 +7,13 @@
 
             <div class="mt-6 flow-root sm:mt-8">
                 <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                    
-                    <app-row-table-user></app-row-table-user>
-                    <app-row-table-user></app-row-table-user>
-                    <app-row-table-user></app-row-table-user>
-                    <app-row-table-user></app-row-table-user>
-                    <app-row-table-user></app-row-table-user>
-                    <app-row-table-user></app-row-table-user>
-                    <app-row-table-user></app-row-table-user>
-                    <app-row-table-user></app-row-table-user>
-                    <app-row-table-user></app-row-table-user>
-
+                    @if (listUsuarios != null && listUsuarios.length > 0) {
+                        @for (usuario of listUsuarios; track usuario.id) {
+                            <app-row-table-user [usuario]="usuario"></app-row-table-user>
+                        }
+                    } @else {
+                        <p>No hay usuarios disponibles</p>
+                    }
                 </div>
             </div>
 

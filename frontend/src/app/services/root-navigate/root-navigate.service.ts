@@ -9,10 +9,10 @@ export class RootNavigateService {
 
   constructor() {
     // Agregar elementos
-    this.mapa.set('administrador', '/administrador/listaDeUsuarios');
-    this.mapa.set('operador', '/operador/listaDeSolicitudes');
-    this.mapa.set('solicitante', '/solicitante/misSolicitudes');
-    this.mapa.set('responsable', '/responsable/solicitudesUnidad');
+    this.mapa.set('Administrador', '/administrador/listaDeUsuarios');
+    this.mapa.set('Operador', '/operador/listaDeSolicitudes');
+    this.mapa.set('Solicitante', '/solicitante/misSolicitudes');
+    this.mapa.set('Responsable', '/responsable/solicitudesUnidad');
   }
 
   valorParaNavegar(valor: string): string {

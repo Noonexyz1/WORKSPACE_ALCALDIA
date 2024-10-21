@@ -25,8 +25,8 @@ public class CredencialImpl implements CredencialAbstract {
 
     @Override
     public CredencialDto encontrarCredencial(String correo, String pass) {
-        //TODO??
-        return null;
+        CredencialEntity credEnty = credencialRepository.encontrarCredencial(correo, pass);
+        return modelMapper.map(credEnty, CredencialDto.class);
     }
 
     @Override
