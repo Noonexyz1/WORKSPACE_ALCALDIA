@@ -191,7 +191,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"id\": 4,\n    \"nombres\": \"Diego\",\n    \"apellidos\": \"Diomir\",\n    \"correo\": \"diego@gmail.com\"\n}",
+							"raw": "{\n    \"id\": 7,\n    \"nombres\": \"Diego\",\n    \"apellidos\": \"Diomir\",\n    \"correo\": \"diego@gmail.com\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -260,7 +260,7 @@
 							}
 						},
 						"url": {
-							"raw": "http://localhost:8081/administrador/eliminarUsuario/6",
+							"raw": "http://localhost:8081/administrador/eliminarUsuario/8",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -269,7 +269,7 @@
 							"path": [
 								"administrador",
 								"eliminarUsuario",
-								"6"
+								"8"
 							]
 						}
 					},
@@ -479,7 +479,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Operacion \n    \"idOperacion\": 2\n}",
+							"raw": "{\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Solicitud\n    \"idOperacion\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -508,7 +508,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Operacion \n    \"idOperacion\": 4\n}",
+							"raw": "{\n    //ID del operador\n    \"idOperador\": 3,\n    //ID de la tabla Solicitud\n    \"idOperacion\": 1\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -638,7 +638,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n\n    \"idResponsable\": 2,\n    \"idAprobacion\": 7\n\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n}",
+							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n\n    \"idResponsable\": 2,\n    //Id de solicitud\n    \"idAprobacion\": 1\n\n    /*\"idResponsable\": 2,\n    \"idAprobacion\": 2*/\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -667,7 +667,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    \"idResponsable\": 2,\n    \"idAprobacion\": 5\n}",
+							"raw": "{\n    //Este ID es el mismo del ID de la peticion :ver solicitudes: /2\n    \"idResponsable\": 2,\n    //Id de la solicitud\n    \"idAprobacion\": 2\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -695,41 +695,9 @@
 			"name": "Solicitante",
 			"item": [
 				{
-					"name": "crear solicitud",
+					"name": "ver mi histo solicitudes",
 					"request": {
 						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"idSolicitante\": 4,\n    \"idUnidad\": 16,\n    \"nroDeCopias\": 1300,\n    \"tipoDeDocumento\": \"Documentacion\",\n    \"nroDePaginas\": 50,\n    \"archivosPdf\": [\n        {\n            \"nombreArchivo\": \"archivo1.pdf\",\n            \"archivo\": \"asdijacvn234234k2l34nksdf234234\"\n        },\n        {\n            \"nombreArchivo\": \"archivo2.pdf\",\n            \"archivo\": \"sdkjvn23423lk2kl23njsdf23423\"\n        },\n        {\n            \"nombreArchivo\": \"archivo3.pdf\",\n            \"archivo\": \"fdsknv234234knlk23jvnlk234324\"\n        }\n    ]\n}\n",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "http://localhost:8081/solicitante/solicitarFotocopiar",
-							"protocol": "http",
-							"host": [
-								"localhost"
-							],
-							"port": "8081",
-							"path": [
-								"solicitante",
-								"solicitarFotocopiar"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "ver mi histo solicitudes",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
-					"request": {
-						"method": "GET",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -750,6 +718,35 @@
 							"path": [
 								"solicitante",
 								"verHistorialSolicitudes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "crear solicitud",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"idSolicitante\": 4,\n    \"idUnidad\": 16,\n    \"nroDeCopias\": 1300,\n    \"tipoDeDocumento\": \"Documentos\",\n    \"nroDePaginas\": 50,\n    \"archivosPdf\": [\n        {\n            \"nombreArchivo\": \"archivo1.pdf\",\n            \"archivo\": \"asdijacvn234234k2l34nksdf234234\"\n        },\n        {\n            \"nombreArchivo\": \"archivo2.pdf\",\n            \"archivo\": \"sdkjvn23423lk2kl23njsdf23423\"\n        },\n        {\n            \"nombreArchivo\": \"archivo3.pdf\",\n            \"archivo\": \"fdsknv234234knlk23jvnlk234324\"\n        }\n    ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8081/solicitante/solicitarFotocopiar",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8081",
+							"path": [
+								"solicitante",
+								"solicitarFotocopiar"
 							]
 						}
 					},

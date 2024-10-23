@@ -7,14 +7,14 @@
 
             <div class="mt-6 flow-root sm:mt-8">
                 <div class="divide-y divide-gray-200 dark:divide-gray-700">
-                    
-                    <app-row-table-solicitudes></app-row-table-solicitudes>
-                    <app-row-table-solicitudes></app-row-table-solicitudes>
-                    <app-row-table-solicitudes></app-row-table-solicitudes>
-                    <app-row-table-solicitudes></app-row-table-solicitudes>
-                    <app-row-table-solicitudes></app-row-table-solicitudes>
-                    <app-row-table-solicitudes></app-row-table-solicitudes>
-                    <app-row-table-solicitudes></app-row-table-solicitudes>
+
+                    @if (listSolicitud != null && listSolicitud.length > 0) {
+                        @for (solicitud of listSolicitud; track solicitud.id) {
+                            <app-row-table-solicitudes [solicitud]="solicitud" ></app-row-table-solicitudes>
+                        }
+                    } @else {
+                        <p>No hay solicitudes disponibles</p>
+                    }
                     
                 </div>
             </div>

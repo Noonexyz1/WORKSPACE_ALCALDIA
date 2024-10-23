@@ -5,4 +5,5 @@ export interface UsuarioResponse {
     correo: string;
     nombreRol: string;
     dashConfig: string;
+    idUnidad: number;
 }

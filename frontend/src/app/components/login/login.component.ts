@@ -6,6 +6,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { catchError, map, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { RootNavigateService } from '../../services/root-navigate/root-navigate.service';
+import { SubjectUserLoginService } from '../../services/subject-user-login/subject-user-login.service';
 
 @Component({
   selector: 'app-login',
@@ -20,22 +21,28 @@ export class LoginComponent {
   private http: HttpClient;
   private formBuilder: FormBuilder;
   private router: Router;
+  private observable: SubjectUserLoginService;
 
   //Mis servicios
   private rootNavigateService: RootNavigateService;
 
   loginForm: FormGroup;
 
-  constructor(http: HttpClient, formBuilder: FormBuilder, router: Router, rootNavigateService: RootNavigateService){
+  constructor(http: HttpClient, 
+              formBuilder: FormBuilder, 
+              router: Router, 
+              rootNavigateService: RootNavigateService,
+              observable: SubjectUserLoginService ){
+
     this.http = http;
     this.formBuilder = formBuilder;
+    this.router = router;
+    this.rootNavigateService = rootNavigateService;
+    this.observable = observable;
     this.loginForm = this.formBuilder.group({
       correo: [],
       pass: [],
     });
-    this.router = router;
-
-    this.rootNavigateService = rootNavigateService;
   }
 
   botonIniciarSesion(): void {
@@ -52,7 +59,9 @@ export class LoginComponent {
         // Mostrar la respuesta en un alert
         const mensaje = `Usuario: ${response.nombres} ${response.apellidos}\nRol: ${response.nombreRol}\nDashboard: ${response.dashConfig}`;
         alert(mensaje);
-        alert('Ta funcionando');
+
+        //Publicamos los datos
+        this.observable.publicarDatos(response);
 
         let toNavegate = this.rootNavigateService.valorParaNavegar(response.dashConfig);
         this.router.navigate([toNavegate]);

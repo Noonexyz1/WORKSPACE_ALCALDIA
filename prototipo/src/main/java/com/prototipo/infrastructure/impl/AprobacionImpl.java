@@ -30,8 +30,10 @@ public class AprobacionImpl implements AprobacionAbstract {
 
     @Override
     public AprobacionDto findAprovacionByIdSoliAbstract(Long id) {
-        AprobacionEntity aprobacionEntity = aprobacionRepository.findById(id).orElseThrow();
-        return modelMapper.map(aprobacionEntity, AprobacionDto.class);
+        //AprobacionEntity aprobacionEntity = aprobacionRepository.findById(id).orElseThrow();
+        AprobacionEntity aprobacion = aprobacionRepository
+                .findAprobacionBySolicitudId(id);
+        return modelMapper.map(aprobacion, AprobacionDto.class);
     }
 
     @Override

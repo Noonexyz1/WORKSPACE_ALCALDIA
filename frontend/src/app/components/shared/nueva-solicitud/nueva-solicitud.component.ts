@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { SolicitudRequest } from '../../../models/SolicitudRequest';
 import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 import { UnidadResponse } from '../../../models/UnidadResponse';
+import { SubjectUserLoginService } from '../../../services/subject-user-login/subject-user-login.service';
+import { UsuarioResponse } from '../../../models/UsuarioResponse';
 
 @Component({
   selector: 'app-nueva-solicitud',
@@ -13,87 +15,91 @@ import { UnidadResponse } from '../../../models/UnidadResponse';
   templateUrl: './nueva-solicitud.component.html',
   styleUrl: './nueva-solicitud.component.css'
 })
-export class NuevaSolicitudComponent implements OnInit{
+export class NuevaSolicitudComponent {
 
   private http: HttpClient;
   private formBuilder: FormBuilder;
   private router: Router;
+  private observable: SubjectUserLoginService;
 
+  usuario: UsuarioResponse = {
+    id: 0,
+    nombres: '',
+    apellidos: '',
+    correo: '',
+    nombreRol: '',
+    dashConfig: '',
+    idUnidad: 0
+  };
   solicitudForm: FormGroup;
   archivosSeleccionados: File[] = []; // Archivos seleccionados
   listaDeUnidades: UnidadResponse[] = []; // Lista de unidades
 
-  constructor(http: HttpClient, formBuilder: FormBuilder, router: Router){
+  constructor(http: HttpClient, 
+              formBuilder: FormBuilder, 
+              router: Router, 
+              observable: SubjectUserLoginService){
+    
     this.http = http;
     this.formBuilder = formBuilder;
+    this.router = router;
+    this.observable = observable;
     this.solicitudForm = this.formBuilder.group({
+      idSolicitante: [],
+      idUnidad: [],
       nroDeCopias: [],
       tipoDeDocumento: [],
       nroDePaginas: [],
-      idUnidad: [], 
-      idSolicitante: [],
       archivosPdf: [],
     });
-    this.router = router;
   }
-  
-  ngOnInit(): void {
-    //peticion GET a la lista de unidades que existen
-    const url = 'http://localhost:8081/solicitante/verListaUnidades'; // URL de tu API
-
-    // Enviar la solicitud
-    this.http.get<UnidadResponse[]>(url).pipe(
-      catchError(error => {
-        console.error('Error en la petición:', error);
-        alert('Hubo un error al traer la lista de unidades');
-        return of([]); // Retornar un array vacío en caso de error
-      })
-    ).subscribe((response: UnidadResponse[]) => {
-      this.listaDeUnidades = response; // Asignar la respuesta directamente
-    });
-  }
-
 
   botonNuevaSolicitud(): void {
     const url = 'http://localhost:8081/solicitante/solicitarFotocopiar'; // URL de tu API
 
-    // Extraer los valores del formulario
+    this.observable.obtenerObservable().subscribe((datos) => {
+      this.usuario = datos;
+      console.log(this.usuario);
+      alert("Datos obtenidos del publicador")
+    });
+
+    //TODO, tengo que revisar este codigo del Null
     const solicitudRequest: SolicitudRequest = {
+      idSolicitante: this.usuario.id,
+      idUnidad: this.usuario.idUnidad,
       nroDeCopias: this.solicitudForm.get('nroDeCopias')?.value,
       tipoDeDocumento: this.solicitudForm.get('tipoDeDocumento')?.value,
       nroDePaginas: this.solicitudForm.get('nroDePaginas')?.value,
-      idUnidad: this.solicitudForm.get('idUnidad')?.value, // Aquí se captura el ID de la unidad seleccionada
-      //Me Parece que: este id del solicitante debe ser del que inicia session
-      idSolicitante: this.solicitudForm.get('idSolicitante')?.value,
-      archivosPdf: [], // Inicialmente vacío
+      archivosPdf: [], // Llenado después de la conversión
     };
 
-    //ESTE ID DEBE VENIR DEL QUE HA INICADO SESION PREVIAMENTE COMO SOLICITANTE
-    solicitudRequest.idSolicitante = 9;
-    solicitudRequest.idUnidad = Number(solicitudRequest.idUnidad);
-    //-------------------ESTO ES SOLO UNA PRUEBA-------------------
+    console.log('Datos:', solicitudRequest)
 
     // Convertir los archivos a Base64
     const conversiones = this.archivosSeleccionados.map(file => this.convertFileToBase64(file));
 
     forkJoin(conversiones).pipe(
+      
       map(base64Array => {
-        // Inicialmente vacio pero luego lo llenamos con la convercion
-        solicitudRequest.archivosPdf = base64Array; // Almacena los valores base64
-        return solicitudRequest; // Retornar el objeto completo
+        solicitudRequest.archivosPdf = base64Array.map((base64, index) => ({
+          nombreArchivo: this.archivosSeleccionados[index].name, // Usa el nombre del archivo real
+          archivo: base64,
+        }));
+        return solicitudRequest; // Retorna el objeto completo
       }),
       catchError(error => {
         console.error('Error en la conversión a Base64:', error);
         alert('Error al convertir archivos a Base64');
         return of(null);
       })
-    ).subscribe((solicitud) => {
-      if (solicitud) {
+
+    ).subscribe((solicitudRequest) => {
+      if (solicitudRequest) {
         // Mostrar los datos antes de enviar
-        console.log('Solicitud a enviar:', solicitud);
+        console.log('Solicitud a enviar:', solicitudRequest);
 
         // Enviar la solicitud
-        this.http.post<SolicitudRequest>(url, solicitud).pipe(
+        this.http.post<SolicitudRequest>(url, solicitudRequest).pipe(
           map((response: any) => {
             this.router.navigate(['/solicitante/misSolicitudes']);
           }),

@@ -76,4 +76,13 @@ public interface OperacionRepository extends JpaRepository<OperacionEntity, Long
     Page<OperacionEntity> findOperacionesByOperadorAndEstadoCompletado(@Param("idOperador") Long idOperador,
                                                                        Pageable pageable);
 
+    @Query(value =
+            """
+            SELECT *
+            FROM operacion o
+            WHERE o.fk_solicitud_id = :id
+            ORDER BY o.id DESC
+            LIMIT 1
+            """, nativeQuery = true)
+    OperacionEntity findOperacionBySolicitudId(@Param("id") Long id);
 }

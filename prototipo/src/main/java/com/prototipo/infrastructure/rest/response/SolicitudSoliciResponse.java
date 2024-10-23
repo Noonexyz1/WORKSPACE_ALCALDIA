@@ -12,4 +12,6 @@ public class SolicitudSoliciResponse {
     private Long nroDeCopias;
     private String tipoDeDocumento;
     private Long nroDePaginas;
+    private String estadoResponsable;
+    private String estadoOperador;
 }

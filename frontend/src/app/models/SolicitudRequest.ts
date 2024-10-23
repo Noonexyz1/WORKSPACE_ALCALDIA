@@ -1,8 +1,10 @@
+import { ArchivoPdfRequest } from "./ArchivoPdfRequest";
+
 export interface SolicitudRequest {
+    idSolicitante: number;
+    idUnidad: number;
     nroDeCopias: number;          // Usar 'number' en lugar de 'Long'
     tipoDeDocumento: string;
     nroDePaginas: number;         // Usar 'number' en lugar de 'Long'
-    idUnidad: number;
-    idSolicitante: number;
-    archivosPdf: string[];        // Array de strings para la lista de archivos
+    archivosPdf: ArchivoPdfRequest[]; 
 }

@@ -23,7 +23,7 @@ public class OperacionImpl implements OperacionAbstract {
 
     @Override
     public OperacionDto findOperacionByIdSoliAbstract(Long id) {
-        OperacionEntity operacionEntity = operacionRepository.findById(id).orElse(null);
+        OperacionEntity operacionEntity = operacionRepository.findOperacionBySolicitudId(id);
         if (operacionEntity == null) {
             return null;
         }

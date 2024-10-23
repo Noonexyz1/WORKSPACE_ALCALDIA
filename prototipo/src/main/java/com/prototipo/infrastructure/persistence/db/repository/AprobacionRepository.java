@@ -90,4 +90,14 @@ public interface AprobacionRepository extends JpaRepository<AprobacionEntity, Lo
             AND aprobaciones.nombre = 'campo_valor'
             """, nativeQuery = true)
     List<String> listaDeArchivosdeDocumentos(@Param("nombreClave") String nombreClave);
+
+    @Query(value =
+            """
+            SELECT *
+            FROM aprobacion a
+            WHERE a.fk_solicitud_id = :id
+            ORDER BY a.id DESC
+            LIMIT 1
+            """, nativeQuery = true)
+    AprobacionEntity findAprobacionBySolicitudId(@Param("id") Long id);
 }

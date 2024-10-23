@@ -59,7 +59,7 @@ public class SolicitanteController {
         solicitudService.solicitarFotocopiarService(solicitud, archivoPdfs);
     }
 
-    @GetMapping(path = {"/verHistorialSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/verHistorialSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudSoliciResponse>> verHistorialSolicitudes(@RequestBody PaginacionSoliRequest pageArg) {
         Long idUsuario = pageArg.getIdUsuario();
 
@@ -77,6 +77,17 @@ public class SolicitanteController {
 
     private SolicitudSoliciResponse funcToReturn(Solicitud x) {
         SolicitudSoliciResponse solicitudSoliciResponse = modelMapper.map(x, SolicitudSoliciResponse.class);
+
+        Aprobacion aprobacion = aprobacionService
+                .findAprovacionByIdSoliService(x.getId());
+        Operacion operacion = operacionService
+                .findOperacionByIdSoliService(x.getId());
+
+        String estadoAprobacion = (aprobacion != null)? aprobacion.getEstadoByResponsable(): null;
+        String estadoOperacion = (operacion != null)? operacion.getEstadoByOperador(): null;
+
+        solicitudSoliciResponse.setEstadoResponsable(estadoAprobacion);
+        solicitudSoliciResponse.setEstadoOperador(estadoOperacion);
         return solicitudSoliciResponse;
     }
 }

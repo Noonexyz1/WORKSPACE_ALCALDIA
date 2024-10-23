@@ -30,8 +30,10 @@ public class AprobacionAdapter implements AprobacionService {
 
     @Override
     public Aprobacion findAprovacionByIdSoliService(Long idSolicitud) {
-        AprobacionDto aprobacionDto = aprobacionAbstract.findAprovacionByIdSoliAbstract(idSolicitud);
-        return mapperApplicationAbstract.mapearAbstract(aprobacionDto, Aprobacion.class);
+        AprobacionDto aprobacionDto = aprobacionAbstract
+                .findAprovacionByIdSoliAbstract(idSolicitud);
+        return mapperApplicationAbstract
+                .mapearAbstract(aprobacionDto, Aprobacion.class);
     }
 
     @Override
