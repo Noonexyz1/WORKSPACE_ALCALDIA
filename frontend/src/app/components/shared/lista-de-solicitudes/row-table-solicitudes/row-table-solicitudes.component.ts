@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
+import { SolicitudResponse } from '../../../../models/SolicitudResponse';
 
 @Component({
   selector: 'app-row-table-solicitudes',
@@ -8,5 +9,8 @@ import { Component } from '@angular/core';
   styleUrl: './row-table-solicitudes.component.css'
 })
 export class RowTableSolicitudesComponent {
-
+  
+  @Input()
+  solicitud!: SolicitudResponse;
+  
 }

@@ -16,4 +16,7 @@ public class UsuarioResponse {
     private String correo;
     private String nombreRol;
     private String dashConfig;
+
+    //TODO Id unidad para el frontend
+    private Long idUnidad;
 }
