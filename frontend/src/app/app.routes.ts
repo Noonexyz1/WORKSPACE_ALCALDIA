@@ -11,8 +11,10 @@ import { NuevaSolicitudComponent } from './components/shared/nueva-solicitud/nue
 import { SolicitanteComponent } from './components/solicitante/solicitante.component';
 import { ResponsableComponent } from './components/responsable/responsable.component';
 import { EditarUsuarioComponent } from './components/shared/editar-usuario/editar-usuario.component';
-import { ListaSoliResponsableComponent } from './components/shared/lista-soli-responsable/lista-soli-responsable.component';
 import { ListaSoliOperadorComponent } from './components/shared/lista-soli-operador/lista-soli-operador.component';
+import { ListaSoliAprobadaResponsableComponent } from './components/shared/lista-soli-responsable-aprobada/lista-soli-responsable-aprobada.component';
+import { ListaSoliPendienteResponsableComponent } from './components/shared/lista-soli-responsable-pendiente/lista-soli-responsable-pendiente.component';
+import { ListaSoliRechazadaResponsableComponent } from './components/shared/lista-soli-responsable-rechazada/lista-soli-responsable-rechazada.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: "login", pathMatch: "full" },
@@ -84,8 +86,16 @@ export const routes: Routes = [
         component: ResponsableComponent,
         children: [
             {
-                path: 'solicitudesUnidad',
-                component: ListaSoliResponsableComponent,
+                path: 'solicitudesPendienteUnidad',
+                component: ListaSoliPendienteResponsableComponent,
+            },
+            {
+                path: 'solicitudesAprobadaUnidad',
+                component: ListaSoliAprobadaResponsableComponent,
+            },
+            {
+                path: 'solicitudesRechazadaUnidad',
+                component: ListaSoliRechazadaResponsableComponent,
             },
             {
                 path: 'cambiarPass',
