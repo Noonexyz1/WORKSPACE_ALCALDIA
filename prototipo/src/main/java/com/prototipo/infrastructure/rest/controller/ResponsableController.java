@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 86400)
 @RestController
 @RequestMapping(path = "/responsable")
 public class ResponsableController {
@@ -41,7 +42,7 @@ public class ResponsableController {
         responsableService.rechazarSolicitudService(idAprobacion, idResponsable);
     }
 
-    @GetMapping(path = {"/verSolicitudesPendientes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/verSolicitudesPendientes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudesPendientes(@RequestBody PaginacionResponRequest pageParam) {
         Long idResponsable = pageParam.getIdUsuario();
 
@@ -59,7 +60,7 @@ public class ResponsableController {
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    @GetMapping(path = {"/verSolicitudesAprobadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/verSolicitudesAprobadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudesAprobadas(@RequestBody PaginacionResponRequest pageParam) {
         Long idResponsable = pageParam.getIdUsuario();
 
@@ -76,7 +77,7 @@ public class ResponsableController {
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    @GetMapping(path = {"/verSolicitudesRechazadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/verSolicitudesRechazadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudesRechazadas(@RequestBody PaginacionResponRequest pageParam) {
         Long idResponsable = pageParam.getIdUsuario();
 

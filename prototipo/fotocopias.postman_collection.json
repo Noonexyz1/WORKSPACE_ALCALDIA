@@ -100,7 +100,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    /*\"correo\": \"diego@gmail.com\",\n    \"pass\": \"Mamani\"*/\n\n    /*\"correo\": \"MoisesMoi@gmail.com\",\n    \"pass\": \"Moi\"*/\n\n    \"correo\": \"WillmerMoi@gmail.com\",\n    \"pass\": \"Moi\"\n}",
+							"raw": "{\n    /*\"correo\": \"diego@gmail.com\",\n    \"pass\": \"Mamani\"*/\n\n    /*\"correo\": \"MoisesMoi@gmail.com\",\n    \"pass\": \"Moi\"*/\n\n    \"correo\": \"RodrigoMoi@gmail.com\",\n    \"pass\": \"Moi\"\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -133,7 +133,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"page\": 0,\n    \"size\": 20,\n    \"byColumName\": null \n}",
+							"raw": "{\n    \"page\": 0,\n    \"size\": 20,\n    \"byColumName\": null\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -537,11 +537,8 @@
 			"item": [
 				{
 					"name": "ver solicitudes pendientes",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -569,11 +566,8 @@
 				},
 				{
 					"name": "ver solicitudes aprobadas",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",
@@ -601,11 +595,8 @@
 				},
 				{
 					"name": "ver solicitudes rechazdas",
-					"protocolProfileBehavior": {
-						"disableBodyPruning": true
-					},
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"body": {
 							"mode": "raw",

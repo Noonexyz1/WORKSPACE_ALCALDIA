@@ -40,7 +40,9 @@ public class LoginController {
         UsuarioResponse usuarioResponse = modelMapper.map(usuario, UsuarioResponse.class);
         usuarioResponse.setNombreRol(usuarioUnidad.getFkRol().getNombreRol());
         usuarioResponse.setDashConfig(usuarioUnidad.getFkRol().getNombreRol());
-        usuarioResponse.setIdUnidad(usuarioUnidad.getFkUnidad().getId());
+        usuarioResponse.setIdUnidad((usuarioUnidad.getFkUnidad() != null)?
+                usuarioUnidad.getFkUnidad().getId():
+                null);
 
         return new ResponseEntity<>(usuarioResponse, HttpStatus.OK);
     }
