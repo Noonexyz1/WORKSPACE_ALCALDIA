@@ -11,10 +11,12 @@ import { NuevaSolicitudComponent } from './components/shared/nueva-solicitud/nue
 import { SolicitanteComponent } from './components/solicitante/solicitante.component';
 import { ResponsableComponent } from './components/responsable/responsable.component';
 import { EditarUsuarioComponent } from './components/shared/editar-usuario/editar-usuario.component';
-import { ListaSoliOperadorComponent } from './components/shared/lista-soli-operador/lista-soli-operador.component';
 import { ListaSoliAprobadaResponsableComponent } from './components/shared/lista-soli-responsable-aprobada/lista-soli-responsable-aprobada.component';
 import { ListaSoliPendienteResponsableComponent } from './components/shared/lista-soli-responsable-pendiente/lista-soli-responsable-pendiente.component';
 import { ListaSoliRechazadaResponsableComponent } from './components/shared/lista-soli-responsable-rechazada/lista-soli-responsable-rechazada.component';
+import { ListaSoliPendienteOperadorComponent } from './components/shared/lista-soli-operador-pendiente/lista-soli-operador-pendiente.component';
+import { ListaSoliIniciadaOperadorComponent } from './components/shared/lista-soli-operador-iniciada/lista-soli-operador-iniciada.component';
+import { ListaSoliCompletaOperadorComponent } from './components/shared/lista-soli-operador-completada/lista-soli-operador-completada.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: "login", pathMatch: "full" },
@@ -50,9 +52,18 @@ export const routes: Routes = [
         component: OperadorComponent,
         children: [
             {
-                path: 'listaDeSolicitudes',
-                component: ListaSoliOperadorComponent,
+                path: 'listaDeSolicitudesPendientes',
+                component: ListaSoliPendienteOperadorComponent,
             },
+            {
+                path: 'listaDeSolicitudesIniciadas',
+                component: ListaSoliIniciadaOperadorComponent,
+            },
+            {
+                path: 'listaDeSolicitudesCompletadas',
+                component: ListaSoliCompletaOperadorComponent,
+            },
+            
             {
                 path: 'cambiarEstado',
                 component: NuevoUsuarioComponent,

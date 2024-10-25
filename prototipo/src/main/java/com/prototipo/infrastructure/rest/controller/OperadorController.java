@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*", maxAge = 86400)
 @RestController
 @RequestMapping(path = "/operador")
 public class OperadorController {
@@ -47,7 +48,7 @@ public class OperadorController {
 
     //Este operador tiene una forma de trabajar, y es por piso,
     //entonces se deberia mostrar las solicitudes correspondientes a su piso
-    @GetMapping(path = {"/verSolicitudesPendientes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/verSolicitudesPendientes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudes(@RequestBody PaginacionOpeRequest pageParam) {
         String estado = EstadoByOperadorEnum.PENDIENTE.getNombre();
         Long idOperador = pageParam.getIdUsuario();
@@ -64,7 +65,7 @@ public class OperadorController {
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    @GetMapping(path = {"/verSolicitudesIniciadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/verSolicitudesIniciadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesIniciadas(@RequestBody PaginacionOpeRequest pageParam) {
         String estado = EstadoByOperadorEnum.INICIADO.getNombre();
         Long idOperador = pageParam.getIdUsuario();
@@ -80,7 +81,7 @@ public class OperadorController {
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    @GetMapping(path = {"/verSolicitudesCompletas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/verSolicitudesCompletas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesCompletadas(@RequestBody PaginacionOpeRequest pageParam) {
         String estado = EstadoByOperadorEnum.COMPLETADO.getNombre();
         Long idOperador = pageParam.getIdUsuario();

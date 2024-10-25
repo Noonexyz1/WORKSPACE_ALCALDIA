@@ -7,6 +7,7 @@ import { catchError, map, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { RootNavigateService } from '../../services/root-navigate/root-navigate.service';
 import { SubjectUserLoginService } from '../../services/subject-user-login/subject-user-login.service';
+import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 
 @Component({
   selector: 'app-login',
@@ -25,6 +26,7 @@ export class LoginComponent {
 
   //Mis servicios
   private rootNavigateService: RootNavigateService;
+  private localStorage: LocalStorageService;
 
   loginForm: FormGroup;
 
@@ -32,13 +34,15 @@ export class LoginComponent {
               formBuilder: FormBuilder, 
               router: Router, 
               rootNavigateService: RootNavigateService,
-              observable: SubjectUserLoginService ){
+              observable: SubjectUserLoginService,
+              localStorage: LocalStorageService ){
 
     this.http = http;
     this.formBuilder = formBuilder;
     this.router = router;
     this.rootNavigateService = rootNavigateService;
     this.observable = observable;
+    this.localStorage = localStorage;
     this.loginForm = this.formBuilder.group({
       correo: [],
       pass: [],
@@ -60,6 +64,8 @@ export class LoginComponent {
         const mensaje = `Usuario: ${response.nombres} ${response.apellidos}\nRol: ${response.nombreRol}\nDashboard: ${response.dashConfig}`;
         alert(mensaje);
 
+        //Guardamos en el localStorage
+        this.localStorage.setItem('userData', response);
         //Publicamos los datos
         this.observable.publicarDatos(response);
 
