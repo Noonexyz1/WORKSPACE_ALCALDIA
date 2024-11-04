@@ -31,7 +31,7 @@ export class ListaDeUsuariosComponent implements OnInit {
     
     const body: PageRequest = {
       page: 0,
-      size: 20,
+      size: 100,
       byColumName: ""
     }
 

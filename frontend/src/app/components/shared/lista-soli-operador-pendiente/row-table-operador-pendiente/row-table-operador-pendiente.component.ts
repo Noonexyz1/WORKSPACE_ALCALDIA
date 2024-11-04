@@ -10,6 +10,7 @@ import { RootNavigateService } from '../../../../services/root-navigate/root-nav
 import { OperacionSoliRequest } from '../../../../models/OperacionSoliRequest';
 import { LocalStorageService } from '../../../../services/local-storage/local-storage.service';
 import { ArchivoPdfResponse } from '../../../../models/ArchivoPdfResponse';
+import { ArchivoPdfService } from '../../../../services/archivo-pdf/archivo-pdf.service';
 
 @Component({
   selector: 'app-row-table-operador-pendiente',
@@ -36,20 +37,25 @@ export class RowTablePendienteOperadorComponent {
   private http: HttpClient;
   private observable: SubjectUserLoginService;
   private router: Router;
-  private rootNavigateService: RootNavigateService
-  private localStorage: LocalStorageService
+  private rootNavigateService: RootNavigateService;
+  private localStorage: LocalStorageService;
+  private archivoPdfService: ArchivoPdfService;
+
+  archivoPdfResponse: ArchivoPdfResponse[] = [];
 
   constructor(http: HttpClient, 
               observable: SubjectUserLoginService,
               router: Router, 
               rootNavigateService: RootNavigateService,
-              localStorage: LocalStorageService){
+              localStorage: LocalStorageService,
+              archivoPdfService: ArchivoPdfService){
 
     this.http = http;
     this.observable = observable;
     this.router = router;
     this.rootNavigateService = rootNavigateService;
     this.localStorage = localStorage;
+    this.archivoPdfService = archivoPdfService;
   }
 
   botonIniciarOperacion(): void {
@@ -70,13 +76,24 @@ export class RowTablePendienteOperadorComponent {
     
     console.log('Aprobacion objeto: ', aprobacion)
 
-    this.http.post<OperacionSoliRequest>(url, aprobacion).pipe(
+    //post<ValorDeRespuesta>
+    this.http.post<ArchivoPdfResponse[]>(url, aprobacion).pipe(
       map((response) => {
-        console.log('Datos para imprimir pdf', response)
-        window.location.reload();
-
-        let toNavegate = this.rootNavigateService.valorParaNavegar('Operador');
-        this.router.navigate([toNavegate]);
+        this.archivoPdfResponse = response;
+    
+        // Intervalo entre cada descarga
+        this.archivoPdfResponse.forEach((archivo, index) => {
+          setTimeout(() => {
+            this.archivoPdfService.descargarPdf(archivo);
+          }, index * 500); // Intervalo de 500 ms entre cada descarga
+        });
+    
+        // Navegación después de que todas las descargas deberían estar completas
+        setTimeout(() => {
+          const toNavegate = this.rootNavigateService.valorParaNavegar('Operador');
+          this.router.navigate([toNavegate]);
+          window.location.reload();
+        }, this.archivoPdfResponse.length * 500 + 1000); // Tiempo suficiente para todas las descargas
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
@@ -84,6 +101,8 @@ export class RowTablePendienteOperadorComponent {
         return of(null); // Retornar un observable vacío en caso de error
       })
     ).subscribe();
+
+    
   }
 
 }

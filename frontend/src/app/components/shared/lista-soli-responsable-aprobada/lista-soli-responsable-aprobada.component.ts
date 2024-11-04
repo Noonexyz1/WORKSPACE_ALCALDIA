@@ -7,6 +7,7 @@ import { PageRequestID } from '../../../models/PageRequestID';
 import { UsuarioResponse } from '../../../models/UsuarioResponse';
 import { SubjectUserLoginService } from '../../../services/subject-user-login/subject-user-login.service';
 import { SolicitudResponResponse } from '../../../models/SolicitudResponResponse';
+import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 
 @Component({
   selector: 'app-lista-soli-responsable',
@@ -19,6 +20,7 @@ export class ListaSoliAprobadaResponsableComponent implements OnInit{
 
   private http: HttpClient;
   private observable: SubjectUserLoginService;
+  private localStorage: LocalStorageService;
 
   listSolicitud: SolicitudResponResponse[] = [];
 
@@ -32,9 +34,13 @@ export class ListaSoliAprobadaResponsableComponent implements OnInit{
     idUnidad: 0
   };
 
-  constructor(http: HttpClient, observable: SubjectUserLoginService){
+  constructor(http: HttpClient, 
+              observable: SubjectUserLoginService,
+              localStorage: LocalStorageService){
+                
     this.http = http;
     this.observable = observable;
+    this.localStorage = localStorage;
   }
 
   ngOnInit(): void {
@@ -42,17 +48,20 @@ export class ListaSoliAprobadaResponsableComponent implements OnInit{
       this.usuario = datos;
       console.log(this.usuario);
     });
+    this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
   }
 
   listarSolicitudes(): void {
     const url = 'http://localhost:8081/responsable/verSolicitudesAprobadas';
-    
+
+    this.usuario = this.localStorage.getItem('userData');
+
     const body: PageRequestID = {
       //TODO, este valor tiene que se de un observable general
       idUsuario: this.usuario.id,
       page: 0,
-      size: 10,
+      size: 100,
       byColumName: ""
     }
 

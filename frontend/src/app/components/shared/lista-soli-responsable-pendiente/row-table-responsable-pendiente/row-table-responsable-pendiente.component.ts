@@ -7,6 +7,7 @@ import { UsuarioResponse } from '../../../../models/UsuarioResponse';
 import { catchError, map, of } from 'rxjs';
 import { Route, Router } from '@angular/router';
 import { RootNavigateService } from '../../../../services/root-navigate/root-navigate.service';
+import { LocalStorageService } from '../../../../services/local-storage/local-storage.service';
 
 @Component({
   selector: 'app-row-table-responsable-pendiente',
@@ -24,6 +25,7 @@ export class RowTablePendienteResponsableComponent {
   private observable: SubjectUserLoginService;
   private router: Router;
   private rootNavigateService: RootNavigateService
+  private localStorage: LocalStorageService;
 
   usuario: UsuarioResponse = {
     id: 0,
@@ -38,12 +40,14 @@ export class RowTablePendienteResponsableComponent {
   constructor(http: HttpClient, 
               observable: SubjectUserLoginService,
               router: Router, 
-              rootNavigateService: RootNavigateService){
+              rootNavigateService: RootNavigateService,
+              localStorage: LocalStorageService){
 
     this.http = http;
     this.observable = observable;
     this.router = router;
     this.rootNavigateService = rootNavigateService;
+    this.localStorage = localStorage;
   }
 
 
@@ -54,6 +58,8 @@ export class RowTablePendienteResponsableComponent {
       this.usuario = datos;
       console.log("Datos obtenidos del publicador", this.usuario);
     });
+    
+    this.usuario = this.localStorage.getItem('userData');
 
     const aprobacion: AprobacionSoliRequest = {
       idResponsable: this.usuario.id,
@@ -66,6 +72,7 @@ export class RowTablePendienteResponsableComponent {
       map(() => {
         let toNavegate = this.rootNavigateService.valorParaNavegar('Responsable');
         this.router.navigate([toNavegate]);
+        window.location.reload();
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
@@ -84,6 +91,8 @@ export class RowTablePendienteResponsableComponent {
       console.log("Datos obtenidos del publicador", this.usuario);
     });
 
+    this.usuario = this.localStorage.getItem('userData');
+
     const aprobacion: AprobacionSoliRequest = {
       idResponsable: this.usuario.id,
       idAprobacion: this.solicitud.idSolicitud
@@ -91,6 +100,7 @@ export class RowTablePendienteResponsableComponent {
     
     this.http.post<AprobacionSoliRequest>(url, aprobacion).pipe(
       map(() => {
+        window.location.reload();
         let toNavegate = this.rootNavigateService.valorParaNavegar('Responsable');
         this.router.navigate([toNavegate]);
       }),

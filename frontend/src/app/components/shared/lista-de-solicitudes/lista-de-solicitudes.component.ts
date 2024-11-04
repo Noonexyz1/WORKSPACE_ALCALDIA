@@ -6,6 +6,7 @@ import { catchError, map, of } from 'rxjs';
 import { PageRequestID } from '../../../models/PageRequestID';
 import { SubjectUserLoginService } from '../../../services/subject-user-login/subject-user-login.service';
 import { UsuarioResponse } from '../../../models/UsuarioResponse';
+import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 
 @Component({
   selector: 'app-lista-de-solicitudes',
@@ -20,6 +21,7 @@ export class ListaDeSolicitudesComponent implements OnInit {
   //con el que se ha iniciado sesion
   private http: HttpClient;
   private observable: SubjectUserLoginService;
+  private localStorage: LocalStorageService;
 
   listSolicitud: SolicitudResponse[] = [];
 
@@ -33,28 +35,34 @@ export class ListaDeSolicitudesComponent implements OnInit {
     idUnidad: 0
   };
 
-  constructor(http: HttpClient, observable: SubjectUserLoginService){
+  constructor(http: HttpClient, 
+              observable: SubjectUserLoginService,
+              localStorage: LocalStorageService){
+
     this.http = http;
     this.observable = observable;
+    this.localStorage = localStorage;
   }
 
   ngOnInit(): void {
     this.observable.obtenerObservable().subscribe((datos) => {
       this.usuario = datos;
       console.log(this.usuario);
-      alert("Datos obtenidos del publicador")
     });
+    this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
   }
 
   listarSolicitudes(): void {
     const url = 'http://localhost:8081/solicitante/verHistorialSolicitudes';
     
+    this.usuario = this.localStorage.getItem('userData');
+
     const body: PageRequestID = {
       //TODO, este valor tiene que se de un observable general
       idUsuario: this.usuario.id,
       page: 0,
-      size: 10,
+      size: 100,
       byColumName: ""
     }
 

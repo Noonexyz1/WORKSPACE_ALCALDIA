@@ -7,6 +7,7 @@ import { catchError, forkJoin, map, Observable, of } from 'rxjs';
 import { UnidadResponse } from '../../../models/UnidadResponse';
 import { SubjectUserLoginService } from '../../../services/subject-user-login/subject-user-login.service';
 import { UsuarioResponse } from '../../../models/UsuarioResponse';
+import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 
 @Component({
   selector: 'app-nueva-solicitud',
@@ -21,6 +22,7 @@ export class NuevaSolicitudComponent {
   private formBuilder: FormBuilder;
   private router: Router;
   private observable: SubjectUserLoginService;
+  private localStorage: LocalStorageService;
 
   usuario: UsuarioResponse = {
     id: 0,
@@ -38,12 +40,14 @@ export class NuevaSolicitudComponent {
   constructor(http: HttpClient, 
               formBuilder: FormBuilder, 
               router: Router, 
-              observable: SubjectUserLoginService){
+              observable: SubjectUserLoginService,
+              localStorage: LocalStorageService){
     
     this.http = http;
     this.formBuilder = formBuilder;
     this.router = router;
     this.observable = observable;
+    this.localStorage = localStorage;
     this.solicitudForm = this.formBuilder.group({
       idSolicitante: [],
       idUnidad: [],
@@ -62,6 +66,8 @@ export class NuevaSolicitudComponent {
       console.log(this.usuario);
       alert("Datos obtenidos del publicador")
     });
+
+    this.usuario = this.localStorage.getItem('userData');                
 
     //TODO, tengo que revisar este codigo del Null
     const solicitudRequest: SolicitudRequest = {

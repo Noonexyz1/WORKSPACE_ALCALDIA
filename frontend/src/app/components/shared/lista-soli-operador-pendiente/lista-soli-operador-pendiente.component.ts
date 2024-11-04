@@ -60,7 +60,7 @@ export class ListaSoliPendienteOperadorComponent implements OnInit{
       //TODO, este valor tiene que se de un observable general
       idUsuario: this.usuario.id,
       page: 0,
-      size: 10,
+      size: 100,
       byColumName: ""
     }
 
