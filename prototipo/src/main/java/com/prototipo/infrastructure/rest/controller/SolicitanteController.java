@@ -2,16 +2,19 @@ package com.prototipo.infrastructure.rest.controller;
 
 import com.prototipo.application.useCase.*;
 import com.prototipo.domain.model.*;
+import com.prototipo.infrastructure.rest.report.SolicitudReport;
 import com.prototipo.infrastructure.rest.request.PaginacionSoliRequest;
 import com.prototipo.infrastructure.rest.request.SolicitudRequest;
 import com.prototipo.infrastructure.rest.response.SolicitudSoliciResponse;
+import com.prototipo.infrastructure.service.SolicitudServiceReport;
+import net.sf.jasperreports.engine.JRException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 86400)
@@ -31,6 +34,9 @@ public class SolicitanteController {
     private AprobacionService aprobacionService;
     @Autowired
     private OperacionService operacionService;
+    @Autowired
+    private SolicitudServiceReport solicitudServiceReport;
+
 
     @PostMapping(path = {"/solicitarFotocopiar"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void solicitarFotocopiar(@RequestBody SolicitudRequest solicitudRequest) {
@@ -89,5 +95,27 @@ public class SolicitanteController {
         solicitudSoliciResponse.setEstadoResponsable(estadoAprobacion);
         solicitudSoliciResponse.setEstadoOperador(estadoOperacion);
         return solicitudSoliciResponse;
+    }
+
+    @GetMapping("/exportSolicitudDPF")
+    public ResponseEntity<byte[]> exportPdf()
+            throws IOException, JRException {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("solicitudPDF", "solicitudPDF.pdf");
+
+        SolicitudReport solicitudReport = SolicitudReport.builder()
+                .funcionarioTo("Juan Pérez")
+                .funcionarioFrom("Maria García")
+                .funcionarioToCargo("Director de Operaciones")
+                .funcionarioFromCargo("Gerente de Recursos Humanos")
+                .cite("CITE-2024-001")
+                .fecha("2024-11-04")
+                .nombreOrganizacion("Corporación XYZ")
+                .build();
+
+        return ResponseEntity.ok().headers(headers).body(solicitudServiceReport.exportToPdf(solicitudReport));
+
     }
 }
