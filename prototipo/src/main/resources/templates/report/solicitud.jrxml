@@ -1,0 +1,102 @@
+<!-- Created with Jaspersoft Studio version 7.0.1.final using JasperReports Library version 7.0.1-573496633c2b4074e32f433154b543003f7d2498  -->
+<jasperReport name="solicitud" language="java" pageWidth="612" pageHeight="792" columnWidth="552" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5ab73023-67ae-4935-9e43-66e1ebf8b5d8">
+    <property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+
+    <parameter name="funcionarioTo" class="java.lang.String"/>
+    <parameter name="funcionarioFrom" class="java.lang.String"/>
+    <parameter name="funcionarioToCargo" class="java.lang.String"/>
+    <parameter name="funcionarioFromCargo" class="java.lang.String"/>
+    <parameter name="cite" class="java.lang.String"/>
+    <parameter name="fecha" class="java.lang.String"/>
+    <parameter name="nombreOrganizacion" class="java.lang.String"/>
+    <parameter name="imageDir" class="java.lang.String"/>
+
+    <query language="sql"><![CDATA[]]></query>
+
+    <background splitType="Stretch"/>
+
+    <pageHeader height="121" splitType="Stretch">
+        <element kind="image" uuid="b082e94e-7c39-4443-8dd6-6b50e66e1ce5" x="433" y="21" width="104" height="75">
+            <expression><![CDATA[$P{imageDir} + "logo.png"]]></expression>
+        </element>
+        <element kind="staticText" uuid="f3735897-c7d2-40ec-b864-39a545c25a80" x="145" y="20" width="270" height="25" bold="true" vTextAlign="Middle">
+            <text><![CDATA[GOBIERNO AUTÓNOMO MUNICIPAL DE EL ALTO]]></text>
+        </element>
+        <element kind="image" uuid="65651d79-7937-4bd0-b29b-f95ce60bc799" x="30" y="16" width="83" height="101">
+            <expression><![CDATA[$P{imageDir} + "escudo.jpg"]]></expression>
+        </element>
+        <element kind="staticText" uuid="643f4a2c-a2cb-4030-99c3-bd3ea62c77a0" x="113" y="39" width="316" height="20" bold="true">
+            <text><![CDATA[_________________________________________________________________________________________________________________________________]]></text>
+        </element>
+        <element kind="textField" uuid="0edee4b0-1084-4c24-8e8a-a9afa7d627c4" x="198" y="80" width="222" height="21" bold="true" hTextAlign="Right">
+            <expression><![CDATA[ "CITE: " + $P{cite}]]></expression>
+        </element>
+        <element kind="textField" uuid="2e9f3bbc-dae0-44b8-8388-00e4e3d05164" x="198" y="60" width="222" height="20" hTextAlign="Right">
+            <expression><![CDATA["El Alto, " + $P{fecha}]]></expression>
+        </element>
+    </pageHeader>
+    <detail>
+        <band height="479" splitType="Stretch">
+            <element kind="staticText" uuid="005cdb85-fcb9-41b2-ad77-67842a2915b8" x="105" y="0" width="20" height="20" bold="true">
+                <text><![CDATA[A:]]></text>
+            </element>
+            <element kind="staticText" uuid="2ae0082e-f741-463f-9a02-9988b7a54dcf" x="105" y="63" width="20" height="20" bold="true">
+                <text><![CDATA[DE:]]></text>
+            </element>
+            <element kind="staticText" uuid="d7887803-18b7-4410-b4b1-94c5d4e6c744" x="157" y="40" width="357" height="20" bold="true">
+                <text><![CDATA[GOBIERNO AUTÓNOMO MUNICIPAL DE EL ALTO]]></text>
+            </element>
+            <element kind="staticText" uuid="30bcba4d-dfc3-4b76-9897-d63eab306f53" x="157" y="103" width="357" height="20" bold="true">
+                <text><![CDATA[GOBIERNO AUTÓNOMO MUNICIPAL DE EL ALTO]]></text>
+            </element>
+            <element kind="staticText" uuid="fcb49312-b89e-4794-9128-c75f229e3b8f" x="105" y="127" width="32" height="20" bold="true">
+                <text><![CDATA[REF:]]></text>
+            </element>
+            <element kind="staticText" uuid="29116084-667d-4e8d-87b5-d9ff4107258b" x="157" y="127" width="357" height="20" bold="true">
+                <text><![CDATA[SOLICITUD DE AUTORIZACIÓN DE FOTOCOPIAS]]></text>
+            </element>
+            <element kind="staticText" uuid="238c84c0-1c08-401e-82e4-cbe17b07ec8b" x="40" y="143" width="474" height="20" bold="true">
+                <text><![CDATA[_________________________________________________________________________________________________________________________________]]></text>
+            </element>
+            <element kind="textField" uuid="14628743-8c24-46cc-94f5-0579f47506f2" x="157" y="0" width="357" height="20">
+                <expression><![CDATA[$P{funcionarioTo}]]></expression>
+            </element>
+            <element kind="textField" uuid="68f5e11a-0c63-4e72-a8ae-4a3ddf2c8930" x="157" y="63" width="357" height="20">
+                <expression><![CDATA[$P{funcionarioFrom}]]></expression>
+            </element>
+            <element kind="textField" uuid="09f85ebf-3780-46c8-81bc-ad01b47e8d36" x="157" y="20" width="357" height="20" bold="true">
+                <expression><![CDATA[$P{funcionarioToCargo}]]></expression>
+            </element>
+            <element kind="textField" uuid="5d9a9fa3-fddf-45ed-8f1f-3dd76f721d42" x="157" y="83" width="357" height="20" bold="true">
+                <expression><![CDATA[$P{funcionarioFromCargo}]]></expression>
+            </element>
+            <element kind="staticText" uuid="20a9aaea-4ed1-4683-9558-0411c6fa2f57" x="50" y="176" width="150" height="15">
+                <text><![CDATA[De mi mayor consideracion:]]></text>
+            </element>
+            <element kind="staticText" uuid="73698534-d06f-42e7-bd2a-871131304446" x="50" y="194" width="464" height="30" hTextAlign="Justified">
+                <text><![CDATA[            Mediante la presente, tengo a bien saludarle y desearle éxitos en las funciones que desempeña en beneficio de la institución.]]></text>
+            </element>
+            <element kind="textField" uuid="2abe62bb-904b-4938-8541-07dbaf4ad078" x="50" y="227" width="464" height="42" hTextAlign="Justified">
+                <expression><![CDATA["           El motivo de la presente es solicitar que, a través de su instrucción, se autoricen las fotocopias pertinentes descritas en la siguiente tabla para la " + $P{nombreOrganizacion} + ":"]]></expression>
+            </element>
+            <element kind="staticText" uuid="1a4de12f-680f-456e-8910-d8bdbb1a2b22" x="177" y="448" width="209" height="20" hTextAlign="Center">
+                <text><![CDATA[....................................]]></text>
+            </element>
+            <element kind="staticText" uuid="be445842-2c99-47e3-bf8b-2544005182e3" x="55" y="356" width="464" height="20">
+                <text><![CDATA[            Sin otro particular, me despido con las más distinguidas consideraciones.]]></text>
+            </element>
+            <element kind="staticText" uuid="f90df738-b23d-41ce-8934-5c007fafff26" x="55" y="376" width="464" height="20">
+                <text><![CDATA[Atentamente,]]></text>
+            </element>
+            <property name="com.jaspersoft.studio.unit.height" value="px"/>
+        </band>
+    </detail>
+    <pageFooter height="71" splitType="Stretch">
+        <element kind="staticText" uuid="4f52b373-1e52-4789-8a93-1361ea646575" x="43" y="12" width="476" height="21" bold="true">
+            <text><![CDATA[_________________________________________________________________________________________________________________________________]]></text>
+        </element>
+        <element kind="staticText" uuid="cc0c25a2-1ca5-4298-9c82-11cc49e7fcd0" x="43" y="33" width="476" height="30" fontSize="10.0" hTextAlign="Center">
+            <text><![CDATA[Avenida Costanera Nro. 5022, Urbanizacion Libertad entre calles JJ Torres y Hernan Siles Zuazo, Casa Municipal (Jach'a Uta), a media cuadra de la Estacion de Bomberos El Alto.]]></text>
+        </element>
+    </pageFooter>
+</jasperReport>
