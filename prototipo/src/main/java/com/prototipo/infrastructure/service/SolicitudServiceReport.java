@@ -1,7 +1,9 @@
 package com.prototipo.infrastructure.service;
 
 import com.prototipo.infrastructure.rest.report.SolicitudReport;
+import com.prototipo.infrastructure.rest.report.TablaSolicitudReport;
 import net.sf.jasperreports.engine.*;
+import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
@@ -9,7 +11,9 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -47,6 +51,12 @@ public class SolicitudServiceReport {
         params.put("fecha", parametros.getFecha());
         params.put("nombreOrganizacion", parametros.getNombreOrganizacion());
         params.put("imageDir", "classpath:/static/images/");
+
+        List<TablaSolicitudReport> list = new ArrayList<>();
+        list.add(new TablaSolicitudReport("Documento Planos", 500));
+        list.add(new TablaSolicitudReport("Notificaciones", 900));
+
+        params.put("ds", new JRBeanCollectionDataSource(list));
 
 
         JasperReport jasperReport = JasperCompileManager.compileReport(filePath);

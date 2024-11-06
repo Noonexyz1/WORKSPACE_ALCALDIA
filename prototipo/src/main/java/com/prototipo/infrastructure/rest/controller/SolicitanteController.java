@@ -97,6 +97,7 @@ public class SolicitanteController {
         return solicitudSoliciResponse;
     }
 
+    //localhost:8081/solicitante/exportSolicitudDPF
     @GetMapping("/exportSolicitudDPF")
     public ResponseEntity<byte[]> exportPdf()
             throws IOException, JRException {
