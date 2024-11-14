@@ -7,8 +7,10 @@ import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.application.useCase.SolicitudService;
 import com.prototipo.domain.enums.EstadoByResponsableEnum;
 import com.prototipo.domain.model.ArchivoPdf;
+import com.prototipo.domain.model.DetalleSolicitud;
 import com.prototipo.domain.model.Solicitud;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 public class SolicitudAdapter implements SolicitudService {
@@ -54,6 +56,26 @@ public class SolicitudAdapter implements SolicitudService {
     }
 
     @Override
+    public void registrarFotocopiarService(Solicitud solicitudDomain, List<DetalleSolicitud> list) {
+        SolicitudDto solicitudDto = mapperApplicationAbstract
+                .mapearAbstract(solicitudDomain, SolicitudDto.class);
+        SolicitudDto solicitudResp = solicitudAbstract.solicitarFotocopiarAbstract(solicitudDto);
+        Solicitud solicitudDomainResp = mapperApplicationAbstract.mapearAbstract(solicitudResp, Solicitud.class);
+
+        list.forEach(x -> {
+            x.setFkSolicitud(solicitudDomainResp);
+            guardadDetalleSolicitudAbstrac(x);
+        });
+
+    }
+
+    private void guardadDetalleSolicitudAbstrac(DetalleSolicitud solicitud){
+        DetalleSolicitudDto detalleSolicitudDto = mapperApplicationAbstract
+                .mapearAbstract(solicitud, DetalleSolicitudDto.class);
+        solicitudAbstract.guardarRegistroSolicitud(detalleSolicitudDto);
+    }
+
+    @Override
     public void guardarPdfDeLaSolicitudAbstract(ArchivoPdf archivoPdfDomain) {
         ArchivoPdfDto archivoPdfDto = mapperApplicationAbstract.mapearAbstract(archivoPdfDomain, ArchivoPdfDto.class);
         solicitudAbstract.guardarPdfDeLaSolicitudAbstract(archivoPdfDto);
@@ -75,7 +97,18 @@ public class SolicitudAdapter implements SolicitudService {
 
     @Override
     public Solicitud buscarSolicitudService(Long id) {
-        //TODO
-        return null;
+        SolicitudDto solicitudDto = solicitudAbstract
+                .buscarSolicitudAbstract(id);
+        return mapperApplicationAbstract
+                .mapearAbstract(solicitudDto, Solicitud.class);
+    }
+
+    @Override
+    public List<DetalleSolicitud> listDetalleSolicitud(Long idSolicitud) {
+         List<DetalleSolicitudDto> list = solicitudAbstract.
+                 getListaDetalleSolicitudAbstract(idSolicitud);
+        return list.stream()
+                .map(x -> mapperApplicationAbstract.mapearAbstract(x, DetalleSolicitud.class))
+                .toList();
     }
 }

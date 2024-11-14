@@ -1,18 +1,21 @@
-import { Component, Input } from '@angular/core';
-import { SolicitudResponResponse } from '../../../../models/SolicitudResponResponse';
-import { AprobacionSoliRequest } from '../../../../models/AprobacionSoliRequest';
-import { HttpClient } from '@angular/common/http';
-import { SubjectUserLoginService } from '../../../../services/subject-user-login/subject-user-login.service';
-import { UsuarioResponse } from '../../../../models/UsuarioResponse';
-import { catchError, map, of } from 'rxjs';
-import { Route, Router } from '@angular/router';
-import { RootNavigateService } from '../../../../services/root-navigate/root-navigate.service';
-import { LocalStorageService } from '../../../../services/local-storage/local-storage.service';
+import {Component, Input} from '@angular/core';
+import {SolicitudResponResponse} from '../../../../models/SolicitudResponResponse';
+import {AprobacionSoliRequest} from '../../../../models/AprobacionSoliRequest';
+import {HttpClient} from '@angular/common/http';
+import {SubjectUserLoginService} from '../../../../services/subject-user-login/subject-user-login.service';
+import {UsuarioResponse} from '../../../../models/UsuarioResponse';
+import {catchError, map, of} from 'rxjs';
+import {Router} from '@angular/router';
+import {RootNavigateService} from '../../../../services/root-navigate/root-navigate.service';
+import {LocalStorageService} from '../../../../services/local-storage/local-storage.service';
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-row-table-responsable-pendiente',
   standalone: true,
-  imports: [],
+  imports: [
+    FormsModule
+  ],
   templateUrl: './row-table-responsable-pendiente.component.html',
   styleUrl: './row-table-responsable-pendiente.component.css'
 })
@@ -37,11 +40,11 @@ export class RowTablePendienteResponsableComponent {
     idUnidad: 0
   };
 
-  constructor(http: HttpClient, 
+  constructor(http: HttpClient,
               observable: SubjectUserLoginService,
-              router: Router, 
+              router: Router,
               rootNavigateService: RootNavigateService,
-              localStorage: LocalStorageService){
+              localStorage: LocalStorageService) {
 
     this.http = http;
     this.observable = observable;
@@ -58,14 +61,14 @@ export class RowTablePendienteResponsableComponent {
       this.usuario = datos;
       console.log("Datos obtenidos del publicador", this.usuario);
     });
-    
+
     this.usuario = this.localStorage.getItem('userData');
 
     const aprobacion: AprobacionSoliRequest = {
       idResponsable: this.usuario.id,
       idAprobacion: this.solicitud.idSolicitud
     };
-    
+
     console.log('Aprobacion objeto: ', aprobacion)
 
     this.http.post<AprobacionSoliRequest>(url, aprobacion).pipe(
@@ -97,7 +100,7 @@ export class RowTablePendienteResponsableComponent {
       idResponsable: this.usuario.id,
       idAprobacion: this.solicitud.idSolicitud
     };
-    
+
     this.http.post<AprobacionSoliRequest>(url, aprobacion).pipe(
       map(() => {
         window.location.reload();

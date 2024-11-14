@@ -10,4 +10,5 @@ public interface UsuarioService {
     List<UsuarioUnidad> listaDeUsuariosServiceDef(Long page, Long size);
     List<Usuario> listaDeUsuariosServiceAsc(Long page, Long size, String byColumName);
     List<Usuario> listaDeUsuariosServiceDesc(Long page, Long size, String byColumName);
+    UsuarioUnidad findUsuarioUnidadByIdUSer(Long id);
 }

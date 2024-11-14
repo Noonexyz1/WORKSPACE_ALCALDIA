@@ -2,6 +2,7 @@ package com.prototipo.application.adapter;
 
 import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.UsuarioDto;
+import com.prototipo.application.modelDto.UsuarioUnidadDto;
 import com.prototipo.application.port.UsuarioAbastract;
 import com.prototipo.application.useCase.UsuarioService;
 import com.prototipo.domain.model.Usuario;
@@ -46,5 +47,13 @@ public class UsuarioAdapter implements UsuarioService {
         return usuarioAbastract.listaDeUsuariosAbsDesc(page, size, byColumName).stream()
                 .map(x -> mapperApplicationAbstract.mapearAbstract(x, Usuario.class))
                 .toList();
+    }
+
+    @Override
+    public UsuarioUnidad findUsuarioUnidadByIdUSer(Long id) {
+        UsuarioUnidadDto usuarioUnidadDto = usuarioAbastract
+                .findUsuarioUnidadPorIdUserAbastract(id);
+        return mapperApplicationAbstract
+                .mapearAbstract(usuarioUnidadDto, UsuarioUnidad.class);
     }
 }

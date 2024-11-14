@@ -1,12 +1,12 @@
-import { Component, OnInit } from '@angular/core';
-import { RowTableSolicitudesComponent } from "./row-table-solicitudes/row-table-solicitudes.component";
-import { HttpClient } from '@angular/common/http';
-import { SolicitudResponse } from '../../../models/SolicitudResponse';
-import { catchError, map, of } from 'rxjs';
-import { PageRequestID } from '../../../models/PageRequestID';
-import { SubjectUserLoginService } from '../../../services/subject-user-login/subject-user-login.service';
-import { UsuarioResponse } from '../../../models/UsuarioResponse';
-import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
+import {AfterViewInit, Component, OnInit, ViewChild} from '@angular/core';
+import {RowTableSolicitudesComponent} from "./row-table-solicitudes/row-table-solicitudes.component";
+import {HttpClient} from '@angular/common/http';
+import {SolicitudResponse} from '../../../models/SolicitudResponse';
+import {catchError, map, of} from 'rxjs';
+import {PageRequestID} from '../../../models/PageRequestID';
+import {SubjectUserLoginService} from '../../../services/subject-user-login/subject-user-login.service';
+import {UsuarioResponse} from '../../../models/UsuarioResponse';
+import {LocalStorageService} from '../../../services/local-storage/local-storage.service';
 
 @Component({
   selector: 'app-lista-de-solicitudes',
@@ -17,7 +17,7 @@ import { LocalStorageService } from '../../../services/local-storage/local-stora
 })
 export class ListaDeSolicitudesComponent implements OnInit {
 
-  //TODO, tengo que publicar en un estado global el usuario 
+  //TODO, tengo que publicar en un estado global el usuario
   //con el que se ha iniciado sesion
   private http: HttpClient;
   private observable: SubjectUserLoginService;
@@ -35,9 +35,9 @@ export class ListaDeSolicitudesComponent implements OnInit {
     idUnidad: 0
   };
 
-  constructor(http: HttpClient, 
+  constructor(http: HttpClient,
               observable: SubjectUserLoginService,
-              localStorage: LocalStorageService){
+              localStorage: LocalStorageService) {
 
     this.http = http;
     this.observable = observable;
@@ -55,7 +55,7 @@ export class ListaDeSolicitudesComponent implements OnInit {
 
   listarSolicitudes(): void {
     const url = 'http://localhost:8081/solicitante/verHistorialSolicitudes';
-    
+
     this.usuario = this.localStorage.getItem('userData');
 
     const body: PageRequestID = {
@@ -76,8 +76,7 @@ export class ListaDeSolicitudesComponent implements OnInit {
         alert('Hubo un error al listar las solicitudes de usuario');
         return of(null); // Retornar un observable vacío en caso de error
       })
-    )
-    .subscribe();
+    ).subscribe();
   }
 
 }

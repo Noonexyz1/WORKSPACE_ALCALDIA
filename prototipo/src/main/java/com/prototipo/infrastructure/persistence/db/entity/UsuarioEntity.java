@@ -24,10 +24,18 @@ public class UsuarioEntity {
 
     @OneToOne(mappedBy = "fkUsuario")
     private CredencialEntity credencial;
+
     @OneToMany(mappedBy = "fkSolicitante")
     private List<SolicitudEntity> listaSolicitantes;
+
+    @OneToMany(mappedBy = "fkResponsable")
+    private List<SolicitudEntity> listaResponsables;
+
     @OneToMany(mappedBy = "fkResponsable")
     private List<AprobacionEntity> listaAprobacion;
     @OneToMany(mappedBy = "fkOperador")
     private List<OperacionEntity> listaOperaciones;
+
+    @OneToMany(mappedBy = "fkResponsable")
+    private List<DescargoEntity> listaDescargo;
 }

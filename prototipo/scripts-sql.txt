@@ -9,26 +9,27 @@ values("Administrador"),
 #Esta tabla si o si para produccion
 INSERT INTO prototipo.unidad(nombre, direccion)
 VALUES
-("Atención al Ciudadano", "Piso 1"),
-("Atención al Estudiante", "Piso 1"),
-("Atención al Projimo", "Piso 1"),
-("Obras Públicas", "Piso 2"),
-("Obras Comunitarias", "Piso 2"),
-("Registro Civil", "Piso 3"),
-("Transporte y Movilidad", "Piso 3"),
-("Desarrollo Económico", "Piso 3"),
-("Asesoría Jurídica", "Piso 3"),
-("Recursos Humanos", "Piso 3"),
-("Secretaría de Hacienda", "Piso 3"),
-("Oficina de la Alcaldesa", "Piso 3"),
-("Planeación Urbana", "Piso 4"),
-("Medio Ambiente", "Piso 4"),
-("Sumariante", "Piso 4"),
-("Sistemas", "Piso 4"),
-("Gabinete de Gobierno", "Piso 5"),
-("Cultura y Deporte", "Piso 6"),
-("Desarrollo Social", "Piso 7"),
-("Servicios Generales", "Piso 7");
+("Unidad de Atención al Ciudadano", "Piso 1"),
+("Unidad de Atención al Estudiante", "Piso 1"),
+("Unidad de Atención al Prójimo", "Piso 1"),
+("Unidad de Obras Públicas", "Piso 2"),
+("Unidad de Obras Comunitarias", "Piso 2"),
+("Unidad de Registro Civil", "Piso 3"),
+("Unidad de Transporte y Movilidad", "Piso 3"),
+("Unidad de Desarrollo Económico", "Piso 3"),
+("Unidad de Asesoría Jurídica", "Piso 3"),
+("Unidad de Recursos Humanos", "Piso 3"),
+("Unidad de Secretaría de Hacienda", "Piso 3"),
+("Unidad de Oficina de la Alcaldesa", "Piso 3"),
+("Unidad de Planeación Urbana", "Piso 4"),
+("Unidad de Medio Ambiente", "Piso 4"),
+("Unidad de Sumariante", "Piso 4"),
+("Unidad de Sistemas", "Piso 4"),
+("Unidad de Gabinete de Gobierno", "Piso 5"),
+("Unidad de Cultura y Deporte", "Piso 6"),
+("Unidad de Desarrollo Social", "Piso 7"),
+("Unidad de Servicios Generales", "Piso 7");
+
 
 #Esta tabla si o si para produccion
 INSERT INTO usuario(apellidos, correo, nombres)
@@ -43,6 +44,12 @@ VALUES(1, "jefa@gmail.com", "123");
 INSERT INTO usuario_unidad(is_active, fk_rol_id, fk_unidad_id, fk_usuario_id)
 VALUES(TRUE, 1, NULL, 1);
 
+#Esta tabla si o si para produccion
+INSERT INTO cargo(nombre_cargo)
+VALUES("Jefe"),
+("Responsable"),
+("Pasante");
+
 
 #----------------------PRUEBAS-----------------------------
 SELECT * FROM rol;
@@ -53,9 +60,11 @@ SELECT * FROM unidad;
 SELECT * from usuario;
 SELECT * from credencial;
 SELECT * from usuario_unidad;
+SELECT * from cargo;
 
 SELECT * from archivo_pdf;
 SELECT * from solicitud;
+SELECT * from detalle_solicitud ds;
 SELECT * from aprobacion;
 SELECT * from operacion;
 
@@ -63,8 +72,6 @@ DELETE from solicitud;
 DELETE FROM operacion;
 
 
-######Consulta de prueba
-#@ consulta 1
 
 #Consulta mas simple pero mas potente
 SELECT * #a.fk_solicitud_id

@@ -6,25 +6,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "usuario_unidad")
-public class UsuarioUnidadEntity {
+@Table(name = "descargo")
+public class DescargoEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
-    private Boolean isActive;
+    private BigDecimal precioTotal;
+    private BigDecimal precioUnitario;
 
     @ManyToOne
-    private UsuarioEntity fkUsuario;
+    private UsuarioEntity fkResponsable;
     @ManyToOne
-    private UnidadEntity fkUnidad;
-    @ManyToOne
-    private RolEntity fkRol;
-    @ManyToOne
-    private CargoEntity fkCargo;
+    private DetalleSolicitudEntity fkDetalleSolicitud;
 }

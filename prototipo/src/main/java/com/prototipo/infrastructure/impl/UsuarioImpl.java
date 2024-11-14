@@ -50,6 +50,13 @@ public class UsuarioImpl implements UsuarioAbastract {
     }
 
     @Override
+    public UsuarioUnidadDto findUsuarioUnidadPorIdUserAbastract(Long id) {
+        UsuarioUnidadEntity user = usuarioUnidadRepository
+                .findUsuariosUnidadPorUsuarioId(id);
+        return modelMapper.map(user, UsuarioUnidadDto.class);
+    }
+
+    @Override
     public List<UsuarioUnidadDto> listaDeUsuariosAbsDef(Long page, Long size) {
         Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
         return usuarioUnidadRepository.getListaUsuarioUnidad(pageable).stream()

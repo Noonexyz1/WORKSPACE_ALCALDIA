@@ -1,0 +1,19 @@
+package com.prototipo.application.modelDto;
+
+import com.prototipo.domain.model.UsuarioUnidad;
+import lombok.*;
+
+import java.util.List;
+
+@Getter
+@Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class CargoDto {
+    private Long id;
+    private String nombreCargo;
+
+    //Esto lo estoy dejando a pesar de que esta es una tabla fuerte
+    private List<UsuarioUnidad> listUsuarioUnidad;
+}
