@@ -1,5 +1,7 @@
 package com.prototipo.application.modelDto;
 
+import com.prototipo.domain.model.Unidad;
+import com.prototipo.domain.model.Usuario;
 import lombok.*;
 
 @Getter
@@ -12,6 +14,9 @@ public class SolicitudDto {
     private Long nroDeCopias;
     private String tipoDeDocumento;
     private Long nroDePaginas;
-    private UsuarioDto fkSolicitante;
-    private UnidadDto fkUnidad;
+
+    private String cite;
+
+    private Usuario fkSolicitante;
+    private Unidad fkUnidad;
 }

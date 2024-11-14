@@ -1,0 +1,22 @@
+package com.prototipo.infrastructure.rest.report;
+
+import lombok.*;
+
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class ComunicacionReport {
+    private String cite;
+    private String funcionarioTo;
+    private String funcionarioToCargo;
+    private String funcionarioFrom;
+    private String funcionarioFromCargo;
+    private String nombreOrganizacion;
+    private String documentos;
+    private Integer totalCopias;
+
+/*    private String fecha;
+    private String parameter1;*/
+}

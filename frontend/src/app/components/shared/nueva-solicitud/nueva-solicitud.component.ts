@@ -1,18 +1,18 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SolicitudRequest } from '../../../models/SolicitudRequest';
-import { catchError, forkJoin, map, Observable, of } from 'rxjs';
-import { UnidadResponse } from '../../../models/UnidadResponse';
-import { SubjectUserLoginService } from '../../../services/subject-user-login/subject-user-login.service';
+import { catchError, map, of } from 'rxjs';
 import { UsuarioResponse } from '../../../models/UsuarioResponse';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
+import { RowDocumentComponent } from './row-document/row-document.component';
+import { RowSolicitud } from '../../../models/RowSolicitud';
 
 @Component({
   selector: 'app-nueva-solicitud',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, RowDocumentComponent, RowDocumentComponent],
   templateUrl: './nueva-solicitud.component.html',
   styleUrl: './nueva-solicitud.component.css'
 })
@@ -21,7 +21,6 @@ export class NuevaSolicitudComponent {
   private http: HttpClient;
   private formBuilder: FormBuilder;
   private router: Router;
-  private observable: SubjectUserLoginService;
   private localStorage: LocalStorageService;
 
   usuario: UsuarioResponse = {
@@ -33,112 +32,75 @@ export class NuevaSolicitudComponent {
     dashConfig: '',
     idUnidad: 0
   };
-  solicitudForm: FormGroup;
-  archivosSeleccionados: File[] = []; // Archivos seleccionados
-  listaDeUnidades: UnidadResponse[] = []; // Lista de unidades
 
-  constructor(http: HttpClient, 
-              formBuilder: FormBuilder, 
-              router: Router, 
-              observable: SubjectUserLoginService,
+  solicitudForm: FormGroup;
+
+  nroDeDocumentos: number = 0;
+  estadoNroDocumentos: boolean = false;
+
+  listSolicitud: RowSolicitud[] = []
+  listSolicitudToFor: RowSolicitud[] = []
+
+  constructor(http: HttpClient,
+              formBuilder: FormBuilder,
+              router: Router,
               localStorage: LocalStorageService){
-    
+
     this.http = http;
     this.formBuilder = formBuilder;
     this.router = router;
-    this.observable = observable;
     this.localStorage = localStorage;
     this.solicitudForm = this.formBuilder.group({
-      idSolicitante: [],
-      idUnidad: [],
-      nroDeCopias: [],
-      tipoDeDocumento: [],
-      nroDePaginas: [],
-      archivosPdf: [],
+      cite: [],
+
+      nroDeDocumento: [],
+
+      nombreRowDocumento: [],   // Agrega valor predeterminado
+      nroRowPaginas: [],         // Agrega valor predeterminado
+      nroRowCopias: [],          // Agrega valor predeterminado
     });
+
   }
 
   botonNuevaSolicitud(): void {
-    const url = 'http://localhost:8081/solicitante/solicitarFotocopiar'; // URL de tu API
+    const url = 'http://localhost:8081/solicitante/solicitarFotocopiarPDF'; // URL de tu API
+    this.usuario = this.localStorage.getItem('userData');
 
-    this.observable.obtenerObservable().subscribe((datos) => {
-      this.usuario = datos;
-      console.log(this.usuario);
-      alert("Datos obtenidos del publicador")
-    });
-
-    this.usuario = this.localStorage.getItem('userData');                
-
-    //TODO, tengo que revisar este codigo del Null
     const solicitudRequest: SolicitudRequest = {
+      cite: this.solicitudForm.get('cite')?.value,
       idSolicitante: this.usuario.id,
       idUnidad: this.usuario.idUnidad,
-      nroDeCopias: this.solicitudForm.get('nroDeCopias')?.value,
-      tipoDeDocumento: this.solicitudForm.get('tipoDeDocumento')?.value,
-      nroDePaginas: this.solicitudForm.get('nroDePaginas')?.value,
-      archivosPdf: [], // Llenado después de la conversión
+      listSolicitud: this.listSolicitud,
     };
 
-    console.log('Datos:', solicitudRequest)
-
-    // Convertir los archivos a Base64
-    const conversiones = this.archivosSeleccionados.map(file => this.convertFileToBase64(file));
-
-    forkJoin(conversiones).pipe(
-      
-      map(base64Array => {
-        solicitudRequest.archivosPdf = base64Array.map((base64, index) => ({
-          nombreArchivo: this.archivosSeleccionados[index].name, // Usa el nombre del archivo real
-          archivo: base64,
-        }));
-        return solicitudRequest; // Retorna el objeto completo
+    // Enviar la solicitud
+    this.http.post<SolicitudRequest>(url, solicitudRequest).pipe(
+      map(() => {
+        this.router.navigate(['/solicitante/misSolicitudes']);
       }),
       catchError(error => {
-        console.error('Error en la conversión a Base64:', error);
-        alert('Error al convertir archivos a Base64');
-        return of(null);
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al enviar la solicitud');
+        return of(null); // Retornar un observable vacío en caso de error
       })
+    ).subscribe();
 
-    ).subscribe((solicitudRequest) => {
-      if (solicitudRequest) {
-        // Mostrar los datos antes de enviar
-        console.log('Solicitud a enviar:', solicitudRequest);
-
-        // Enviar la solicitud
-        this.http.post<SolicitudRequest>(url, solicitudRequest).pipe(
-          map((response: any) => {
-            this.router.navigate(['/solicitante/misSolicitudes']);
-          }),
-          catchError(error => {
-            console.error('Error en la petición:', error);
-            alert('Hubo un error al enviar la solicitud');
-            return of(null); // Retornar un observable vacío en caso de error
-          })
-        ).subscribe();
-      }
-    });
   }
 
-
-  // Maneja la selección de archivos
-  onFileSelected(event: any): void {
-    const files: FileList = event.target.files;
-    // Convierte el FileList a un array y concatena a los archivos ya seleccionados
-    this.archivosSeleccionados = this.archivosSeleccionados.concat(Array.from(files));
+  botonSetNumeroDeCopias(): void {
+    this.nroDeDocumentos = this.solicitudForm.get('nroDeDocumento')?.value;
+    this.listSolicitudToFor = new Array(this.nroDeDocumentos);
+    this.estadoNroDocumentos = true;
   }
 
-  // Función para convertir un archivo a Base64
-  convertFileToBase64(file: File): Observable<string> {
-    return new Observable((observer) => {
-      const reader = new FileReader();
-      reader.onload = () => {
-        observer.next(reader.result as string);
-        observer.complete();
-      };
-      reader.onerror = (error) => {
-        observer.error(error);
-      };
-      reader.readAsDataURL(file); // Convertir a Base64
-    });
+  botonDocumentoInsertado(): void {
+    const nuevoDocumento: RowSolicitud = {
+      nombreDocumento: this.solicitudForm.get('nombreRowDocumento')?.value,
+      nroPaginas: this.solicitudForm.get('nroRowPaginas')?.value,
+      nroCopias: this.solicitudForm.get('nroRowCopias')?.value,
+    };
+
+    this.listSolicitud.push(nuevoDocumento);
+    console.log(this.listSolicitud); // Verifica que el documento se agregue correctamente
   }
 }

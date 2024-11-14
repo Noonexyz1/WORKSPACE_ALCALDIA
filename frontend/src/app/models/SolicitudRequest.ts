@@ -1,10 +1,8 @@
-import { ArchivoPdfRequest } from "./ArchivoPdfRequest";
+import {RowSolicitud} from "./RowSolicitud";
 
 export interface SolicitudRequest {
-    idSolicitante: number;
-    idUnidad: number;
-    nroDeCopias: number;          // Usar 'number' en lugar de 'Long'
-    tipoDeDocumento: string;
-    nroDePaginas: number;         // Usar 'number' en lugar de 'Long'
-    archivosPdf: ArchivoPdfRequest[]; 
+  cite: string;
+  idSolicitante: number;
+  idUnidad: number;
+  listSolicitud: RowSolicitud[];
 }

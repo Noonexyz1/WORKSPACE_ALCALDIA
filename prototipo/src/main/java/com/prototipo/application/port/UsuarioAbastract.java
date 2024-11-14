@@ -13,4 +13,6 @@ public interface UsuarioAbastract {
     List<UsuarioDto> listaDeUsuariosAbsDesc(Long page, Long size, String byColumName);
     UsuarioDto buscarUsuarioPorEmail(String email);
     UsuarioDto guardarUsuarioAbastract(UsuarioDto usuarioDto);
+
+    UsuarioUnidadDto findUsuarioUnidadPorIdUserAbastract(Long id);
 }

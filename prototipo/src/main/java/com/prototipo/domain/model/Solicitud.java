@@ -12,6 +12,10 @@ public class Solicitud {
     private Long nroDeCopias;
     private String tipoDeDocumento;
     private Long nroDePaginas;
+
+    private String cite;
+
     private Usuario fkSolicitante;
+    private Usuario fkResponsable;
     private Unidad fkUnidad;
 }

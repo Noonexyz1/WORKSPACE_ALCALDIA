@@ -44,6 +44,15 @@ public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEnti
             """
             SELECT *
             FROM usuario_unidad uu
+            WHERE uu.fk_usuario_id = :idUsuario
+            AND uu.is_active = TRUE
+            """, nativeQuery = true)
+    UsuarioUnidadEntity findUsuariosUnidadPorUsuarioId(@Param("idUsuario") Long idUsuario);
+
+    @Query(value =
+            """
+            SELECT *
+            FROM usuario_unidad uu
             WHERE uu.is_active = TRUE
             """, nativeQuery = true)
     List<UsuarioUnidadEntity> getListaUsuarioUnidad(Pageable pageable);

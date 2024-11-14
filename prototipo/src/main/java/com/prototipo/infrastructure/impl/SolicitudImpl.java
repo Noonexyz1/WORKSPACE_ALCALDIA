@@ -1,12 +1,15 @@
 package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.ArchivoPdfDto;
+import com.prototipo.application.modelDto.DetalleSolicitudDto;
 import com.prototipo.application.modelDto.SolicitudDto;
 import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.domain.model.Solicitud;
 import com.prototipo.infrastructure.persistence.db.entity.ArchivoPdfEntity;
+import com.prototipo.infrastructure.persistence.db.entity.DetalleSolicitudEntity;
 import com.prototipo.infrastructure.persistence.db.entity.SolicitudEntity;
 import com.prototipo.infrastructure.persistence.db.repository.ArchivoPdfRepository;
+import com.prototipo.infrastructure.persistence.db.repository.DetalleSolicitudRepository;
 import com.prototipo.infrastructure.persistence.db.repository.SolicitudRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +28,8 @@ public class SolicitudImpl implements SolicitudAbstract {
     private ArchivoPdfRepository archivoPdfRepository;
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private DetalleSolicitudRepository detalleSolicitudRepository;
 
     //Tu unicamente deberias traerla Solicitud
     @Override
@@ -38,6 +43,13 @@ public class SolicitudImpl implements SolicitudAbstract {
     public void guardarPdfDeLaSolicitudAbstract(ArchivoPdfDto archivoPdfDto) {
         ArchivoPdfEntity archivoPdfEntity = modelMapper.map(archivoPdfDto, ArchivoPdfEntity.class);
         archivoPdfRepository.save(archivoPdfEntity);
+    }
+
+    @Override
+    public void guardarRegistroSolicitud(DetalleSolicitudDto detalleSolicitudDto) {
+        DetalleSolicitudEntity solicitud = modelMapper
+                .map(detalleSolicitudDto, DetalleSolicitudEntity.class);
+        detalleSolicitudRepository.save(solicitud);
     }
 
     @Override
@@ -75,5 +87,14 @@ public class SolicitudImpl implements SolicitudAbstract {
         /*SolicitudEntity solicitudEntityResp = solicitudRepository.findByFkUnidad_Id(idUnidad);
         return modelMapper.map(solicitudEntityResp, SolicitudDto.class);*/
         return null;
+    }
+
+    @Override
+    public List<DetalleSolicitudDto> getListaDetalleSolicitudAbstract(Long idSolicitud) {
+        List<DetalleSolicitudEntity> list = detalleSolicitudRepository
+                .findAllBySolicitudId(idSolicitud);
+        return list.stream()
+                .map(x -> modelMapper.map(x, DetalleSolicitudDto.class))
+                .toList();
     }
 }
