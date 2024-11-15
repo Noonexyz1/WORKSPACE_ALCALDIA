@@ -338,9 +338,6 @@ public class SolicitanteController {
 
 
 
-
-
-
     @GetMapping("/exportOrdenParaFotocopiaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
     public ResponseEntity<byte[]> exportOrdenParaFotocopiaDPF(
             @PathVariable Long idSolicitud,
@@ -363,5 +360,4 @@ public class SolicitanteController {
                 .headers(headers)
                 .body(ordenFotoServiceReport.exportToPdf(listDetalleSolicitudResp));
     }
-
 }
