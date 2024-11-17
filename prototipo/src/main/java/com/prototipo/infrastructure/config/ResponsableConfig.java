@@ -1,10 +1,8 @@
 package com.prototipo.infrastructure.config;
 
 import com.prototipo.application.adapter.ResponsableAdapter;
-import com.prototipo.application.port.AprobacionAbstract;
-import com.prototipo.application.port.OperacionAbstract;
-import com.prototipo.application.port.SolicitudAbstract;
-import com.prototipo.application.port.UsuarioAbastract;
+import com.prototipo.application.mapper.MapperApplicationAbstract;
+import com.prototipo.application.port.*;
 import com.prototipo.application.useCase.ResponsableService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -21,11 +19,20 @@ public class ResponsableConfig {
                                                      @Qualifier("usuarioImpl")
                                                      UsuarioAbastract usuarioAbstract,
                                                      @Qualifier("operacionImpl")
-                                                     OperacionAbstract operacionAbstract) {
+                                                     OperacionAbstract operacionAbstract,
+                                                     @Qualifier("mapperApplicationImpl")
+                                                     MapperApplicationAbstract mapperApplicationAbstract,
+                                                     @Qualifier("reportesPDFImpl")
+                                                     ReportesPDFAbstract reportesPDFAbstract) {
 
-        return new ResponsableAdapter(solicitudAbstract,
-                                      aprobacionAbstract,
-                                      usuarioAbstract,
-                                      operacionAbstract);
+        return new ResponsableAdapter(
+                solicitudAbstract,
+                aprobacionAbstract,
+                usuarioAbstract,
+                operacionAbstract,
+                mapperApplicationAbstract,
+                reportesPDFAbstract
+        );
+
     }
 }

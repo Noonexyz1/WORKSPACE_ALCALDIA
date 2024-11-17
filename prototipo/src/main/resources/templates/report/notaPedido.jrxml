@@ -1,0 +1,195 @@
+<!-- Created with Jaspersoft Studio version 7.0.1.final using JasperReports Library version 7.0.1-573496633c2b4074e32f433154b543003f7d2498  -->
+<jasperReport name="notaPedido" language="java" pageWidth="612" pageHeight="792" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c38dfe59-fa41-464b-ad6a-479d4b4ee904">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+
+	<dataset name="dsPedido" uuid="fb6bffc2-d2a8-47dc-a5e6-93891f82611d">
+		<query language="sql"><![CDATA[]]></query>
+		<field name="detalle" class="java.lang.String"/>
+		<field name="servicio" class="java.lang.String"/>
+		<field name="cantidad" class="java.lang.Integer"/>
+		<field name="precioUni" class="java.math.BigDecimal"/>
+		<field name="precio" class="java.math.BigDecimal"/>
+		<variable name="nroCounter" class="java.lang.Integer">
+			<expression><![CDATA[$V{nroCounter} + 1]]></expression>
+			<initialValueExpression><![CDATA[0]]></initialValueExpression>
+		</variable>
+		<variable name="total" resetType="Column" calculation="Count" class="java.math.BigDecimal"/>
+	</dataset>
+
+	<parameter name="fecha" class="java.lang.String"/>
+	<parameter name="imageDir" class="java.lang.String"/>
+	<parameter name="ds" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<query language="sql"><![CDATA[]]></query>
+	<background splitType="Stretch"/>
+	<pageHeader height="199" splitType="Stretch">
+		<element kind="staticText" uuid="d8162a19-9a7c-47ee-9571-f84f3379ffa7" x="165" y="94" width="255" height="40" fontName="DejaVu Sans" fontSize="25.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[NOTA DE PEDIDO]]></text>
+		</element>
+		<element kind="staticText" uuid="c139a55c-161a-498e-8f92-2c213d13572d" x="314" y="47" width="240" height="42" fontSize="13.0" bold="true" hTextAlign="Center">
+			<text><![CDATA[UNIDAD DE SERVICIOS GENERALES Y MANTENIMIENTO]]></text>
+		</element>
+		<element kind="textField" uuid="8a9ce920-24d5-40d1-87f6-b299231c1298" x="371" y="134" width="180" height="30" fontSize="14.0" bold="true" hTextAlign="Right" vTextAlign="Middle">
+			<expression><![CDATA["El Alto, " + $P{fecha}]]></expression>
+		</element>
+		<element kind="image" uuid="90d0ddd3-b22c-4a3f-8668-7d68e955ee50" x="32" y="24" width="90" height="109">
+			<expression><![CDATA[$P{imageDir} + "escudo.jpg"]]></expression>
+		</element>
+		<element kind="staticText" uuid="ea8a9ec9-9bf2-4d2a-b005-9bf23e8aa0a1" x="112" y="46" width="150" height="33" fontSize="11.0" bold="false" hTextAlign="Center">
+			<text><![CDATA[GOBIERNO AUTÓNOMO MUNICIPAL DE EL ALTO]]></text>
+		</element>
+	</pageHeader>
+	<columnHeader height="25" splitType="Stretch">
+		<element kind="staticText" uuid="abcfcd53-1ec2-4798-bfb6-6af0f660416d" x="32" y="2" width="519" height="19" bold="true" hTextAlign="Center" vTextAlign="Top">
+			<text><![CDATA[______________________________________________________________________________________________________]]></text>
+		</element>
+	</columnHeader>
+	<detail>
+		<band height="240" splitType="Stretch">
+			<element kind="component" uuid="9eb93090-1f0c-4dac-b927-7fda161c09aa" x="32" y="10" width="522" height="79">
+				<component kind="table">
+					<datasetRun uuid="5ccf8fd7-550e-4a91-a4e7-013d2b3b1869" subDataset="dsPedido">
+						<dataSourceExpression><![CDATA[$P{ds}]]></dataSourceExpression>
+					</datasetRun>
+					<column kind="single" uuid="d77074b1-7de0-4c62-b568-950b1e210983" width="40">
+						<columnHeader height="30" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="38928833-92c7-4fa4-9c3a-ab1b78428fce" x="0" y="0" width="40" height="30" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[NRO.]]></text>
+							</element>
+						</columnHeader>
+						<columnFooter height="20" rowSpan="1" style="Table_CH"/>
+						<detailCell height="20" style="Table_TD">
+							<element kind="textField" uuid="7bab3bff-2bf3-4e17-a46f-e4e546d0c7f3" x="0" y="0" width="40" height="20" hTextAlign="Center" vTextAlign="Middle">
+								<expression><![CDATA[$V{nroCounter}]]></expression>
+							</element>
+						</detailCell>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+					</column>
+					<column kind="single" uuid="f52b6058-3269-4309-9ee7-dbc16d94479c" width="180">
+						<columnHeader height="30" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="0566a475-8b3f-4134-92aa-08330e09c33e" x="0" y="0" width="180" height="30" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[DETALLE]]></text>
+							</element>
+						</columnHeader>
+						<columnFooter height="20" rowSpan="1" style="Table_CH"/>
+						<detailCell height="20" style="Table_TD">
+							<element kind="textField" uuid="8caa6f1d-8d3b-48db-add6-d2f61268d0d8" x="0" y="0" width="180" height="20" vTextAlign="Middle">
+								<paragraph leftIndent="5"/>
+								<expression><![CDATA[$F{detalle}]]></expression>
+								<property name="com.jaspersoft.studio.unit.spacingBefore" value="pixel"/>
+								<property name="com.jaspersoft.studio.unit.leftIndent" value="px"/>
+							</element>
+						</detailCell>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+					</column>
+					<column kind="single" uuid="bb6cfdfb-e7bd-43dd-9dab-479327399712" width="80">
+						<columnHeader height="30" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="f4a85195-16d3-4a5f-a3e3-e83deb5e64df" x="0" y="0" width="80" height="30" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[SERVICIO]]></text>
+							</element>
+						</columnHeader>
+						<columnFooter height="20" rowSpan="1" style="Table_CH"/>
+						<detailCell height="20" style="Table_TD">
+							<element kind="textField" uuid="9c727f1e-42e8-4526-8dca-4b262c7dea30" x="0" y="0" width="80" height="20" hTextAlign="Center" vTextAlign="Middle">
+								<expression><![CDATA[$F{servicio}]]></expression>
+							</element>
+						</detailCell>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+					</column>
+					<column kind="single" uuid="ef5ec50f-ae8a-4aed-81e5-69a148d09d9c" width="80">
+						<columnHeader height="30" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="147be612-f323-4dc8-88fe-8f170b90a621" x="0" y="0" width="80" height="30" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[CANTIDAD]]></text>
+							</element>
+						</columnHeader>
+						<columnFooter height="20" rowSpan="1" style="Table_CH"/>
+						<detailCell height="20" style="Table_TD">
+							<element kind="textField" uuid="a2ed8865-337b-4a13-8525-cc26c81d684f" x="0" y="0" width="80" height="20" hTextAlign="Center" vTextAlign="Middle">
+								<expression><![CDATA[$F{cantidad}]]></expression>
+							</element>
+						</detailCell>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+					</column>
+					<column kind="single" uuid="33e55a48-a58c-473a-b478-ce810e902279" width="70">
+						<columnHeader height="30" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="52082fff-ea1e-4252-b9e3-5c819142003c" x="0" y="0" width="70" height="30" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[PRECIO UNITARIO]]></text>
+							</element>
+						</columnHeader>
+						<columnFooter height="20" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="798e97c2-c3e1-45aa-84c0-75bc70e70fe5" x="0" y="0" width="70" height="20" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[TOTAL]]></text>
+							</element>
+						</columnFooter>
+						<detailCell height="20" style="Table_TD">
+							<element kind="textField" uuid="73571898-70e9-44bf-8fd8-4c68eff189c6" x="0" y="0" width="70" height="20" hTextAlign="Center" vTextAlign="Middle">
+								<expression><![CDATA[$F{precioUni}]]></expression>
+							</element>
+						</detailCell>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+					</column>
+					<column kind="single" uuid="a02594d4-6f41-4fa5-b0a6-c680bbe536e9" width="71">
+						<columnHeader height="30" rowSpan="1" style="Table_CH">
+							<element kind="staticText" uuid="9db2f7e0-0a40-4188-94de-bb20781ea3b0" x="0" y="0" width="71" height="30" fontSize="9.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+								<text><![CDATA[PRECIO]]></text>
+							</element>
+						</columnHeader>
+						<columnFooter height="20" rowSpan="1" style="Table_CH">
+							<element kind="textField" uuid="ef79ae8e-c309-4ebc-90e5-390a37f0e00a" x="0" y="0" width="71" height="20" hTextAlign="Center" vTextAlign="Middle">
+								<expression><![CDATA[$V{total}]]></expression>
+							</element>
+						</columnFooter>
+						<detailCell height="20" style="Table_TD">
+							<element kind="textField" uuid="9cdcebef-cf7f-4962-876e-adca2fb30c5b" x="0" y="0" width="71" height="20" hTextAlign="Center" vTextAlign="Middle">
+								<expression><![CDATA[$F{precio}]]></expression>
+							</element>
+						</detailCell>
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+					</column>
+				</component>
+				<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+				<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+				<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+				<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+			</element>
+			<element kind="staticText" uuid="3a0b774a-5fc4-4379-9441-61624ff66a54" x="199" y="172" width="165" height="40" fontSize="15.0" hTextAlign="Center">
+				<text><![CDATA[..............................
+Firma Vo.Bo.]]></text>
+			</element>
+		</band>
+	</detail>
+	<pageFooter height="75" splitType="Stretch">
+		<element kind="staticText" uuid="7cc69f3b-4c97-460d-8ac2-5c7bccf26283" x="32" y="12" width="518" height="21" bold="true" hTextAlign="Center" vTextAlign="Top">
+			<text><![CDATA[_________________________________________________________________________________________________________________________________]]></text>
+		</element>
+		<element kind="staticText" uuid="4fc1d1fe-7145-42c3-92e2-c5cba28007dc" x="43" y="31" width="476" height="30" fontSize="10.0" hTextAlign="Center">
+			<text><![CDATA[Avenida Costanera Nro. 5022, Urbanizacion Libertad entre calles JJ Torres y Hernan Siles Zuazo, Casa Municipal (Jach'a Uta), a media cuadra de la Estacion de Bomberos El Alto.]]></text>
+		</element>
+	</pageFooter>
+</jasperReport>

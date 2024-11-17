@@ -60,7 +60,7 @@ public class OrdenFotoServiceReport {
                     "resources" + File.separator +
                     "templates" + File.separator +
                     "report" + File.separator +
-                    "orden" + i + ".jrxml";
+                    "orden.jrxml";
 
             //sabes que, con esta primera pagina, quiero que lo pobles con datos
             Map<String, Object> params = new HashMap<>();

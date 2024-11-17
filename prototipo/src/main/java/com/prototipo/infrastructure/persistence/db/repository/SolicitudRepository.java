@@ -1,8 +1,11 @@
 package com.prototipo.infrastructure.persistence.db.repository;
 
+import com.prototipo.application.modelDto.NotaDePedidoDto;
 import com.prototipo.infrastructure.persistence.db.entity.SolicitudEntity;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -22,4 +25,7 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
 
 //    List<SolicitudEntity> findAllByFkUnidad_Id(Long fkUnidadId);
 //    SolicitudEntity findByFkUnidad_Id(Long fkUnidadId);
+
+
+
 }

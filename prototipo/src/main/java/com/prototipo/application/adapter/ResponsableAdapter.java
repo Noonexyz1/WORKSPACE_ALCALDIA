@@ -1,15 +1,18 @@
 package com.prototipo.application.adapter;
 
+import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.AprobacionDto;
+import com.prototipo.application.modelDto.NotaDePedidoDto;
 import com.prototipo.application.modelDto.OperacionDto;
 import com.prototipo.application.modelDto.UsuarioDto;
-import com.prototipo.application.port.AprobacionAbstract;
-import com.prototipo.application.port.OperacionAbstract;
-import com.prototipo.application.port.SolicitudAbstract;
-import com.prototipo.application.port.UsuarioAbastract;
+import com.prototipo.application.port.*;
 import com.prototipo.application.useCase.ResponsableService;
 import com.prototipo.domain.enums.EstadoByOperadorEnum;
 import com.prototipo.domain.enums.EstadoByResponsableEnum;
+import com.prototipo.domain.model.NotaDePedido;
+import com.prototipo.domain.model.Reporte;
+
+import java.util.List;
 
 public class ResponsableAdapter implements ResponsableService {
 
@@ -19,16 +22,22 @@ public class ResponsableAdapter implements ResponsableService {
     private AprobacionAbstract aprobacionAbstract;
     private UsuarioAbastract usuarioAbastract;
     private OperacionAbstract operacionAbstract;
+    private MapperApplicationAbstract mapperApplication;
+    private ReportesPDFAbstract reportesPDFAbstract;
 
     public ResponsableAdapter(SolicitudAbstract solicitudAbstract,
                               AprobacionAbstract aprobacionAbstract,
                               UsuarioAbastract usuarioAbastract,
-                              OperacionAbstract operacionAbstract) {
+                              OperacionAbstract operacionAbstract,
+                              MapperApplicationAbstract mapperApplication,
+                              ReportesPDFAbstract reportesPDFAbstract) {
 
         this.solicitudAbstract = solicitudAbstract;
         this.aprobacionAbstract = aprobacionAbstract;
         this.usuarioAbastract = usuarioAbastract;
         this.operacionAbstract = operacionAbstract;
+        this.mapperApplication = mapperApplication;
+        this.reportesPDFAbstract = reportesPDFAbstract;
     }
 
     @Override
@@ -71,5 +80,23 @@ public class ResponsableAdapter implements ResponsableService {
         aprobacionDto.setFkResponsable(usuarioDto);
 
         aprobacionAbstract.guardarAprobacionAbstract(aprobacionDto);
+    }
+
+    @Override
+    public List<NotaDePedido> generarNotaDePedidoPDF(Long idSolicitud) {
+        List<NotaDePedidoDto> notaDePedidoDtoList = reportesPDFAbstract
+                .getNotaDePedidoAbstract(idSolicitud);
+
+        return notaDePedidoDtoList.stream()
+                .map(x -> mapperApplication.mapearAbstract(x, NotaDePedido.class))
+                .toList();
+    }
+
+    @Override
+    public List<Reporte> generarReportePDF(Long idSolicitud) {
+        return reportesPDFAbstract.generarReportePDFAbstract(idSolicitud)
+                .stream()
+                .map(x -> mapperApplication.mapearAbstract(x, Reporte.class))
+                .toList();
     }
 }
