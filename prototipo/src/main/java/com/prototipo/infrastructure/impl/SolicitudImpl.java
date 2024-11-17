@@ -2,6 +2,7 @@ package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.ArchivoPdfDto;
 import com.prototipo.application.modelDto.DetalleSolicitudDto;
+import com.prototipo.application.modelDto.NotaDePedidoDto;
 import com.prototipo.application.modelDto.SolicitudDto;
 import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.domain.model.Solicitud;

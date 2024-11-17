@@ -2,17 +2,25 @@ package com.prototipo.infrastructure.rest.controller;
 
 import com.prototipo.application.useCase.AprobacionService;
 import com.prototipo.application.useCase.ResponsableService;
-import com.prototipo.domain.model.Aprobacion;
+import com.prototipo.domain.model.*;
+import com.prototipo.infrastructure.rest.report.SolicitudReport;
+import com.prototipo.infrastructure.rest.report.TablaSolicitudReport;
 import com.prototipo.infrastructure.rest.request.AprobacionSoliRequest;
 import com.prototipo.infrastructure.rest.request.PaginacionResponRequest;
 import com.prototipo.infrastructure.rest.response.SolicitudResponResponse;
+import com.prototipo.infrastructure.service.NotaPedidoServiceReport;
+import com.prototipo.infrastructure.service.ReporteServiceReport;
+import net.sf.jasperreports.engine.JRException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 @CrossOrigin(origins = "*", maxAge = 86400)
@@ -26,6 +34,10 @@ public class ResponsableController {
     private ModelMapper modelMapper;
     @Autowired
     private ResponsableService responsableService;
+    @Autowired
+    private NotaPedidoServiceReport notaPedidoServiceReport;
+    @Autowired
+    private ReporteServiceReport reporteServiceReport;
 
     //TODO, verificar este metodo
     @PostMapping(path = {"/aprobarSolicitud"}, produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -105,5 +117,54 @@ public class ResponsableController {
                 .estadoByResponsable(x.getEstadoByResponsable())
                 .nombreUnidad(x.getFkSolicitud().getFkUnidad().getNombre())
                 .build();
+    }
+
+
+
+    //localhost:8081/solicitante/exportSolicitudDPF
+    @GetMapping("/exportNotaPedidoDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
+    public ResponseEntity<byte[]> exportNotaPedidoDPF(
+            @PathVariable Long idSolicitud,
+            @PathVariable Long idSolicitante,
+            @PathVariable Long idResponsable ) throws IOException, JRException {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData(
+                "notaPedidoPDF",
+                "notaPedidoPDF.pdf"
+        );
+
+
+        List<NotaDePedido> notaDePedidoList = responsableService.generarNotaDePedidoPDF(idSolicitud);
+
+//        List<Reporte> listReport = responsableService.generarReportePDF(idSolicitud);
+//        System.out.println(listReport);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(notaPedidoServiceReport.exportToPdf(notaDePedidoList));
+    }
+
+    //localhost:8081/solicitante/exportSolicitudDPF
+    @GetMapping("/exportReporteDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
+    public ResponseEntity<byte[]> exportReporteDPF(
+            @PathVariable Long idSolicitud,
+            @PathVariable Long idSolicitante,
+            @PathVariable Long idResponsable ) throws IOException, JRException {
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData(
+                "reportePDF",
+                "reportePDF.pdf"
+        );
+
+        List<Reporte> listReport = responsableService.generarReportePDF(idSolicitud);
+        System.out.println(listReport);
+
+        return ResponseEntity.ok()
+                .headers(headers)
+                .body(reporteServiceReport.exportToPdf(listReport));
     }
 }

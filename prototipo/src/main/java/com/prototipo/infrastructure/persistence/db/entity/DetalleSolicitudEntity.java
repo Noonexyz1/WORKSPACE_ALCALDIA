@@ -32,6 +32,6 @@ public class DetalleSolicitudEntity {
     @ManyToOne
     private SolicitudEntity fkSolicitud;
 
-    @OneToMany(mappedBy = "fkDetalleSolicitud")
-    private List<DescargoEntity> listDescargo;
+    @OneToOne(mappedBy = "fkDetalleSolicitud")
+    private DescargoEntity descargo;
 }

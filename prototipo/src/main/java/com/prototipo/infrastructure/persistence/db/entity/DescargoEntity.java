@@ -25,6 +25,6 @@ public class DescargoEntity {
 
     @ManyToOne
     private UsuarioEntity fkResponsable;
-    @ManyToOne
+    @OneToOne
     private DetalleSolicitudEntity fkDetalleSolicitud;
 }

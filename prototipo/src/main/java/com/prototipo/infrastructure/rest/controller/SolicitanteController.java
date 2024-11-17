@@ -347,8 +347,8 @@ public class SolicitanteController {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
         headers.setContentDispositionFormData(
-                "comunicacionInternaPDF",
-                "comunicacionInterna.pdf"
+                "ordenParaFotocopiaPDF",
+                "ordenParaFotocopia.pdf"
         );
 
         Solicitud solicitudResp = solicitudService

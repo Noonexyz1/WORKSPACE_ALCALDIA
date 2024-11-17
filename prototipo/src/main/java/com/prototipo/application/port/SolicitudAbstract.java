@@ -16,6 +16,5 @@ public interface SolicitudAbstract {
     SolicitudDto buscarSolicitudAbstract(Long id);
 
     SolicitudDto buscarSolicitudByFkUnidad(Long idUnidad);
-
     List<DetalleSolicitudDto> getListaDetalleSolicitudAbstract(Long idSolicitud);
 }
