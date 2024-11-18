@@ -1,6 +1,5 @@
 package com.prototipo.application.modelDto;
 
-import com.prototipo.domain.model.Cargo;
 import lombok.*;
 
 @Getter
@@ -15,4 +14,5 @@ public class UsuarioUnidadDto {
     private UnidadDto fkUnidad;
     private RolDto fkRol;
     private CargoDto fkCargo;
+    private UsuarioUnidadDto fkResponsable;
 }

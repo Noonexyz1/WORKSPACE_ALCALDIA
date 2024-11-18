@@ -14,4 +14,5 @@ public class UsuarioUnidad {
     private Unidad fkUnidad;
     private Rol fkRol;
     private Cargo fkCargo;
+    private UsuarioUnidad fkResponsable;
 }
