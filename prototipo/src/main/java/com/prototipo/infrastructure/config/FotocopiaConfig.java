@@ -12,25 +12,31 @@ import org.springframework.context.annotation.Configuration;
 public class FotocopiaConfig {
 
     @Bean
-    public FotocopiaService fotocopiaServiceBean(@Qualifier("usuarioImpl")
-                                                 UsuarioAbastract usuarioAbastract,
-                                                 @Qualifier("mapperApplicationImpl")
-                                                 MapperApplicationAbstract mapperApplicationAbstract,
-                                                 @Qualifier("rolImpl")
-                                                 RolAbstract rolAbstract,
-                                                 @Qualifier("credencialImpl")
-                                                 CredencialAbstract credencialAbstract,
-                                                 @Qualifier("unidadImpl")
-                                                 UnidadAbstract unidadAbstract,
-                                                 @Qualifier("usuarioUnidadImpl")
-                                                 UsuarioUnidadAbstract usuarioUnidadAbstract){
-
+    public FotocopiaService fotocopiaServiceBean(
+            @Qualifier("usuarioImpl")
+            UsuarioAbastract usuarioAbastract,
+            @Qualifier("mapperApplicationImpl")
+            MapperApplicationAbstract mapperApplicationAbstract,
+            @Qualifier("rolImpl")
+            RolAbstract rolAbstract,
+            @Qualifier("credencialImpl")
+            CredencialAbstract credencialAbstract,
+            @Qualifier("unidadImpl")
+            UnidadAbstract unidadAbstract,
+            @Qualifier("usuarioUnidadImpl")
+            UsuarioUnidadAbstract usuarioUnidadAbstract,
+            @Qualifier("cargoImpl")
+            CargoAbstract cargoAbstract
+    ){
         //En los construntores, EL ORDEN IMPORTA
-        return new FotocopiaAdapter(usuarioAbastract,
-                                    rolAbstract,
-                                    mapperApplicationAbstract,
-                                    credencialAbstract,
-                                    unidadAbstract,
-                                    usuarioUnidadAbstract);
+        return new FotocopiaAdapter(
+                usuarioAbastract,
+                rolAbstract,
+                mapperApplicationAbstract,
+                credencialAbstract,
+                unidadAbstract,
+                usuarioUnidadAbstract,
+                cargoAbstract
+        );
     }
 }

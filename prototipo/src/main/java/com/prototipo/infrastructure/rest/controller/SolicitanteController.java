@@ -175,12 +175,14 @@ public class SolicitanteController {
         SolicitudReport solicitudReport = SolicitudReport.builder()
                 .funcionarioTo(
                         usuarioResponsable.getFkUsuario().getNombres() + " " +
-                        usuarioResponsable.getFkUsuario().getApellidos())
+                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                        usuarioResponsable.getFkUsuario().getMaterno())
                 .funcionarioToCargo(
                         usuarioResponsable.getFkCargo().getNombreCargo())
                 .funcionarioFrom(
                         usuarioSolicitante.getFkUsuario().getNombres() + " " +
-                        usuarioSolicitante.getFkUsuario().getApellidos())
+                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                        usuarioResponsable.getFkUsuario().getMaterno())
                 .funcionarioFromCargo(
                         usuarioSolicitante.getFkCargo().getNombreCargo())
                 .cite(solicitudResp.getCite())
@@ -225,12 +227,14 @@ public class SolicitanteController {
         ComunicacionReport comunicacionReport = ComunicacionReport.builder()
                 .funcionarioTo(
                         usuarioResponsable.getFkUsuario().getNombres() + " " +
-                        usuarioResponsable.getFkUsuario().getApellidos())
+                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                        usuarioResponsable.getFkUsuario().getMaterno())
                 .funcionarioToCargo(
                         usuarioResponsable.getFkCargo().getNombreCargo())
                 .funcionarioFrom(
                         usuarioSolicitante.getFkUsuario().getNombres() + " " +
-                        usuarioSolicitante.getFkUsuario().getApellidos())
+                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                        usuarioResponsable.getFkUsuario().getMaterno())
                 .funcionarioFromCargo(
                         usuarioSolicitante.getFkCargo().getNombreCargo())
                 .cite(solicitudResp.getCite())
@@ -300,12 +304,14 @@ public class SolicitanteController {
             InformeReport report = InformeReport.builder()
                     .funcionarioTo(
                             usuarioResponsable.getFkUsuario().getNombres() + " " +
-                                    usuarioResponsable.getFkUsuario().getApellidos())
+                            usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                            usuarioResponsable.getFkUsuario().getMaterno())
                     .funcionarioToCargo(
                             usuarioResponsable.getFkCargo().getNombreCargo())
                     .funcionarioFrom(
                             usuarioSolicitante.getFkUsuario().getNombres() + " " +
-                                    usuarioSolicitante.getFkUsuario().getApellidos())
+                            usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                            usuarioResponsable.getFkUsuario().getMaterno())
                     .funcionarioFromCargo(
                             usuarioSolicitante.getFkCargo().getNombreCargo())
                     .cite(solicitudResp.getCite())

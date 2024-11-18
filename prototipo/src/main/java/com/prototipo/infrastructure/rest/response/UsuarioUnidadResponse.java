@@ -15,7 +15,8 @@ public class UsuarioUnidadResponse {
 
     private Long idUser;
     private String nombres;
-    private String apellidos;
+    private String paterno;
+    private String materno;
     private String correo;
 
     private String nombreRol;
