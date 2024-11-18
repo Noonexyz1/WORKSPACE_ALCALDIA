@@ -14,4 +14,5 @@ public class UsuarioNuevoRequest {
     private String correo;
     private Long idRol;
     private Long idUni;
+    private Long idCargo;
 }

@@ -84,7 +84,7 @@ public class AdministradorController {
     public void editarUsuario(@RequestBody UsuarioUnidadRequest request){
         //TODO, hacer para Auditoria
         Usuario usuario = Usuario.builder()
-                .id(request.getIdUser())
+                .id(request.getId())
                 .nombres(request.getNombres())
                 .apellidos(request.getApellidos())
                 .correo(request.getCorreo())
@@ -93,6 +93,7 @@ public class AdministradorController {
         //Haciendo el truco de los Ids ;D
         Unidad unidad = Unidad.builder().id(request.getIdUni()).build();
         Rol rol = Rol.builder().id(request.getIdRol()).build();
+        Cargo cargo = Cargo.builder().id(request.getIdCargo()).build();
 
         UsuarioUnidad editUserUni = UsuarioUnidad.builder()
                 .id(request.getId())

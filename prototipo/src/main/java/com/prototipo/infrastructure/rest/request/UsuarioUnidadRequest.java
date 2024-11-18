@@ -18,4 +18,5 @@ public class UsuarioUnidadRequest {
 
     private Long idUni;
     private Long idRol;
+    private Long idCargo;
 }
