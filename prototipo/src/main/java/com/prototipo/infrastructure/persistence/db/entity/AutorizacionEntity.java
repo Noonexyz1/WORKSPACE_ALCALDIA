@@ -3,6 +3,7 @@ package com.prototipo.infrastructure.persistence.db.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 @Getter
@@ -11,19 +12,22 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "solicitud")
-public class SolicitudEntity {
+@Table(name = "autorizacion")
+public class AutorizacionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
-    private String cite;
     private String fecha;
+    private Long totalAutorizado;
+    private BigDecimal totalCotizadoBs;
 
     @ManyToOne
-    private UsuarioUnidadEntity fkUsuarioSolicitante;
+    private UsuarioUnidadEntity fkUsuarioResponsable;
+    @ManyToOne
+    private SolicitudEntity fkSolicitud;
 
-    @OneToMany(mappedBy = "fkSolicitud")
-    private List<AutorizacionEntity> listAutorizacion;
+    @OneToOne(mappedBy = "fkAutorizacion")
+    private FinalizacionEntity finalizacion;
 }

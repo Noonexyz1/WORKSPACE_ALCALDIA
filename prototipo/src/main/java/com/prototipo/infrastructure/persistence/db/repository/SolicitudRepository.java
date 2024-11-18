@@ -17,7 +17,9 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
     * valor proporcionado. La sintaxis FkSolicitante_Id le indica a
     * Spring Data JPA que debe usar el campo id de la entidad Usuario
     * relacionada con fkSolicitante. */
-    List<SolicitudEntity> findAllByFkSolicitante_Id(Long fkSolicitanteId, Pageable pageable);
+
+    //List<SolicitudEntity> findAllByFkSolicitante_Id(Long fkSolicitanteId, Pageable pageable);
+
     /*Si no hay elementos coincidentes, retorna una lista vacía ([])
     * Este comportamiento es predeterminado en las listas devueltas por
     * métodos de repositorio en Spring Data JPA: nunca se retorna null,
@@ -25,7 +27,5 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
 
 //    List<SolicitudEntity> findAllByFkUnidad_Id(Long fkUnidadId);
 //    SolicitudEntity findByFkUnidad_Id(Long fkUnidadId);
-
-
 
 }

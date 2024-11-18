@@ -3,25 +3,25 @@ package com.prototipo.infrastructure.persistence.db.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "archivo_pdf")
-public class ArchivoPdfEntity {
+@Table(name = "finalizacion")
+public class FinalizacionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
-    private String nombreArchivo;
+    private String fecha;
+    private Long totalEjecutado;
+    private BigDecimal totalEjecutadoBs;
 
-    //@Column(columnDefinition = "LONGTEXT")
-    @Column(columnDefinition = "MEDIUMTEXT")
-    private String archivo;
-
-    @ManyToOne
-    private SolicitudEntity fkSolicitud;
+    @OneToOne
+    private AutorizacionEntity fkAutorizacion;
 }

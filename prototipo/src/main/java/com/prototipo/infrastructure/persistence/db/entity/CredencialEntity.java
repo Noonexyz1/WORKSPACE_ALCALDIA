@@ -18,7 +18,7 @@ public class CredencialEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
-    private String correo;
+    private String ci;
     private String pass;
 
     @OneToOne

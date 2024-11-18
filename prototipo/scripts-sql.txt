@@ -28,27 +28,29 @@ VALUES
 ("Unidad de Gabinete de Gobierno", "Piso 5"),
 ("Unidad de Cultura y Deporte", "Piso 6"),
 ("Unidad de Desarrollo Social", "Piso 7"),
-("Unidad de Servicios Generales", "Piso 7");
+("Unidad de Servicios Generales", "Piso 2");
 
 
 #Esta tabla si o si para produccion
-INSERT INTO usuario(apellidos, correo, nombres)
-VALUES("Jefis", "jefa@gmail.com", "Tania");
+INSERT INTO usuario(ci, correo, materno, nombres, paterno)
+VALUES("1234567", "jefa@gmail.com", "Lopez", "Wilder Ariel", "Ali");
 
 #Esta tabla si o si para produccion
-INSERT INTO credencial(fk_usuario_id, correo, pass)
-VALUES(1, "jefa@gmail.com", "123");
+INSERT INTO credencial(fk_usuario_id, ci, pass)
+VALUES(1, "1234567", "123");
 #El administrador debe poder iniciar con el sistema
-
-#Esta tabla si o si para produccion
-INSERT INTO usuario_unidad(is_active, fk_rol_id, fk_unidad_id, fk_usuario_id)
-VALUES(TRUE, 1, NULL, 1);
 
 #Esta tabla si o si para produccion
 INSERT INTO cargo(nombre_cargo)
 VALUES("Jefe"),
 ("Responsable"),
-("Pasante");
+("Funcionario");
+
+#Esta tabla si o si para produccion
+INSERT INTO usuario_unidad(is_active, fk_cargo_id, fk_responsable_id , fk_rol_id, fk_unidad_id, fk_usuario_id)
+VALUES(TRUE, 1, null, 1, 20, 1);
+
+
 
 
 #----------------------PRUEBAS-----------------------------
@@ -62,267 +64,12 @@ SELECT * from credencial;
 SELECT * from usuario_unidad;
 SELECT * from cargo;
 
-SELECT * from archivo_pdf;
 SELECT * from solicitud;
 SELECT * from detalle_solicitud ds;
-SELECT * from aprobacion;
-SELECT * from operacion;
 
 DELETE from solicitud;
-DELETE FROM operacion;
 
 
-
-#Consulta mas simple pero mas potente
-SELECT * #a.fk_solicitud_id
-FROM aprobacion a
-WHERE a.fk_solicitud_id IN (
-	SELECT s.id
-	FROM solicitud s
-	WHERE s.fk_unidad_id = (
-		SELECT uu.fk_unidad_id
-		FROM usuario_unidad uu
-		WHERE uu.fk_usuario_id = 6
-		AND uu.is_active = TRUE
-	)
-)
-AND a.estado_by_responsable = 'Pendiente'
-AND a.estado_cambio = 0;
-
-
-
-#Consulta mas simple para operadores
-SELECT *
-FROM operacion o
-WHERE fk_solicitud_id IN (
-    SELECT s.id
-	FROM solicitud s
-	WHERE s.fk_unidad_id IN (
-		SELECT uu.fk_unidad_id
-		FROM usuario_unidad uu
-		WHERE uu.fk_usuario_id = 3
-		AND uu.is_active = TRUE
-	)
-)
-AND o.estado_by_operador = 'Pendiente'
-AND o.estado_cambio = 0
-
-SELECT *
-FROM operacion o
-WHERE fk_solicitud_id IN (
-    SELECT s.id
-	FROM solicitud s
-	WHERE s.fk_unidad_id IN (
-		SELECT uu.fk_unidad_id
-		FROM usuario_unidad uu
-		WHERE uu.fk_usuario_id = 3
-		AND uu.is_active = TRUE
-	)
-)
-AND o.estado_by_operador = 'Iniciado'
-AND o.estado_cambio = 1
-
-SELECT *
-FROM operacion o
-WHERE fk_solicitud_id IN (
-    SELECT s.id
-	FROM solicitud s
-	WHERE s.fk_unidad_id IN (
-		SELECT uu.fk_unidad_id
-		FROM usuario_unidad uu
-		WHERE uu.fk_usuario_id = 3
-		AND uu.is_active = TRUE
-	)
-)
-AND o.estado_by_operador = 'Iniciado'
-AND o.estado_cambio = 1
-
-SELECT *
-FROM operacion o
-WHERE fk_solicitud_id IN (
-    SELECT s.id
-	FROM solicitud s
-	WHERE s.fk_unidad_id IN (
-		SELECT uu.fk_unidad_id
-		FROM usuario_unidad uu
-		WHERE uu.fk_usuario_id = 3
-		AND uu.is_active = TRUE
-	)
-)
-AND o.estado_by_operador = 'Completado'
-AND o.estado_cambio = 2
-
-SELECT *
-FROM operacion o
-
-
-
-######Consulta de prueba
-
-
-
-
-
-
-
-
-
-
-#consulta final
-SELECT *
-FROM aprobacion a
-WHERE a.fk_solicitud_id IN (
-	SELECT *
-	FROM solicitud s
-	WHERE s.fk_unidad_id = (
-		SELECT uu.fk_unidad_id
-		FROM usuario_unidad uu
-		WHERE uu.fk_usuario_id = 6
-		AND uu.is_active = TRUE
-	)
-)
-AND a.estado_by_responsable = "Pendiente"
-
-
-
-#######################################
-
-SELECT o2.fk_solicitud_id
-FROM operacion o2
-WHERE o2.fk_operador_id = :idOperador
-AND o2.estado_by_operador = 'Completado'
-
-SELECT *
-FROM operacion o
-WHERE o.fk_operador_id = :idOperador
-AND o.estado_by_operador = 'Iniciado'
-AND o.fk_solicitud_id NOT IN (
-    SELECT o2.fk_solicitud_id
-    FROM operacion o2
-    WHERE o2.fk_operador_id = :idOperador
-    AND o2.estado_by_operador = 'Completado'
-)
-
-SELECT *
-FROM aprobacion a
-
-SELECT *
-FROM aprobacion a2
-WHERE a2.fk_solicitud_id = 1
-AND (a2.estado_by_responsable = "Aprobada"
-	OR a2.estado_by_responsable = "Rechazada"
-)
-
-#consulta final
-SELECT *
-FROM aprobacion a
-WHERE a.fk_solicitud_id NOT IN (
-    SELECT a2.fk_solicitud_id
-    FROM aprobacion a2
-    WHERE a2.fk_solicitud_id = 1
-    AND (a2.estado_by_responsable = "Aprobada"
-    	OR a2.estado_by_responsable = "Rechazada"
-    )
-)
-AND a.fk_solicitud_id = 1
-AND a.estado_by_responsable = "Pendiente"
-
-SELECT uu.fk_unidad_id
-FROM usuario_unidad uu
-WHERE uu.fk_usuario_id = 2###
-
-SELECT *
-FROM aprobacion a
-WHERE a.fk_solicitud_id NOT IN (
-    SELECT a2.fk_solicitud_id
-    FROM aprobacion a2
-    WHERE a2.fk_solicitud_id = 1
-    AND (a2.estado_by_responsable = "Aprobada"
-    	OR a2.estado_by_responsable = "Rechazada"
-    )
-)
-AND a.fk_solicitud_id = 1
-AND a.estado_by_responsable = "Pendiente"
-
-SELECT s.id
-FROM solicitud s
-WHERE s.fk_unidad_id = (
-	SELECT uu.fk_unidad_id
-	FROM usuario_unidad uu
-	WHERE uu.fk_usuario_id = 2###
-)
-
-SELECT *
-FROM aprobacion a
-WHERE a.fk_solicitud_id IN (
-	SELECT s.id
-	FROM solicitud s
-	WHERE s.fk_unidad_id = (
-		SELECT uu.fk_unidad_id
-		FROM usuario_unidad uu
-		WHERE uu.fk_usuario_id = 2###
-	)
-);
-
-#consulta final
-SELECT *
-FROM aprobacion a
-WHERE a.fk_solicitud_id NOT IN (
-    SELECT a2.fk_solicitud_id
-    FROM aprobacion a2
-    WHERE a2.fk_solicitud_id IN (
-        SELECT s.id
-        FROM solicitud s
-        WHERE s.fk_unidad_id = (
-            SELECT uu.fk_unidad_id
-            FROM usuario_unidad uu
-            WHERE uu.fk_usuario_id = 2
-        )
-    )
-    AND (a2.estado_by_responsable = 'Aprobada'
-    	OR a2.estado_by_responsable = 'Rechazada'
-    )
-)
-AND a.estado_by_responsable = 'Pendiente';
-
-SELECT *
-FROM aprobacion a
-WHERE a.fk_solicitud_id NOT IN (
-    SELECT a2.fk_solicitud_id
-    FROM aprobacion a2
-    WHERE a2.fk_solicitud_id IN (
-        SELECT s.id
-        FROM solicitud s
-        WHERE s.fk_unidad_id = (
-            SELECT uu.fk_unidad_id
-            FROM usuario_unidad uu
-            WHERE uu.fk_usuario_id = 2
-        )
-    )
-    AND (a2.estado_by_responsable = 'Aprobada'
-        OR a2.estado_by_responsable = 'Rechazada'
-    )
-)
-AND a.estado_by_responsable = 'Pendiente'
-
-SELECT *
-FROM aprobacion a
-WHERE a.fk_responsable_id = 2
-AND a.estado_by_responsable = "Aprobada"
-
-
-SELECT *
-FROM aprobacion a
-WHERE a.fk_solicitud_id IN (
-    SELECT s.id
-    FROM solicitud s
-    WHERE s.fk_unidad_id = (
-        SELECT uu.fk_unidad_id
-        FROM usuario_unidad uu
-        WHERE uu.fk_usuario_id = 2
-    )
-)
-AND a.estado_by_responsable = "Aprobada";
 
 #######################################
 
@@ -336,15 +83,12 @@ WHERE uu.fk_usuario_id = (
     WHERE u.id = (
         SELECT c.fk_usuario_id
         FROM credencial c
-        WHERE c.correo = "OliviaOliveira@gmail.com"
+        WHERE c.ci = "1234567"
         AND c.pass = "Oliveira"
     )
 )
 AND uu.is_active = TRUE
 LIMIT 1
-
-
-
 
 
 #consulta final
@@ -356,47 +100,7 @@ WHERE uu.fk_usuario_id = (
 	WHERE u.id = (
 		SELECT c.fk_usuario_id
 		FROM credencial c
-		WHERE c.correo = "jefa@gmail.com"
+		WHERE c.ci= "1234567"
 		AND c.pass = "123"
 	)
-);
-
-
-
-SELECT *
-FROM operacion o;
-
-SELECT *
-FROM operacion o
-WHERE o.fk_operador_id = 3;
-
-#si por cada uno de estos fkSolicitudes se repite dos veces o mas
-#entonces esta solicitudes ya a sido Completado
-#El resultado de esto es otro subconjunto nuevo
-SELECT *
-FROM operacion o
-WHERE o.fk_operador_id = 3
-AND o.estado_by_operador = "Iniciado";
-
-SELECT o.fk_solicitud_id
-FROM operacion o
-WHERE o.fk_operador_id = 3
-AND o.estado_by_operador = "Iniciado";
-
-/*quiero hacer una consulta donde me devuelva unicamente las operaciones
-con etsado Iniciado, el fkSolicitud es un 5 por ejemplo, pero esta
-solicitud 5 ya ha sido registrado a Completado, entonces si en la misma
-tabla se repite dos veces el 5 quiere decir que esta solicitud ya ha sido
-completada, pero si este 5 solamente aparece una vez, entonces quiero que me muestre
-esta operacion*/
-#CONSULTA DEFINITIVA
-SELECT *
-FROM operacion o
-WHERE o.fk_operador_id = 3
-AND o.estado_by_operador = 'Iniciado'
-AND o.fk_solicitud_id NOT IN (
-    SELECT o2.fk_solicitud_id
-    FROM operacion o2
-    WHERE o2.fk_operador_id = 3
-    AND o2.estado_by_operador = 'Completado'
 );
