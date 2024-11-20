@@ -1,17 +1,11 @@
 package com.prototipo.infrastructure.impl;
 
-import com.prototipo.application.modelDto.ArchivoPdfDto;
-import com.prototipo.application.modelDto.DetalleSolicitudDto;
-import com.prototipo.application.modelDto.SolicitudDto;
+import com.prototipo.application.modelDto.*;
 import com.prototipo.application.port.SolicitudAbstract;
-import com.prototipo.infrastructure.persistence.db.entity.DetalleSolicitudEntity;
-import com.prototipo.infrastructure.persistence.db.entity.SolicitudEntity;
-import com.prototipo.infrastructure.persistence.db.repository.DetalleSolicitudRepository;
-import com.prototipo.infrastructure.persistence.db.repository.SolicitudRepository;
+import com.prototipo.infrastructure.persistence.db.entity.*;
+import com.prototipo.infrastructure.persistence.db.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -23,12 +17,21 @@ public class SolicitudImpl implements SolicitudAbstract {
     private ModelMapper modelMapper;
     @Autowired
     private DetalleSolicitudRepository detalleSolicitudRepository;
+    @Autowired
+    private SolicitudRepository solicitudRepository;
+    @Autowired
+    private FinalizacionRepository finalizacionRepository;
+    @Autowired
+    private CotizacionRepository cotizacionRepository;
+    @Autowired
+    private AutorizacionRepository autorizacionRepository;
 
     //Tu unicamente deberias traerla Solicitud
     @Override
     public SolicitudDto solicitarFotocopiarAbstract(SolicitudDto solicitudDto) {
-
-        return null;
+        SolicitudEntity solicitudEntity = modelMapper.map(solicitudDto, SolicitudEntity.class);
+        SolicitudEntity solicitudEntityResp = solicitudRepository.save(solicitudEntity);
+        return modelMapper.map(solicitudEntityResp, SolicitudDto.class);
     }
 
     @Override
@@ -44,9 +47,11 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
-    public List<SolicitudDto> getListaSolicitudesAbstract(Long idUsuario, Long page, Long size) {
-
-        return null;
+    public List<SolicitudDto> getListaSolicitudesAbstract(Long idUsuarioUnidad, Long page, Long size) {
+        List<SolicitudEntity> listSoli = solicitudRepository.findAllByIdUserUnidad(idUsuarioUnidad);
+        return listSoli.stream()
+                .map(x -> modelMapper.map(x, SolicitudDto.class))
+                .toList();
     }
 
     @Override
@@ -80,4 +85,89 @@ public class SolicitudImpl implements SolicitudAbstract {
                 .map(x -> modelMapper.map(x, DetalleSolicitudDto.class))
                 .toList();
     }
+
+    @Override
+    public List<FinalizacionDto> listFinalizacionSolicitudAbs(Long idFunUni, Long page, Long size) {
+
+        return null;
+    }
+
+    @Override
+    public List<DetalleSolicitudDto> findListDetalleSoliBySolicitudIdAbs(Long idSolicitud) {
+        List<DetalleSolicitudEntity> allBySolicitudId = detalleSolicitudRepository.findAllBySolicitudId(idSolicitud);
+        return allBySolicitudId.stream()
+                .map(x -> modelMapper.map(x, DetalleSolicitudDto.class))
+                .toList();
+    }
+
+    @Override
+    public void guardarCotizacionAbs(CotizacionDto cotizacionDto) {
+        // Intenta cargar el DetalleSolicitudEntity desde la base de datos
+        DetalleSolicitudEntity detalleSolicitud = null;
+
+        if (cotizacionDto.getFkDetalleSolicitud() != null && cotizacionDto.getFkDetalleSolicitud().getId() != null) {
+            detalleSolicitud = detalleSolicitudRepository.findById(cotizacionDto.getFkDetalleSolicitud().getId())
+                    .orElseThrow(() -> new IllegalArgumentException("DetalleSolicitud no encontrado"));
+        } else {
+            // O persiste uno nuevo si no tiene ID (asegúrate de que tenga todos los campos requeridos)
+            detalleSolicitud = modelMapper.map(cotizacionDto.getFkDetalleSolicitud(), DetalleSolicitudEntity.class);
+            detalleSolicitud = detalleSolicitudRepository.save(detalleSolicitud);
+        }
+
+        // Mapear y asignar
+        CotizacionEntity cotizacion = new CotizacionEntity();
+        cotizacion.setPrecioUnitario(cotizacionDto.getPrecioUnitario());
+        cotizacion.setPrecioTotal(cotizacionDto.getPrecioTotal());
+        cotizacion.setFkDetalleSolicitud(detalleSolicitud);
+
+        // Guardar cotización
+        cotizacionRepository.save(cotizacion);
+    }
+
+    @Override
+    public void guardarAutorizacionAbs(AutorizacionDto autorizacionDto) {
+        AutorizacionEntity autorizacion = new AutorizacionEntity();
+
+        // Mapear campos simples
+        autorizacion.setFecha(autorizacionDto.getFecha());
+        autorizacion.setTotalAutorizado(autorizacionDto.getTotalAutorizado());
+        autorizacion.setTotalCotizadoBs(autorizacionDto.getTotalCotizadoBs());
+
+        // Mapear relaciones
+        SolicitudEntity solicitudEntity = new SolicitudEntity();
+        solicitudEntity.setId(autorizacionDto.getFkSolicitud().getId());
+        autorizacion.setFkSolicitud(solicitudEntity);
+
+        UsuarioUnidadEntity usuarioEntity = new UsuarioUnidadEntity();
+        usuarioEntity.setId(autorizacionDto.getFkUsuarioResponsable().getId());
+        autorizacion.setFkUsuarioResponsable(usuarioEntity);
+
+        autorizacionRepository.save(autorizacion);
+    }
+
+    @Override
+    public AutorizacionDto buscarAutorizacionByIdSoliAbs(Long idSolicitud) {
+        AutorizacionEntity autorizacion = autorizacionRepository
+                .buscarAutorizacionByIdSoli(idSolicitud);
+        return modelMapper.map(autorizacion, AutorizacionDto.class);
+    }
+
+    @Override
+    public void guardarFinalizacionAbs(FinalizacionDto finalizacionDto) {
+        FinalizacionEntity finalizacion = new FinalizacionEntity();
+
+        // Mapear los valores simples
+        finalizacion.setFecha(finalizacionDto.getFecha());
+        finalizacion.setTotalEjecutado(finalizacionDto.getTotalEjecutado());
+        finalizacion.setTotalEjecutadoBs(finalizacionDto.getTotalEjecutadoBs());
+
+        // Mapear fkAutorizacion manualmente
+        AutorizacionEntity autorizacionEntity = new AutorizacionEntity();
+        autorizacionEntity.setId(finalizacionDto.getFkAutorizacion().getId());
+        // Mapear propiedades adicionales de fkAutorizacion si es necesario
+        finalizacion.setFkAutorizacion(autorizacionEntity);
+
+        finalizacionRepository.save(finalizacion);
+    }
+
 }

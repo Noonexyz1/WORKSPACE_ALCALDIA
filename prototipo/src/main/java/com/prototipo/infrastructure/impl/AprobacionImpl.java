@@ -1,11 +1,12 @@
 package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.AprobacionDto;
+import com.prototipo.application.modelDto.SolicitudDto;
 import com.prototipo.application.port.AprobacionAbstract;
+import com.prototipo.infrastructure.persistence.db.entity.SolicitudEntity;
+import com.prototipo.infrastructure.persistence.db.repository.SolicitudRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -15,6 +16,9 @@ public class AprobacionImpl implements AprobacionAbstract {
 
     @Autowired
     private ModelMapper modelMapper;
+    @Autowired
+    private SolicitudRepository solicitudRepository;
+
 
     @Override
     public AprobacionDto guardarAprobacionAbstract(AprobacionDto aprobacionDto) {
@@ -47,9 +51,11 @@ public class AprobacionImpl implements AprobacionAbstract {
     }
 
     @Override
-    public List<AprobacionDto> listaDeAprobacionesPendientesAbstractPage(Long idSupervisor, Long page, Long size, String byColumName) {
-
-        return null;
+    public List<SolicitudDto> listaDeAprobacionesPendientesAbstractPage(Long idResponsable, Long page, Long size, String byColumName) {
+        List<SolicitudEntity> listSolEnt = solicitudRepository.findAllByIdUserUnidadRespon(idResponsable);
+        return listSolEnt.stream()
+                .map(x -> modelMapper.map(x, SolicitudDto.class))
+                .toList();
     }
 
     @Override

@@ -4,7 +4,6 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 @Getter
 @Setter
@@ -25,7 +24,7 @@ public class AutorizacionEntity {
 
     @ManyToOne
     private UsuarioUnidadEntity fkUsuarioResponsable;
-    @ManyToOne
+    @OneToOne
     private SolicitudEntity fkSolicitud;
 
     @OneToOne(mappedBy = "fkAutorizacion")

@@ -9,10 +9,9 @@ import lombok.*;
 @Builder
 public class SolicitudResponResponse {
     private Long id;
-    private Long idSolicitud;
-    private Long nroDeCopias;
-    private String tipoDeDocumento;
-    private Long nroDePaginas;
-    private String estadoByResponsable;
+    private String cite;
+    private String fecha;
+    private String nomCompleto;
+    private String nomCargo;
     private String nombreUnidad;
 }

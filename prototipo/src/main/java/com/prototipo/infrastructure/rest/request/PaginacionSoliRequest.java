@@ -8,7 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class PaginacionSoliRequest {
-    private Long idUsuario;
+    private Long idUserUni;
+
     private Long page;
     private Long size;
     private String byColumName;

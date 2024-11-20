@@ -12,6 +12,27 @@ import java.util.List;
 
 @Repository
 public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long> {
+
+    @Query(value =
+            """
+            SELECT *
+            FROM solicitud s
+            WHERE fk_usuario_solicitante_id = :idUsuarioUnidad
+            """, nativeQuery = true)
+    List<SolicitudEntity> findAllByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad);
+
+    @Query(value =
+            """
+            SELECT *
+            FROM solicitud s
+            WHERE fk_usuario_solicitante_id IN (
+                SELECT id
+                FROM usuario_unidad uu
+                WHERE fk_responsable_id = :idResponsable
+            )
+            """, nativeQuery = true)
+    List<SolicitudEntity> findAllByIdUserUnidadRespon(@Param("idResponsable") Long idResponsable);
+
     /*Este méto-do busca todas las solicitudes cuyo campo fkSolicitante
     * (que es una relación con la entidad Usuario) tenga un id igual al
     * valor proporcionado. La sintaxis FkSolicitante_Id le indica a

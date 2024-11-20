@@ -3,8 +3,6 @@ package com.prototipo.infrastructure.persistence.db.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.List;
-
 @Getter
 @Setter
 @Builder
@@ -19,11 +17,12 @@ public class SolicitudEntity {
     @Column(updatable = false, nullable = false)
     private Long id;
     private String cite;
+    private String descripcion;
     private String fecha;
 
     @ManyToOne
     private UsuarioUnidadEntity fkUsuarioSolicitante;
 
-    @OneToMany(mappedBy = "fkSolicitud")
-    private List<AutorizacionEntity> listAutorizacion;
+    @OneToOne(mappedBy = "fkSolicitud")
+    private AutorizacionEntity autorizacion;
 }

@@ -2,15 +2,17 @@ package com.prototipo.infrastructure.rest.response;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class SolicitudSoliciResponse {
+public class DetalleSolicitudExtendidoResponse {
+    private Long idSolicitud;
     private String cite;
     private String fecha;
     private String descripcion;
-    private String cargo;
-    private String ci;
+    private List<DetalleSolicitudResponse> detalleSolicitudResponses;
 }

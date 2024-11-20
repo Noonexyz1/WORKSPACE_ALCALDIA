@@ -1,0 +1,19 @@
+package com.prototipo.infrastructure.persistence.db.repository;
+
+import com.prototipo.infrastructure.persistence.db.entity.AutorizacionEntity;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface AutorizacionRepository extends JpaRepository<AutorizacionEntity, Long> {
+
+    @Query(value =
+            """
+            SELECT *
+            FROM autorizacion a
+            WHERE fk_solicitud_id = :idSolicitud
+            """, nativeQuery = true)
+    AutorizacionEntity buscarAutorizacionByIdSoli(@Param("idSolicitud") Long idSolicitud);
+}
