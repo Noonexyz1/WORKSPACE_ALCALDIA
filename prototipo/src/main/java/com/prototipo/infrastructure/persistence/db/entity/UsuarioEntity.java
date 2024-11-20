@@ -19,23 +19,11 @@ public class UsuarioEntity {
     @Column(updatable = false, nullable = false)
     private Long id;
     private String nombres;
-    private String apellidos;
+    private String paterno;
+    private String materno;
     private String correo;
+    private String ci;
 
     @OneToOne(mappedBy = "fkUsuario")
     private CredencialEntity credencial;
-
-    @OneToMany(mappedBy = "fkSolicitante")
-    private List<SolicitudEntity> listaSolicitantes;
-
-    @OneToMany(mappedBy = "fkResponsable")
-    private List<SolicitudEntity> listaResponsables;
-
-    @OneToMany(mappedBy = "fkResponsable")
-    private List<AprobacionEntity> listaAprobacion;
-    @OneToMany(mappedBy = "fkOperador")
-    private List<OperacionEntity> listaOperaciones;
-
-    @OneToMany(mappedBy = "fkResponsable")
-    private List<DescargoEntity> listaDescargo;
 }

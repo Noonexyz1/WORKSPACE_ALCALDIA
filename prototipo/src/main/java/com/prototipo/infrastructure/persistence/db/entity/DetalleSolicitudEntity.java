@@ -6,8 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 @NoArgsConstructor
@@ -33,5 +31,5 @@ public class DetalleSolicitudEntity {
     private SolicitudEntity fkSolicitud;
 
     @OneToOne(mappedBy = "fkDetalleSolicitud")
-    private DescargoEntity descargo;
+    private CotizacionEntity cotizacion;
 }

@@ -56,7 +56,7 @@ public class SolicitanteController {
     @PostMapping(path = {"/solicitarFotocopiar"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void solicitarFotocopiar(@RequestBody SolicitudRequest solicitudRequest) {
         //Truco de los Ids
-        Unidad unidad = Unidad.builder()
+        /*Unidad unidad = Unidad.builder()
                 .id(solicitudRequest.getIdUnidad())
                 .build();
         Usuario usuario = Usuario.builder()
@@ -77,13 +77,37 @@ public class SolicitanteController {
                 .fkSolicitante(usuario)
                 .build();
 
-        solicitudService.solicitarFotocopiarService(solicitud, archivoPdfs);
+        solicitudService.solicitarFotocopiarService(solicitud, archivoPdfs);*/
+    }
+
+    @PostMapping(path = {"/v2/solicitarFotocopiar"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void solicitarFotocopiarV2(@RequestBody SolicitudRequest solicitudRequest) {
+        //Truco de los Ids
+        UsuarioUnidad usuarioUnidad = UsuarioUnidad.builder()
+                .id(solicitudRequest.getFkUsuarioSolicitante())
+                .build();
+
+        List<DetalleSolicitud> listDetalleSolicitud = solicitudRequest
+                .getListDetalleSolicitud()
+                .stream()
+                .map(x -> modelMapper.map(x, DetalleSolicitud.class))
+                .toList();
+
+        //Debo usar los mappeadores de mi Infraestrucutura
+        Solicitud solicitud = Solicitud.builder()
+                .cite(solicitudRequest.getCite())
+                .fecha(LocalDate.now().toString())
+                .descripcion(solicitudRequest.getDescripcion())
+                .fkUsuarioSolicitante(usuarioUnidad)
+                .build();
+
+        solicitudService.solicitarFotocopiarService(solicitud, listDetalleSolicitud);
     }
 
     @PostMapping(path = {"/solicitarFotocopiarPDF"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public void solicitarFotocopiar(@RequestBody SolicitudRequestPDF solicitudRequest) {
         //Truco de los Ids
-        Usuario usuario = Usuario.builder()
+        /*Usuario usuario = Usuario.builder()
                 .id(solicitudRequest.getIdSolicitante())
                 .build();
         Unidad unidad = Unidad.builder()
@@ -101,21 +125,23 @@ public class SolicitanteController {
                 .map(x -> modelMapper.map(x, DetalleSolicitud.class))
                 .toList();
 
-        solicitudService.registrarFotocopiarService(solicitud, list);
+        solicitudService.registrarFotocopiarService(solicitud, list);*/
     }
 
     @PostMapping(path = {"/verHistorialSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudSoliciResponse>> verHistorialSolicitudes(
             @RequestBody PaginacionSoliRequest pageArg ) {
 
-        Long idUsuario = pageArg.getIdUsuario();
+        Long idUserUni = pageArg.getIdUserUni();
 
         Long page = pageArg.getPage();
         Long size = pageArg.getSize();
         //String byColumName = pageArg.getByColumName();
 
-        List<Solicitud> listDomain = solicitudService.getListaSolicitudesService(idUsuario, page, size);
-        List<SolicitudSoliciResponse> list = listDomain.stream()
+        List<Solicitud> listSoli = solicitudService
+                .getListaSolicitudesService(idUserUni, page, size);
+
+        List<SolicitudSoliciResponse> list = listSoli.stream()
                 .map(this::funcToReturn)
                 .toList();
 
@@ -124,21 +150,10 @@ public class SolicitanteController {
 
     private SolicitudSoliciResponse funcToReturn(Solicitud x) {
         SolicitudSoliciResponse solicitudSoliciResponse = modelMapper.map(x, SolicitudSoliciResponse.class);
-
-        //TODO, personalizar las salidas
-        /*Aprobacion aprobacion = aprobacionService
-                .findAprovacionByIdSoliService(x.getId());
-        Operacion operacion = operacionService
-                .findOperacionByIdSoliService(x.getId());
-
-        String estadoAprobacion = (aprobacion != null)? aprobacion.getEstadoByResponsable(): null;
-        String estadoOperacion = (operacion != null)? operacion.getEstadoByOperador(): null;
-
-        solicitudSoliciResponse.setEstadoResponsable(estadoAprobacion);
-        solicitudSoliciResponse.setEstadoOperador(estadoOperacion);*/
+        solicitudSoliciResponse.setCi(x.getFkUsuarioSolicitante().getFkUsuario().getCi());
+        solicitudSoliciResponse.setCargo(x.getFkUsuarioSolicitante().getFkCargo().getNombreCargo());
         return solicitudSoliciResponse;
     }
-
 
 
     //localhost:8081/solicitante/exportSolicitudDPF
@@ -175,12 +190,14 @@ public class SolicitanteController {
         SolicitudReport solicitudReport = SolicitudReport.builder()
                 .funcionarioTo(
                         usuarioResponsable.getFkUsuario().getNombres() + " " +
-                        usuarioResponsable.getFkUsuario().getApellidos())
+                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                        usuarioResponsable.getFkUsuario().getMaterno())
                 .funcionarioToCargo(
                         usuarioResponsable.getFkCargo().getNombreCargo())
                 .funcionarioFrom(
                         usuarioSolicitante.getFkUsuario().getNombres() + " " +
-                        usuarioSolicitante.getFkUsuario().getApellidos())
+                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                        usuarioResponsable.getFkUsuario().getMaterno())
                 .funcionarioFromCargo(
                         usuarioSolicitante.getFkCargo().getNombreCargo())
                 .cite(solicitudResp.getCite())
@@ -225,12 +242,14 @@ public class SolicitanteController {
         ComunicacionReport comunicacionReport = ComunicacionReport.builder()
                 .funcionarioTo(
                         usuarioResponsable.getFkUsuario().getNombres() + " " +
-                        usuarioResponsable.getFkUsuario().getApellidos())
+                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                        usuarioResponsable.getFkUsuario().getMaterno())
                 .funcionarioToCargo(
                         usuarioResponsable.getFkCargo().getNombreCargo())
                 .funcionarioFrom(
                         usuarioSolicitante.getFkUsuario().getNombres() + " " +
-                        usuarioSolicitante.getFkUsuario().getApellidos())
+                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                        usuarioResponsable.getFkUsuario().getMaterno())
                 .funcionarioFromCargo(
                         usuarioSolicitante.getFkCargo().getNombreCargo())
                 .cite(solicitudResp.getCite())
@@ -300,12 +319,14 @@ public class SolicitanteController {
             InformeReport report = InformeReport.builder()
                     .funcionarioTo(
                             usuarioResponsable.getFkUsuario().getNombres() + " " +
-                                    usuarioResponsable.getFkUsuario().getApellidos())
+                            usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                            usuarioResponsable.getFkUsuario().getMaterno())
                     .funcionarioToCargo(
                             usuarioResponsable.getFkCargo().getNombreCargo())
                     .funcionarioFrom(
                             usuarioSolicitante.getFkUsuario().getNombres() + " " +
-                                    usuarioSolicitante.getFkUsuario().getApellidos())
+                            usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                            usuarioResponsable.getFkUsuario().getMaterno())
                     .funcionarioFromCargo(
                             usuarioSolicitante.getFkCargo().getNombreCargo())
                     .cite(solicitudResp.getCite())

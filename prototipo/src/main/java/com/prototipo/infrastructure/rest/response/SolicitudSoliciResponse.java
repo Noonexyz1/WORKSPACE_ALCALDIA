@@ -8,13 +8,9 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class SolicitudSoliciResponse {
-    private Long id;
-    private Long nroDeCopias;
-    private String tipoDeDocumento;
-    private Long nroDePaginas;
-
     private String cite;
-
-    private String estadoResponsable;
-    private String estadoOperador;
+    private String fecha;
+    private String descripcion;
+    private String cargo;
+    private String ci;
 }

@@ -17,13 +17,15 @@ public class FotocopiaAdapter implements FotocopiaService {
     private CredencialAbstract credencialAbstract;
     private UnidadAbstract unidadAbstract;
     private UsuarioUnidadAbstract usuarioUnidadAbstract;
+    private CargoAbstract cargoAbstract;
 
     public FotocopiaAdapter(UsuarioAbastract usuarioAbastract,
                             RolAbstract rolAbstract,
                             MapperApplicationAbstract mapperApplicationAbstract,
                             CredencialAbstract credencialAbstract,
                             UnidadAbstract unidadAbstract,
-                            UsuarioUnidadAbstract usuarioUnidadAbstract) {
+                            UsuarioUnidadAbstract usuarioUnidadAbstract,
+                            CargoAbstract cargoAbstract) {
 
         this.usuarioAbastract = usuarioAbastract;
         this.rolAbstract = rolAbstract;
@@ -31,10 +33,11 @@ public class FotocopiaAdapter implements FotocopiaService {
         this.credencialAbstract = credencialAbstract;
         this.unidadAbstract = unidadAbstract;
         this.usuarioUnidadAbstract = usuarioUnidadAbstract;
+        this.cargoAbstract = cargoAbstract;
     }
 
     @Override
-    public void creaUsuario(Usuario user, Long rolId, Long idUni){
+    public void creaUsuario(Usuario user, Long idRol, Long idUni, Long idCargo, Long idResponsable){
         // Insertamos al usuario en la tabla 'usuario'
         UsuarioDto usuarioDtoResp = crearUsuario(user);
 
@@ -46,15 +49,19 @@ public class FotocopiaAdapter implements FotocopiaService {
         // a partir de sus IDs, ya que JPA puede manejar estas referencias directamente con los IDs proporcionados.
         // Esto mejora el rendimiento al evitar llamadas innecesarias a la BD.
         // Que trucaso no????? jaja
-        RolDto rolDto = RolDto.builder().id(rolId).build();
+        RolDto rolDto = RolDto.builder().id(idRol).build();
         UnidadDto unidadDto = UnidadDto.builder().id(idUni).build();
+        CargoDto cargoDto = CargoDto.builder().id(idCargo).build();
+        UsuarioUnidadDto usuarioUnidadDto = UsuarioUnidadDto.builder().id(idResponsable).build();
 
         UsuarioUnidadDto userUni = UsuarioUnidadDto.builder()
                 .id(null)
                 .isActive(true)
                 .fkRol(rolDto)
                 .fkUnidad(unidadDto)
+                .fkCargo(cargoDto)
                 .fkUsuario(usuarioDtoResp)
+                .fkResponsable(usuarioUnidadDto)
                 .build();
 
         usuarioUnidadAbstract.guardarUsuarioUnidad(userUni);
@@ -65,8 +72,8 @@ public class FotocopiaAdapter implements FotocopiaService {
                 .encontrarCredencialPorUsuarioId(usuarioDtoResp.getId());
         if (credencialDtoResp == null) {
             CredencialDto newCredencialDto = CredencialDto.builder()
-                    .correo(usuarioDtoResp.getCorreo())
-                    .pass(usuarioDtoResp.getApellidos())
+                    .ci(usuarioDtoResp.getCi())
+                    .pass("funcionario" + usuarioDtoResp.getCi())
                     .fkUsuario(usuarioDtoResp)
                     .build();
             credencialAbstract.guardarCredencialAbstract(newCredencialDto);
@@ -94,19 +101,10 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     @Override
-    public UsuarioUnidad editarUsuarioUnidad(UsuarioUnidad usuarioEditado) {
-        UsuarioUnidadDto usuarioUnidadDto = mapperApplicationAbstract
-                .mapearAbstract(usuarioEditado, UsuarioUnidadDto.class);
-
-        UsuarioDto usuarioDto = usuarioAbastract
-                .guardarUsuarioAbastract(usuarioUnidadDto.getFkUsuario());
-
-        usuarioUnidadDto.setFkUsuario(usuarioDto);
-
-        UsuarioUnidadDto usuarioDtoResp = usuarioAbastract
-                .guardarUsuarioUnidadAbastract(usuarioUnidadDto);
-        return mapperApplicationAbstract
-                .mapearAbstract(usuarioDtoResp, UsuarioUnidad.class);
+    public void editarUsuarioUnidad(Usuario userEdit) {
+        UsuarioDto usuarioDto = mapperApplicationAbstract
+                .mapearAbstract(userEdit, UsuarioDto.class);
+        usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
     }
 
     @Override
@@ -128,13 +126,23 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     @Override
+    public List<Cargo> listarCargosService() {
+        List<CargoDto> listCargos = cargoAbstract.findAllCargos();
+        return listCargos.stream()
+                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Cargo.class))
+                .toList();
+    }
+
+    @Override
     public void cambiarPass(Credencial credencial, String newPass) {
-        String correo = credencial.getCorreo();
+        String ci = credencial.getCi();
         String pass = credencial.getPass();
-        CredencialDto credencialDto = credencialAbstract.encontrarCredencial(correo, pass);
+        CredencialDto credencialDto = credencialAbstract.encontrarCredencial(ci, pass);
         credencialDto.setPass(newPass);
         credencialAbstract.guardarCredencialAbstract(credencialDto);
     }
+
+
 
     @Override
     public void subirArchivoPdf() {

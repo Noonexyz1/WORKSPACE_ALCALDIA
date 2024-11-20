@@ -12,12 +12,35 @@ import java.util.List;
 
 @Repository
 public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long> {
+
+    @Query(value =
+            """
+            SELECT *
+            FROM solicitud s
+            WHERE fk_usuario_solicitante_id = :idUsuarioUnidad
+            """, nativeQuery = true)
+    List<SolicitudEntity> findAllByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad);
+
+    @Query(value =
+            """
+            SELECT *
+            FROM solicitud s
+            WHERE fk_usuario_solicitante_id IN (
+                SELECT id
+                FROM usuario_unidad uu
+                WHERE fk_responsable_id = :idResponsable
+            )
+            """, nativeQuery = true)
+    List<SolicitudEntity> findAllByIdUserUnidadRespon(@Param("idResponsable") Long idResponsable);
+
     /*Este méto-do busca todas las solicitudes cuyo campo fkSolicitante
     * (que es una relación con la entidad Usuario) tenga un id igual al
     * valor proporcionado. La sintaxis FkSolicitante_Id le indica a
     * Spring Data JPA que debe usar el campo id de la entidad Usuario
     * relacionada con fkSolicitante. */
-    List<SolicitudEntity> findAllByFkSolicitante_Id(Long fkSolicitanteId, Pageable pageable);
+
+    //List<SolicitudEntity> findAllByFkSolicitante_Id(Long fkSolicitanteId, Pageable pageable);
+
     /*Si no hay elementos coincidentes, retorna una lista vacía ([])
     * Este comportamiento es predeterminado en las listas devueltas por
     * métodos de repositorio en Spring Data JPA: nunca se retorna null,
@@ -25,7 +48,5 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
 
 //    List<SolicitudEntity> findAllByFkUnidad_Id(Long fkUnidadId);
 //    SolicitudEntity findByFkUnidad_Id(Long fkUnidadId);
-
-
 
 }

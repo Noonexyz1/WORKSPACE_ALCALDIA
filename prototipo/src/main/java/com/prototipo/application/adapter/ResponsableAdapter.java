@@ -1,14 +1,12 @@
 package com.prototipo.application.adapter;
 
 import com.prototipo.application.mapper.MapperApplicationAbstract;
-import com.prototipo.application.modelDto.AprobacionDto;
-import com.prototipo.application.modelDto.NotaDePedidoDto;
-import com.prototipo.application.modelDto.OperacionDto;
-import com.prototipo.application.modelDto.UsuarioDto;
+import com.prototipo.application.modelDto.*;
 import com.prototipo.application.port.*;
 import com.prototipo.application.useCase.ResponsableService;
 import com.prototipo.domain.enums.EstadoByOperadorEnum;
 import com.prototipo.domain.enums.EstadoByResponsableEnum;
+import com.prototipo.domain.model.Cotizacion;
 import com.prototipo.domain.model.NotaDePedido;
 import com.prototipo.domain.model.Reporte;
 
@@ -98,5 +96,11 @@ public class ResponsableAdapter implements ResponsableService {
                 .stream()
                 .map(x -> mapperApplication.mapearAbstract(x, Reporte.class))
                 .toList();
+    }
+
+    @Override
+    public void guardarCotizacion(Cotizacion x) {
+        CotizacionDto cotizacionDto = mapperApplication.mapearAbstract(x, CotizacionDto.class);
+        solicitudAbstract.guardarCotizacionAbs(cotizacionDto);
     }
 }

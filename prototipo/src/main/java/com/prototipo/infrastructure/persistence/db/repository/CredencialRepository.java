@@ -27,9 +27,9 @@ public interface CredencialRepository extends JpaRepository<CredencialEntity, Lo
             """
             SELECT *
             FROM credencial c
-            WHERE c.correo = :correo
+            WHERE c.ci = :ci
             AND c.pass = :pass
             """, nativeQuery = true)
-    CredencialEntity encontrarCredencial(@Param("correo") String correo, @Param("pass") String pass);
+    CredencialEntity encontrarCredencial(@Param("ci") String ci, @Param("pass") String pass);
 }
 

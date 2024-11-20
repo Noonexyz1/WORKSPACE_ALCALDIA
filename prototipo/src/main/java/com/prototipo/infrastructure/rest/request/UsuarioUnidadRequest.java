@@ -13,9 +13,11 @@ public class UsuarioUnidadRequest {
 
     private Long idUser;
     private String nombres;
-    private String apellidos;
+    private String paterno;
+    private String materno;
     private String correo;
 
     private Long idUni;
     private Long idRol;
+    private Long idCargo;
 }

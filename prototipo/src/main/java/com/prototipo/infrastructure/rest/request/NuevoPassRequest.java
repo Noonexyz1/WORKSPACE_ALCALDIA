@@ -8,7 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class NuevoPassRequest {
-    private String correo;
+    private String ci;
     private String pass;
     private String nuevoPass;
 }

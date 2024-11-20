@@ -7,6 +7,7 @@ import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.application.port.UsuarioAbastract;
 import com.prototipo.application.useCase.AprobacionService;
 import com.prototipo.domain.model.Aprobacion;
+import com.prototipo.domain.model.Solicitud;
 
 import java.util.List;
 
@@ -37,11 +38,11 @@ public class AprobacionAdapter implements AprobacionService {
     }
 
     @Override
-    public List<Aprobacion> listaDeSolicitudesPendientesService(Long idSupervisor, Long page, Long size, String byColumName){
-        List<AprobacionDto> aprobacionDtos = aprobacionAbstract
+    public List<Solicitud> listaDeSolicitudesPendientesService(Long idSupervisor, Long page, Long size, String byColumName){
+        List<SolicitudDto> solicitudDtos = aprobacionAbstract
                 .listaDeAprobacionesPendientesAbstractPage(idSupervisor, page, size, byColumName);
-        return aprobacionDtos.stream()
-                .map(aprobacionDto -> mapperApplicationAbstract.mapearAbstract(aprobacionDto, Aprobacion.class))
+        return solicitudDtos.stream()
+                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
                 .toList();
     }
 

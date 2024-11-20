@@ -99,15 +99,7 @@ public class OperadorController {
     }
 
     private SolicitudOperaResponse funcion(Operacion x){
-        return SolicitudOperaResponse.builder()
-                //No el ID de la solicitud, sino el id del registro Aprobacion
-                .id(x.getId())
-                .idSolicitud(x.getFkSolicitud().getId())
-                .nroDeCopias(x.getFkSolicitud().getNroDeCopias())
-                .tipoDeDocumento(x.getFkSolicitud().getTipoDeDocumento())
-                .nroDePaginas(x.getFkSolicitud().getNroDePaginas())
-                .nombreUnidad(x.getFkSolicitud().getFkUnidad().getNombre())
-                .estadoByOperador(x.getEstadoByOperador())
-                .build();
+
+        return null;
     }
 }

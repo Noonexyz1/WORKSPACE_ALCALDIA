@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
@@ -13,6 +15,7 @@ import lombok.Setter;
 @Entity
 @Table(name = "usuario_unidad")
 public class UsuarioUnidadEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
@@ -27,4 +30,16 @@ public class UsuarioUnidadEntity {
     private RolEntity fkRol;
     @ManyToOne
     private CargoEntity fkCargo;
+
+    //------------------Relacion Reflexiva--------------
+    @ManyToOne
+    private UsuarioUnidadEntity fkResponsable;
+    @OneToMany(mappedBy = "fkResponsable")
+    private List<UsuarioUnidadEntity> listFuncionarios;
+    //--------------------------------------------------
+
+    @OneToMany(mappedBy = "fkUsuarioSolicitante")
+    private List<SolicitudEntity> listSolicitud;
+    @OneToMany(mappedBy = "fkUsuarioResponsable")
+    private List<AutorizacionEntity> listAutorizacion;
 }

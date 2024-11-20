@@ -20,7 +20,4 @@ public class UnidadEntity {
     private Long id;
     private String nombre;
     private String direccion;
-
-    @OneToMany(mappedBy = "fkUnidad")
-    private List<SolicitudEntity> listaUsuarios;
 }

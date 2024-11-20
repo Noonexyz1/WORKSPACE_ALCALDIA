@@ -10,10 +10,9 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class SolicitudRequest {
-    private Long nroDeCopias;
-    private String tipoDeDocumento;
-    private Long nroDePaginas;
-    private Long idUnidad;
-    private Long idSolicitante;
-    private List<ArchivoPdfRequest> archivosPdf;
+    private Long fkUsuarioSolicitante;
+    private String cite;
+    private String descripcion;
+    // private String fecha; // Comentado porque está comentado en el JSON
+    private List<DetalleSolicitudRequest> listDetalleSolicitud;
 }

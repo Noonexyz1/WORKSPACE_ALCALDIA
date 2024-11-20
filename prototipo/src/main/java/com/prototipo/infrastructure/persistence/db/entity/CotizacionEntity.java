@@ -13,8 +13,8 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "descargo")
-public class DescargoEntity {
+@Table(name = "cotizacion")
+public class CotizacionEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,8 +23,6 @@ public class DescargoEntity {
     private BigDecimal precioTotal;
     private BigDecimal precioUnitario;
 
-    @ManyToOne
-    private UsuarioEntity fkResponsable;
     @OneToOne
     private DetalleSolicitudEntity fkDetalleSolicitud;
 }

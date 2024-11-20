@@ -10,8 +10,13 @@ import lombok.*;
 public class UsuarioNuevoRequest {
     private Long id;
     private String nombres;
-    private String apellidos;
+    private String materno;
+    private String paterno;
     private String correo;
+    private String ci;
+
     private Long idRol;
     private Long idUni;
+    private Long idCargo;
+    private Long idResponsable;
 }

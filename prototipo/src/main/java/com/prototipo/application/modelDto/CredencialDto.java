@@ -9,7 +9,7 @@ import lombok.*;
 @AllArgsConstructor
 public class CredencialDto {
     private Long id;
-    private String correo;
+    private String ci;
     private String pass;
     private UsuarioDto fkUsuario;
 }

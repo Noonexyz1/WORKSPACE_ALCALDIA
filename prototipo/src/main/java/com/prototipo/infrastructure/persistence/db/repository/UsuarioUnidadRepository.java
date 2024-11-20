@@ -22,14 +22,14 @@ public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEnti
                 WHERE u.id = (
                     SELECT c.fk_usuario_id
                     FROM credencial c
-                    WHERE c.correo = :correo
+                    WHERE c.ci = :ci
                     AND c.pass = :pass
                 )
             )
             AND uu.is_active = TRUE
             LIMIT 1
             """, nativeQuery = true)
-    UsuarioUnidadEntity findUsuarioUnidadByCredencial(@Param("correo") String correo,
+    UsuarioUnidadEntity findUsuarioUnidadByCredencial(@Param("ci") String correo,
                                                 @Param("pass") String pass);
 
     @Query(value =
