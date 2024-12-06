@@ -19,6 +19,7 @@ public class SolicitudEntity {
     private String cite;
     private String descripcion;
     private String fecha;
+    private Long autoriFlag;
 
     @ManyToOne
     private UsuarioUnidadEntity fkUsuarioSolicitante;

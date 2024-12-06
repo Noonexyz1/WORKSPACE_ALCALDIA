@@ -1,9 +1,5 @@
 package com.prototipo.domain.model;
 
-import com.prototipo.infrastructure.persistence.db.entity.FinalizacionEntity;
-import com.prototipo.infrastructure.persistence.db.entity.SolicitudEntity;
-import com.prototipo.infrastructure.persistence.db.entity.UsuarioUnidadEntity;
-import jakarta.persistence.*;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -19,6 +15,7 @@ public class Autorizacion {
     private String fecha;
     private Long totalAutorizado;
     private BigDecimal totalCotizadoBs;
+    private Long finaliFlag;
 
     private UsuarioUnidad fkUsuarioResponsable;
     private Solicitud fkSolicitud;

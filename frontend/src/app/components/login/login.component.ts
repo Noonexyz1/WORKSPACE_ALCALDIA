@@ -30,9 +30,9 @@ export class LoginComponent {
 
   loginForm: FormGroup;
 
-  constructor(http: HttpClient, 
-              formBuilder: FormBuilder, 
-              router: Router, 
+  constructor(http: HttpClient,
+              formBuilder: FormBuilder,
+              router: Router,
               rootNavigateService: RootNavigateService,
               observable: SubjectUserLoginService,
               localStorage: LocalStorageService ){
@@ -43,27 +43,26 @@ export class LoginComponent {
     this.rootNavigateService = rootNavigateService;
     this.observable = observable;
     this.localStorage = localStorage;
+
     this.loginForm = this.formBuilder.group({
-      correo: [],
+      ci: [],
       pass: [],
     });
+
   }
 
   botonIniciarSesion(): void {
-    const url = 'http://localhost:8081/dologin'; // URL de tu API
+    const url = 'http://localhost:8081/login/v2/login'; // URL de tu API
 
     // Extraer los valores del formulario
     const credenciales: CredencialRequest = {
-      correo: this.loginForm.get('correo')?.value, // Obtener el valor de correo
+      ci: this.loginForm.get('ci')?.value, // Obtener el valor de correo
       pass: this.loginForm.get('pass')?.value           // Obtener el valor de pass
     };
 
+    // Recibimos la peticion
     this.http.post<UsuarioResponse>(url, credenciales).pipe(
       map((response: UsuarioResponse) => {
-        // Mostrar la respuesta en un alert
-        const mensaje = `Usuario: ${response.nombres} ${response.apellidos}\nRol: ${response.nombreRol}\nDashboard: ${response.dashConfig}`;
-        alert(mensaje);
-
         //Guardamos en el localStorage
         this.localStorage.setItem('userData', response);
         //Publicamos los datos
@@ -71,7 +70,6 @@ export class LoginComponent {
 
         let toNavegate = this.rootNavigateService.valorParaNavegar(response.dashConfig);
         this.router.navigate([toNavegate]);
-        
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
@@ -79,5 +77,7 @@ export class LoginComponent {
         return of(null); // Retornar un observable vacío en caso de error
       })
     ).subscribe();
+
+
   }
 }

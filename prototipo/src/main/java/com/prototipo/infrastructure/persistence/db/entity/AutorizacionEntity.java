@@ -21,6 +21,7 @@ public class AutorizacionEntity {
     private String fecha;
     private Long totalAutorizado;
     private BigDecimal totalCotizadoBs;
+    private Long finaliFlag;
 
     @ManyToOne
     private UsuarioUnidadEntity fkUsuarioResponsable;

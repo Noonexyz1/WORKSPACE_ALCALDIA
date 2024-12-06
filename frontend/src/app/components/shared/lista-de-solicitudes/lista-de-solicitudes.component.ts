@@ -20,36 +20,29 @@ export class ListaDeSolicitudesComponent implements OnInit {
   //TODO, tengo que publicar en un estado global el usuario
   //con el que se ha iniciado sesion
   private http: HttpClient;
-  private observable: SubjectUserLoginService;
   private localStorage: LocalStorageService;
 
   listSolicitud: SolicitudResponse[] = [];
 
   usuario: UsuarioResponse = {
     id: 0,
-    nombres: '',
-    apellidos: '',
-    correo: '',
+    fkUsuario: 0,
+    fkUnidad: 0,
+    fkRol: 0,
     nombreRol: '',
     dashConfig: '',
-    idUnidad: 0
+    fkCargo: 0,
+    fkResponsable: 0
   };
 
   constructor(http: HttpClient,
-              observable: SubjectUserLoginService,
               localStorage: LocalStorageService) {
 
     this.http = http;
-    this.observable = observable;
     this.localStorage = localStorage;
   }
 
   ngOnInit(): void {
-    this.observable.obtenerObservable().subscribe((datos) => {
-      this.usuario = datos;
-      console.log(this.usuario);
-    });
-    this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
   }
 
@@ -59,11 +52,10 @@ export class ListaDeSolicitudesComponent implements OnInit {
     this.usuario = this.localStorage.getItem('userData');
 
     const body: PageRequestID = {
-      //TODO, este valor tiene que se de un observable general
-      idUsuario: this.usuario.id,
+      idUsuarioUnidad: this.usuario.id,
       page: 0,
-      size: 100,
-      byColumName: ""
+      size: 10,
+      byColumName: ''
     }
 
     this.http.post<SolicitudResponse[]>(url, body).pipe(
@@ -77,6 +69,7 @@ export class ListaDeSolicitudesComponent implements OnInit {
         return of(null); // Retornar un observable vacío en caso de error
       })
     ).subscribe();
+
   }
 
 }

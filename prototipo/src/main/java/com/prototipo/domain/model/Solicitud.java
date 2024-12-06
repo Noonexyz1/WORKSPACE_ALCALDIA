@@ -12,5 +12,6 @@ public class Solicitud {
     private String cite;
     private String fecha;
     private String descripcion;
+    private Long autoriFlag;
     private UsuarioUnidad fkUsuarioSolicitante;
 }

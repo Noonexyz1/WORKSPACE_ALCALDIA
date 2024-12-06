@@ -6,6 +6,8 @@ import { catchError, map, of } from 'rxjs';
 import { RootNavigateService } from '../../../../services/root-navigate/root-navigate.service';
 import { SubjectUsuarioUnidadService } from '../../../../services/subject-usuario-unidad/subject-usuario-unidad.service';
 import { UsuarioUnidadRequest } from '../../../../models/UsuarioUnidadRequest';
+import {UsuarioRequest} from "../../../../models/UsuarioRequest";
+import {UsuarioResponse} from "../../../../models/UsuarioResponse";
 
 @Component({
   selector: 'app-row-table-user',
@@ -25,8 +27,8 @@ export class RowTableUserComponent {
   usuario!: UsuarioUnidadResponse;
   //Aqui me traer todos los datos, pero unicamente muestro algunos al frontend jaja
 
-  constructor(router: Router, 
-              http: HttpClient, 
+  constructor(router: Router,
+              http: HttpClient,
               rootNavigateService: RootNavigateService,
               subjectUsuarioUnidadService: SubjectUsuarioUnidadService) {
 
@@ -35,25 +37,22 @@ export class RowTableUserComponent {
     this.rootNavigateService = rootNavigateService;
     this.subjectUsuarioUnidadService = subjectUsuarioUnidadService;
   }
-  
-  botonEditarUsuario(): void { 
-    //TODO, usar RxJs para pasar informacion de un componente a otro ;D
-    const usuarioUnidad: UsuarioUnidadRequest = {
+
+  botonEditarUsuario(): void {
+    const usuario: UsuarioRequest = {
       id: this.usuario.id,
-      isActive: this.usuario.isActive,
-      idUser: this.usuario.idUser,
       nombres: this.usuario.nombres,
-      apellidos: this.usuario.apellidos,
+      materno: this.usuario.materno,
+      paterno: this.usuario.paterno,
       correo: this.usuario.correo,
-      idRol: this.usuario.idRol,
-      idUni: this.usuario.idUni
+      ci: this.usuario.ci,
     };
-    this.subjectUsuarioUnidadService.publicarDatos(usuarioUnidad);
+    this.subjectUsuarioUnidadService.publicarDatos(usuario);
     this.router.navigate(['/administrador/editarUsuario']);
   }
 
-  botonEliminarUsuario(): void { 
-    const url = 'http://localhost:8081/administrador/eliminarUsuario/' + this.usuario.idUser; // URL de tu API
+  botonEliminarUsuarioUnidad(): void {
+    const url = 'http://localhost:8081/administrador/eliminarFuncionario/' + this.usuario.id; // URL de tu API
     this.http.get(url).pipe(
       map(() => {
         window.location.reload();

@@ -3,7 +3,6 @@
 INSERT INTO prototipo.rol(nombre_rol)
 values("Administrador"),
 ("Responsable"),
-("Operador"),
 ("Solicitante");
 
 #Esta tabla si o si para produccion
@@ -33,24 +32,28 @@ VALUES
 
 #Esta tabla si o si para produccion
 INSERT INTO usuario(ci, correo, materno, nombres, paterno)
-VALUES("1234567", "jefa@gmail.com", "Lopez", "Wilder Ariel", "Ali");
+VALUES("1234567", "jefe@gmail.com", "Lopez", "Wilder Ariel", "Ali"),
+("2222222", "responsable@gmail.com", "Responsable", "Respon Sable", "Responsable");
 
 #Esta tabla si o si para produccion
 INSERT INTO credencial(fk_usuario_id, ci, pass)
-VALUES(1, "1234567", "123");
+VALUES(1, "1234567", "123"),
+(2, "2222222", "funcionario2222222");
 #El administrador debe poder iniciar con el sistema
 
 #Esta tabla si o si para produccion
 INSERT INTO cargo(nombre_cargo)
-VALUES("Jefe"),
+VALUES("Director"),
 ("Responsable"),
 ("Funcionario");
 
+
+############3##tengo que tener total atencion a esta tabla
 #Esta tabla si o si para produccion
-INSERT INTO usuario_unidad(is_active, fk_cargo_id, fk_responsable_id , fk_rol_id, fk_unidad_id, fk_usuario_id)
-VALUES(TRUE, 1, null, 1, 20, 1);
-
-
+INSERT INTO usuario_unidad(is_active, fk_cargo_id, fk_responsable_id, fk_director_id, fk_rol_id, fk_unidad_id, fk_usuario_id)
+VALUES(TRUE, 1, null, null, 1, 20, 1),
+(TRUE, 2, null, 1, 2, 20, 2);
+############tengo que tener total atencion a esta tabla
 
 
 #----------------------PRUEBAS-----------------------------
@@ -66,12 +69,16 @@ SELECT * from cargo;
 
 SELECT * from solicitud;
 SELECT * from detalle_solicitud ds;
+SELECT * from cotizacion c;
+SELECT * from autorizacion a;
+SELECT * from finalizacion f;
 
 DELETE from solicitud;
 
 
-
-#######################################
+SELECT *
+FROM autorizacion a
+WHERE fk_usuario_responsable_id = 2
 
 
 #consulta final

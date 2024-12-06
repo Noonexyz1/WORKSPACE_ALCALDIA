@@ -27,7 +27,8 @@ public class AdministradorController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping(path = {"/listaDeUsuarios"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/listaDeUsuarios"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<UsuarioUnidadResponse>> listaDeUsuarios(
             @RequestBody PaginacionAdminRequest pageReq) {
 
@@ -55,31 +56,48 @@ public class AdministradorController {
                 .nombreUnidad(
                         (userUni.getFkUnidad() != null)?
                                 userUni.getFkUnidad().getNombre():
-                                "Administrador"
+                                "Unidad Servicios Generales"
                 )
-
                 .idRol(userUni.getFkRol().getId())
                 .idUni((userUni.getFkUnidad() != null)? userUni.getFkUnidad().getId(): null)
+                .nombreCargo(
+                        (userUni.getFkCargo() != null)?
+                        userUni.getFkCargo().getNombreCargo():
+                        "Unidad Servicios Generales"
+                )
+                .ci(userUni.getFkUsuario().getCi())
                 .build();
     }
 
-    @PostMapping(path = {"/crearUsuario"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/crearUsuario"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public void crearUsuario(@RequestBody UsuarioNuevoRequest newUser){
         Long idRol = newUser.getIdRol();
         Long idUni = newUser.getIdUni();
         Long idCargo = newUser.getIdCargo();
+
         Long idResponsable = newUser.getIdResponsable();
+        Long idDirector = newUser.getIdDirector();
 
         Usuario usuario = modelMapper.map(newUser, Usuario.class);
-        fotocopiaService.creaUsuario(usuario, idRol, idUni, idCargo, idResponsable);
+        fotocopiaService.creaUsuario(
+                usuario,
+                idRol,
+                idUni,
+                idCargo,
+                idResponsable,
+                idDirector);
+
     }
 
-    @GetMapping(path = {"/eliminarFuncionario/{idUsuarioUnidad}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = {"/eliminarFuncionario/{idUsuarioUnidad}"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public void eliminarUsuario(@PathVariable Long idUsuarioUnidad){
         fotocopiaService.eliminarUsuario(idUsuarioUnidad);
     }
 
-    @PostMapping(path = {"/editarUsuario"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/editarUsuario"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public void editarUsuario(@RequestBody UsuarioRequest request){
         Usuario usuario = modelMapper.map(request, Usuario.class);
         fotocopiaService.editarUsuarioUnidad(usuario);
@@ -87,7 +105,8 @@ public class AdministradorController {
 
     @GetMapping(path = {"/listarRoles"})
     public ResponseEntity<List<RolResponse>> listarRoles(){
-        List<RolResponse> listaRoles = fotocopiaService.listarRolesService()
+        List<RolResponse> listaRoles = fotocopiaService
+                .listarRolesService()
                 .stream()
                 .map(x -> modelMapper.map(x, RolResponse.class))
                 .toList();
@@ -96,7 +115,8 @@ public class AdministradorController {
 
     @GetMapping(path = {"/listarUnidades"})
     public ResponseEntity<List<UnidadResponse>> listarUnidades(){
-        List<UnidadResponse> listaUnidades = fotocopiaService.listarUnidadesService()
+        List<UnidadResponse> listaUnidades = fotocopiaService
+                .listarUnidadesService()
                 .stream()
                 .map(x -> modelMapper.map(x, UnidadResponse.class))
                 .toList();
@@ -105,7 +125,8 @@ public class AdministradorController {
 
     @GetMapping(path = {"/listarCargos"})
     public ResponseEntity<List<CargoResponse>> listarCargos() {
-        List<Cargo> listaCargos = fotocopiaService.listarCargosService();
+        List<Cargo> listaCargos = fotocopiaService
+                .listarCargosService();
         List<CargoResponse> listaCargosResp = listaCargos.stream()
                 .map(x -> modelMapper.map(x, CargoResponse.class))
                 .toList();
@@ -121,9 +142,10 @@ public class AdministradorController {
         fotocopiaService.cambiarPass(credencial, request.getNuevoPass());
     }
 
-    @GetMapping(path = {"/generarReporte"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = {"/generarReporte"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ReporteResponse> generarReporte(){
-        //TODO
+        //TODO, generar reporte
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }

@@ -8,6 +8,8 @@ import { Router } from '@angular/router';
 import { RolResponse } from '../../../models/RolResponse';
 import { UnidadResponse } from '../../../models/UnidadResponse';
 import { RootNavigateService } from '../../../services/root-navigate/root-navigate.service';
+import {UsuarioRequest} from "../../../models/UsuarioRequest";
+import {CargoResponse} from "../../../models/CargoResponse";
 
 @Component({
   selector: 'app-editar-usuario',
@@ -19,20 +21,21 @@ import { RootNavigateService } from '../../../services/root-navigate/root-naviga
 export class EditarUsuarioComponent implements OnInit {
 
   //Crear formulario reactivo
-  private http: HttpClient; 
+  private http: HttpClient;
   private formBuilder: FormBuilder;
   private subjectUsuarioUnidadService: SubjectUsuarioUnidadService;
   private rootNavigateService: RootNavigateService;
   private router: Router;
   editUserForm: FormGroup;
 
-  usuarioUnidad!: UsuarioUnidadRequest;
+  usuario!: UsuarioRequest;
 
   listaRoles: RolResponse[] = [];
   listaUnidades: UnidadResponse[] = [];
+  listaCargos: CargoResponse[] = [];
 
   constructor(subjectUsuarioUnidadService: SubjectUsuarioUnidadService,
-              http: HttpClient, 
+              http: HttpClient,
               formBuilder: FormBuilder,
               rootNavigateService: RootNavigateService,
               router: Router) {
@@ -44,15 +47,11 @@ export class EditarUsuarioComponent implements OnInit {
     this.rootNavigateService = rootNavigateService;
     this.editUserForm = this.formBuilder.group({
       id: [],
-      isActive: [],
-
-      idUser: [],
       nombres: [],
-      apellidos: [],
+      materno: [],
+      paterno: [],
       correo: [],
-      
-      idUni: [],
-      idRol: [],
+      ci: []
     });
   }
 
@@ -60,27 +59,40 @@ export class EditarUsuarioComponent implements OnInit {
     this.getObserbable();
     this.listaDeRoles();
     this.listaDeUnidades();
+    this.listaDeCargos();
   }
 
   getObserbable(): void {
     // Suscribirse al observable para recibir cambios
-    this.subjectUsuarioUnidadService.obtenerObservable().subscribe((datos) => {
-      this.usuarioUnidad = datos;
-      console.log('Datos recibidossss:', this.usuarioUnidad);
+    this.subjectUsuarioUnidadService.obtenerObservable()
+      .subscribe((datos) => {
+        this.usuario = datos;
+        console.log('Datos recibidossss:', this.usuario);
 
-      this.editUserForm.patchValue({
-        id: this.usuarioUnidad.id,
-        isActive: this.usuarioUnidad.isActive,
-  
-        idUser: this.usuarioUnidad.idUser,
-        nombres: this.usuarioUnidad.nombres,
-        apellidos: this.usuarioUnidad.apellidos,
-        correo: this.usuarioUnidad.correo,
-  
-        idUni: this.usuarioUnidad.idUni,
-        idRol: this.usuarioUnidad.idRol,
+        this.editUserForm.patchValue({
+          id: this.usuario.id,
+          nombres: this.usuario.nombres,
+          materno: this.usuario.materno,
+          paterno: this.usuario.paterno,
+          correo: this.usuario.correo,
+          ci: this.usuario.ci,
+        });
       });
-    });
+  }
+
+  listaDeCargos(): void {
+    const url = 'http://localhost:8081/administrador/listarCargos';
+    this.http.get<CargoResponse[]>(url).pipe(
+      map((response: CargoResponse[]) => {
+        this.listaCargos = response;
+        console.log(this.listaRoles);
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al traer los cargos');
+        return of(null); // Retornar un observable vacío en caso de error
+      })
+    ).subscribe();
   }
 
   listaDeRoles(): void {
@@ -95,8 +107,7 @@ export class EditarUsuarioComponent implements OnInit {
         alert('Hubo un error al traer los roles');
         return of(null); // Retornar un observable vacío en caso de error
       })
-    )
-    .subscribe();
+    ).subscribe();
   }
 
   listaDeUnidades(): void {
@@ -111,8 +122,7 @@ export class EditarUsuarioComponent implements OnInit {
         alert('Hubo un error al traer las unidades');
         return of(null); // Retornar un observable vacío en caso de error
       })
-    )
-    .subscribe();
+    ).subscribe();
   }
 
   botonEditarUsuarioUnidad(): void {
@@ -124,8 +134,10 @@ export class EditarUsuarioComponent implements OnInit {
 
       idUser: this.editUserForm.get('idUser')?.value,
       nombres: this.editUserForm.get('nombres')?.value,
-      apellidos: this.editUserForm.get('apellidos')?.value,
+      paterno: this.editUserForm.get('paterno')?.value,
+      materno: this.editUserForm.get('materno')?.value,
       correo: this.editUserForm.get('correo')?.value,
+      ci: this.editUserForm.get('ci')?.value,
 
       idUni: this.editUserForm.get('idUni')?.value,
       idRol: this.editUserForm.get('idRol')?.value,
@@ -144,6 +156,6 @@ export class EditarUsuarioComponent implements OnInit {
         return of(null); // Retornar un observable vacío en caso de error
       })
     ).subscribe();
-
   }
+
 }

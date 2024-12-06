@@ -30,6 +30,7 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
                 FROM usuario_unidad uu
                 WHERE fk_responsable_id = :idResponsable
             )
+            AND autori_flag = 0
             """, nativeQuery = true)
     List<SolicitudEntity> findAllByIdUserUnidadRespon(@Param("idResponsable") Long idResponsable);
 

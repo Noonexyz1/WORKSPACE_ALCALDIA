@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { UsuarioUnidadRequest } from '../../models/UsuarioUnidadRequest';
+import {UsuarioRequest} from "../../models/UsuarioRequest";
 
 @Injectable({
   providedIn: 'root'
@@ -10,24 +11,22 @@ export class SubjectUsuarioUnidadService {
     // Se supone que Subject deberia ser injectado porque Angular ya lo tiene en su IoC Container
   // pero bueno
 
-  usuarioUnidad: UsuarioUnidadRequest = {
-    id: 0,             
-    isActive: true,     
-    idUser: 0,          
-    nombres: '',        
-    apellidos: '',      
-    correo: '',         
-    idUni: 0,           
-    idRol: 0            
+  usuarioUnidad: UsuarioRequest = {
+    id: 0,
+    nombres: '',
+    materno: '',
+    paterno: '',
+    correo: '',
+    ci: ''
   };
 
-  private subject$ = new BehaviorSubject<UsuarioUnidadRequest>(this.usuarioUnidad);
+  private subject$ = new BehaviorSubject<UsuarioRequest>(this.usuarioUnidad);
 
-  obtenerObservable(): Observable<UsuarioUnidadRequest> {
+  obtenerObservable(): Observable<UsuarioRequest> {
       return this.subject$.asObservable();
   }
 
-  publicarDatos(valor: UsuarioUnidadRequest): void {
+  publicarDatos(valor: UsuarioRequest): void {
       this.subject$.next(valor);
   }
 

@@ -1,5 +1,5 @@
 export interface NuevoPassRequest {
-    correo: string;
+    ci: string;
     pass: string;
     nuevoPass: string;
 }

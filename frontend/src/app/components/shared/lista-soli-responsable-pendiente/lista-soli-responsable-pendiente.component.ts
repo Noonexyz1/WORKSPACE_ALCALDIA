@@ -28,12 +28,13 @@ export class ListaSoliPendienteResponsableComponent implements OnInit {
 
   usuario: UsuarioResponse = {
     id: 0,
-    nombres: '',
-    apellidos: '',
-    correo: '',
+    fkUsuario: 0,
+    fkUnidad: 0,
+    fkRol: 0,
     nombreRol: '',
     dashConfig: '',
-    idUnidad: 0
+    fkCargo: 0,
+    fkResponsable: 0
   };
 
   constructor(http: HttpClient,
@@ -46,10 +47,6 @@ export class ListaSoliPendienteResponsableComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.observable.obtenerObservable().subscribe((datos) => {
-      this.usuario = datos;
-    });
-    this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
   }
 
@@ -63,18 +60,14 @@ export class ListaSoliPendienteResponsableComponent implements OnInit {
     this.usuario = this.localStorage.getItem('userData');
 
     const body: PageRequestID = {
-      //TODO, este valor tiene que se de un observable general
-      idUsuario: this.usuario.id,
+      idUsuarioUnidad: this.usuario.id,
       page: 0,
       size: 100,
       byColumName: ""
     }
 
-    console.log('Datos a enviar: ', body)
-
     this.http.post<SolicitudResponResponse[]>(url, body).pipe(
       map((response: SolicitudResponResponse[]) => {
-        console.log(response);
         this.listSolicitud = response;
       }),
       catchError(error => {

@@ -1,4 +1,4 @@
-import {Component, Input} from '@angular/core';
+import {AfterViewInit, Component, Input, ViewChild} from '@angular/core';
 import {SolicitudResponResponse} from '../../../../models/SolicitudResponResponse';
 import {AprobacionSoliRequest} from '../../../../models/AprobacionSoliRequest';
 import {HttpClient} from '@angular/common/http';
@@ -8,21 +8,32 @@ import {catchError, map, of} from 'rxjs';
 import {Router} from '@angular/router';
 import {RootNavigateService} from '../../../../services/root-navigate/root-navigate.service';
 import {LocalStorageService} from '../../../../services/local-storage/local-storage.service';
-import {FormsModule} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {PageRequestID} from "../../../../models/PageRequestID";
+import {DetalleSolicitudExtendidoResponse} from "../../../../models/DetalleSolicitudExtendidoResponse";
+import {DetalleSolicitudCotizadoResponse} from "../../../../models/DetalleSolicitudCotizadoResponse";
+import {RowSolicitudExtendComponent} from "./row-solicitud-extend/row-solicitud-extend.component";
+import {CredencialRequest} from "../../../../models/CredencialRequest";
 
 @Component({
   selector: 'app-row-table-responsable-pendiente',
   standalone: true,
   imports: [
-    FormsModule
+    ReactiveFormsModule,
+    RowSolicitudExtendComponent
   ],
   templateUrl: './row-table-responsable-pendiente.component.html',
   styleUrl: './row-table-responsable-pendiente.component.css'
 })
-export class RowTablePendienteResponsableComponent {
+export class RowTablePendienteResponsableComponent implements AfterViewInit{
 
   @Input()
   solicitud!: SolicitudResponResponse;
+
+  @ViewChild(RowSolicitudExtendComponent)
+  rowSolicitudExtendComponent!: RowSolicitudExtendComponent;
+
+  estadoModal = false;
 
   private http: HttpClient;
   private observable: SubjectUserLoginService;
@@ -32,13 +43,24 @@ export class RowTablePendienteResponsableComponent {
 
   usuario: UsuarioResponse = {
     id: 0,
-    nombres: '',
-    apellidos: '',
-    correo: '',
+    fkUsuario: 0,
+    fkUnidad: 0,
+    fkRol: 0,
     nombreRol: '',
     dashConfig: '',
-    idUnidad: 0
+    fkCargo: 0,
+    fkResponsable: 0
   };
+
+  detSoliExtendidoResponse: DetalleSolicitudExtendidoResponse = {
+    idSolicitud: 0,
+    cite: '',
+    fecha: '',
+    descripcion: '',
+    detalleSolicitudResponses: [],
+  };
+
+  detalleSolicitudCotizado: DetalleSolicitudCotizadoResponse[] = [];
 
   constructor(http: HttpClient,
               observable: SubjectUserLoginService,
@@ -53,66 +75,66 @@ export class RowTablePendienteResponsableComponent {
     this.localStorage = localStorage;
   }
 
-
-  botonAprobarSolicitud(): void {
-    const url = 'http://localhost:8081/responsable/aprobarSolicitud'; // URL de tu API
-
-    this.observable.obtenerObservable().subscribe((datos) => {
-      this.usuario = datos;
-      console.log("Datos obtenidos del publicador", this.usuario);
-    });
-
+  ngAfterViewInit(): void {
+    if (this.rowSolicitudExtendComponent) {
+      this.rowSolicitudExtendComponent.cotizacionEmitida.subscribe((cotizacion: DetalleSolicitudCotizadoResponse) => {
+          this.onCotizacionRecibida(cotizacion);
+        });
+    }
+  }
+  onCotizacionRecibida(cotizacion: DetalleSolicitudCotizadoResponse): void {
+    console.log('Cotización recibida:', cotizacion);
     this.usuario = this.localStorage.getItem('userData');
+    cotizacion.idUsuarioUnidad = this.usuario.id;
+    this.detalleSolicitudCotizado.push(cotizacion);
+    console.log('Lista actualizada:', this.detalleSolicitudCotizado);
+  }
 
-    const aprobacion: AprobacionSoliRequest = {
-      idResponsable: this.usuario.id,
-      idAprobacion: this.solicitud.idSolicitud
-    };
 
-    console.log('Aprobacion objeto: ', aprobacion)
 
-    this.http.post<AprobacionSoliRequest>(url, aprobacion).pipe(
-      map(() => {
-        let toNavegate = this.rootNavigateService.valorParaNavegar('Responsable');
-        this.router.navigate([toNavegate]);
-        window.location.reload();
+  botonTraerDatosModal(): void {
+    this.estadoModal = true;
+
+    //Traer el objeto de SolicitudExtendido mediante el ID de solicitud
+    const url = 'http://localhost:8081/responsable/verDetalleDeSolicitud/' + this.solicitud.idSolicitud;
+
+    this.http.get<DetalleSolicitudExtendidoResponse>(url).pipe(
+      map((response: DetalleSolicitudExtendidoResponse) => {
+        this.detSoliExtendidoResponse = response;
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
-        alert('Hubo un error al aprobar la solicitud');
+        alert('Hubo un error al listar los datos para el modal');
         return of(null); // Retornar un observable vacío en caso de error
       })
     ).subscribe();
   }
 
-  botonRechazarSolicitud(): void {
+  botonRegistrar(): void {
+    // Mostrar el objeto dentro del alert (convertido a formato de texto)
+    alert("Estos son los datos a enviarse: " + JSON.stringify(this.detalleSolicitudCotizado));
 
-    const url = 'http://localhost:8081/responsable/rechazarSolicitud'; // URL de tu API
+    const url = 'http://localhost:8081/responsable/cotizarAutorizarSolicitud'; // URL de tu API
 
-    this.observable.obtenerObservable().subscribe((datos) => {
-      this.usuario = datos;
-      console.log("Datos obtenidos del publicador", this.usuario);
-    });
+    // Extraer los valores del formulario
+    const soliCotizadoList: DetalleSolicitudCotizadoResponse[] = this.detalleSolicitudCotizado;
 
-    this.usuario = this.localStorage.getItem('userData');
-
-    const aprobacion: AprobacionSoliRequest = {
-      idResponsable: this.usuario.id,
-      idAprobacion: this.solicitud.idSolicitud
-    };
-
-    this.http.post<AprobacionSoliRequest>(url, aprobacion).pipe(
+    //Aqui hacer la peticion POST a mi servidor deberia tener la lista
+    // Recibimos la peticion
+    this.http.post<DetalleSolicitudCotizadoResponse[]>(url, soliCotizadoList).pipe(
       map(() => {
-        window.location.reload();
+        //TODO, la funcionalidad de esos botones (2) se deben implementar aqui
+        //TODO, y quitar esos dos de la vista
+
         let toNavegate = this.rootNavigateService.valorParaNavegar('Responsable');
         this.router.navigate([toNavegate]);
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
-        alert('Hubo un error al recharzar la solicitud');
+        alert('Hubo un error al enviar las solicitudes cotizadas');
         return of(null); // Retornar un observable vacío en caso de error
       })
     ).subscribe();
-  }
 
+  }
 }

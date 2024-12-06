@@ -9,6 +9,8 @@ import lombok.*;
 @Builder
 public class DetalleSolicitudResponse {
 
+    private Long idSolicitud;
+
     private Long idDetalleSolicitud;
     private String nombreDocumento;
     private Long nroCopias;

@@ -2,3 +2,54 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Paleta de colores de la empresa */
+.color-base {
+  --color-primary: #739FD9;
+  --color-secondary: #A0CCF2;
+  --color-tertiary: #BEAE8D;
+  --color-quaternary: #717A43;
+  --color-quinary: #42505B;
+}
+
+/* Ejemplo de uso de los colores */
+.background-primary {
+  background-color: var(--color-primary);
+}
+
+.text-primary {
+  color: var(--color-primary);
+}
+
+.background-secondary {
+  background-color: var(--color-secondary);
+}
+
+.text-secondary {
+  color: var(--color-secondary);
+}
+
+.background-tertiary {
+  background-color: var(--color-tertiary);
+}
+
+.text-tertiary {
+  color: var(--color-tertiary);
+}
+
+.background-quaternary {
+  background-color: var(--color-quaternary);
+}
+
+.text-quaternary {
+  color: var(--color-quaternary);
+}
+
+.background-quinary {
+  background-color: var(--color-quinary);
+}
+
+.text-quinary {
+  color: var(--color-quinary);
+}
+

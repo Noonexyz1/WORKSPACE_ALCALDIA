@@ -13,12 +13,13 @@ export class SubjectUserLoginService {
 
   usuarioUnidad: UsuarioResponse = {
     id: 0,
-    nombres: '',
-    apellidos: '',
-    correo: '',
+    fkUsuario: 0,
+    fkUnidad: 0,
+    fkRol: 0,
     nombreRol: '',
     dashConfig: '',
-    idUnidad: 0,
+    fkCargo: 0,
+    fkResponsable: 0
   };
 
   private subject$ = new BehaviorSubject<UsuarioResponse>(this.usuarioUnidad);

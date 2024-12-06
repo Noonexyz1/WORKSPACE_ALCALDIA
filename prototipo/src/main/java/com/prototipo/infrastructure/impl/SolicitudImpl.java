@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class SolicitudImpl implements SolicitudAbstract {
@@ -132,6 +133,7 @@ public class SolicitudImpl implements SolicitudAbstract {
         autorizacion.setFecha(autorizacionDto.getFecha());
         autorizacion.setTotalAutorizado(autorizacionDto.getTotalAutorizado());
         autorizacion.setTotalCotizadoBs(autorizacionDto.getTotalCotizadoBs());
+        autorizacion.setFinaliFlag(autorizacionDto.getFinaliFlag());
 
         // Mapear relaciones
         SolicitudEntity solicitudEntity = new SolicitudEntity();
@@ -141,14 +143,32 @@ public class SolicitudImpl implements SolicitudAbstract {
         UsuarioUnidadEntity usuarioEntity = new UsuarioUnidadEntity();
         usuarioEntity.setId(autorizacionDto.getFkUsuarioResponsable().getId());
         autorizacion.setFkUsuarioResponsable(usuarioEntity);
+        autorizacion.setFinaliFlag(autorizacion.getFinaliFlag());
 
         autorizacionRepository.save(autorizacion);
+
+        //Cambio de estado de la solicitud
+        //Se necesita del contexto de JPA donde vive esta entidad a ser editada
+        SolicitudEntity solicitudRepositoryById = solicitudRepository
+                .findById(autorizacionDto.getFkSolicitud().getId())
+                .orElseThrow();
+
+        solicitudRepositoryById.setAutoriFlag(autorizacionDto.getFkSolicitud().getAutoriFlag());
+        solicitudRepository.save(solicitudRepositoryById);
+
     }
 
     @Override
     public AutorizacionDto buscarAutorizacionByIdSoliAbs(Long idSolicitud) {
         AutorizacionEntity autorizacion = autorizacionRepository
                 .buscarAutorizacionByIdSoli(idSolicitud);
+        return modelMapper.map(autorizacion, AutorizacionDto.class);
+    }
+
+    @Override
+    public AutorizacionDto buscarAutorizacionByIdAbs(Long idAutorizacion) {
+        AutorizacionEntity autorizacion = autorizacionRepository
+                .findById(idAutorizacion).get();
         return modelMapper.map(autorizacion, AutorizacionDto.class);
     }
 

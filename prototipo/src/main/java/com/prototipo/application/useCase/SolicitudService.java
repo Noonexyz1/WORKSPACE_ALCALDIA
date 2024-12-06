@@ -21,5 +21,7 @@ public interface SolicitudService {
 
     Autorizacion buscarAutorizacionByIdSoli(Long idSolicitud);
 
+    Autorizacion buscarAutorizacionById(Long idAutorizacion);
+
     void guardarFinalizacion(Finalizacion finalizacion);
 }

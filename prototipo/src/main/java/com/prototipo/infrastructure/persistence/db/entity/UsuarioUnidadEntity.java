@@ -31,11 +31,18 @@ public class UsuarioUnidadEntity {
     @ManyToOne
     private CargoEntity fkCargo;
 
-    //------------------Relacion Reflexiva--------------
+    //------------------Relacion Reflexiva Responsable--
     @ManyToOne
     private UsuarioUnidadEntity fkResponsable;
     @OneToMany(mappedBy = "fkResponsable")
     private List<UsuarioUnidadEntity> listFuncionarios;
+    //--------------------------------------------------
+
+    //------------------Relacion Reflexiva Responsable--
+    @ManyToOne
+    private UsuarioUnidadEntity fkDirector;
+    @OneToMany(mappedBy = "fkDirector")
+    private List<UsuarioUnidadEntity> listFuncionariosSistema;
     //--------------------------------------------------
 
     @OneToMany(mappedBy = "fkUsuarioSolicitante")

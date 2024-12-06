@@ -1,8 +1,8 @@
-export interface SolicitudResponse{
-    id: number;
-    nroDeCopias: number;
-    tipoDeDocumento: string;
-    nroDePaginas: number;
-    estadoResponsable: string;
-    estadoOperador: string;
+export interface SolicitudResponse {
+  id: number;
+  cite: string;
+  fecha: string;
+  descripcion: string;
+  cargo: string;
+  ci: string;
 }

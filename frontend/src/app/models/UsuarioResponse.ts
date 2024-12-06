@@ -1,9 +1,10 @@
 export interface UsuarioResponse {
-    id: number;
-    nombres: string;
-    apellidos: string;
-    correo: string;
-    nombreRol: string;
-    dashConfig: string;
-    idUnidad: number;
+  id: number,
+  fkUsuario: number,
+  fkUnidad: number,
+  fkRol: number,
+  nombreRol: string,
+  dashConfig: string,
+  fkCargo: number,
+  fkResponsable: number
 }

@@ -4,8 +4,10 @@ export interface UsuarioUnidadRequest {
 
     idUser: number;
     nombres: string;
-    apellidos: string;
+    paterno: string;
+    materno: string;
     correo: string;
+    ci: string;
 
     idUni: number;
     idRol: number;

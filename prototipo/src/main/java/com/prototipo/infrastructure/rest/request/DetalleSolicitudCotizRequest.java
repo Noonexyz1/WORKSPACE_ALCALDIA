@@ -11,11 +11,12 @@ import java.math.BigDecimal;
 @Builder
 public class DetalleSolicitudCotizRequest {
 
+    private Long idSolicitud;
+
     private Long idDetalleSolicitud;
     private Long nroPaginas;
     private Long nroCopias;
-    private BigDecimal precioUnitario;
-
-    private Long idSolicitud;
     private Long idUsuarioUnidad;
+
+    private BigDecimal precioUnit;
 }

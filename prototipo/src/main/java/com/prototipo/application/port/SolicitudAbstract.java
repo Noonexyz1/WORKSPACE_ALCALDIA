@@ -25,5 +25,7 @@ public interface SolicitudAbstract {
 
     AutorizacionDto buscarAutorizacionByIdSoliAbs(Long idSolicitud);
 
+    AutorizacionDto buscarAutorizacionByIdAbs(Long idAutorizacion);
+
     void guardarFinalizacionAbs(FinalizacionDto finalizacionDto);
 }

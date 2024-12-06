@@ -1,9 +1,10 @@
 export interface SolicitudResponResponse {
-    id: number;
-    idSolicitud: number;
-    nroDeCopias: number;
-    tipoDeDocumento: string;
-    nroDePaginas: number;
-    estadoByResponsable: string;
-    nombreUnidad: string;
+  "idAutorizacion": number,
+
+  "idSolicitud": number,
+  "cite": string,
+  "fecha": string,
+  "nomCompleto": string,
+  "nomCargo": string,
+  "nombreUnidad": string
 }

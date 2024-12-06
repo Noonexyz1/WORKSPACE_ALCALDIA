@@ -43,9 +43,14 @@ public class UsuarioImpl implements UsuarioAbastract {
 
     @Override
     public UsuarioDto guardarUsuarioAbastract(UsuarioDto usuarioDto) {
-        UsuarioEntity usuarioEntity = modelMapper.map(usuarioDto, UsuarioEntity.class);
-        UsuarioEntity userRespo = usuarioRepository.save(usuarioEntity);
-        UsuarioDto usuarioDtoResp = modelMapper.map(userRespo, UsuarioDto.class);
+        UsuarioEntity usuarioEntity = modelMapper
+                .map(usuarioDto, UsuarioEntity.class);
+
+        UsuarioEntity userRespo = usuarioRepository
+                .save(usuarioEntity);
+
+        UsuarioDto usuarioDtoResp = modelMapper
+                .map(userRespo, UsuarioDto.class);
         return usuarioDtoResp;
     }
 
