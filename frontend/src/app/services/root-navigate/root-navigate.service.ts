@@ -13,6 +13,7 @@ export class RootNavigateService {
     this.mapa.set('Operador', '/operador/listaDeSolicitudesPendientes');
     this.mapa.set('Solicitante', '/solicitante/misSolicitudes');
     this.mapa.set('Responsable', '/responsable/solicitudesPendienteUnidad');
+    this.mapa.set('Login', '/login');
   }
 
   valorParaNavegar(valor: string): string {

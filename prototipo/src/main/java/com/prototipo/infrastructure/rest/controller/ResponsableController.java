@@ -1,13 +1,12 @@
 package com.prototipo.infrastructure.rest.controller;
 
+import com.prototipo.application.modelDto.FinalizacionDto;
 import com.prototipo.application.useCase.AprobacionService;
 import com.prototipo.application.useCase.ResponsableService;
 import com.prototipo.application.useCase.SolicitudService;
 import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.rest.request.*;
-import com.prototipo.infrastructure.rest.response.DetalleSolicitudExtendidoResponse;
-import com.prototipo.infrastructure.rest.response.DetalleSolicitudResponse;
-import com.prototipo.infrastructure.rest.response.SolicitudResponResponse;
+import com.prototipo.infrastructure.rest.response.*;
 import com.prototipo.infrastructure.service.NotaPedidoServiceReport;
 import com.prototipo.infrastructure.service.ReporteServiceReport;
 import net.sf.jasperreports.engine.JRException;
@@ -42,24 +41,28 @@ public class ResponsableController {
     @Autowired
     private SolicitudService solicitudService;
 
-    //TODO, verificar este metodo
-    @PostMapping(path = {"/aprobarSolicitud"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+
+    @PostMapping(path = {"/aprobarSolicitud"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public void aprobarSolicitud(@RequestBody AprobacionSoliRequest aprobacionSoliRequest) {
         Long idAprobacion = aprobacionSoliRequest.getIdAprobacion();
         Long idResponsable = aprobacionSoliRequest.getIdResponsable();
         responsableService.aprobarSolicitudService(idAprobacion, idResponsable);
     }
 
-    @PostMapping(path = {"/rechazarSolicitud"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/rechazarSolicitud"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public void rechazarSolicitud(@RequestBody AprobacionSoliRequest aprobacionSoliRequest) {
         Long idAprobacion = aprobacionSoliRequest.getIdAprobacion();
         Long idResponsable = aprobacionSoliRequest.getIdResponsable();
         responsableService.rechazarSolicitudService(idAprobacion, idResponsable);
     }
 
-    @PostMapping(path = {"/verSolicitudesPendientes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/verSolicitudesPendientes"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudesPendientes(
-            @RequestBody PaginacionResponRequest pageParam) {
+            @RequestBody PaginacionResponRequest pageParam
+    ) {
 
         Long idResponsable = pageParam.getIdUsuarioUnidad();
         Long page = pageParam.getPage();
@@ -79,7 +82,7 @@ public class ResponsableController {
 
     private SolicitudResponResponse funcion(Solicitud x){
         return SolicitudResponResponse.builder()
-                .id(x.getId())
+                .idSolicitud(x.getId())
                 .cite(x.getCite())
                 .fecha(x.getFecha())
                 .nomCompleto(
@@ -92,73 +95,125 @@ public class ResponsableController {
                 .build();
     }
 
-    /*ver detalle de una solicitud especifica - HECHO
+    @PostMapping(path = {"/verSolicitudesAprobadas"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudesAprobadas(
+            @RequestBody PaginacionResponRequest pageParam) {
 
+        Long idResponsable = pageParam.getIdUsuarioUnidad();
+
+        Long page = pageParam.getPage();
+        Long size = pageParam.getSize();
+        String byColumName = pageParam.getByColumName();
+
+        List<Autorizacion> autorizacionList = aprobacionService
+                .listaDeSolicitudesAutorizadasService(
+                        idResponsable,
+                        page,
+                        size,
+                        byColumName
+                );
+
+        List<SolicitudResponResponse> listSolicitud = autorizacionList
+                .stream()
+                .map(this::funcion)
+                .toList();
+        return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
+    }
+
+    private SolicitudResponResponse funcion(Autorizacion x){
+        return SolicitudResponResponse.builder()
+                .idAutorizacion(x.getId())
+                .idSolicitud(x.getFkSolicitud().getId())
+                .cite(x.getFkSolicitud().getCite())
+                .fecha(x.getFecha())
+                .nomCompleto(
+                        x.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getNombres() + " " +
+                        x.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getPaterno() + " " +
+                        x.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getMaterno()
+                )
+                .nomCargo(x.getFkSolicitud().getFkUsuarioSolicitante().getFkCargo().getNombreCargo())
+                .nombreUnidad(x.getFkSolicitud().getFkUsuarioSolicitante().getFkUnidad().getNombre())
+                .build();
+    }
+
+    /*ver detalle de una solicitud especifica - HECHO
     Una vez viendo el detalle, el responsable lo puede cotizar y registrarlo en la tabla Cotizacion,
     dandole un precio unitario a cada detalle una vez cotizado, se registra la solicitud en la
     tabla autorizacion.
-
-    TODO Una vez terminado la operacion por parte de un externo, entonces se
+    Una vez terminado la operacion por parte de un externo, entonces se
     registra como finalizado en la tabla Finalizacion*/
 
-    @GetMapping(path = {"/finalizacion/{idSolicitud}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void finalizacion(@PathVariable Long idSolicitud) {
+    @PostMapping(path = {"/finalizarSolicitud"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void finalizarSolicitud(@RequestBody FinalizacionRequest request) {
+        Autorizacion autorizacion = solicitudService
+                .buscarAutorizacionById(request.getIdAutorizacion());
+        autorizacion.setFinaliFlag(1L);
 
-        Autorizacion autorizacion = solicitudService.buscarAutorizacionByIdSoli(idSolicitud);
+        aprobacionService.guardarAutorizacionService(autorizacion);
 
         Finalizacion finalizacion = Finalizacion.builder()
                 .fecha(LocalDate.now().toString())
-                .totalEjecutado(autorizacion.getTotalAutorizado())
-                .totalEjecutadoBs(autorizacion.getTotalCotizadoBs())
+                .totalEjecutado(request.getTotalEjecutado())
+                .totalEjecutadoBs(request.getTotalEjecutadoBs())
                 .fkAutorizacion(autorizacion)
                 .build();
 
         solicitudService.guardarFinalizacion(finalizacion);
-
     }
 
-
-
-
-    @PostMapping(path = {"/cotizarAutorizarSolicitud"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/cotizarAutorizarSolicitud"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public void cotizarAutorizarSolicitud(@RequestBody List<DetalleSolicitudCotizRequest> listSoliCoti) {
+
         listSoliCoti.forEach(x -> {
 
             DetalleSolicitud detalleSolicitud = DetalleSolicitud.builder()
                     .id(x.getIdDetalleSolicitud())
                     .build();
 
-            BigDecimal total = x.getPrecioUnitario()
+            BigDecimal total = x.getPrecioUnit()
                     .multiply(BigDecimal.valueOf(x.getNroCopias()))
                     .multiply(BigDecimal.valueOf(x.getNroPaginas()));
 
             Cotizacion cotizacion = Cotizacion.builder()
-                    .precioUnitario(x.getPrecioUnitario())
+                    .precioUnitario(x.getPrecioUnit())
                     .precioTotal(total)
                     .fkDetalleSolicitud(detalleSolicitud)
                     .build();
 
             responsableService.guardarCotizacion(cotizacion);
+
         });
 
-        Long idSolicitud = listSoliCoti.getFirst().getIdSolicitud();
+        Long idSolicitud = listSoliCoti.getFirst().getIdDetalleSolicitud();
         Long idUsuarioUnidad = listSoliCoti.getFirst().getIdUsuarioUnidad();
 
         UsuarioUnidad usuarioUnidad = UsuarioUnidad.builder()
                 .id(idUsuarioUnidad)
                 .build();
+
+        //TODO, verificar que esta solicitud se guarde con el flag
         Solicitud solicitud = Solicitud.builder()
                 .id(idSolicitud)
+                .autoriFlag(1L)
                 .build();
 
-        List<DetalleSolicitud> list = solicitudService.findListDetalleSoliBySolicitudId(idSolicitud);
+        List<DetalleSolicitud> list = solicitudService
+                .findListDetalleSoliBySolicitudId(idSolicitud);
+
         Long totalAutorizado = list.stream()
                 .mapToLong(x -> x.getNroCopias())
                 .sum();
+
         BigDecimal totalAutorizadoBs = list.stream()
                 .map(detalle -> {
-                    BigDecimal paginas = detalle.getNroPaginas() != null ? BigDecimal.valueOf(detalle.getNroPaginas()) : BigDecimal.ZERO;
-                    BigDecimal copias = detalle.getNroCopias() != null ? BigDecimal.valueOf(detalle.getNroCopias()) : BigDecimal.ZERO;
+                    BigDecimal paginas = detalle.getNroPaginas() != null ?
+                            BigDecimal.valueOf(detalle.getNroPaginas()) : BigDecimal.ZERO;
+                    BigDecimal copias = detalle.getNroCopias() != null ?
+                            BigDecimal.valueOf(detalle.getNroCopias()) : BigDecimal.ZERO;
+
                     return paginas.multiply(copias);
                 })
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
@@ -169,14 +224,16 @@ public class ResponsableController {
                 .totalCotizadoBs(totalAutorizadoBs)
                 .fkUsuarioResponsable(usuarioUnidad)
                 .fkSolicitud(solicitud)
+                .finaliFlag(0L)
                 .build();
 
+        //TODO, esta autorizacion no me esta guardando con el flag de 0 en la BD
         solicitudService.guardarAutorizacion(autorizacion);
 
     }
 
-
-    @GetMapping(path = {"/verDetalleDeSolicitud/{idSolicitud}"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @GetMapping(path = {"/verDetalleDeSolicitud/{idSolicitud}"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<DetalleSolicitudExtendidoResponse> verDetalleDeSolicitud(@PathVariable Long idSolicitud) {
         List<DetalleSolicitud> listDetSoli = solicitudService
                 .findListDetalleSoliBySolicitudId(idSolicitud);
@@ -198,6 +255,7 @@ public class ResponsableController {
 
     private DetalleSolicitudResponse funcion(DetalleSolicitud detalleSolicitud){
         return DetalleSolicitudResponse.builder()
+                .idSolicitud(detalleSolicitud.getFkSolicitud().getId())
                 .idDetalleSolicitud(detalleSolicitud.getId())
                 .nroCopias(detalleSolicitud.getNroCopias())
                 .nombreDocumento(detalleSolicitud.getNombreDocumento())
@@ -208,42 +266,78 @@ public class ResponsableController {
                 .build();
     }
 
+    @GetMapping(path = {"/verAutorizacionSolicitud/{idAutorizacion}"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<AutorizacionResponse> verAutorizacionSolicitud(@PathVariable Long idAutorizacion) {
 
+        Autorizacion autorizacion = aprobacionService.findAutorizacionById(idAutorizacion);
+        AutorizacionResponse autorizacionResponse = null;
 
+        if (autorizacion != null) {
+            autorizacionResponse = AutorizacionResponse.builder()
+                    .idAutorizacion(autorizacion.getId())
+                    .idSolicitud(autorizacion.getFkSolicitud().getId())
+                    .cite(autorizacion.getFkSolicitud().getCite())
+                    .fecha(autorizacion.getFkSolicitud().getFecha())
+                    .nomCompleto(
+                            autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getNombres() + " " +
+                            autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getPaterno() + " " +
+                            autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getMaterno()
+                    )
+                    .nomCargo(autorizacion.getFkUsuarioResponsable().getFkCargo().getNombreCargo())
+                    .nombreUnidad(autorizacion.getFkUsuarioResponsable().getFkUnidad().getNombre())
 
-    @PostMapping(path = {"/verSolicitudesAprobadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudesAprobadas(@RequestBody PaginacionResponRequest pageParam) {
-        /*Long idResponsable = pageParam.getIdUsuario();
+                    .totalAutorizado(autorizacion.getTotalAutorizado())
+                    .totalCotizadoBs(autorizacion.getTotalCotizadoBs())
+                    .fechaCotizado(autorizacion.getFecha())
+                    .build();
+        }
+
+        return new ResponseEntity<>(autorizacionResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(path = {"/verSolicitudesFinalizadas"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<FinalizacionResponse>> verSolicitudesFinalizadas(
+            @RequestBody PaginacionResponRequest pageParam) {
+
+        Long idResponsable = pageParam.getIdUsuarioUnidad();
 
         Long page = pageParam.getPage();
         Long size = pageParam.getSize();
         String byColumName = pageParam.getByColumName();
 
-        List<Aprobacion> aprobacionDomains = aprobacionService
-                .listaDeSolicitudesAprobadasService(idResponsable, page, size, byColumName);
-        List<SolicitudResponResponse> listSolicitud = aprobacionDomains
+        List<Finalizacion> finalizacionList = aprobacionService
+                .listaDeSolicitudesFinalizadasService(
+                        idResponsable,
+                        page,
+                        size,
+                        byColumName
+                );
+
+        List<FinalizacionResponse> listSolicitud = finalizacionList
                 .stream()
-                .map(this::funcion)
-                .toList();*/
-        return new ResponseEntity<>(null, HttpStatus.OK);
+                .map(this::funcionSoliFinalizacion)
+                .toList();
+        return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    @PostMapping(path = {"/verSolicitudesRechazadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudesRechazadas(@RequestBody PaginacionResponRequest pageParam) {
-        /*Long idResponsable = pageParam.getIdUsuario();
-
-        Long page = pageParam.getPage();
-        Long size = pageParam.getSize();
-        String byColumName = pageParam.getByColumName();
-
-        List<Aprobacion> aprobacionDomains = aprobacionService
-                .listaDeSolicitudesRechazadasService(idResponsable, page, size, byColumName);
-        List<SolicitudResponResponse> listSolicitud = aprobacionDomains
-                .stream()
-                .map(this::funcion)
-                .toList();*/
-        return new ResponseEntity<>(null, HttpStatus.OK);
+    private FinalizacionResponse funcionSoliFinalizacion(Finalizacion finalizacion){
+        return FinalizacionResponse.builder()
+                .idAutorizacion(finalizacion.getFkAutorizacion().getFkSolicitud().getId())
+                .nombreCompleto(finalizacion.getFkAutorizacion().getFkSolicitud().getDescripcion())
+                .nombreUnidad(finalizacion.getFkAutorizacion().getFkSolicitud().getFkUsuarioSolicitante().getFkUnidad().getNombre())
+                .nombreCargo(finalizacion.getFkAutorizacion().getFkSolicitud().getFkUsuarioSolicitante().getFkCargo().getNombreCargo())
+                .descripcion(finalizacion.getFkAutorizacion().getFkSolicitud().getDescripcion())
+                .totalAutorizado(finalizacion.getFkAutorizacion().getTotalAutorizado())
+                .totalCotizadoBs(finalizacion.getFkAutorizacion().getTotalCotizadoBs())
+                .totalEjecutado(finalizacion.getTotalEjecutado())
+                .totalEjecutadoBs(finalizacion.getTotalEjecutadoBs())
+                .fecha(finalizacion.getFecha())
+                .build();
     }
+
+
 
 
     //localhost:8081/solicitante/exportSolicitudDPF

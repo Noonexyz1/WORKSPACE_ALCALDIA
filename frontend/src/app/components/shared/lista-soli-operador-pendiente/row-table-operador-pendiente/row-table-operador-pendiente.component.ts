@@ -26,12 +26,13 @@ export class RowTablePendienteOperadorComponent {
 
   usuario: UsuarioResponse = {
     id: 0,
-    nombres: '',
-    apellidos: '',
-    correo: '',
+    fkUsuario: 0,
+    fkUnidad: 0,
+    fkRol: 0,
     nombreRol: '',
     dashConfig: '',
-    idUnidad: 0
+    fkCargo: 0,
+    fkResponsable: 0
   };
 
   private http: HttpClient;
@@ -43,9 +44,9 @@ export class RowTablePendienteOperadorComponent {
 
   archivoPdfResponse: ArchivoPdfResponse[] = [];
 
-  constructor(http: HttpClient, 
+  constructor(http: HttpClient,
               observable: SubjectUserLoginService,
-              router: Router, 
+              router: Router,
               rootNavigateService: RootNavigateService,
               localStorage: LocalStorageService,
               archivoPdfService: ArchivoPdfService){
@@ -73,21 +74,21 @@ export class RowTablePendienteOperadorComponent {
       idOperador: this.usuario.id,
       idOperacion: this.solicitud.idSolicitud
     };
-    
+
     console.log('Aprobacion objeto: ', aprobacion)
 
     //post<ValorDeRespuesta>
     this.http.post<ArchivoPdfResponse[]>(url, aprobacion).pipe(
       map((response) => {
         this.archivoPdfResponse = response;
-    
+
         // Intervalo entre cada descarga
         this.archivoPdfResponse.forEach((archivo, index) => {
           setTimeout(() => {
             this.archivoPdfService.descargarPdf(archivo);
           }, index * 500); // Intervalo de 500 ms entre cada descarga
         });
-    
+
         // Navegación después de que todas las descargas deberían estar completas
         setTimeout(() => {
           const toNavegate = this.rootNavigateService.valorParaNavegar('Operador');
@@ -102,7 +103,7 @@ export class RowTablePendienteOperadorComponent {
       })
     ).subscribe();
 
-    
+
   }
 
 }

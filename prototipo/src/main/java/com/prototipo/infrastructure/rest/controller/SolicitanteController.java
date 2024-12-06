@@ -53,7 +53,8 @@ public class SolicitanteController {
     private OrdenFotoServiceReport ordenFotoServiceReport;
 
 
-    @PostMapping(path = {"/solicitarFotocopiar"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/solicitarFotocopiar"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public void solicitarFotocopiar(@RequestBody SolicitudRequest solicitudRequest) {
         //Truco de los Ids
         /*Unidad unidad = Unidad.builder()
@@ -80,7 +81,8 @@ public class SolicitanteController {
         solicitudService.solicitarFotocopiarService(solicitud, archivoPdfs);*/
     }
 
-    @PostMapping(path = {"/v2/solicitarFotocopiar"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/v2/solicitarFotocopiar"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public void solicitarFotocopiarV2(@RequestBody SolicitudRequest solicitudRequest) {
         //Truco de los Ids
         UsuarioUnidad usuarioUnidad = UsuarioUnidad.builder()
@@ -99,12 +101,14 @@ public class SolicitanteController {
                 .fecha(LocalDate.now().toString())
                 .descripcion(solicitudRequest.getDescripcion())
                 .fkUsuarioSolicitante(usuarioUnidad)
+                .autoriFlag(0L)
                 .build();
 
         solicitudService.solicitarFotocopiarService(solicitud, listDetalleSolicitud);
     }
 
-    @PostMapping(path = {"/solicitarFotocopiarPDF"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/solicitarFotocopiarPDF"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public void solicitarFotocopiar(@RequestBody SolicitudRequestPDF solicitudRequest) {
         //Truco de los Ids
         /*Usuario usuario = Usuario.builder()
@@ -128,7 +132,8 @@ public class SolicitanteController {
         solicitudService.registrarFotocopiarService(solicitud, list);*/
     }
 
-    @PostMapping(path = {"/verHistorialSolicitudes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(path = {"/verHistorialSolicitudes"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudSoliciResponse>> verHistorialSolicitudes(
             @RequestBody PaginacionSoliRequest pageArg ) {
 
@@ -356,8 +361,6 @@ public class SolicitanteController {
         }
 
     }
-
-
 
     @GetMapping("/exportOrdenParaFotocopiaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
     public ResponseEntity<byte[]> exportOrdenParaFotocopiaDPF(

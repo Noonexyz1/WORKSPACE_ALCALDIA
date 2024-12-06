@@ -137,6 +137,14 @@ public class SolicitudAdapter implements SolicitudService {
     }
 
     @Override
+    public Autorizacion buscarAutorizacionById(Long idAutorizacion) {
+        AutorizacionDto autorizacionDto = solicitudAbstract
+                .buscarAutorizacionByIdAbs(idAutorizacion);
+        return mapperApplicationAbstract
+                .mapearAbstract(autorizacionDto, Autorizacion.class);
+    }
+
+    @Override
     public void guardarFinalizacion(Finalizacion finalizacion) {
         FinalizacionDto finalizacionDto = mapperApplicationAbstract
                 .mapearAbstract(finalizacion, FinalizacionDto.class);

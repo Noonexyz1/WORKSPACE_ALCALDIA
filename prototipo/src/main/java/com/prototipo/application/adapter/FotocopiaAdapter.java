@@ -37,7 +37,13 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     @Override
-    public void creaUsuario(Usuario user, Long idRol, Long idUni, Long idCargo, Long idResponsable){
+    public void creaUsuario(Usuario user,
+                            Long idRol,
+                            Long idUni,
+                            Long idCargo,
+                            Long idResponsable,
+                            Long idDirector){
+
         // Insertamos al usuario en la tabla 'usuario'
         UsuarioDto usuarioDtoResp = crearUsuario(user);
 
@@ -53,6 +59,7 @@ public class FotocopiaAdapter implements FotocopiaService {
         UnidadDto unidadDto = UnidadDto.builder().id(idUni).build();
         CargoDto cargoDto = CargoDto.builder().id(idCargo).build();
         UsuarioUnidadDto usuarioUnidadDto = UsuarioUnidadDto.builder().id(idResponsable).build();
+        UsuarioUnidadDto usuarioDirectorDto = UsuarioUnidadDto.builder().id(idDirector).build();
 
         UsuarioUnidadDto userUni = UsuarioUnidadDto.builder()
                 .id(null)
@@ -62,6 +69,7 @@ public class FotocopiaAdapter implements FotocopiaService {
                 .fkCargo(cargoDto)
                 .fkUsuario(usuarioDtoResp)
                 .fkResponsable(usuarioUnidadDto)
+                .fkDirector(usuarioDirectorDto)
                 .build();
 
         usuarioUnidadAbstract.guardarUsuarioUnidad(userUni);

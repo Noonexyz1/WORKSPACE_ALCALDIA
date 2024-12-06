@@ -1,5 +1,6 @@
 export interface PageRequest {
-    page: number;
-    size: number;
-    byColumName: string;
+  idUserUni: number;
+  page: number;
+  size: number;
+  byColumName: string;
 }

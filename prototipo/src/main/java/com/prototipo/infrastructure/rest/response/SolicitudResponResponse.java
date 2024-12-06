@@ -8,7 +8,10 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class SolicitudResponResponse {
-    private Long id;
+
+    private Long idAutorizacion;
+
+    private Long idSolicitud;
     private String cite;
     private String fecha;
     private String nomCompleto;

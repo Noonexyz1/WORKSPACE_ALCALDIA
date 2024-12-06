@@ -26,18 +26,19 @@ export class ListaSoliAprobadaResponsableComponent implements OnInit{
 
   usuario: UsuarioResponse = {
     id: 0,
-    nombres: '',
-    apellidos: '',
-    correo: '',
+    fkUsuario: 0,
+    fkUnidad: 0,
+    fkRol: 0,
     nombreRol: '',
     dashConfig: '',
-    idUnidad: 0
+    fkCargo: 0,
+    fkResponsable: 0
   };
 
-  constructor(http: HttpClient, 
+  constructor(http: HttpClient,
               observable: SubjectUserLoginService,
               localStorage: LocalStorageService){
-                
+
     this.http = http;
     this.observable = observable;
     this.localStorage = localStorage;
@@ -59,7 +60,7 @@ export class ListaSoliAprobadaResponsableComponent implements OnInit{
 
     const body: PageRequestID = {
       //TODO, este valor tiene que se de un observable general
-      idUsuario: this.usuario.id,
+      idUsuarioUnidad: this.usuario.id,
       page: 0,
       size: 100,
       byColumName: ""

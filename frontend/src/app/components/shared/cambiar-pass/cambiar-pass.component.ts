@@ -1,10 +1,10 @@
-import { Component } from '@angular/core';
-import { NuevoPassRequest } from '../../../models/NuevoPassRequest';
-import { catchError, map, of } from 'rxjs';
-import { Router } from '@angular/router';
-import { RootNavigateService } from '../../../services/root-navigate/root-navigate.service';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
+import {Component} from '@angular/core';
+import {NuevoPassRequest} from '../../../models/NuevoPassRequest';
+import {catchError, map, of} from 'rxjs';
+import {Router} from '@angular/router';
+import {RootNavigateService} from '../../../services/root-navigate/root-navigate.service';
+import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {HttpClient} from '@angular/common/http';
 
 @Component({
   selector: 'app-cambiar-pass',
@@ -14,18 +14,22 @@ import { HttpClient } from '@angular/common/http';
   styleUrl: './cambiar-pass.component.css'
 })
 export class CambiarPassComponent {
-  
+
   private http: HttpClient;
   private formBuilder: FormBuilder;
   private rootNavigateService: RootNavigateService;
   private router: Router;
   nuevoPassForm: FormGroup;
 
-  constructor(http: HttpClient, formBuilder: FormBuilder, rootNavigateService: RootNavigateService, router: Router){
+  constructor(http: HttpClient,
+              formBuilder: FormBuilder,
+              rootNavigateService: RootNavigateService,
+              router: Router) {
+
     this.formBuilder = formBuilder;
     this.http = http;
     this.nuevoPassForm = this.formBuilder.group({
-      correo: [''],
+      ci: [''],
       pass: [''],
       nuevoPass: [''],
     });
@@ -34,9 +38,9 @@ export class CambiarPassComponent {
   }
 
   botonCambiarPass(): void {
-    const url = 'http://localhost:8081/administrador/cambiarPass';
+    const url = 'http://localhost:8081/cambioPassService/cambiarPass';
     const nuevoPassRequest: NuevoPassRequest = {
-      correo: this.nuevoPassForm.get('correo')?.value,
+      ci: this.nuevoPassForm.get('ci')?.value,
       pass: this.nuevoPassForm.get('pass')?.value,
       nuevoPass: this.nuevoPassForm.get('nuevoPass')?.value,
     };
@@ -45,15 +49,16 @@ export class CambiarPassComponent {
 
     this.http.post<NuevoPassRequest>(url, nuevoPassRequest).pipe(
       map((response: NuevoPassRequest) => {
-        let toNavegate = this.rootNavigateService.valorParaNavegar("Administrador");
+        let toNavegate = this.rootNavigateService
+          .valorParaNavegar('Login');
         this.router.navigate([toNavegate]);
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
-        alert('Hubo un error al crear usuario');
+        alert('Hubo un error al cambiar la contrasena');
         return of(null); // Retornar un observable vacío en caso de error
       })
     ).subscribe();
-    
+
   }
 }

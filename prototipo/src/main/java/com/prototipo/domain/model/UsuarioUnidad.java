@@ -1,5 +1,6 @@
 package com.prototipo.domain.model;
 
+import com.prototipo.infrastructure.persistence.db.entity.UsuarioUnidadEntity;
 import lombok.*;
 
 @Getter
@@ -15,4 +16,5 @@ public class UsuarioUnidad {
     private Rol fkRol;
     private Cargo fkCargo;
     private UsuarioUnidad fkResponsable;
+    private UsuarioUnidad fkDirector;
 }

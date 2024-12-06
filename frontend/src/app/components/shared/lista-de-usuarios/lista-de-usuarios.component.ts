@@ -28,8 +28,9 @@ export class ListaDeUsuariosComponent implements OnInit {
 
   listarUsuarios(): void {
     const url = 'http://localhost:8081/administrador/listaDeUsuarios';
-    
+
     const body: PageRequest = {
+      idUserUni: 1,
       page: 0,
       size: 100,
       byColumName: ""

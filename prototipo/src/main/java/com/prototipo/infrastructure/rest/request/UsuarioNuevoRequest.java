@@ -19,4 +19,5 @@ public class UsuarioNuevoRequest {
     private Long idUni;
     private Long idCargo;
     private Long idResponsable;
+    private Long idDirector;
 }

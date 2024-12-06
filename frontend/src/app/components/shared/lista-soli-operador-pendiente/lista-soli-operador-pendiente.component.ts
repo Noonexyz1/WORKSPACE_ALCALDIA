@@ -24,15 +24,16 @@ export class ListaSoliPendienteOperadorComponent implements OnInit{
   listSolicitud: SolicitudOperaResponse[] = [];
   usuario: UsuarioResponse = {
     id: 0,
-    nombres: '',
-    apellidos: '',
-    correo: '',
+    fkUsuario: 0,
+    fkUnidad: 0,
+    fkRol: 0,
     nombreRol: '',
     dashConfig: '',
-    idUnidad: 0
+    fkCargo: 0,
+    fkResponsable: 0
   };
-  
-  constructor(http: HttpClient, 
+
+  constructor(http: HttpClient,
               observable: SubjectUserLoginService,
               localStorage: LocalStorageService){
 
@@ -47,28 +48,23 @@ export class ListaSoliPendienteOperadorComponent implements OnInit{
   }
 
   listarSolicitudes(): void {
-    const url = 'http://localhost:8081/operador/verSolicitudesPendientes';
-    
+    const url = 'http://localhost:8081/responsable/verSolicitudesPendientes';
+
     this.observable.obtenerObservable().subscribe((datos) => {
       this.usuario = datos;
     });
 
     this.usuario = this.localStorage.getItem('userData');
-    console.log('valor del local storage; ', this.usuario)
-    
+
     const body: PageRequestID = {
-      //TODO, este valor tiene que se de un observable general
-      idUsuario: this.usuario.id,
+      idUsuarioUnidad: this.usuario.id,
       page: 0,
       size: 100,
       byColumName: ""
     }
 
-    console.log('Datos a enviar: ', body)
-
     this.http.post<SolicitudOperaResponse[]>(url, body).pipe(
       map((response: SolicitudOperaResponse[]) => {
-        console.log('valor de respuesta: ', response);
         this.listSolicitud = response;
       }),
       catchError(error => {
@@ -78,6 +74,7 @@ export class ListaSoliPendienteOperadorComponent implements OnInit{
       })
     )
     .subscribe();
+
   }
 
 }

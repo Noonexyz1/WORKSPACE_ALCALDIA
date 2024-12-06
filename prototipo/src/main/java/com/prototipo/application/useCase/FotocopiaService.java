@@ -6,7 +6,7 @@ import com.prototipo.domain.model.*;
 import java.util.List;
 
 public interface FotocopiaService {
-    void creaUsuario(Usuario userSoli, Long idRol, Long idUni, Long idCargo, Long idResponsable);
+    void creaUsuario(Usuario userSoli, Long idRol, Long idUni, Long idCargo, Long idResponsable, Long idDirector);
     void editarUsuarioUnidad(Usuario userEdit);
     void eliminarUsuario(Long idUsuario);
     void subirArchivoPdf();

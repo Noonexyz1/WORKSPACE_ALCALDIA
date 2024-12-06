@@ -1,7 +1,5 @@
 package com.prototipo.application.modelDto;
 
-import com.prototipo.domain.model.Solicitud;
-import com.prototipo.domain.model.UsuarioUnidad;
 import lombok.*;
 
 import java.math.BigDecimal;
@@ -17,6 +15,7 @@ public class AutorizacionDto {
     private String fecha;
     private Long totalAutorizado;
     private BigDecimal totalCotizadoBs;
+    private Long finaliFlag;
 
     private UsuarioUnidadDto fkUsuarioResponsable;
     private SolicitudDto fkSolicitud;

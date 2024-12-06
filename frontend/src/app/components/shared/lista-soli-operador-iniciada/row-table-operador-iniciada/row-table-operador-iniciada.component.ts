@@ -23,12 +23,13 @@ export class RowTablePendienteOperadorComponent {
 
   usuario: UsuarioResponse = {
     id: 0,
-    nombres: '',
-    apellidos: '',
-    correo: '',
+    fkUsuario: 0,
+    fkUnidad: 0,
+    fkRol: 0,
     nombreRol: '',
     dashConfig: '',
-    idUnidad: 0
+    fkCargo: 0,
+    fkResponsable: 0
   };
 
   private http: HttpClient;
@@ -37,9 +38,9 @@ export class RowTablePendienteOperadorComponent {
   private rootNavigateService: RootNavigateService
   private localStorage: LocalStorageService
 
-  constructor(http: HttpClient, 
+  constructor(http: HttpClient,
               observable: SubjectUserLoginService,
-              router: Router, 
+              router: Router,
               rootNavigateService: RootNavigateService,
               localStorage: LocalStorageService){
 
@@ -65,7 +66,7 @@ export class RowTablePendienteOperadorComponent {
       idOperador: this.usuario.id,
       idOperacion: this.solicitud.idSolicitud
     };
-    
+
     console.log('Aprobacion objeto: ', aprobacion)
 
     this.http.post<OperacionSoliRequest>(url, aprobacion).pipe(

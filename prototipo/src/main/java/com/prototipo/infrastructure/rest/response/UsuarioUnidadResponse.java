@@ -11,6 +11,7 @@ import lombok.*;
 //@EqualsAndHashCode
 public class UsuarioUnidadResponse {
     private Long id;
+    private String ci;
     private Boolean isActive;
 
     private Long idUser;
@@ -21,6 +22,7 @@ public class UsuarioUnidadResponse {
 
     private String nombreRol;
     private String nombreUnidad;
+    private String nombreCargo;
 
     private Long idRol;
     private Long idUni;
