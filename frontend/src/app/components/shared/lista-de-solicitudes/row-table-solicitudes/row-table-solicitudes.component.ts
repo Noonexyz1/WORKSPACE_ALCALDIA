@@ -13,6 +13,14 @@ export class RowTableSolicitudesComponent {
   @Input()
   solicitud!: SolicitudResponse;
 
+
+  isModalVisible: boolean = false;
+
+  toggleModal(): void {
+    this.isModalVisible = !this.isModalVisible;
+  }
+
+
   botonSolicitudFotocopiaPDF(): void {
     alert("botonSolicitudFotocopiaPDF()");
   }

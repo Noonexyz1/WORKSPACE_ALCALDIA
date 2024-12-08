@@ -90,10 +90,14 @@ export class RowTablePendienteResponsableComponent implements AfterViewInit{
     console.log('Lista actualizada:', this.detalleSolicitudCotizado);
   }
 
-
+  isModalVisible: boolean = false;
+  toggleModal(): void {
+    this.isModalVisible = !this.isModalVisible;
+  }
 
   botonTraerDatosModal(): void {
     this.estadoModal = true;
+    this.isModalVisible = !this.isModalVisible;
 
     //Traer el objeto de SolicitudExtendido mediante el ID de solicitud
     const url = 'http://localhost:8081/responsable/verDetalleDeSolicitud/' + this.solicitud.idSolicitud;
