@@ -137,7 +137,7 @@ public class SolicitanteController {
     public ResponseEntity<List<SolicitudSoliciResponse>> verHistorialSolicitudes(
             @RequestBody PaginacionSoliRequest pageArg ) {
 
-        Long idUserUni = pageArg.getIdUserUni();
+        Long idUserUni = pageArg.getIdUsuarioUnidad();
 
         Long page = pageArg.getPage();
         Long size = pageArg.getSize();
