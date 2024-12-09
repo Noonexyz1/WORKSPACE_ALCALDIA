@@ -1,5 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { SolicitudResponResponse } from '../../../../models/SolicitudResponResponse';
+import {FinalizacionResponse} from "../../../../models/FinalizacionResponse";
 
 @Component({
   selector: 'app-row-table-responsable-rechazada',
@@ -11,6 +12,6 @@ import { SolicitudResponResponse } from '../../../../models/SolicitudResponRespo
 export class RowTableRechazadaResponsableComponent {
 
   @Input()
-  solicitud!: SolicitudResponResponse;
- 
+  solicitudFinali!: FinalizacionResponse;
+
 }

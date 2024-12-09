@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class SolicitudImpl implements SolicitudAbstract {
@@ -26,6 +25,8 @@ public class SolicitudImpl implements SolicitudAbstract {
     private CotizacionRepository cotizacionRepository;
     @Autowired
     private AutorizacionRepository autorizacionRepository;
+    @Autowired
+    private UsuarioUnidadRepository usuarioUnidadRepository;
 
     //Tu unicamente deberias traerla Solicitud
     @Override
@@ -135,13 +136,15 @@ public class SolicitudImpl implements SolicitudAbstract {
         autorizacion.setTotalCotizadoBs(autorizacionDto.getTotalCotizadoBs());
         autorizacion.setFinaliFlag(autorizacionDto.getFinaliFlag());
 
-        // Mapear relaciones
-        SolicitudEntity solicitudEntity = new SolicitudEntity();
-        solicitudEntity.setId(autorizacionDto.getFkSolicitud().getId());
-        autorizacion.setFkSolicitud(solicitudEntity);
+        //aqui tengo que traer la instancia de la solicitud con ID, porque si no, no esta dentro del contexto
+        SolicitudEntity solicitudEntity = solicitudRepository
+                .findById(autorizacionDto.getFkSolicitud().getId()).orElseThrow();
 
-        UsuarioUnidadEntity usuarioEntity = new UsuarioUnidadEntity();
-        usuarioEntity.setId(autorizacionDto.getFkUsuarioResponsable().getId());
+        autorizacion.setFkSolicitud(solicitudEntity);
+        //aqui tengo que traer la instancia de UsuarioUnidad con ID, porque si no, no esta dentro del contexto
+        UsuarioUnidadEntity usuarioEntity = usuarioUnidadRepository
+                .findById(autorizacionDto.getFkUsuarioResponsable().getId()).orElseThrow();
+
         autorizacion.setFkUsuarioResponsable(usuarioEntity);
         autorizacion.setFinaliFlag(autorizacion.getFinaliFlag());
 

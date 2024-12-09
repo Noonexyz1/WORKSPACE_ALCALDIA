@@ -100,7 +100,8 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public void guardarCotizacion(Cotizacion x) {
-        CotizacionDto cotizacionDto = mapperApplication.mapearAbstract(x, CotizacionDto.class);
+        CotizacionDto cotizacionDto = mapperApplication
+                .mapearAbstract(x, CotizacionDto.class);
         solicitudAbstract.guardarCotizacionAbs(cotizacionDto);
     }
 }
