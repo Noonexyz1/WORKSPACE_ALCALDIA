@@ -10,7 +10,8 @@ public class PageRedirectController {
             value = {
                     "/{path:[^\\.]*}",
                     "/responsable/{path:[^\\.]*}",
-                    "/solicitante/{path:[^\\.]*}"
+                    "/solicitante/{path:[^\\.]*}",
+                    "/administrador/{path:[^\\.]*}"
             },
             method = {
                     RequestMethod.GET,
