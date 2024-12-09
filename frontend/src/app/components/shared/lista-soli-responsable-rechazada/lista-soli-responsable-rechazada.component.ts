@@ -8,6 +8,7 @@ import { SubjectUserLoginService } from '../../../services/subject-user-login/su
 import { SolicitudResponResponse } from '../../../models/SolicitudResponResponse';
 import { RowTableRechazadaResponsableComponent } from './row-table-responsable-rechazada/row-table-responsable-rechazada.component';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
+import {FinalizacionResponse} from "../../../models/FinalizacionResponse";
 
 @Component({
   selector: 'app-lista-soli-responsable',
@@ -22,7 +23,7 @@ export class ListaSoliRechazadaResponsableComponent implements OnInit{
   private observable: SubjectUserLoginService;
   private localStorage: LocalStorageService;
 
-  listSolicitud: SolicitudResponResponse[] = [];
+  listSolicitudFinal: FinalizacionResponse[] = [];
 
   usuario: UsuarioResponse = {
     id: 0,
@@ -65,10 +66,10 @@ export class ListaSoliRechazadaResponsableComponent implements OnInit{
       byColumName: ""
     }
 
-    this.http.post<SolicitudResponResponse[]>(url, body).pipe(
-      map((response: SolicitudResponResponse[]) => {
+    this.http.post<FinalizacionResponse[]>(url, body).pipe(
+      map((response: FinalizacionResponse[]) => {
         console.log(response);
-        this.listSolicitud = response;
+        this.listSolicitudFinal = response;
       }),
       catchError(error => {
         console.error('Error en la petición:', error);

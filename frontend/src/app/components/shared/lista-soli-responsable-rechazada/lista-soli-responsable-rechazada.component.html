@@ -9,9 +9,9 @@
       <div class="mt-6 flow-root sm:mt-8">
         <div class="divide-y divide-gray-200 dark:divide-gray-700">
 
-          @if (listSolicitud != null && listSolicitud.length > 0) {
-            @for (solicitud of listSolicitud; track solicitud.idSolicitud) {
-              <app-row-table-responsable-rechazada [solicitud]="solicitud"></app-row-table-responsable-rechazada>
+          @if (listSolicitudFinal != null && listSolicitudFinal.length > 0) {
+            @for (solicitudFinali of listSolicitudFinal; track solicitudFinali.idAutorizacion) {
+              <app-row-table-responsable-rechazada [solicitudFinali]="solicitudFinali"></app-row-table-responsable-rechazada>
             }
           } @else {
             <p>No hay solicitudes disponibles</p>

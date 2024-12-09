@@ -165,8 +165,10 @@ public class ResponsableController {
 
     @PostMapping(path = {"/cotizarAutorizarSolicitud"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void cotizarAutorizarSolicitud(@RequestBody List<DetalleSolicitudCotizRequest> listSoliCoti) {
+    public void cotizarAutorizarSolicitud(
+            @RequestBody List<DetalleSolicitudCotizRequest> listSoliCoti) {
 
+        //Esto sirve para cotizar el detalle de una solicitud, por cada uno de ellos
         listSoliCoti.forEach(x -> {
 
             DetalleSolicitud detalleSolicitud = DetalleSolicitud.builder()
@@ -184,29 +186,31 @@ public class ResponsableController {
                     .build();
 
             responsableService.guardarCotizacion(cotizacion);
-
         });
 
-        Long idSolicitud = listSoliCoti.getFirst().getIdDetalleSolicitud();
-        Long idUsuarioUnidad = listSoliCoti.getFirst().getIdUsuarioUnidad();
 
-        UsuarioUnidad usuarioUnidad = UsuarioUnidad.builder()
-                .id(idUsuarioUnidad)
+        Long idUsuarioUnidadResponsable = listSoliCoti.getFirst().getIdUsuarioUnidad();
+        UsuarioUnidad usuarioUnidadResponsable = UsuarioUnidad.builder()
+                .id(idUsuarioUnidadResponsable)
                 .build();
 
-        //TODO, verificar que esta solicitud se guarde con el flag
+
+        Long idSolicitud = listSoliCoti.getFirst().getIdSolicitud();
         Solicitud solicitud = Solicitud.builder()
                 .id(idSolicitud)
                 .autoriFlag(1L)
                 .build();
 
+        //EStas son OPERACIONES para la sumatoria para guardar el Autorizacion
         List<DetalleSolicitud> list = solicitudService
                 .findListDetalleSoliBySolicitudId(idSolicitud);
 
-        Long totalAutorizado = list.stream()
-                .mapToLong(x -> x.getNroCopias())
-                .sum();
+        Long totalAutorizado = 0L;
+        for (DetalleSolicitud y: list) {
+            totalAutorizado = totalAutorizado + y.getNroCopias();
+        }
 
+        //EStas son OPERACIONES para el producto para guardar el Autorizacion
         BigDecimal totalAutorizadoBs = list.stream()
                 .map(detalle -> {
                     BigDecimal paginas = detalle.getNroPaginas() != null ?
@@ -218,18 +222,17 @@ public class ResponsableController {
                 })
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
 
+        //Para persistir en la BD
         Autorizacion autorizacion = Autorizacion.builder()
                 .fecha(LocalDate.now().toString())
                 .totalAutorizado(totalAutorizado)
                 .totalCotizadoBs(totalAutorizadoBs)
-                .fkUsuarioResponsable(usuarioUnidad)
+                .fkUsuarioResponsable(usuarioUnidadResponsable)
                 .fkSolicitud(solicitud)
                 .finaliFlag(0L)
                 .build();
 
-        //TODO, esta autorizacion no me esta guardando con el flag de 0 en la BD
         solicitudService.guardarAutorizacion(autorizacion);
-
     }
 
     @GetMapping(path = {"/verDetalleDeSolicitud/{idSolicitud}"},
@@ -284,8 +287,8 @@ public class ResponsableController {
                             autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getPaterno() + " " +
                             autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getMaterno()
                     )
-                    .nomCargo(autorizacion.getFkUsuarioResponsable().getFkCargo().getNombreCargo())
-                    .nombreUnidad(autorizacion.getFkUsuarioResponsable().getFkUnidad().getNombre())
+                    .nomCargo(autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkCargo().getNombreCargo())
+                    .nombreUnidad(autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkUnidad().getNombre())
 
                     .totalAutorizado(autorizacion.getTotalAutorizado())
                     .totalCotizadoBs(autorizacion.getTotalCotizadoBs())
@@ -336,7 +339,6 @@ public class ResponsableController {
                 .fecha(finalizacion.getFecha())
                 .build();
     }
-
 
 
 

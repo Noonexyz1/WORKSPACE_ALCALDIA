@@ -50,8 +50,13 @@ export class RowTableAprobadaResponsableComponent {
     });
   }
 
+  isModalVisible: boolean = false;
+  toggleModal(): void {
+    this.isModalVisible = !this.isModalVisible;
+  }
 
   botonTraerDatosModal(): void {
+    this.isModalVisible = !this.isModalVisible;
     const url = 'http://localhost:8081/responsable/verAutorizacionSolicitud/' + this.solicitud.idAutorizacion;
 
     // Recibimos la peticion
