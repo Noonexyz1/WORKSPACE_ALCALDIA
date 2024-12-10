@@ -16,12 +16,14 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @CrossOrigin(origins = "*", maxAge = 86400)
 @RestController
@@ -327,7 +329,7 @@ public class ResponsableController {
 
     private FinalizacionResponse funcionSoliFinalizacion(Finalizacion finalizacion){
         return FinalizacionResponse.builder()
-                .idAutorizacion(finalizacion.getFkAutorizacion().getFkSolicitud().getId())
+                .idSoliAutorizada(finalizacion.getFkAutorizacion().getFkSolicitud().getId())
                 .nombreCompleto(finalizacion.getFkAutorizacion().getFkSolicitud().getDescripcion())
                 .nombreUnidad(finalizacion.getFkAutorizacion().getFkSolicitud().getFkUsuarioSolicitante().getFkUnidad().getNombre())
                 .nombreCargo(finalizacion.getFkAutorizacion().getFkSolicitud().getFkUsuarioSolicitante().getFkCargo().getNombreCargo())
@@ -341,13 +343,13 @@ public class ResponsableController {
     }
 
 
-
-    //localhost:8081/solicitante/exportSolicitudDPF
+    //local:8081/responsable/exportNotaPedidoDPF/1/2/2
+    @Async  // La anotación para indicar que este méttodo es asincrónico
     @GetMapping("/exportNotaPedidoDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
-    public ResponseEntity<byte[]> exportNotaPedidoDPF(
+    public CompletableFuture<ResponseEntity<byte[]>> exportNotaPedidoDPF(
             @PathVariable Long idSolicitud,
             @PathVariable Long idSolicitante,
-            @PathVariable Long idResponsable ) throws IOException, JRException {
+            @PathVariable Long idResponsable) throws IOException, JRException {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
@@ -356,20 +358,26 @@ public class ResponsableController {
                 "notaPedidoPDF.pdf"
         );
 
-
+        // Llamar al servicio de manera sincrónica en este caso
         List<NotaDePedido> notaDePedidoList = responsableService.generarNotaDePedidoPDF(idSolicitud);
 
-//        List<Reporte> listReport = responsableService.generarReportePDF(idSolicitud);
-//        System.out.println(listReport);
-
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(notaPedidoServiceReport.exportToPdf(notaDePedidoList));
+        // Procesar el archivo PDF y devolver el resultado asincrónicamente
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .body(notaPedidoServiceReport.exportToPdf(notaDePedidoList));
+            } catch (IOException | JRException e) {
+                throw new RuntimeException("Error al generar el PDF", e);
+            }
+        });
     }
 
+
     //localhost:8081/solicitante/exportSolicitudDPF
+    @Async
     @GetMapping("/exportReporteDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
-    public ResponseEntity<byte[]> exportReporteDPF(
+    public CompletableFuture<ResponseEntity<byte[]>> exportReporteDPF(
             @PathVariable Long idSolicitud,
             @PathVariable Long idSolicitante,
             @PathVariable Long idResponsable ) throws IOException, JRException {
@@ -382,10 +390,15 @@ public class ResponsableController {
         );
 
         List<Reporte> listReport = responsableService.generarReportePDF(idSolicitud);
-        System.out.println(listReport);
 
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(reporteServiceReport.exportToPdf(listReport));
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .body(reporteServiceReport.exportToPdf(listReport));
+            } catch (IOException | JRException e) {
+                throw new RuntimeException("Error al generar el PDF", e);
+            }
+        });
     }
 }

@@ -1,6 +1,5 @@
 package com.prototipo.infrastructure.persistence.db.repository;
 
-import com.prototipo.application.modelDto.NotaDePedidoDto;
 import com.prototipo.application.modelDto.ReporteDto;
 import com.prototipo.infrastructure.persistence.db.entity.DetalleSolicitudEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,24 +14,28 @@ public interface ReportesPDFRepository extends JpaRepository<DetalleSolicitudEnt
 
     @Query(value =
             """
-            SELECT ds.nro_copias,
-            ds.nombre_documento,
-            d.precio_unitario,
-            d.precio_total
-            FROM detalle_solicitud ds, descargo d
-            WHERE ds.id = d.fk_detalle_solicitud_id
-            AND ds.fk_solicitud_id = :idSolicitud
+            SELECT 
+                ds.nro_copias AS nroCopias,
+                ds.nombre_documento AS nombreDocumento,
+                c.precio_unitario AS precioUnitario,
+                c.precio_total AS precioTotal
+            FROM detalle_solicitud ds
+            INNER JOIN cotizacion c ON ds.id = c.fk_detalle_solicitud_id
+            WHERE ds.fk_solicitud_id = :idSolicitud
             """, nativeQuery = true)
-    List<NotaDePedidoDto> getNotaDePedido(@Param("idSolicitud") Long idSolicitud);
+    List<Object[]> getNotaDePedido(@Param("idSolicitud") Long idSolicitud);
+
+
 
     @Query(value =
             """
-            SELECT ds.nro_copias,
-            d.precio_unitario,
-            d.precio_total
-            FROM detalle_solicitud ds, descargo d
+            SELECT
+            CAST(ds.nro_copias AS int) AS nroCopias,
+            d.precio_unitario AS precioUnitario,
+            d.precio_total AS precioTotal
+            FROM detalle_solicitud ds, cotizacion d
             WHERE ds.id = d.fk_detalle_solicitud_id
             AND ds.fk_solicitud_id = :idSolicitud
             """, nativeQuery = true)
-    List<ReporteDto> getListReporte(@Param("idSolicitud") Long idSolicitud);
+    List<Object[]> getListReporte(@Param("idSolicitud") Long idSolicitud);
 }

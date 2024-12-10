@@ -2,28 +2,28 @@
   <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
     <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Id Autorizacion:</dt>
     <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">
-      <a href="#" class="hover:underline">{{ solicitudFinali.idAutorizacion }}</a>
+      <a href="#" class="hover:underline">{{ solicitudFinalizada.idSoliAutorizada }}</a>
     </dd>
   </dl>
 
   <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
     <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Descripcion:</dt>
-    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudFinali.nombreCompleto }}</dd>
+    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudFinalizada.nombreCompleto }}</dd>
   </dl>
 
   <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
     <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Cargo Solicitante:</dt>
-    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudFinali.nombreCargo }}</dd>
+    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudFinalizada.nombreCargo }}</dd>
   </dl>
 
   <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
     <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Unidad Solicitante:</dt>
-    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudFinali.nombreUnidad }}</dd>
+    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudFinalizada.nombreUnidad }}</dd>
   </dl>
 
   <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
     <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Fecha:</dt>
-    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudFinali.fecha }}</dd>
+    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudFinalizada.fecha }}</dd>
   </dl>
 
 
@@ -42,6 +42,21 @@
         COMPLETADO
       </span>
     </dd>
+  </dl>
+
+  <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+    <div class="flex justify-end space-x-2">
+      <button type="submit" (click)="botonDescargoSolicitud()"
+              class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+        <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true"
+             xmlns="http://www.w3.org/2000/svg"
+             width="24" height="24" fill="none" viewBox="0 0 24 24">
+          <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2m-8 1V4m0 12-4-4m4 4 4-4"/>
+        </svg>
+        Descargo de Solicitud PDF
+      </button>
+    </div>
   </dl>
 
 </div>

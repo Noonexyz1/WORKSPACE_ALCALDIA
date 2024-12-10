@@ -141,4 +141,8 @@ export class RowTablePendienteResponsableComponent implements AfterViewInit{
     ).subscribe();
 
   }
+
+
+
+
 }

@@ -9,6 +9,7 @@ import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {FinalizacionRequest} from "../../../../models/FinalizacionRequest";
 import {RootNavigateService} from "../../../../services/root-navigate/root-navigate.service";
 import {Router} from "@angular/router";
+import {LocalStorageService} from "../../../../services/local-storage/local-storage.service";
 
 @Component({
   selector: 'app-row-table-responsable-aprobada',
@@ -26,6 +27,7 @@ export class RowTableAprobadaResponsableComponent {
 
   estadoModal: boolean = true;
 
+  private localStorage: LocalStorageService;
   private http: HttpClient;
   private formBuilder: FormBuilder;
   private router: Router;
@@ -38,9 +40,11 @@ export class RowTableAprobadaResponsableComponent {
   constructor(http: HttpClient,
               formBuilder: FormBuilder,
               router: Router,
-              rootNavigateService: RootNavigateService,) {
+              rootNavigateService: RootNavigateService,
+              localStorage: LocalStorageService) {
 
     this.http = http;
+    this.localStorage = localStorage;
     this.router = router;
     this.formBuilder = formBuilder;
     this.rootNavigateService = rootNavigateService;
@@ -53,6 +57,34 @@ export class RowTableAprobadaResponsableComponent {
   isModalVisible: boolean = false;
   toggleModal(): void {
     this.isModalVisible = !this.isModalVisible;
+  }
+
+  botonNotaDeSolicitud(): void {
+    alert(JSON.stringify(this.solicitud, null, 2));
+    const usuario: UsuarioResponse = this.localStorage.getItem('userData');
+    alert(JSON.stringify(usuario, null, 2));
+
+    //"/exportOrdenParaFotocopiaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}"
+    const url = 'http://localhost:8081/responsable/exportNotaPedidoDPF/' + this.solicitud.idSolicitud + '/' + usuario.id + '/2';
+    alert(JSON.stringify(url, null, 2));
+
+    // Recibimos la peticion
+    this.http.get(url, { responseType: 'blob' }).pipe( // Cambiar el tipo de respuesta
+      map((response: Blob) => {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'notaPedidoPDF.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al generar la orden de fotocopia PDF');
+        return of(null);
+      })
+    ).subscribe();
   }
 
   botonTraerDatosModal(): void {
