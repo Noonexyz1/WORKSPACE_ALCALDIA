@@ -1,5 +1,5 @@
 export interface FinalizacionResponse {
-  idAutorizacion: number;
+  idSoliAutorizada: number;
 
   nombreCompleto: string;
   nombreUnidad: string;

@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Builder
 public class FinalizacionResponse {
 
-    private Long idAutorizacion;
+    private Long idSoliAutorizada;
 
     private String nombreCompleto;
     private String nombreUnidad;

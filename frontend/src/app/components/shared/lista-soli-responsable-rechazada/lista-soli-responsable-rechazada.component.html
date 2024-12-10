@@ -10,8 +10,8 @@
         <div class="divide-y divide-gray-200 dark:divide-gray-700">
 
           @if (listSolicitudFinal != null && listSolicitudFinal.length > 0) {
-            @for (solicitudFinali of listSolicitudFinal; track solicitudFinali.idAutorizacion) {
-              <app-row-table-responsable-rechazada [solicitudFinali]="solicitudFinali"></app-row-table-responsable-rechazada>
+            @for (solicitudFinalizada of listSolicitudFinal; track solicitudFinalizada.idSoliAutorizada) {
+              <app-row-table-responsable-rechazada [solicitudFinalizada]="solicitudFinalizada"></app-row-table-responsable-rechazada>
             }
           } @else {
             <p>No hay solicitudes disponibles</p>
