@@ -19,12 +19,14 @@ import net.sf.jasperreports.engine.JRException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @CrossOrigin(origins = "*", maxAge = 86400)
 @RestController
@@ -155,6 +157,7 @@ public class SolicitanteController {
 
     private SolicitudSoliciResponse funcToReturn(Solicitud x) {
         SolicitudSoliciResponse solicitudSoliciResponse = modelMapper.map(x, SolicitudSoliciResponse.class);
+        solicitudSoliciResponse.setId(x.getId());
         solicitudSoliciResponse.setCi(x.getFkUsuarioSolicitante().getFkUsuario().getCi());
         solicitudSoliciResponse.setCargo(x.getFkUsuarioSolicitante().getFkCargo().getNombreCargo());
         return solicitudSoliciResponse;
@@ -162,57 +165,55 @@ public class SolicitanteController {
 
 
     //localhost:8081/solicitante/exportSolicitudDPF
+    @Async
     @GetMapping("/exportSolicitudDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
-    public ResponseEntity<byte[]> exportSolicitudDPF(
+    public CompletableFuture<ResponseEntity<byte[]>> exportSolicitudDPF(
             @PathVariable Long idSolicitud,
             @PathVariable Long idSolicitante,
-            @PathVariable Long idResponsable ) throws IOException, JRException {
+            @PathVariable Long idResponsable) {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData(
-                "solicitudPDF",
-                "solicitudPDF.pdf"
-        );
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                headers.setContentDispositionFormData("solicitudPDF", "solicitudPDF.pdf");
 
-        Solicitud solicitudResp = solicitudService
-                .buscarSolicitudService(idSolicitud);
-        List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService
-                .listDetalleSolicitud(idSolicitud);
+                Solicitud solicitudResp = solicitudService.buscarSolicitudService(idSolicitud);
+                List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService.listDetalleSolicitud(idSolicitud);
 
-        List<TablaSolicitudReport> listReport = listDetalleSolicitudResp.stream()
-                .map(x -> TablaSolicitudReport.builder()
-                        .documento(x.getNombreDocumento())
-                        .cantidad(x.getNroCopias().intValue())
-                        .build())
-                .toList();
+                List<TablaSolicitudReport> listReport = listDetalleSolicitudResp.stream()
+                        .map(x -> TablaSolicitudReport.builder()
+                                .documento(x.getNombreDocumento())
+                                .cantidad(x.getNroCopias().intValue())
+                                .build())
+                        .toList();
 
-        UsuarioUnidad usuarioResponsable = usuarioService
-                .findUsuarioUnidadByIdUSer(idResponsable);
-        UsuarioUnidad usuarioSolicitante = usuarioService
-                .findUsuarioUnidadByIdUSer(idSolicitante);
+                UsuarioUnidad usuarioResponsable = usuarioService.findUsuarioUnidadByIdUSer(idResponsable);
+                UsuarioUnidad usuarioSolicitante = usuarioService.findUsuarioUnidadByIdUSer(idSolicitante);
 
-        SolicitudReport solicitudReport = SolicitudReport.builder()
-                .funcionarioTo(
-                        usuarioResponsable.getFkUsuario().getNombres() + " " +
-                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
-                        usuarioResponsable.getFkUsuario().getMaterno())
-                .funcionarioToCargo(
-                        usuarioResponsable.getFkCargo().getNombreCargo())
-                .funcionarioFrom(
-                        usuarioSolicitante.getFkUsuario().getNombres() + " " +
-                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
-                        usuarioResponsable.getFkUsuario().getMaterno())
-                .funcionarioFromCargo(
-                        usuarioSolicitante.getFkCargo().getNombreCargo())
-                .cite(solicitudResp.getCite())
-                .fecha(LocalDate.now().toString())
-                .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
-                .build();
+                SolicitudReport solicitudReport = SolicitudReport.builder()
+                        .funcionarioTo(usuarioResponsable.getFkUsuario().getNombres() + " " +
+                                usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                                usuarioResponsable.getFkUsuario().getMaterno())
+                        .funcionarioToCargo(usuarioResponsable.getFkCargo().getNombreCargo())
+                        .funcionarioFrom(usuarioSolicitante.getFkUsuario().getNombres() + " " +
+                                usuarioSolicitante.getFkUsuario().getPaterno() + " " +
+                                usuarioSolicitante.getFkUsuario().getMaterno())
+                        .funcionarioFromCargo(usuarioSolicitante.getFkCargo().getNombreCargo())
+                        .cite(solicitudResp.getCite())
+                        .fecha(LocalDate.now().toString())
+                        .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
+                        .build();
 
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(solicitudServiceReport.exportToPdf(solicitudReport, listReport));
+                byte[] pdfData = solicitudServiceReport.exportToPdf(solicitudReport, listReport);
+
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .body(pdfData);
+            } catch (Exception e) {
+                throw new RuntimeException("Error al generar el PDF", e);
+            }
+        });
     }
 
     @GetMapping("/exportComunicacionInternaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")

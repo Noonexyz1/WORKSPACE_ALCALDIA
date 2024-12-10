@@ -69,8 +69,9 @@ public class SolicitudImpl implements SolicitudAbstract {
 
     @Override
     public SolicitudDto buscarSolicitudAbstract(Long id) {
-
-        return null;
+        SolicitudEntity solicitudEntity = solicitudRepository
+                .findById(id).orElseThrow();
+        return modelMapper.map(solicitudEntity, SolicitudDto.class);
     }
 
     @Override
