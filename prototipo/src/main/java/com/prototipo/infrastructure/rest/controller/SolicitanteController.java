@@ -164,6 +164,7 @@ public class SolicitanteController {
     }
 
 
+
     //localhost:8081/solicitante/exportSolicitudDPF
     @Async
     @GetMapping("/exportSolicitudDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
@@ -216,57 +217,67 @@ public class SolicitanteController {
         });
     }
 
+    @Async
     @GetMapping("/exportComunicacionInternaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
-    public ResponseEntity<byte[]> exportComunicacionInternaDPF(
+    public CompletableFuture<ResponseEntity<byte[]>> exportComunicacionInternaDPF(
             @PathVariable Long idSolicitud,
             @PathVariable Long idSolicitante,
-            @PathVariable Long idResponsable ) throws IOException, JRException {
+            @PathVariable Long idResponsable) {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData(
-                "comunicacionInternaPDF",
-                "comunicacionInterna.pdf"
-        );
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                // Configurar encabezados de la respuesta
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                headers.setContentDispositionFormData(
+                        "comunicacionInternaPDF",
+                        "comunicacionInterna.pdf"
+                );
 
-        Solicitud solicitudResp = solicitudService
-                .buscarSolicitudService(idSolicitud);
-        List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService
-                .listDetalleSolicitud(idSolicitud);
+                // Recuperar datos necesarios
+                Solicitud solicitudResp = solicitudService.buscarSolicitudService(idSolicitud);
+                List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService.listDetalleSolicitud(idSolicitud);
 
-        String documentos = formatListaDocumentos(listDetalleSolicitudResp);
-        Long totalCopias = listDetalleSolicitudResp.stream()
-                .mapToLong(DetalleSolicitud::getNroCopias)  // Convierte a stream de long
-                .sum();  // Suma todos los valores
+                String documentos = formatListaDocumentos(listDetalleSolicitudResp);
+                Long totalCopias = listDetalleSolicitudResp.stream()
+                        .mapToLong(DetalleSolicitud::getNroCopias)
+                        .sum();
 
-        UsuarioUnidad usuarioResponsable = usuarioService
-                .findUsuarioUnidadByIdUSer(idResponsable);
-        UsuarioUnidad usuarioSolicitante = usuarioService
-                .findUsuarioUnidadByIdUSer(idSolicitante);
+                UsuarioUnidad usuarioResponsable = usuarioService.findUsuarioUnidadByIdUSer(idResponsable);
+                UsuarioUnidad usuarioSolicitante = usuarioService.findUsuarioUnidadByIdUSer(idSolicitante);
 
+                // Crear objeto de reporte
+                ComunicacionReport comunicacionReport = ComunicacionReport.builder()
+                        .funcionarioTo(
+                                usuarioResponsable.getFkUsuario().getNombres() + " " +
+                                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                                        usuarioResponsable.getFkUsuario().getMaterno())
+                        .funcionarioToCargo(
+                                usuarioResponsable.getFkCargo().getNombreCargo())
+                        .funcionarioFrom(
+                                usuarioSolicitante.getFkUsuario().getNombres() + " " +
+                                        usuarioSolicitante.getFkUsuario().getPaterno() + " " +
+                                        usuarioSolicitante.getFkUsuario().getMaterno())
+                        .funcionarioFromCargo(
+                                usuarioSolicitante.getFkCargo().getNombreCargo())
+                        .cite(solicitudResp.getCite())
+                        .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
+                        .documentos(documentos)
+                        .totalCopias(totalCopias.intValue())
+                        .build();
 
-        ComunicacionReport comunicacionReport = ComunicacionReport.builder()
-                .funcionarioTo(
-                        usuarioResponsable.getFkUsuario().getNombres() + " " +
-                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
-                        usuarioResponsable.getFkUsuario().getMaterno())
-                .funcionarioToCargo(
-                        usuarioResponsable.getFkCargo().getNombreCargo())
-                .funcionarioFrom(
-                        usuarioSolicitante.getFkUsuario().getNombres() + " " +
-                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
-                        usuarioResponsable.getFkUsuario().getMaterno())
-                .funcionarioFromCargo(
-                        usuarioSolicitante.getFkCargo().getNombreCargo())
-                .cite(solicitudResp.getCite())
-                .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
-                .documentos(documentos)
-                .totalCopias(totalCopias.intValue())
-                .build();
+                // Generar el PDF
+                byte[] pdfBytes = comunicacionInternaServiceReport.exportToPdf(comunicacionReport);
 
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(comunicacionInternaServiceReport.exportToPdf(comunicacionReport));
+                // Crear y devolver la respuesta
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .body(pdfBytes);
+
+            } catch (IOException | JRException e) {
+                throw new RuntimeException("Error al generar el PDF", e);
+            }
+        });
     }
 
     private String formatListaDocumentos(List<DetalleSolicitud> listDetalleSolicitudResp) {
@@ -363,26 +374,40 @@ public class SolicitanteController {
 
     }
 
+
+    @Async
     @GetMapping("/exportOrdenParaFotocopiaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
-    public ResponseEntity<byte[]> exportOrdenParaFotocopiaDPF(
+    public CompletableFuture<ResponseEntity<byte[]>> exportOrdenParaFotocopiaDPF(
             @PathVariable Long idSolicitud,
             @PathVariable Long idSolicitante,
-            @PathVariable Long idResponsable ) throws IOException, JRException {
+            @PathVariable Long idResponsable) {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData(
-                "ordenParaFotocopiaPDF",
-                "ordenParaFotocopia.pdf"
-        );
+        return CompletableFuture.supplyAsync(() -> {
+            try {
+                // Configurar encabezados de la respuesta
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                headers.setContentDispositionFormData(
+                        "ordenParaFotocopiaPDF",
+                        "ordenParaFotocopia.pdf"
+                );
 
-        Solicitud solicitudResp = solicitudService
-                .buscarSolicitudService(idSolicitud);
-        List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService
-                .listDetalleSolicitud(idSolicitud);
+                // Recuperar datos necesarios
+                Solicitud solicitudResp = solicitudService.buscarSolicitudService(idSolicitud);
+                List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService.listDetalleSolicitud(idSolicitud);
 
-        return ResponseEntity.ok()
-                .headers(headers)
-                .body(ordenFotoServiceReport.exportToPdf(listDetalleSolicitudResp));
+                // Generar el PDF
+                byte[] pdfBytes = ordenFotoServiceReport.exportToPdf(listDetalleSolicitudResp);
+
+                // Crear y devolver la respuesta
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .body(pdfBytes);
+
+            } catch (IOException | JRException e) {
+                throw new RuntimeException("Error al generar el PDF", e);
+            }
+        });
     }
+
 }
