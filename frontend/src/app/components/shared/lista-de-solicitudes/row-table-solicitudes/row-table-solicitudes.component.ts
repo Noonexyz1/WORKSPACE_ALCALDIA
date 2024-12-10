@@ -75,8 +75,60 @@ export class RowTableSolicitudesComponent {
     alert("botonInformePDF()")
   }
 
+  botonOrdenFotocopiaPDF(): void {
+    alert(JSON.stringify(this.solicitud, null, 2));
+    const usuario: UsuarioResponse = this.localStorage.getItem('userData');
+    alert(JSON.stringify(usuario, null, 2));
+
+    //"/exportOrdenParaFotocopiaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}"
+    const url = 'http://localhost:8081/solicitante/exportOrdenParaFotocopiaDPF/' + this.solicitud.id + '/' + usuario.id + '/2';
+    alert(JSON.stringify(url, null, 2));
+
+    // Recibimos la peticion
+    this.http.get(url, { responseType: 'blob' }).pipe( // Cambiar el tipo de respuesta
+      map((response: Blob) => {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'ordenParaFotocopia.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al generar la orden de fotocopia PDF');
+        return of(null);
+      })
+    ).subscribe();
+  }
+
   botonComunicacionInterna(): void {
-    alert("botonComunicacionInterna()");
+    alert(JSON.stringify(this.solicitud, null, 2));
+    const usuario: UsuarioResponse = this.localStorage.getItem('userData');
+    alert(JSON.stringify(usuario, null, 2));
+
+    //"/exportSolicitudDPF/{idSolicitud}/{idSolicitante}/{idResponsable}"
+    const url = 'http://localhost:8081/solicitante/exportComunicacionInternaDPF/' + this.solicitud.id + '/' + usuario.id + '/2';
+    alert(JSON.stringify(url, null, 2));
+
+    // Recibimos la peticion
+    this.http.get(url, { responseType: 'blob' }).pipe( // Cambiar el tipo de respuesta
+      map((response: Blob) => {
+        const blob = new Blob([response], { type: 'application/pdf' });
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'comunicacionInterna.pdf';
+        a.click();
+        window.URL.revokeObjectURL(url);
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al generar la comunicacion interna PDF');
+        return of(null);
+      })
+    ).subscribe();
   }
 
 }
