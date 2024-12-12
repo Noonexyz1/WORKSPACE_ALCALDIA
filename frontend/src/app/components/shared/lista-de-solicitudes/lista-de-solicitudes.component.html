@@ -2,7 +2,9 @@
   <div class="mx-auto max-w-screen-xl px-4 2xl:px-0">
     <div class="mx-auto max-w-5xl">
       <div class="gap-4 sm:flex sm:items-center sm:justify-between border-b-4 pb-4 rounded-lg">
-        <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">Lista de solicitudes</h2>
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+          Lista de solicitudes </h2>
+        <br>
       </div>
 
       <div class="mt-6 flow-root sm:mt-8">
@@ -13,7 +15,7 @@
               <app-row-table-solicitudes [solicitud]="solicitud"></app-row-table-solicitudes>
             }
           } @else {
-            <p>No hay solicitudes disponibles</p>
+            <p class="mb-3 text-gray-500 dark:text-gray-400">No hay solicitudes disponibles</p>
           }
 
         </div>

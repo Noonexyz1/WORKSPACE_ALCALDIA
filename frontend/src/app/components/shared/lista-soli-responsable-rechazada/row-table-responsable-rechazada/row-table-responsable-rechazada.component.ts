@@ -31,14 +31,9 @@ export class RowTableRechazadaResponsableComponent {
 
 
   botonDescargoSolicitud(): void {
-    alert(JSON.stringify(this.solicitudFinalizada, null, 2));
     const usuario: UsuarioResponse = this.localStorage.getItem('userData');
-    alert(JSON.stringify(usuario, null, 2));
-
-    //TODO, revisar el tipo de id que se envia, el solicitud o autorizacion
     //"/exportOrdenParaFotocopiaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}"
     const url = 'http://localhost:8081/responsable/exportReporteDPF/' + this.solicitudFinalizada.idSoliAutorizada + '/' + usuario.id + '/2';
-    alert(JSON.stringify(url, null, 2));
 
     // Recibimos la peticion
     this.http.get(url, { responseType: 'blob' }).pipe( // Cambiar el tipo de respuesta

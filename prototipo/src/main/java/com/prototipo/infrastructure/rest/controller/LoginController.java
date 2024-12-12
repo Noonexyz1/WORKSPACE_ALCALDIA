@@ -1,7 +1,6 @@
 package com.prototipo.infrastructure.rest.controller;
 
 import com.prototipo.application.useCase.InicioSesionService;
-import com.prototipo.domain.model.Usuario;
 import com.prototipo.domain.model.UsuarioUnidad;
 import com.prototipo.infrastructure.rest.request.CredencialRequest;
 import com.prototipo.infrastructure.rest.response.UsuarioResponse;
@@ -24,8 +23,11 @@ public class LoginController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping(path = {""}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UsuarioResponse> iniciarSesion(@RequestBody CredencialRequest request){
+    @PostMapping(path = {""},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<UsuarioResponse> iniciarSesion(
+            @RequestBody CredencialRequest request){
+
         /*String correo = request.getCorreo();
         String pass = request.getPass();
 
@@ -41,15 +43,19 @@ public class LoginController {
         return new ResponseEntity<>(null, HttpStatus.OK);
     }
 
-    @PostMapping(path = {"/v2/login"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UsuarioUnidadSesionResponse> iniciarSesionV2(@RequestBody CredencialRequest request){
+    @PostMapping(path = {"/v2/login"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<UsuarioUnidadSesionResponse> iniciarSesionV2(
+            @RequestBody CredencialRequest request){
+
         String correo = request.getCi();
         String pass = request.getPass();
 
-        UsuarioUnidad usuarioUnidad = inicioSesionService.iniciarSesionService(correo, pass);
+        UsuarioUnidad usuarioUnidad = inicioSesionService
+                .iniciarSesionService(correo, pass);
 
-        //TODO, hacer la logica de todo esto
-        UsuarioUnidadSesionResponse response = UsuarioUnidadSesionResponse.builder()
+        UsuarioUnidadSesionResponse response = UsuarioUnidadSesionResponse
+                .builder()
                 //Este es el ID del UsuarioUnidadSesionResponse
                 .id(usuarioUnidad.getId())
                 .fkUsuario(usuarioUnidad.getFkUsuario().getId())

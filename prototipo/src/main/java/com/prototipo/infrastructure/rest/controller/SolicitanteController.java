@@ -7,7 +7,6 @@ import com.prototipo.infrastructure.rest.report.InformeReport;
 import com.prototipo.infrastructure.rest.report.SolicitudReport;
 import com.prototipo.infrastructure.rest.report.TablaSolicitudReport;
 import com.prototipo.infrastructure.rest.request.PaginacionSoliRequest;
-import com.prototipo.infrastructure.rest.request.RowSolicitud;
 import com.prototipo.infrastructure.rest.request.SolicitudRequest;
 import com.prototipo.infrastructure.rest.request.SolicitudRequestPDF;
 import com.prototipo.infrastructure.rest.response.SolicitudSoliciResponse;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -156,7 +154,8 @@ public class SolicitanteController {
     }
 
     private SolicitudSoliciResponse funcToReturn(Solicitud x) {
-        SolicitudSoliciResponse solicitudSoliciResponse = modelMapper.map(x, SolicitudSoliciResponse.class);
+        SolicitudSoliciResponse solicitudSoliciResponse = modelMapper
+                .map(x, SolicitudSoliciResponse.class);
         solicitudSoliciResponse.setId(x.getId());
         solicitudSoliciResponse.setCi(x.getFkUsuarioSolicitante().getFkUsuario().getCi());
         solicitudSoliciResponse.setCargo(x.getFkUsuarioSolicitante().getFkCargo().getNombreCargo());
@@ -236,7 +235,8 @@ public class SolicitanteController {
 
                 // Recuperar datos necesarios
                 Solicitud solicitudResp = solicitudService.buscarSolicitudService(idSolicitud);
-                List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService.listDetalleSolicitud(idSolicitud);
+                List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService
+                        .listDetalleSolicitud(idSolicitud);
 
                 String documentos = formatListaDocumentos(listDetalleSolicitudResp);
                 Long totalCopias = listDetalleSolicitudResp.stream()
@@ -374,7 +374,6 @@ public class SolicitanteController {
 
     }
 
-
     @Async
     @GetMapping("/exportOrdenParaFotocopiaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
     public CompletableFuture<ResponseEntity<byte[]>> exportOrdenParaFotocopiaDPF(
@@ -393,11 +392,14 @@ public class SolicitanteController {
                 );
 
                 // Recuperar datos necesarios
-                Solicitud solicitudResp = solicitudService.buscarSolicitudService(idSolicitud);
-                List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService.listDetalleSolicitud(idSolicitud);
+                Solicitud solicitudResp = solicitudService
+                        .buscarSolicitudService(idSolicitud);
+                List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService
+                        .listDetalleSolicitud(idSolicitud);
 
                 // Generar el PDF
-                byte[] pdfBytes = ordenFotoServiceReport.exportToPdf(listDetalleSolicitudResp);
+                byte[] pdfBytes = ordenFotoServiceReport
+                        .exportToPdf(listDetalleSolicitudResp);
 
                 // Crear y devolver la respuesta
                 return ResponseEntity.ok()

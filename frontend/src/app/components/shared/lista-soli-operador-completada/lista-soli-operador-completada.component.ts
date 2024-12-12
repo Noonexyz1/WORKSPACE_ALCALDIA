@@ -57,7 +57,6 @@ export class ListaSoliCompletaOperadorComponent {
     console.log('valor del local storage; ', this.usuario)
 
     const body: PageRequestID = {
-      //TODO, este valor tiene que se de un observable general
       idUsuarioUnidad: this.usuario.id,
       page: 0,
       size: 100,

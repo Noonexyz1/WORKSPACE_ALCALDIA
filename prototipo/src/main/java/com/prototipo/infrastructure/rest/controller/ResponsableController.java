@@ -1,6 +1,5 @@
 package com.prototipo.infrastructure.rest.controller;
 
-import com.prototipo.application.modelDto.FinalizacionDto;
 import com.prototipo.application.useCase.AprobacionService;
 import com.prototipo.application.useCase.ResponsableService;
 import com.prototipo.application.useCase.SolicitudService;
@@ -72,7 +71,12 @@ public class ResponsableController {
         String byColumName = pageParam.getByColumName();
 
         List<Solicitud> solicituds = aprobacionService
-                .listaDeSolicitudesPendientesService(idResponsable, page, size, byColumName);
+                .listaDeSolicitudesPendientesService(
+                        idResponsable,
+                        page,
+                        size,
+                        byColumName
+                );
 
         List<SolicitudResponResponse> listSolicitud = solicituds
                 .stream()
@@ -239,7 +243,9 @@ public class ResponsableController {
 
     @GetMapping(path = {"/verDetalleDeSolicitud/{idSolicitud}"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<DetalleSolicitudExtendidoResponse> verDetalleDeSolicitud(@PathVariable Long idSolicitud) {
+    public ResponseEntity<DetalleSolicitudExtendidoResponse> verDetalleDeSolicitud(
+            @PathVariable Long idSolicitud) {
+
         List<DetalleSolicitud> listDetSoli = solicitudService
                 .findListDetalleSoliBySolicitudId(idSolicitud);
 
@@ -273,7 +279,8 @@ public class ResponsableController {
 
     @GetMapping(path = {"/verAutorizacionSolicitud/{idAutorizacion}"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<AutorizacionResponse> verAutorizacionSolicitud(@PathVariable Long idAutorizacion) {
+    public ResponseEntity<AutorizacionResponse> verAutorizacionSolicitud(
+            @PathVariable Long idAutorizacion) {
 
         Autorizacion autorizacion = aprobacionService.findAutorizacionById(idAutorizacion);
         AutorizacionResponse autorizacionResponse = null;
@@ -359,7 +366,8 @@ public class ResponsableController {
         );
 
         // Llamar al servicio de manera sincrónica en este caso
-        List<NotaDePedido> notaDePedidoList = responsableService.generarNotaDePedidoPDF(idSolicitud);
+        List<NotaDePedido> notaDePedidoList = responsableService
+                .generarNotaDePedidoPDF(idSolicitud);
 
         // Procesar el archivo PDF y devolver el resultado asincrónicamente
         return CompletableFuture.supplyAsync(() -> {
@@ -389,7 +397,8 @@ public class ResponsableController {
                 "reportePDF.pdf"
         );
 
-        List<Reporte> listReport = responsableService.generarReportePDF(idSolicitud);
+        List<Reporte> listReport = responsableService
+                .generarReportePDF(idSolicitud);
 
         return CompletableFuture.supplyAsync(() -> {
             try {

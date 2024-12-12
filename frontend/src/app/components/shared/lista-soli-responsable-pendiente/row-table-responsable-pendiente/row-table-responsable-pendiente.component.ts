@@ -98,7 +98,6 @@ export class RowTablePendienteResponsableComponent implements AfterViewInit{
   botonTraerDatosModal(): void {
     this.estadoModal = true;
     this.isModalVisible = !this.isModalVisible;
-
     //Traer el objeto de SolicitudExtendido mediante el ID de solicitud
     const url = 'http://localhost:8081/responsable/verDetalleDeSolicitud/' + this.solicitud.idSolicitud;
 
@@ -115,11 +114,7 @@ export class RowTablePendienteResponsableComponent implements AfterViewInit{
   }
 
   botonRegistrar(): void {
-    // Mostrar el objeto dentro del alert (convertido a formato de texto)
-    alert("Estos son los datos a enviarse: " + JSON.stringify(this.detalleSolicitudCotizado));
-
     const url = 'http://localhost:8081/responsable/cotizarAutorizarSolicitud'; // URL de tu API
-
     // Extraer los valores del formulario
     const soliCotizadoList: DetalleSolicitudCotizadoResponse[] = this.detalleSolicitudCotizado;
 
@@ -127,9 +122,6 @@ export class RowTablePendienteResponsableComponent implements AfterViewInit{
     // Recibimos la peticion
     this.http.post<DetalleSolicitudCotizadoResponse[]>(url, soliCotizadoList).pipe(
       map(() => {
-        //TODO, la funcionalidad de esos botones (2) se deben implementar aqui
-        //TODO, y quitar esos dos de la vista
-
         let toNavegate = this.rootNavigateService.valorParaNavegar('Responsable');
         this.router.navigate([toNavegate]);
       }),
