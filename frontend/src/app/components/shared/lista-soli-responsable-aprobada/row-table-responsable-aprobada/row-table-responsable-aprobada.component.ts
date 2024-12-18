@@ -60,13 +60,9 @@ export class RowTableAprobadaResponsableComponent {
   }
 
   botonNotaDeSolicitud(): void {
-    alert(JSON.stringify(this.solicitud, null, 2));
     const usuario: UsuarioResponse = this.localStorage.getItem('userData');
-    alert(JSON.stringify(usuario, null, 2));
-
     //"/exportOrdenParaFotocopiaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}"
     const url = 'http://localhost:8081/responsable/exportNotaPedidoDPF/' + this.solicitud.idSolicitud + '/' + usuario.id + '/2';
-    alert(JSON.stringify(url, null, 2));
 
     // Recibimos la peticion
     this.http.get(url, { responseType: 'blob' }).pipe( // Cambiar el tipo de respuesta

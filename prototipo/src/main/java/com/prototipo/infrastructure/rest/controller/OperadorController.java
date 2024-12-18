@@ -28,28 +28,38 @@ public class OperadorController {
     private ModelMapper modelMapper;
 
 
-    //TODO, cuando inicie la operacion, el archivo o los archivos pdf se deben descargar
-    @PostMapping(path = {"/iniciarOperacion"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<ArchivoPdfResponse>> iniciarSolicitudOperacion(@RequestBody OperacionSoliRequest opeSoliRequest) {
+    @PostMapping(path = {"/iniciarOperacion"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<ArchivoPdfResponse>> iniciarSolicitudOperacion(
+            @RequestBody OperacionSoliRequest opeSoliRequest) {
+
         Long idOperacion = opeSoliRequest.getIdOperacion();
         Long idOperador = opeSoliRequest.getIdOperador();
-        List<ArchivoPdf> listArchivos = operadorService.iniciarSolicitudOperacion(idOperacion, idOperador);
+        List<ArchivoPdf> listArchivos = operadorService
+                .iniciarSolicitudOperacion(idOperacion, idOperador);
         List<ArchivoPdfResponse> listArchivosResp = listArchivos.stream()
-                .map(x -> modelMapper.map(x, ArchivoPdfResponse.class))
+                .map(x -> modelMapper
+                        .map(x, ArchivoPdfResponse.class))
                 .toList();
         return new ResponseEntity<>(listArchivosResp, HttpStatus.OK);
     }
 
-    @PostMapping(path = {"/terminarOperacion"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void finalizarSolicitudOperacion(@RequestBody OperacionSoliRequest opeSoliRequest) {
+    @PostMapping(path = {"/terminarOperacion"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void finalizarSolicitudOperacion(
+            @RequestBody OperacionSoliRequest opeSoliRequest) {
+
         Long idOperacion = opeSoliRequest.getIdOperacion();
         operadorService.terminarSolicitudOperacion(idOperacion);
     }
 
     //Este operador tiene una forma de trabajar, y es por piso,
     //entonces se deberia mostrar las solicitudes correspondientes a su piso
-    @PostMapping(path = {"/verSolicitudesPendientes"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudes(@RequestBody PaginacionOpeRequest pageParam) {
+    @PostMapping(path = {"/verSolicitudesPendientes"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudes(
+            @RequestBody PaginacionOpeRequest pageParam) {
+
         String estado = EstadoByOperadorEnum.PENDIENTE.getNombre();
         Long idOperador = pageParam.getIdUsuario();
         Long page = pageParam.getPage();
@@ -65,15 +75,19 @@ public class OperadorController {
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    @PostMapping(path = {"/verSolicitudesIniciadas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesIniciadas(@RequestBody PaginacionOpeRequest pageParam) {
+    @PostMapping(path = {"/verSolicitudesIniciadas"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesIniciadas(
+            @RequestBody PaginacionOpeRequest pageParam) {
+
         String estado = EstadoByOperadorEnum.INICIADO.getNombre();
         Long idOperador = pageParam.getIdUsuario();
         Long page = pageParam.getPage();
         Long size = pageParam.getSize();
         String byColumName = pageParam.getByColumName();
 
-        List<Operacion> list = operadorService.verSolicitudesDeOperadorIniciadas(idOperador, page, size);
+        List<Operacion> list = operadorService
+                .verSolicitudesDeOperadorIniciadas(idOperador, page, size);
         List<SolicitudOperaResponse> listSolicitud = list
                 .stream()
                 .map(this::funcion)
@@ -81,8 +95,11 @@ public class OperadorController {
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    @PostMapping(path = {"/verSolicitudesCompletas"}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesCompletadas(@RequestBody PaginacionOpeRequest pageParam) {
+    @PostMapping(path = {"/verSolicitudesCompletas"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesCompletadas(
+            @RequestBody PaginacionOpeRequest pageParam) {
+
         String estado = EstadoByOperadorEnum.COMPLETADO.getNombre();
         Long idOperador = pageParam.getIdUsuario();
         Long page = pageParam.getPage();

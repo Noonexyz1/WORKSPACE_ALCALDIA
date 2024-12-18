@@ -17,8 +17,6 @@ import {LocalStorageService} from '../../../services/local-storage/local-storage
 })
 export class ListaDeSolicitudesComponent implements OnInit {
 
-  //TODO, tengo que publicar en un estado global el usuario
-  //con el que se ha iniciado sesion
   private http: HttpClient;
   private localStorage: LocalStorageService;
 

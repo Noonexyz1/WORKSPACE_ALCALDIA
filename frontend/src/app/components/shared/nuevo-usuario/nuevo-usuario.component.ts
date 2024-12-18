@@ -74,8 +74,7 @@ export class NuevoUsuarioComponent implements OnInit {
         alert('Hubo un error al traer los cargos');
         return of(null); // Retornar un observable vacío en caso de error
       })
-    )
-      .subscribe();
+    ).subscribe();
   }
 
   listaDeRoles(): void {

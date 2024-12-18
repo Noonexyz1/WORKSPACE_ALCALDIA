@@ -59,7 +59,6 @@ export class ListaSoliAprobadaResponsableComponent implements OnInit{
     this.usuario = this.localStorage.getItem('userData');
 
     const body: PageRequestID = {
-      //TODO, este valor tiene que se de un observable general
       idUsuarioUnidad: this.usuario.id,
       page: 0,
       size: 100,
