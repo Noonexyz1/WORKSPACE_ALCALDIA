@@ -1,6 +1,6 @@
 export interface PageRequest {
-  idUserUni: number;
   page: number;
   size: number;
-  byColumName: string;
+  sortBy: string;
+  direction: string;
 }

@@ -1,6 +1,7 @@
 package com.prototipo.infrastructure.persistence.db.repository;
 
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioUnidadEntity;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -29,8 +30,9 @@ public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEnti
             AND uu.is_active = TRUE
             LIMIT 1
             """, nativeQuery = true)
-    UsuarioUnidadEntity findUsuarioUnidadByCredencial(@Param("ci") String correo,
-                                                @Param("pass") String pass);
+    UsuarioUnidadEntity findUsuarioUnidadByCredencial(
+            @Param("ci") String correo,
+            @Param("pass") String pass);
 
     @Query(value =
             """
@@ -38,7 +40,8 @@ public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEnti
             FROM usuario_unidad uu
             WHERE uu.fk_usuario_id = :idUsuario
             """, nativeQuery = true)
-    List<UsuarioUnidadEntity> encontrarUsuariosUnidadPorUsuarioId(@Param("idUsuario") Long idUsuario);
+    List<UsuarioUnidadEntity> encontrarUsuariosUnidadPorUsuarioId(
+            @Param("idUsuario") Long idUsuario);
 
     @Query(value =
             """
@@ -47,7 +50,8 @@ public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEnti
             WHERE uu.fk_usuario_id = :idUsuario
             AND uu.is_active = TRUE
             """, nativeQuery = true)
-    UsuarioUnidadEntity findUsuariosUnidadPorUsuarioId(@Param("idUsuario") Long idUsuario);
+    UsuarioUnidadEntity findUsuariosUnidadPorUsuarioId(
+            @Param("idUsuario") Long idUsuario);
 
     @Query(value =
             """
@@ -55,5 +59,5 @@ public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEnti
             FROM usuario_unidad uu
             WHERE uu.is_active = TRUE
             """, nativeQuery = true)
-    List<UsuarioUnidadEntity> getListaUsuarioUnidad(Pageable pageable);
+    Page<UsuarioUnidadEntity> getListaUsuarioUnidad(Pageable pageable);
 }

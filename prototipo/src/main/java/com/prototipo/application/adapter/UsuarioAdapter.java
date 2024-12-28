@@ -3,6 +3,8 @@ package com.prototipo.application.adapter;
 import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.UsuarioDto;
 import com.prototipo.application.modelDto.UsuarioUnidadDto;
+import com.prototipo.application.pager.PaginableIn;
+import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.port.UsuarioAbastract;
 import com.prototipo.application.useCase.UsuarioService;
 import com.prototipo.domain.model.Usuario;
@@ -24,15 +26,32 @@ public class UsuarioAdapter implements UsuarioService {
 
     @Override
     public Usuario findUsuarioPorIdService(Long idUnidad) {
-        UsuarioDto usuarioDto = usuarioAbastract.findUsuarioPorIdAbastract(idUnidad);
-        return mapperApplicationAbstract.mapearAbstract(usuarioDto, Usuario.class);
+        UsuarioDto usuarioDto = usuarioAbastract
+                .findUsuarioPorIdAbastract(idUnidad);
+        return mapperApplicationAbstract
+                .mapearAbstract(usuarioDto, Usuario.class);
     }
 
     @Override
-    public List<UsuarioUnidad> listaDeUsuariosServiceDef(Long page, Long size) {
-        return usuarioAbastract.listaDeUsuariosAbsDef(page, size).stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, UsuarioUnidad.class))
-                .toList();
+    public PaginableOut<UsuarioUnidad> listaDeUsuariosServiceDef(PaginableIn paginableIn) {
+        PaginableOut<UsuarioUnidadDto> paginableOut = usuarioAbastract
+                .listaDeUsuariosAbsDef(paginableIn);
+
+        PaginableOut<UsuarioUnidad> paginableResponse = PaginableOut
+                .<UsuarioUnidad>builder()
+                .content(
+                        paginableOut.getContent()
+                        .stream()
+                        .map(x -> mapperApplicationAbstract
+                                .mapearAbstract(x, UsuarioUnidad.class)
+                        )
+                        .toList()
+                )
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return paginableResponse;
     }
 
     @Override

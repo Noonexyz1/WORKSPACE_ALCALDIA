@@ -1,27 +1,32 @@
 <section class="min-h-screen bg-gray-50 dark:bg-gray-900">
   <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-    <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
-      <img class="md:w-[120px] md:h-[120px] mr-2"
-           src="https://scontent.flpb2-2.fna.fbcdn.net/v/t39.30808-6/279779561_303931991921451_5612832159288401162_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=a5f93a&_nc_ohc=eAYPMlorPe4Q7kNvgF45UzR&_nc_zt=23&_nc_ht=scontent.flpb2-2.fna&_nc_gid=AWvmB27sGUTlRo3BquwlaGd&oh=00_AYBUDdJ5MofuwXu93OlkNOdvNBIxvO_ne3tjJUf14f_-RA&oe=675F0DBE"
-           alt="logo">
-      Sistema de control <br> de Fotocopias
-    </a>
-    <div
-      class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 border-[10px]">
+    <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 border-[10px]">
       <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
-        <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
-          Iniciar Sesion
-        </h1>
+        <div class="flex flex-col items-center justify-center">
+          <img class="w-[50vw] h-auto max-h-[10vh] md:w-[250px] mr-2"
+               src="{{PATH_IMAGE_LOGO}}"
+               alt="logo">
+          <h1 class="text-xl font-sans leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+            Sistema de control de Fotocopias
+          </h1>
+          <br>
+          <h1 class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+            Iniciar Sesion
+          </h1>
+        </div>
+
         <form [formGroup]="loginForm" class="space-y-4 md:space-y-6">
           <div>
-            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
-              Ingrese su C.I sin extencion:</label>
+            <label class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">
+              Ingrese su C.I sin extencion:
+            </label>
+
             <input formControlName="ci" type="text" name="" id="username"
                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                    placeholder="1234567" required="">
           </div>
           <div>
-            <label for="password" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+            <label for="password" class="block mb-2 text-lg font-medium text-gray-900 dark:text-white">
               Ingrese contraseña</label>
             <input formControlName="pass" type="password" name="password" id="password" placeholder="••••••••"
                    class="bg-gray-50 border border-gray-300 text-gray-900 rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -34,9 +39,7 @@
                   class="w-full text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
             Iniciar sesion
           </button>
-
         </form>
-
       </div>
     </div>
   </div>

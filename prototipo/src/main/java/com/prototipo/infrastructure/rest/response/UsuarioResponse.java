@@ -2,8 +2,6 @@ package com.prototipo.infrastructure.rest.response;
 
 import lombok.*;
 
-import java.util.List;
-
 @Getter
 @Setter
 @AllArgsConstructor
@@ -11,12 +9,18 @@ import java.util.List;
 @Builder
 public class UsuarioResponse {
     private Long id;
-    private String nombres;
-    private String apellidos;
-    private String correo;
+    //private Boolean isActive;
+
+    private Long fkUsuario;
+    private Long fkUnidad;
+
+    private Long fkRol;
     private String nombreRol;
     private String dashConfig;
 
-    //TODO Id unidad para el frontend
-    private Long idUnidad;
+    private Long fkCargo;
+    private Long fkResponsable;
+
+    private String nombreUsuario;
+    private String apellidoUsuario;
 }

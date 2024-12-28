@@ -1,4 +1,7 @@
 import { Component } from '@angular/core';
+import {ImagesProperties} from "../../../enums/ImagesProperties";
+import {UsuarioResponse} from "../../../models/UsuarioResponse";
+import {LocalStorageService} from "../../../services/local-storage/local-storage.service";
 
 @Component({
   selector: 'app-nav-bar',
@@ -9,4 +12,17 @@ import { Component } from '@angular/core';
 })
 export class NavBarComponent {
 
+  PATH_IMAGE_LOGO: string = ImagesProperties.PATH_IMAGE_LOGO;
+
+  private localStorageService: LocalStorageService
+  usuarioResponse: UsuarioResponse | null = null;
+
+  constructor(localStorageService: LocalStorageService) {
+    this.localStorageService = localStorageService;
+  }
+
+  botonUsuario(): void {
+     this.usuarioResponse = this.localStorageService
+       .getItem('userData');
+  }
 }

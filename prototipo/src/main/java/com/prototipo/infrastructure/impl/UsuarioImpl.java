@@ -2,6 +2,8 @@ package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.UsuarioDto;
 import com.prototipo.application.modelDto.UsuarioUnidadDto;
+import com.prototipo.application.pager.PaginableIn;
+import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.port.UsuarioAbastract;
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioEntity;
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioUnidadEntity;
@@ -9,6 +11,7 @@ import com.prototipo.infrastructure.persistence.db.repository.UsuarioRepository;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioUnidadRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -62,11 +65,40 @@ public class UsuarioImpl implements UsuarioAbastract {
     }
 
     @Override
-    public List<UsuarioUnidadDto> listaDeUsuariosAbsDef(Long page, Long size) {
-        Pageable pageable = PageRequest.of(page.intValue(), size.intValue());
-        return usuarioUnidadRepository.getListaUsuarioUnidad(pageable).stream()
-                .map(x -> modelMapper.map(x, UsuarioUnidadDto.class))
+    public PaginableOut<UsuarioUnidadDto> listaDeUsuariosAbsDef(PaginableIn paginableIn) {
+
+        Sort sort = paginableIn.getDirection().equalsIgnoreCase("DESC")?
+                Sort.by(paginableIn.getSortBy()).descending() :
+                Sort.by(paginableIn.getSortBy()).ascending();
+
+        /*Pageable pageable = PageRequest.of(
+                paginableIn.getPage().intValue(),
+                paginableIn.getSize().intValue(),
+                sort
+        );*/
+
+        Pageable pageable = PageRequest.of(
+                paginableIn.getPage().intValue(),
+                paginableIn.getSize().intValue()
+        );
+
+        Page<UsuarioUnidadEntity> pageResponse = usuarioUnidadRepository
+                .getListaUsuarioUnidad(pageable);
+
+        List<UsuarioUnidadDto> listResponse = pageResponse.getContent()
+                .stream()
+                .map(x -> modelMapper
+                        .map(x, UsuarioUnidadDto.class))
                 .toList();
+
+        PaginableOut<UsuarioUnidadDto> paginableOut = PaginableOut
+                .<UsuarioUnidadDto>builder()
+                .content(listResponse)
+                .totalPages(pageResponse.getTotalPages())
+                .totalElements(pageResponse.getTotalElements())
+                .build();
+
+        return paginableOut;
     }
 
     @Override

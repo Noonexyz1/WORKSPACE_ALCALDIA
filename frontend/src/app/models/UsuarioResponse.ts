@@ -7,4 +7,7 @@ export interface UsuarioResponse {
   dashConfig: string,
   fkCargo: number,
   fkResponsable: number
+
+  nombreUsuario: string;
+  apellidoUsuario: string;
 }

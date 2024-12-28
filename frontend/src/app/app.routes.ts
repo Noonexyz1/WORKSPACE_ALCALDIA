@@ -4,7 +4,6 @@ import { AdministradorComponent } from './components/administrador/administrador
 import { ListaDeUsuariosComponent } from './components/shared/lista-de-usuarios/lista-de-usuarios.component';
 import { NuevoUsuarioComponent } from './components/shared/nuevo-usuario/nuevo-usuario.component';
 import { CambiarPassComponent } from './components/shared/cambiar-pass/cambiar-pass.component';
-import { GenerarReporteComponent } from './components/shared/generar-reporte/generar-reporte.component';
 import { OperadorComponent } from './components/operador/operador.component';
 import { ListaDeSolicitudesComponent } from './components/shared/lista-de-solicitudes/lista-de-solicitudes.component';
 import { NuevaSolicitudComponent } from './components/shared/nueva-solicitud/nueva-solicitud.component';
@@ -34,10 +33,6 @@ export const routes: Routes = [
                 component: NuevoUsuarioComponent,
             },
             {
-                path: 'generarReporte',
-                component: GenerarReporteComponent,
-            },
-            {
                 path: 'cambiarPass',
                 component: CambiarPassComponent,
             },
@@ -63,7 +58,7 @@ export const routes: Routes = [
                 path: 'listaDeSolicitudesCompletadas',
                 component: ListaSoliCompletaOperadorComponent,
             },
-            
+
             {
                 path: 'cambiarEstado',
                 component: NuevoUsuarioComponent,
