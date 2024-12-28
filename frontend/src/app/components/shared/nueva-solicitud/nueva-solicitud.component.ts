@@ -32,7 +32,10 @@ export class NuevaSolicitudComponent implements OnInit{
     nombreRol: '',
     dashConfig: '',
     fkCargo: 0,
-    fkResponsable: 0
+    fkResponsable: 0,
+
+    nombreUsuario: '',
+    apellidoUsuario: ''
   };
 
   solicitudForm: FormGroup;

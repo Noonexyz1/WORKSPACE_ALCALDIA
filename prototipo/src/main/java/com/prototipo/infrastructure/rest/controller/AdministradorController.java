@@ -1,5 +1,7 @@
 package com.prototipo.infrastructure.rest.controller;
 
+import com.prototipo.application.pager.PaginableIn;
+import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.useCase.FotocopiaService;
 import com.prototipo.application.useCase.UsuarioService;
 import com.prototipo.domain.model.*;
@@ -28,16 +30,32 @@ public class AdministradorController {
 
     @PostMapping(path = {"/listaDeUsuarios"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<UsuarioUnidadResponse>> listaDeUsuarios(
-            @RequestBody PaginacionAdminRequest pageReq) {
+    public ResponseEntity<PageResponse<UsuarioUnidadResponse>> listaDeUsuarios(
+            @RequestBody PageRequest pageReq) {
 
-        List<UsuarioUnidad> listUserDomain = usuarioService
-                .listaDeUsuariosServiceDef(pageReq.getPage(), pageReq.getSize());
+        PaginableOut<UsuarioUnidad> paginableOut = usuarioService
+                .listaDeUsuariosServiceDef(
+                        modelMapper.map(pageReq, PaginableIn.class)
+                );
 
-        List<UsuarioUnidadResponse> listResponse = listUserDomain.stream()
+        List<UsuarioUnidadResponse> listResponse = paginableOut.getContent()
+                .stream()
                 .map(this::mapeoUsuarioUnidadToResponse)
                 .toList();
-        return new ResponseEntity<>(listResponse, HttpStatus.OK);
+
+        PageResponse<UsuarioUnidadResponse> pageResponse = PageResponse
+                .<UsuarioUnidadResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(listResponse)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
     }
 
     private UsuarioUnidadResponse mapeoUsuarioUnidadToResponse(UsuarioUnidad userUni) {

@@ -22,7 +22,4 @@ export class AdministradorComponent implements OnInit{
     this.modoDarkService.metodoModoDark();
   }
 
-  crearUsuario(): void {}
-  editarUsuario(): void {}
-  eliminarUsuario(): void {}
 }

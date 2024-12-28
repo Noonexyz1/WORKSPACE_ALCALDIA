@@ -4,6 +4,11 @@ import { HttpClient } from '@angular/common/http';
 import { PageRequest } from '../../../models/PageRequest';
 import { UsuarioUnidadResponse } from '../../../models/UsuarioUnidadResponse';
 import { catchError, map, of } from 'rxjs';
+import {Router} from "@angular/router";
+import {SubjectUsuarioUnidadService} from "../../../services/subject-usuario-unidad/subject-usuario-unidad.service";
+import {UrlsProperties} from "../../../enums/UrlsProperties";
+import {PageResponse} from "../../../models/PageResponse";
+import {PageProperties} from "../../../models/PageProperties";
 
 @Component({
   selector: 'app-lista-de-usuarios',
@@ -12,41 +17,107 @@ import { catchError, map, of } from 'rxjs';
   templateUrl: './lista-de-usuarios.component.html',
   styleUrl: './lista-de-usuarios.component.css'
 })
-export class ListaDeUsuariosComponent implements OnInit {
+export class ListaDeUsuariosComponent {
 
+  private router: Router;
   private http: HttpClient;
+  private subjectUsuarioUnidadService: SubjectUsuarioUnidadService;
+
   listUsuarios: UsuarioUnidadResponse[] = [];
+  pageProperties: PageProperties = new PageProperties();
 
-  constructor(http: HttpClient){
+  listaConsecutiva: number[] = Array.from(
+    {
+      length: this.pageProperties.totalPages
+    },
+    (_, index) => index
+  );
+
+  //Esto se ejecuta nates que el ngOnInit()
+  constructor(router: Router,
+              http: HttpClient,
+              subjectUsuarioUnidadService: SubjectUsuarioUnidadService){
+
+    this.router = router;
     this.http = http;
-  }
-
-  //Aqui debo poner mis peticiones al Backend
-  ngOnInit(): void {
+    this.subjectUsuarioUnidadService = subjectUsuarioUnidadService;
     this.listarUsuarios();
   }
 
   listarUsuarios(): void {
-    const url = 'http://localhost:8081/administrador/listaDeUsuarios';
-
     const body: PageRequest = {
-      idUserUni: 1,
-      page: 0,
-      size: 100,
-      byColumName: ""
+      page: this.pageProperties.currentPage,
+      size: this.pageProperties.pageSize,
+      sortBy: this.pageProperties.sortBy,
+      direction: this.pageProperties.direction
     }
 
-    this.http.post<UsuarioUnidadResponse[]>(url, body).pipe(
-      map((response: UsuarioUnidadResponse[]) => {
-        console.log(response);
-        this.listUsuarios = response;
+    this.http.post<PageResponse<UsuarioUnidadResponse>>(
+      UrlsProperties.PATH_LIST_USERS,
+      body
+    ).pipe(
+      map((response: PageResponse<UsuarioUnidadResponse>) => {
+        this.listUsuarios = response.content;
+        this.pageProperties.currentPage = response.page;
+        this.pageProperties.pageSize = response.size;
+        this.pageProperties.totalPages = response.totalPages;
+        this.pageProperties.totalElements = response.totalElements;
+        this.listaConsecutiva = Array.from(
+          {
+            length: this.pageProperties.totalPages
+          },
+          (_, index) => index
+        );
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
         alert('Hubo un error al listar usuarios');
-        return of(null); // Retornar un observable vacío en caso de error
+        // Retornar un observable vacío en caso de error
+        return of(null);
       })
     )
     .subscribe();
+  }
+
+  goToPage(page: number): void {
+    if (page >= 0 && page < this.pageProperties.totalPages) {
+      this.pageProperties.currentPage = page;
+      this.listarUsuarios();
+    }
+  }
+
+  goToPreviousPage(): void {
+    if (this.pageProperties.currentPage > 0) {
+      this.pageProperties.currentPage--;
+      this.listarUsuarios();
+    }
+  }
+
+  goToNextPage(): void {
+    if (this.pageProperties.currentPage < this.pageProperties.totalPages - 1) {
+      this.pageProperties.currentPage++;
+      this.listarUsuarios();
+    }
+  }
+
+  botonEditarUsuario(usuarioUnidad: UsuarioUnidadResponse): void {
+    this.subjectUsuarioUnidadService.publicarDatos(usuarioUnidad);
+    this.router.navigate(['/administrador/editarUsuario']);
+  }
+
+  botonEliminarUsuarioUnidad(usuarioUnidad: UsuarioUnidadResponse): void {
+    // URL de tu API
+    const url = UrlsProperties.PATH_DELETE_USER + usuarioUnidad.id;
+    this.http.get(url).pipe(
+      map(() => {
+        window.location.reload();
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al eliminar el usuario');
+        // Retornar un observable vacío en caso de error
+        return of(null);
+      })
+    ).subscribe();
   }
 }

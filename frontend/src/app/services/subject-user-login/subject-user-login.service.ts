@@ -8,8 +8,8 @@ import { UsuarioResponse } from '../../models/UsuarioResponse';
 })
 export class SubjectUserLoginService {
 
-  // Se supone que Subject deberia ser injectado porque Angular ya lo tiene en su IoC Container
-  // pero bueno
+  // Se supone que Subject deberia ser injectado porque Angular ya
+  // lo tiene en su IoC Container pero bueno
 
   usuarioUnidad: UsuarioResponse = {
     id: 0,
@@ -19,7 +19,9 @@ export class SubjectUserLoginService {
     nombreRol: '',
     dashConfig: '',
     fkCargo: 0,
-    fkResponsable: 0
+    fkResponsable: 0,
+    nombreUsuario: '',
+    apellidoUsuario: ''
   };
 
   private subject$ = new BehaviorSubject<UsuarioResponse>(this.usuarioUnidad);

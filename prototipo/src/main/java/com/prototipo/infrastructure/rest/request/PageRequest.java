@@ -7,8 +7,9 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PaginacionAdminRequest {
+public class PageRequest {
     private Long page;
     private Long size;
-    private String byColumName;
+    private String sortBy;
+    private String direction;
 }
