@@ -19,7 +19,7 @@ import {UrlsProperties} from "../../../enums/UrlsProperties";
   templateUrl: './nuevo-usuario.component.html',
   styleUrl: './nuevo-usuario.component.css'
 })
-export class NuevoUsuarioComponent implements OnInit {
+export class NuevoUsuarioComponent {
 
   private http: HttpClient;
   private formBuilder: FormBuilder;
@@ -55,9 +55,11 @@ export class NuevoUsuarioComponent implements OnInit {
     });
     this.rootNavigateService = rootNavigateService;
     this.router = router;
+
+    this.inicializarDatos();
   }
 
-  ngOnInit(): void {
+  inicializarDatos(): void {
     this.listaDeRoles();
     this.listaDeUnidades();
     this.listaDeCargos();
