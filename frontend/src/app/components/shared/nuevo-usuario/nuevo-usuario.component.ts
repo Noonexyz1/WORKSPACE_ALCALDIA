@@ -10,6 +10,7 @@ import { Router } from '@angular/router';
 import {CargoResponse} from "../../../models/CargoResponse";
 import {LocalStorageService} from "../../../services/local-storage/local-storage.service";
 import {UsuarioResponse} from "../../../models/UsuarioResponse";
+import {UrlsProperties} from "../../../enums/UrlsProperties";
 
 @Component({
   selector: 'app-nuevo-usuario',
@@ -63,56 +64,52 @@ export class NuevoUsuarioComponent implements OnInit {
   }
 
   listaDeCargos(): void {
-    const url = 'http://localhost:8081/administrador/listarCargos';
-    this.http.get<CargoResponse[]>(url).pipe(
-      map((response: CargoResponse[]) => {
-        this.listaCargos = response;
-        console.log(this.listaRoles);
-      }),
-      catchError(error => {
-        console.error('Error en la petición:', error);
-        alert('Hubo un error al traer los cargos');
-        return of(null); // Retornar un observable vacío en caso de error
-      })
-    ).subscribe();
+    this.http.get<CargoResponse[]>(UrlsProperties.PATH_LIST_CARGOS)
+      .pipe(
+        map((response: CargoResponse[]) => {
+          this.listaCargos = response;
+          console.log(this.listaRoles);
+        }),
+        catchError(error => {
+          console.error('Error en la petición:', error);
+          alert('Hubo un error al traer los cargos');
+          return of(null); // Retornar un observable vacío en caso de error
+        })
+      ).subscribe();
   }
 
   listaDeRoles(): void {
-    const url = 'http://localhost:8081/administrador/listarRoles';
-    this.http.get<RolResponse[]>(url).pipe(
-      map((response: RolResponse[]) => {
-        this.listaRoles = response;
-        console.log(this.listaRoles);
-      }),
-      catchError(error => {
-        console.error('Error en la petición:', error);
-        alert('Hubo un error al traer los roles');
-        return of(null); // Retornar un observable vacío en caso de error
-      })
-    )
-    .subscribe();
+    this.http.get<RolResponse[]>(UrlsProperties.PATH_LIST_ROLES)
+      .pipe(
+        map((response: RolResponse[]) => {
+          this.listaRoles = response;
+          console.log(this.listaRoles);
+        }),
+        catchError(error => {
+          console.error('Error en la petición:', error);
+          alert('Hubo un error al traer los roles');
+          return of(null); // Retornar un observable vacío en caso de error
+        })
+      ).subscribe();
   }
 
   listaDeUnidades(): void {
-    const url = 'http://localhost:8081/administrador/listarUnidades';
-    this.http.get<UnidadResponse[]>(url).pipe(
-      map((response: UnidadResponse[]) => {
-        this.listaUnidades = response;
-        console.log(this.listaUnidades);
-      }),
-      catchError(error => {
-        console.error('Error en la petición:', error);
-        alert('Hubo un error al traer las unidades');
-        return of(null); // Retornar un observable vacío en caso de error
-      })
-    )
-    .subscribe();
+    this.http.get<UnidadResponse[]>(UrlsProperties.PATH_LIST_UNIDADES)
+      .pipe(
+        map((response: UnidadResponse[]) => {
+          this.listaUnidades = response;
+          console.log(this.listaUnidades);
+        }),
+        catchError(error => {
+          console.error('Error en la petición:', error);
+          alert('Hubo un error al traer las unidades');
+          return of(null); // Retornar un observable vacío en caso de error
+        })
+      ).subscribe();
   }
 
 
   botonRegistrarUsuario(): void {
-    const url = 'http://localhost:8081/administrador/crearUsuario';
-
     const usuarioNuevoRequest: UsuarioNuevoRequest = {
       nombres: this.nuevoUsuario.get('nombres')?.value,
       materno: this.nuevoUsuario.get('materno')?.value,
@@ -128,17 +125,21 @@ export class NuevoUsuarioComponent implements OnInit {
       idResponsable: 2
     };
 
-    this.http.post<UsuarioNuevoRequest>(url, usuarioNuevoRequest).pipe(
+    this.http.post<UsuarioNuevoRequest>(
+      UrlsProperties.PATH_CREATE_USER,
+      usuarioNuevoRequest
+    ).pipe(
       map(() => {
-        let toNavegate = this.rootNavigateService.valorParaNavegar("Administrador");
+        let toNavegate = this.rootNavigateService
+          .valorParaNavegar("Administrador");
         this.router.navigate([toNavegate]);
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
         alert('Hubo un error al crear usuario');
-        return of(null); // Retornar un observable vacío en caso de error
+        // Retornar un observable vacío en caso de error
+        return of(null);
       })
     ).subscribe();
-
   }
 }
