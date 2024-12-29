@@ -1,5 +1,4 @@
-import { Component, OnInit } from '@angular/core';
-import { RowTableUserComponent } from "./row-table-user/row-table-user.component";
+import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { PageRequest } from '../../../models/PageRequest';
 import { UsuarioUnidadResponse } from '../../../models/UsuarioUnidadResponse';
@@ -13,7 +12,7 @@ import {PageProperties} from "../../../models/PageProperties";
 @Component({
   selector: 'app-lista-de-usuarios',
   standalone: true,
-  imports: [RowTableUserComponent],
+  imports: [],
   templateUrl: './lista-de-usuarios.component.html',
   styleUrl: './lista-de-usuarios.component.css'
 })
