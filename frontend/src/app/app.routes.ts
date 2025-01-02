@@ -4,7 +4,6 @@ import { AdministradorComponent } from './components/administrador/administrador
 import { ListaDeUsuariosComponent } from './components/shared/lista-de-usuarios/lista-de-usuarios.component';
 import { NuevoUsuarioComponent } from './components/shared/nuevo-usuario/nuevo-usuario.component';
 import { CambiarPassComponent } from './components/shared/cambiar-pass/cambiar-pass.component';
-import { OperadorComponent } from './components/operador/operador.component';
 import { ListaDeSolicitudesComponent } from './components/shared/lista-de-solicitudes/lista-de-solicitudes.component';
 import { NuevaSolicitudComponent } from './components/shared/nueva-solicitud/nueva-solicitud.component';
 import { SolicitanteComponent } from './components/solicitante/solicitante.component';
@@ -12,10 +11,7 @@ import { ResponsableComponent } from './components/responsable/responsable.compo
 import { EditarUsuarioComponent } from './components/shared/editar-usuario/editar-usuario.component';
 import { ListaSoliAprobadaResponsableComponent } from './components/shared/lista-soli-responsable-aprobada/lista-soli-responsable-aprobada.component';
 import { ListaSoliPendienteResponsableComponent } from './components/shared/lista-soli-responsable-pendiente/lista-soli-responsable-pendiente.component';
-import { ListaSoliRechazadaResponsableComponent } from './components/shared/lista-soli-responsable-rechazada/lista-soli-responsable-rechazada.component';
-import { ListaSoliPendienteOperadorComponent } from './components/shared/lista-soli-operador-pendiente/lista-soli-operador-pendiente.component';
-import { ListaSoliIniciadaOperadorComponent } from './components/shared/lista-soli-operador-iniciada/lista-soli-operador-iniciada.component';
-import { ListaSoliCompletaOperadorComponent } from './components/shared/lista-soli-operador-completada/lista-soli-operador-completada.component';
+import { ListaSoliFinalizadaResponsableComponent } from './components/shared/lista-soli-responsable-finalizada/lista-soli-responsable-finalizada.component';
 
 export const routes: Routes = [
     { path: '', redirectTo: "login", pathMatch: "full" },
@@ -39,33 +35,6 @@ export const routes: Routes = [
             {
                 path: 'editarUsuario',
                 component: EditarUsuarioComponent,
-            },
-        ]
-    },
-    {
-        path: 'operador',
-        component: OperadorComponent,
-        children: [
-            {
-                path: 'listaDeSolicitudesPendientes',
-                component: ListaSoliPendienteOperadorComponent,
-            },
-            {
-                path: 'listaDeSolicitudesIniciadas',
-                component: ListaSoliIniciadaOperadorComponent,
-            },
-            {
-                path: 'listaDeSolicitudesCompletadas',
-                component: ListaSoliCompletaOperadorComponent,
-            },
-
-            {
-                path: 'cambiarEstado',
-                component: NuevoUsuarioComponent,
-            },
-            {
-                path: 'cambiarPass',
-                component: CambiarPassComponent,
             },
         ]
     },
@@ -101,7 +70,7 @@ export const routes: Routes = [
             },
             {
                 path: 'solicitudesRechazadaUnidad',
-                component: ListaSoliRechazadaResponsableComponent,
+                component: ListaSoliFinalizadaResponsableComponent,
             },
             {
                 path: 'cambiarPass',

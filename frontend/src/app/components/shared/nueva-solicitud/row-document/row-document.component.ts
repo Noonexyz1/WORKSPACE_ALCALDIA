@@ -1,7 +1,6 @@
 import {Component} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {RowSolicitud} from '../../../../models/RowSolicitud';
-import {SubjectUserLoginService} from "../../../../services/subject-user-login/subject-user-login.service";
 import {SubjectDocumentoService} from "../../../../services/subject-documento/subject-documento.service";
 
 @Component({

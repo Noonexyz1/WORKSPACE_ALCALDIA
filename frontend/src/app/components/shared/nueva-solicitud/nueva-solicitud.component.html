@@ -1,11 +1,12 @@
-<form [formGroup]="solicitudForm" class="w-full max-w-4xl mx-auto">
+<form [formGroup]="solicitudForm" class="dark:bg-gray-900">
+
   <div class="relative z-0 w-full mb-5 group">
         <span class="self-center text-4xl font-semibold whitespace-nowrap dark:text-white">
             Nueva solicitud
         </span>
   </div>
 
-  <div class="grid gap-6">
+  <div class="grid grid-cols-2 gap-4 xl:grid-cols-5">
     <div class="relative z-0 w-full mb-5 group">
       <input formControlName="cite" type="text" name="floating_first_name" id="citeID"
              class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
@@ -16,7 +17,7 @@
       </label>
     </div>
 
-    <div class="relative z-0 w-full mb-5 group">
+    <div class="relative z-0 w-full mb-5 group col-span-2">
       <input formControlName="descripcion" type="text" name="floating_first_name" id="citeIDd"
              class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
              placeholder=" " required/>
@@ -26,42 +27,42 @@
       </label>
     </div>
 
-
-
-    @if (!estadoNroDocumentos) {
-      <div class="relative z-0 w-full mb-5 group flex items-center gap-2">
-        <input formControlName="nroDeDocumento" type="number" name="floating_first_name" id="nroDocID"
-               class="block py-2.5 px-2 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
-               placeholder=" " required/>
-        <label for="nroDocID"
-               class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
-          Ingrese cantidad de documentos a fontocopiar
-        </label>
-        <button (click)="botonSetNumeroDeCopias()"
-                class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
-          Listo
-        </button>
-      </div>
-
-    } @else {
-      <div class="mt-6 flow-root sm:mt-8 border-gray-300 dark:border-gray-600 rounded-lg" style="padding: 10px;">
-        <div class="divide-y divide-gray-200 dark:divide-gray-700">
-
-          @for (item of listSolicitudToFor; track $index) {
-            <app-row-document></app-row-document>
-          }
-
-        </div>
-      </div>
-
-    }
-
-    <div class="relative z-0 w-full mb-5 group">
-      <button (click)="botonNuevaSolicitud()"
-              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
-        Enviar
-      </button>
+    <div class="relative z-0 w-full mb-5 group flex items-center gap-2">
+      <input formControlName="nroDeDocumento" type="number" name="floating_first_name" id="nroDocID"
+             class="block py-2.5 px-2 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+             placeholder=" " required/>
+      <label for="nroDocID"
+             class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+        Numero de documentos
+      </label>
     </div>
 
+    @if (!estadoNroDocumentos) {
+    <div class="relative z-0 w-full mb-5 group flex items-center gap-2">
+      <button (click)="botonSetNumeroDeCopias()"
+              class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+        Listo
+      </button>
+    </div>
+    }
   </div>
+
+  @if (estadoNroDocumentos) {
+  <div class="divide-y divide-gray-200 py-2 dark:divide-gray-700">
+    @for (item of listSolicitudToFor; track $index) {
+      <p class="text-xl font-bold text-gray-900 dark:text-white">
+        Documento {{$index + 1}}
+      </p>
+      <app-row-document></app-row-document>
+    }
+  </div>
+    <br>
+  <div class="relative z-0 w-full mb-5 group">
+    <button (click)="botonNuevaSolicitud()"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+      Enviar
+    </button>
+  </div>
+  }
+
 </form>

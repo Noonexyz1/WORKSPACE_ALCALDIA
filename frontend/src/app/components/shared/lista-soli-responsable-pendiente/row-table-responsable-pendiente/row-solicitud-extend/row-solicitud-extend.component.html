@@ -1,5 +1,5 @@
 <form [formGroup]="cotizacionForm">
-  <div class="flex flex-wrap items-center gap-y-4 py-3">
+  <div class="p-3 border border-gray-500 rounded-2xl py-4 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-9">
 
     <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
       <dt class="text-base font-medium text-gray-500 dark:text-gray-400">ID:</dt>
@@ -9,28 +9,28 @@
     </dl>
 
     <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1 pr-4">
-      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Nom. Documento:</dt>
+      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Documento:</dt>
       <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.nombreDocumento }}
       </dd>
     </dl>
 
     <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Nro. Copias:</dt>
+      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Nro Copias:</dt>
       <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.nroCopias }}</dd>
     </dl>
 
     <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Nro. Paginas:</dt>
+      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Nro Paginas:</dt>
       <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.nroPaginas }}</dd>
     </dl>
 
     <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Tam. Pagina:</dt>
+      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Tam Pagina:</dt>
       <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.tamanoPagina }}</dd>
     </dl>
 
     <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Anverso?:</dt>
+      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Anv/Rev:</dt>
       <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.anversoReverso }}
       </dd>
     </dl>
@@ -42,9 +42,6 @@
     </dl>
 
     <div class="w-full grid sm:grid-cols-2 lg:flex lg:w-64 lg:items-center lg:justify-end gap-4">
-
-
-
       @if (estadoBotonEstablecer) {
         <div>
           <input type="number" id="precUnitario"
@@ -62,7 +59,6 @@
           <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ precioEstablecido }}</dd>
         </dl>
       }
-
     </div>
 
   </div>

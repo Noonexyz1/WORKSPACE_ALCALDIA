@@ -3,12 +3,13 @@ import {Component, OnInit} from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { SolicitudRequest } from '../../../models/SolicitudRequest';
-import {catchError, map, Observable, of} from 'rxjs';
+import {catchError, map, of} from 'rxjs';
 import { UsuarioResponse } from '../../../models/UsuarioResponse';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 import { RowDocumentComponent } from './row-document/row-document.component';
 import { RowSolicitud } from '../../../models/RowSolicitud';
 import {SubjectDocumentoService} from "../../../services/subject-documento/subject-documento.service";
+import {UrlsProperties} from "../../../enums/UrlsProperties";
 
 @Component({
   selector: 'app-nueva-solicitud',
@@ -78,7 +79,6 @@ export class NuevaSolicitudComponent implements OnInit{
   }
 
   botonNuevaSolicitud(): void {
-    const url = 'http://localhost:8081/solicitante/v2/solicitarFotocopiar'; // URL de tu API
     this.usuario = this.localStorage.getItem('userData');
 
     const solicitudRequest: SolicitudRequest = {
@@ -90,7 +90,10 @@ export class NuevaSolicitudComponent implements OnInit{
     };
 
     // Enviar la solicitud
-    this.http.post<SolicitudRequest>(url, solicitudRequest).pipe(
+    this.http.post<SolicitudRequest>(
+      UrlsProperties.PATH_CREATE_SOLICITUD,
+      solicitudRequest
+    ).pipe(
       map(() => {
         this.router.navigate(['/solicitante/misSolicitudes']);
       }),

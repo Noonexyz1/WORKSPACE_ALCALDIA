@@ -1,6 +1,5 @@
 import {AfterViewInit, Component, Input, ViewChild} from '@angular/core';
 import {SolicitudResponResponse} from '../../../../models/SolicitudResponResponse';
-import {AprobacionSoliRequest} from '../../../../models/AprobacionSoliRequest';
 import {HttpClient} from '@angular/common/http';
 import {SubjectUserLoginService} from '../../../../services/subject-user-login/subject-user-login.service';
 import {UsuarioResponse} from '../../../../models/UsuarioResponse';
@@ -8,12 +7,10 @@ import {catchError, map, of} from 'rxjs';
 import {Router} from '@angular/router';
 import {RootNavigateService} from '../../../../services/root-navigate/root-navigate.service';
 import {LocalStorageService} from '../../../../services/local-storage/local-storage.service';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {PageRequestID} from "../../../../models/PageRequestID";
+import {ReactiveFormsModule} from "@angular/forms";
 import {DetalleSolicitudExtendidoResponse} from "../../../../models/DetalleSolicitudExtendidoResponse";
 import {DetalleSolicitudCotizadoResponse} from "../../../../models/DetalleSolicitudCotizadoResponse";
 import {RowSolicitudExtendComponent} from "./row-solicitud-extend/row-solicitud-extend.component";
-import {CredencialRequest} from "../../../../models/CredencialRequest";
 
 @Component({
   selector: 'app-row-table-responsable-pendiente',
