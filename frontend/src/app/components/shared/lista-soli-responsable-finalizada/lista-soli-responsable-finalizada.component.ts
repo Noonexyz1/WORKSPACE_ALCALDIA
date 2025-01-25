@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, map, of } from 'rxjs';
 import { PageRequestID } from '../../../models/PageRequestID';
 import { UsuarioResponse } from '../../../models/UsuarioResponse';
-import { SubjectUserLoginService } from '../../../services/subject-user-login/subject-user-login.service';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 import {FinalizacionResponse} from "../../../models/FinalizacionResponse";
 import {PageProperties} from "../../../models/PageProperties";
@@ -19,39 +18,20 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 export class ListaSoliFinalizadaResponsableComponent implements OnInit{
 
   private http: HttpClient;
-  private observable: SubjectUserLoginService;
   private localStorage: LocalStorageService;
 
   listSolicitudFinal: FinalizacionResponse[] = [];
 
-  usuario: UsuarioResponse = {
-    id: 0,
-    fkUsuario: 0,
-    fkUnidad: 0,
-    fkRol: 0,
-    nombreRol: '',
-    dashConfig: '',
-    fkCargo: 0,
-    fkResponsable: 0,
-    nombreUsuario: '',
-    apellidoUsuario: ''
-  };
+  usuario: UsuarioResponse = new UsuarioResponse();
 
   constructor(http: HttpClient,
-              observable: SubjectUserLoginService,
               localStorage: LocalStorageService){
 
     this.http = http;
-    this.observable = observable;
     this.localStorage = localStorage;
   }
 
   ngOnInit(): void {
-    this.observable
-      .obtenerObservable()
-      .subscribe((datos) => {
-        this.usuario = datos;
-      });
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
   }

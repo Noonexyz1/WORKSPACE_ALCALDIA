@@ -31,30 +31,18 @@ public class UsuarioImpl implements UsuarioAbastract {
 
     @Override
     public UsuarioDto findUsuarioPorIdAbastract(Long idUsuario) {
-        UsuarioEntity usuarioEntity = usuarioRepository.findById(idUsuario).orElseThrow();
+        UsuarioEntity usuarioEntity = usuarioRepository
+                .findById(idUsuario).orElseThrow();
         return modelMapper.map(usuarioEntity, UsuarioDto.class);
-    }
-
-    @Override
-    public UsuarioUnidadDto guardarUsuarioUnidadAbastract(UsuarioUnidadDto usuarioUnidadDto) {
-        UsuarioUnidadEntity usuarioUnidadReq = modelMapper
-                .map(usuarioUnidadDto, UsuarioUnidadEntity.class);
-        UsuarioUnidadEntity usuarioUnidadResp = usuarioUnidadRepository
-                .save(usuarioUnidadReq);
-        return modelMapper.map(usuarioUnidadResp, UsuarioUnidadDto.class);
     }
 
     @Override
     public UsuarioDto guardarUsuarioAbastract(UsuarioDto usuarioDto) {
         UsuarioEntity usuarioEntity = modelMapper
                 .map(usuarioDto, UsuarioEntity.class);
-
         UsuarioEntity userRespo = usuarioRepository
                 .save(usuarioEntity);
-
-        UsuarioDto usuarioDtoResp = modelMapper
-                .map(userRespo, UsuarioDto.class);
-        return usuarioDtoResp;
+        return modelMapper.map(userRespo, UsuarioDto.class);
     }
 
     @Override
@@ -123,5 +111,14 @@ public class UsuarioImpl implements UsuarioAbastract {
     public UsuarioDto buscarUsuarioPorEmail(String email) {
         UsuarioEntity usuarioResp = usuarioRepository.encontrarUsuarioPorEmail(email);
         return (usuarioResp != null)? modelMapper.map(usuarioResp, UsuarioDto.class): null;
+    }
+
+    @Override
+    public UsuarioDto buscarUsuarioPorCi(String userCi) {
+        var usuarioEntity = usuarioRepository
+                .encontrarUsuarioPorCi(userCi);
+        return usuarioEntity != null ?
+                modelMapper.map(usuarioEntity, UsuarioDto.class):
+                null;
     }
 }

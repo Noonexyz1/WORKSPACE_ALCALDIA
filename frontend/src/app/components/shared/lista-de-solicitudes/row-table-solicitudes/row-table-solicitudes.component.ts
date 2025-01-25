@@ -5,7 +5,6 @@ import {UsuarioResponse} from "../../../../models/UsuarioResponse";
 import {HttpClient} from "@angular/common/http";
 import {catchError, map, of} from "rxjs";
 import {Router} from "@angular/router";
-import {SubjectUserLoginService} from "../../../../services/subject-user-login/subject-user-login.service";
 import {RootNavigateService} from "../../../../services/root-navigate/root-navigate.service";
 
 @Component({

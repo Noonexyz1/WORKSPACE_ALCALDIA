@@ -3,7 +3,6 @@ import {HttpClient} from '@angular/common/http';
 import {catchError, map, of} from 'rxjs';
 import {PageRequestID} from '../../../models/PageRequestID';
 import {UsuarioResponse} from '../../../models/UsuarioResponse';
-import {SubjectUserLoginService} from '../../../services/subject-user-login/subject-user-login.service';
 import {SolicitudResponResponse} from '../../../models/SolicitudResponResponse';
 import {RowTablePendienteResponsableComponent} from './row-table-responsable-pendiente/row-table-responsable-pendiente.component';
 import {LocalStorageService} from '../../../services/local-storage/local-storage.service';
@@ -25,7 +24,6 @@ import {Router} from "@angular/router";
 export class ListaSoliPendienteResponsableComponent implements OnInit {
 
   private http: HttpClient;
-  private observable: SubjectUserLoginService;
   private localStorage: LocalStorageService;
   private rootNavigateService: RootNavigateService;
   private router: Router;
@@ -41,28 +39,14 @@ export class ListaSoliPendienteResponsableComponent implements OnInit {
   );
 
 
-  usuario: UsuarioResponse = {
-    id: 0,
-    fkUsuario: 0,
-    fkUnidad: 0,
-    fkRol: 0,
-    nombreRol: '',
-    dashConfig: '',
-    fkCargo: 0,
-    fkResponsable: 0,
-
-    nombreUsuario: '',
-    apellidoUsuario: ''
-  };
+  usuario: UsuarioResponse = new UsuarioResponse();
 
   constructor(http: HttpClient,
-              observable: SubjectUserLoginService,
               rootNavigateService: RootNavigateService,
               router: Router,
               localStorage: LocalStorageService) {
 
     this.http = http;
-    this.observable = observable;
     this.localStorage = localStorage;
     this.rootNavigateService = rootNavigateService;
     this.router = router;
@@ -74,10 +58,6 @@ export class ListaSoliPendienteResponsableComponent implements OnInit {
 
   listarSolicitudes(): void {
     const url = 'http://localhost:8081/responsable/verSolicitudesPendientes';
-
-    this.observable.obtenerObservable().subscribe((datos) => {
-      this.usuario = datos;
-    });
 
     this.usuario = this.localStorage.getItem('userData');
 

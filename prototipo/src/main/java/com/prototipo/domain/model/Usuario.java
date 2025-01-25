@@ -15,4 +15,7 @@ public class Usuario {
     private String correo;
     private String ci;
 
+    private String nombreRol;
+    private String nombreUnidad;
+    private String nombreCargo;
 }

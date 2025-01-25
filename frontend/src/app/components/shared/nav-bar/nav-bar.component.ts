@@ -19,10 +19,7 @@ export class NavBarComponent {
 
   constructor(localStorageService: LocalStorageService) {
     this.localStorageService = localStorageService;
-  }
-
-  botonUsuario(): void {
-     this.usuarioResponse = this.localStorageService
-       .getItem('userData');
+    this.usuarioResponse = this.localStorageService
+      .getItem('userData');
   }
 }

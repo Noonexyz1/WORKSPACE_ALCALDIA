@@ -18,6 +18,6 @@ public class UnidadEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
-    private String nombre;
+    private String nombreUnidad;
     private String direccion;
 }

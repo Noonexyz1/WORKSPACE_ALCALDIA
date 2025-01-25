@@ -25,19 +25,7 @@ export class NuevaSolicitudComponent implements OnInit{
   private router: Router;
   private localStorage: LocalStorageService;
 
-  usuario: UsuarioResponse = {
-    id: 0,
-    fkUsuario: 0,
-    fkUnidad: 0,
-    fkRol: 0,
-    nombreRol: '',
-    dashConfig: '',
-    fkCargo: 0,
-    fkResponsable: 0,
-
-    nombreUsuario: '',
-    apellidoUsuario: ''
-  };
+  usuario: UsuarioResponse = new UsuarioResponse();
 
   solicitudForm: FormGroup;
 

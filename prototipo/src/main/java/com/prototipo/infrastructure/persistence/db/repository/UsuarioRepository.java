@@ -16,4 +16,12 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
             WHERE u.correo = :email
             """, nativeQuery = true)
     UsuarioEntity encontrarUsuarioPorEmail(@Param("email") String email);
+
+    @Query(value =
+            """
+            SELECT *
+            FROM usuario u
+            WHERE u.ci = :ci
+            """, nativeQuery = true)
+    UsuarioEntity encontrarUsuarioPorCi(@Param("ci") String ci);
 }

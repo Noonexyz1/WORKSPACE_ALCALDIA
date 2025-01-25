@@ -3,7 +3,6 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, map, of } from 'rxjs';
 import { PageRequestID } from '../../../models/PageRequestID';
 import { UsuarioResponse } from '../../../models/UsuarioResponse';
-import { SubjectUserLoginService } from '../../../services/subject-user-login/subject-user-login.service';
 import { SolicitudResponResponse } from '../../../models/SolicitudResponResponse';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -26,34 +25,20 @@ import {PageProperties} from "../../../models/PageProperties";
 export class ListaSoliAprobadaResponsableComponent implements OnInit{
 
   private http: HttpClient;
-  private observable: SubjectUserLoginService;
   private localStorage: LocalStorageService;
   private router: Router;
 
   listSolicitud: SolicitudResponResponse[] = [];
 
-  usuario: UsuarioResponse = {
-    id: 0,
-    fkUsuario: 0,
-    fkUnidad: 0,
-    fkRol: 0,
-    nombreRol: '',
-    dashConfig: '',
-    fkCargo: 0,
-    fkResponsable: 0,
-    nombreUsuario: '',
-    apellidoUsuario: ''
-  };
+  usuario: UsuarioResponse = new UsuarioResponse();
 
   constructor(http: HttpClient,
-              observable: SubjectUserLoginService,
               rootNavigateService: RootNavigateService,
               router: Router,
               formBuilder: FormBuilder,
               localStorage: LocalStorageService){
 
     this.http = http;
-    this.observable = observable;
     this.localStorage = localStorage;
     this.rootNavigateService = rootNavigateService;
     this.router = router;
@@ -65,10 +50,6 @@ export class ListaSoliAprobadaResponsableComponent implements OnInit{
   }
 
   ngOnInit(): void {
-    this.observable.obtenerObservable().subscribe((datos) => {
-      this.usuario = datos;
-      console.log(this.usuario);
-    });
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
   }

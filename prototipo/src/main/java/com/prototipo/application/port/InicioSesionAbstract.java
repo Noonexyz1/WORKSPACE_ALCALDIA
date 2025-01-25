@@ -1,8 +1,7 @@
 package com.prototipo.application.port;
 
-import com.prototipo.application.modelDto.UsuarioUnidadDto;
+import com.prototipo.application.modelDto.UsuarioDto;
 
 public interface InicioSesionAbstract {
-    UsuarioUnidadDto iniciarSesionAbstract(String correo, String pass);
-    String rolDeUsuarioAbstract();
+    UsuarioDto iniciarSesionAbstract(String correo, String pass);
 }

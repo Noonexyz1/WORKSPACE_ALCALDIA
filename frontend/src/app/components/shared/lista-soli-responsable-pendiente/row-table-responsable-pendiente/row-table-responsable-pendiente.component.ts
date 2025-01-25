@@ -1,7 +1,6 @@
 import {AfterViewInit, Component, Input, ViewChild} from '@angular/core';
 import {SolicitudResponResponse} from '../../../../models/SolicitudResponResponse';
 import {HttpClient} from '@angular/common/http';
-import {SubjectUserLoginService} from '../../../../services/subject-user-login/subject-user-login.service';
 import {UsuarioResponse} from '../../../../models/UsuarioResponse';
 import {catchError, map, of} from 'rxjs';
 import {Router} from '@angular/router';
@@ -33,24 +32,11 @@ export class RowTablePendienteResponsableComponent implements AfterViewInit{
   estadoModal = false;
 
   private http: HttpClient;
-  private observable: SubjectUserLoginService;
   private router: Router;
   private rootNavigateService: RootNavigateService
   private localStorage: LocalStorageService;
 
-  usuario: UsuarioResponse = {
-    id: 0,
-    fkUsuario: 0,
-    fkUnidad: 0,
-    fkRol: 0,
-    nombreRol: '',
-    dashConfig: '',
-    fkCargo: 0,
-    fkResponsable: 0,
-
-    nombreUsuario: '',
-    apellidoUsuario: ''
-  };
+  usuario: UsuarioResponse = new UsuarioResponse();
 
   detSoliExtendidoResponse: DetalleSolicitudExtendidoResponse = {
     idSolicitud: 0,
@@ -63,13 +49,11 @@ export class RowTablePendienteResponsableComponent implements AfterViewInit{
   detalleSolicitudCotizado: DetalleSolicitudCotizadoResponse[] = [];
 
   constructor(http: HttpClient,
-              observable: SubjectUserLoginService,
               router: Router,
               rootNavigateService: RootNavigateService,
               localStorage: LocalStorageService) {
 
     this.http = http;
-    this.observable = observable;
     this.router = router;
     this.rootNavigateService = rootNavigateService;
     this.localStorage = localStorage;

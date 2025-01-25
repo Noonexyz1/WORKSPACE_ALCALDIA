@@ -9,18 +9,12 @@ import lombok.*;
 @Builder
 public class UsuarioResponse {
     private Long id;
-    //private Boolean isActive;
-
-    private Long fkUsuario;
-    private Long fkUnidad;
-
-    private Long fkRol;
+    private String nombres;
+    private String paterno;
+    private String materno;
+    private String ci;
+    private String correo;
     private String nombreRol;
-    private String dashConfig;
-
-    private Long fkCargo;
-    private Long fkResponsable;
-
-    private String nombreUsuario;
-    private String apellidoUsuario;
+    private String nombreUnidad;
+    private String nombreCargo;
 }

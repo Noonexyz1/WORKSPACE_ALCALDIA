@@ -32,7 +32,7 @@ public class UnidadImpl implements UnidadAbstract {
         UnidadEntity unidadEntity = unidadRepository.findById(idUnidad).orElseThrow();
         UnidadDto unidadDto = UnidadDto.builder()
                 .id(unidadEntity.getId())
-                .nombre(unidadEntity.getNombre())
+                .nombre(unidadEntity.getNombreUnidad())
                 .direccion(unidadEntity.getDireccion())
                 .build();
         return unidadDto;

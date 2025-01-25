@@ -1,8 +1,7 @@
 package com.prototipo.application.useCase;
 
-import com.prototipo.domain.model.UsuarioUnidad;
+import com.prototipo.domain.model.Usuario;
 
 public interface InicioSesionService {
-    UsuarioUnidad iniciarSesionService(String correo, String pass);
-    String rolDeUsuarioService();
+    Usuario iniciarSesionService(String correo, String pass);
 }

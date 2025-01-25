@@ -15,32 +15,30 @@ public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEnti
 
     @Query(value =
             """
-            SELECT *
-            FROM usuario_unidad uu
-            WHERE uu.fk_usuario_id = (
-                SELECT u.id
-                FROM usuario u
-                WHERE u.id = (
-                    SELECT c.fk_usuario_id
-                    FROM credencial c
-                    WHERE c.ci = :ci
-                    AND c.pass = :pass
-                )
-            )
-            AND uu.is_active = TRUE
+            SELECT uu.id, u.nombres, u.paterno, u.materno, u.ci, u.correo, r.nombre_rol, u2.nombre_unidad, c.nombre_cargo
+            FROM usuario_unidad uu, rol r, usuario u, cargo c, unidad u2, credencial c2
+            WHERE u.id = uu.fk_usuario_id
+            AND u2.id = uu.fk_unidad_id
+            AND r.id = uu.fk_rol_id
+            AND c.id = uu.fk_cargo_id
+            AND u.id = c2.fk_usuario_id
+            AND c2.ci = :ci
+            AND c2.pass = :pass
             LIMIT 1
             """, nativeQuery = true)
-    UsuarioUnidadEntity findUsuarioUnidadByCredencial(
+    Object[] findUsuarioByCredencial(
             @Param("ci") String correo,
-            @Param("pass") String pass);
+            @Param("pass") String pass
+    );
 
     @Query(value =
             """
             SELECT *
             FROM usuario_unidad uu
             WHERE uu.fk_usuario_id = :idUsuario
+            LIMIT 1
             """, nativeQuery = true)
-    List<UsuarioUnidadEntity> encontrarUsuariosUnidadPorUsuarioId(
+    UsuarioUnidadEntity encontrarUsuarioUnidadPorUsuarioId(
             @Param("idUsuario") Long idUsuario);
 
     @Query(value =

@@ -4,7 +4,6 @@ import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.*;
 import com.prototipo.application.port.*;
 import com.prototipo.application.useCase.FotocopiaService;
-import com.prototipo.domain.enums.EstadoByResponsableEnum;
 import com.prototipo.domain.model.*;
 
 import java.util.List;
@@ -19,13 +18,14 @@ public class FotocopiaAdapter implements FotocopiaService {
     private UsuarioUnidadAbstract usuarioUnidadAbstract;
     private CargoAbstract cargoAbstract;
 
-    public FotocopiaAdapter(UsuarioAbastract usuarioAbastract,
-                            RolAbstract rolAbstract,
-                            MapperApplicationAbstract mapperApplicationAbstract,
-                            CredencialAbstract credencialAbstract,
-                            UnidadAbstract unidadAbstract,
-                            UsuarioUnidadAbstract usuarioUnidadAbstract,
-                            CargoAbstract cargoAbstract) {
+    public FotocopiaAdapter(
+            UsuarioAbastract usuarioAbastract,
+            RolAbstract rolAbstract,
+            MapperApplicationAbstract mapperApplicationAbstract,
+            CredencialAbstract credencialAbstract,
+            UnidadAbstract unidadAbstract,
+            UsuarioUnidadAbstract usuarioUnidadAbstract,
+            CargoAbstract cargoAbstract) {
 
         this.usuarioAbastract = usuarioAbastract;
         this.rolAbstract = rolAbstract;
@@ -37,17 +37,18 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     @Override
-    public void creaUsuario(Usuario user,
-                            Long idRol,
-                            Long idUni,
-                            Long idCargo,
-                            Long idResponsable,
-                            Long idDirector){
+    public void creaUsuario(
+            Usuario user,
+            Long idRol,
+            Long idUni,
+            Long idCargo,
+            Long idResponsable,
+            Long idDirector){
 
-        // Insertamos al usuario en la tabla 'usuario'
+        //Verificar primero si ya existe el usuario registrado
         UsuarioDto usuarioDtoResp = crearUsuario(user);
 
-        // Creamos las credenciales correspondientes para el nuevo usuario
+        // insertamos las credenciales a la BD correspondientes para el nuevo usuario
         crearCredencial(usuarioDtoResp);
 
         // Creamos instancias de RolDto y UnidadDto usando únicamente sus IDs.
@@ -61,7 +62,7 @@ public class FotocopiaAdapter implements FotocopiaService {
         UsuarioUnidadDto usuarioUnidadDto = UsuarioUnidadDto.builder().id(idResponsable).build();
         UsuarioUnidadDto usuarioDirectorDto = UsuarioUnidadDto.builder().id(idDirector).build();
 
-        UsuarioUnidadDto userUni = UsuarioUnidadDto.builder()
+        UsuarioUnidadDto userUniNew = UsuarioUnidadDto.builder()
                 .id(null)
                 .isActive(true)
                 .fkRol(rolDto)
@@ -72,7 +73,15 @@ public class FotocopiaAdapter implements FotocopiaService {
                 .fkDirector(usuarioDirectorDto)
                 .build();
 
-        usuarioUnidadAbstract.guardarUsuarioUnidad(userUni);
+        UsuarioUnidadDto userRespon = existeUsuarioUnidad(usuarioDtoResp);
+        if (userRespon == null) {
+            usuarioUnidadAbstract.guardarUsuarioUnidad(userUniNew);
+        } else {
+            userRespon.setIsActive(false);
+            usuarioUnidadAbstract.guardarUsuarioUnidad(userRespon);
+            usuarioUnidadAbstract.guardarUsuarioUnidad(userUniNew);
+        }
+
     }
 
     private void crearCredencial(UsuarioDto usuarioDtoResp) {
@@ -85,19 +94,31 @@ public class FotocopiaAdapter implements FotocopiaService {
                     .fkUsuario(usuarioDtoResp)
                     .build();
             credencialAbstract.guardarCredencialAbstract(newCredencialDto);
+        } else {
+            credencialDtoResp.setPass("funcionario" + usuarioDtoResp.getCi());
+            credencialAbstract.guardarCredencialAbstract(credencialDtoResp);
         }
     }
 
     private UsuarioDto crearUsuario(Usuario user) {
-        //Primero encontramos si existe este registro o no
+        //TODO. por que tendria que buscar por id, si tiene ID entonces lo actualiza,
+        //TODO. si no tiene id, entonces lo crea, NO NECESITAS UN IF(){}
         UsuarioDto usuarioRes = usuarioAbastract
-                .buscarUsuarioPorEmail(user.getCorreo());
+                .buscarUsuarioPorCi(user.getCi());
         if (usuarioRes == null) {
             UsuarioDto usuarioDto = mapperApplicationAbstract
                     .mapearAbstract(user, UsuarioDto.class);
             return usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
+        } else {
+            UsuarioDto usuarioDto = mapperApplicationAbstract
+                    .mapearAbstract(user, UsuarioDto.class);
+            return usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
         }
-        return usuarioRes;
+    }
+
+    private UsuarioUnidadDto existeUsuarioUnidad(UsuarioDto usuarioDto) {
+        return usuarioUnidadAbstract
+                .encontrarUsuarioUnidadByUsuarioId(usuarioDto.getId());
     }
 
     @Override
@@ -149,35 +170,4 @@ public class FotocopiaAdapter implements FotocopiaService {
         credencialDto.setPass(newPass);
         credencialAbstract.guardarCredencialAbstract(credencialDto);
     }
-
-
-
-    @Override
-    public void subirArchivoPdf() {
-        //TODO
-    }
-
-    @Override
-    public EstadoByResponsableEnum enviarNotificacionEstado() {
-        //TODO
-        return null;
-    }
-
-    @Override
-    public void guardarRegistroInsumosUtilizado(Insumo insumoUtilizado) {
-        //TODO
-    }
-
-    @Override
-    public void generarAlertaInsumosBajos() {
-        //TODO
-    }
-
-    @Override
-    public Solicitud enviarNotificacionEstadoSoli() {
-        //TODO
-        return null;
-    }
-
-
 }

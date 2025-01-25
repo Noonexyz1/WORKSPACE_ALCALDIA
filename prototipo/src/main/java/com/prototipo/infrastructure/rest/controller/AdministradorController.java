@@ -28,7 +28,8 @@ public class AdministradorController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping(path = {"/listaDeUsuarios"},
+    @PostMapping(
+            path = {"/listaDeUsuarios"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PageResponse<UsuarioUnidadResponse>> listaDeUsuarios(
             @RequestBody PageRequest pageReq) {
@@ -67,7 +68,8 @@ public class AdministradorController {
                 .nombres(userUni.getFkUsuario().getNombres())
                 .paterno(userUni.getFkUsuario().getPaterno())
                 .materno(userUni.getFkUsuario().getMaterno())
-                .correo(userUni.getFkUsuario().getCorreo())
+                //.correo(userUni.getFkUsuario().getCorreo())
+                .correo("userUni.getFkUsuario().getCorreo()")
 
                 .nombreRol(userUni.getFkRol().getNombreRol())
                 .nombreUnidad(
@@ -86,38 +88,44 @@ public class AdministradorController {
                 .build();
     }
 
-    @PostMapping(path = {"/crearUsuario"},
+    @PostMapping(
+            path = {"/crearUsuario"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public void crearUsuario(@RequestBody UsuarioNuevoRequest newUser){
-        Long idRol = newUser.getIdRol();
-        Long idUni = newUser.getIdUni();
-        Long idCargo = newUser.getIdCargo();
-
-        Long idResponsable = newUser.getIdResponsable();
-        Long idDirector = newUser.getIdDirector();
-
         Usuario usuario = modelMapper.map(newUser, Usuario.class);
         fotocopiaService.creaUsuario(
                 usuario,
-                idRol,
-                idUni,
-                idCargo,
-                idResponsable,
-                idDirector);
-
+                newUser.getIdRol(),
+                newUser.getIdUni(),
+                newUser.getIdCargo(),
+                newUser.getIdResponsable(),
+                newUser.getIdDirector()
+        );
     }
 
-    @GetMapping(path = {"/eliminarFuncionario/{idUsuarioUnidad}"},
+    @PostMapping(
+            path = {"/editarUsuario"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void editarUsuario(@RequestBody UsuarioEditRequest editUser){
+        Usuario usuario = modelMapper.map(editUser, Usuario.class);
+        //fotocopiaService.editarUsuarioUnidad(usuario);
+
+        //TODO, probar este metodo
+        fotocopiaService.creaUsuario(
+                usuario,
+                editUser.getIdRol(),
+                editUser.getIdUni(),
+                editUser.getIdCargo(),
+                editUser.getIdResponsable(),
+                editUser.getIdDirector()
+        );
+    }
+
+    @GetMapping(
+            path = {"/eliminarFuncionario/{idUsuarioUnidad}"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public void eliminarUsuario(@PathVariable Long idUsuarioUnidad){
         fotocopiaService.eliminarUsuario(idUsuarioUnidad);
-    }
-
-    @PostMapping(path = {"/editarUsuario"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void editarUsuario(@RequestBody UsuarioRequest request){
-        Usuario usuario = modelMapper.map(request, Usuario.class);
-        fotocopiaService.editarUsuarioUnidad(usuario);
     }
 
     @GetMapping(path = {"/listarRoles"})
@@ -159,7 +167,8 @@ public class AdministradorController {
         fotocopiaService.cambiarPass(credencial, request.getNuevoPass());
     }
 
-    @GetMapping(path = {"/generarReporte"},
+    @GetMapping(
+            path = {"/generarReporte"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ReporteResponse> generarReporte(){
         //TODO, generar reporte

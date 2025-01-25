@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.rest.controller;
 
 import com.prototipo.application.useCase.InicioSesionService;
-import com.prototipo.domain.model.UsuarioUnidad;
+import com.prototipo.domain.model.Usuario;
 import com.prototipo.infrastructure.rest.request.CredencialRequest;
 import com.prototipo.infrastructure.rest.response.UsuarioResponse;
 import org.modelmapper.ModelMapper;
@@ -24,30 +24,26 @@ public class LoginController {
 
     @PostMapping(path = {""},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<UsuarioResponse> iniciarSesionV2(
+    public ResponseEntity<UsuarioResponse> iniciarSesion(
             @RequestBody CredencialRequest request){
 
-        String correo = request.getCi();
-        String pass = request.getPass();
-
-        UsuarioUnidad usuarioUnidad = inicioSesionService
-                .iniciarSesionService(correo, pass);
+        Usuario usuario = inicioSesionService
+                .iniciarSesionService(
+                        request.getCi(),
+                        request.getPass()
+                );
 
         UsuarioResponse response = UsuarioResponse
                 .builder()
-                //Este es el ID del UsuarioUnidadSesionResponse
-                .id(usuarioUnidad.getId())
-                .fkUsuario(usuarioUnidad.getFkUsuario().getId())
-                .fkUnidad(usuarioUnidad.getFkUnidad().getId())
-                .fkRol(usuarioUnidad.getFkRol().getId())
-                .nombreRol(usuarioUnidad.getFkRol().getNombreRol())
-                .dashConfig(usuarioUnidad.getFkRol().getNombreRol())
-                .fkCargo(usuarioUnidad.getFkCargo().getId())
-                .fkResponsable(usuarioUnidad.getFkResponsable() != null?
-                        usuarioUnidad.getFkResponsable().getId(): null )
-                .nombreUsuario(usuarioUnidad.getFkUsuario().getNombres())
-                .apellidoUsuario(usuarioUnidad.getFkUsuario().getMaterno() + " " +
-                        usuarioUnidad.getFkUsuario().getPaterno())
+                .id(usuario.getId())
+                .nombres(usuario.getNombres())
+                .paterno(usuario.getPaterno())
+                .materno(usuario.getMaterno())
+                .ci(usuario.getCi())
+                .correo(usuario.getCorreo())
+                .nombreRol(usuario.getNombreRol())
+                .nombreUnidad(usuario.getNombreUnidad())
+                .nombreCargo(usuario.getNombreCargo())
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);

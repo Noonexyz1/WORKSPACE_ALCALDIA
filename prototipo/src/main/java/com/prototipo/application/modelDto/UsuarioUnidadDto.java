@@ -1,6 +1,5 @@
 package com.prototipo.application.modelDto;
 
-import com.prototipo.infrastructure.persistence.db.entity.UsuarioUnidadEntity;
 import lombok.*;
 
 @Getter
