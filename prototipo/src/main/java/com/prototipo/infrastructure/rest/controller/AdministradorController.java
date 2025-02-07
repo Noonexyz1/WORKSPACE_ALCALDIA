@@ -64,61 +64,51 @@ public class AdministradorController {
                 .id(userUni.getId())
                 .isActive(userUni.getIsActive())
 
-                .idUser(userUni.getFkUsuario().getId())
-                .nombres(userUni.getFkUsuario().getNombres())
-                .paterno(userUni.getFkUsuario().getPaterno())
-                .materno(userUni.getFkUsuario().getMaterno())
-                //.correo(userUni.getFkUsuario().getCorreo())
-                .correo("userUni.getFkUsuario().getCorreo()")
+                .idUser((userUni.getFkUsuario() != null)? userUni.getFkUsuario().getId(): null)
+                .nombres((userUni.getFkUsuario() != null)? userUni.getFkUsuario().getNombres(): null)
+                .materno((userUni.getFkUsuario() != null)? userUni.getFkUsuario().getMaterno(): null)
+                .paterno((userUni.getFkUsuario() != null)? userUni.getFkUsuario().getPaterno(): null)
+                .correo((userUni.getFkUsuario() != null)? userUni.getFkUsuario().getCorreo(): null)
+                .ci((userUni.getFkUsuario() != null)? userUni.getFkUsuario().getCi(): null)
 
                 .nombreRol(userUni.getFkRol().getNombreRol())
-                .nombreUnidad(
-                        (userUni.getFkUnidad() != null)?
-                                userUni.getFkUnidad().getNombre():
-                                "Unidad Servicios Generales"
-                )
+                .nombreUnidad((userUni.getFkUnidad() != null)? userUni.getFkUnidad().getNombre(): "Unidad Servicios Generales")
+                .nombreCargo((userUni.getFkCargo() != null)? userUni.getFkCargo().getNombreCargo(): "Unidad Servicios Generales")
+
                 .idRol(userUni.getFkRol().getId())
                 .idUni((userUni.getFkUnidad() != null)? userUni.getFkUnidad().getId(): null)
-                .nombreCargo(
-                        (userUni.getFkCargo() != null)?
-                        userUni.getFkCargo().getNombreCargo():
-                        "Unidad Servicios Generales"
-                )
-                .ci(userUni.getFkUsuario().getCi())
+                .idCargo(userUni.getFkCargo().getId())
+                .idResponsable(userUni.getFkResponsable() != null ? userUni.getFkResponsable().getId(): null)
+                .idDirector(userUni.getFkDirector().getId())
                 .build();
     }
 
     @PostMapping(
             path = {"/crearUsuario"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void crearUsuario(@RequestBody UsuarioNuevoRequest newUser){
+    public void crearUsuario(@RequestBody UsuarioUnidadEditRequest newUser){
         Usuario usuario = modelMapper.map(newUser, Usuario.class);
-        fotocopiaService.creaUsuario(
-                usuario,
-                newUser.getIdRol(),
-                newUser.getIdUni(),
-                newUser.getIdCargo(),
-                newUser.getIdResponsable(),
-                newUser.getIdDirector()
-        );
+        UsuarioUnidad usuarioUnidad = usuarioUnidadBuilder(newUser);
+        fotocopiaService.creaUsuario(usuario, usuarioUnidad);
     }
 
     @PostMapping(
             path = {"/editarUsuario"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void editarUsuario(@RequestBody UsuarioEditRequest editUser){
+    public void editarUsuario(@RequestBody UsuarioUnidadEditRequest editUser) {
         Usuario usuario = modelMapper.map(editUser, Usuario.class);
-        //fotocopiaService.editarUsuarioUnidad(usuario);
+        UsuarioUnidad usuarioUnidad = usuarioUnidadBuilder(editUser);
+        fotocopiaService.creaUsuario(usuario, usuarioUnidad);
+    }
 
-        //TODO, probar este metodo
-        fotocopiaService.creaUsuario(
-                usuario,
-                editUser.getIdRol(),
-                editUser.getIdUni(),
-                editUser.getIdCargo(),
-                editUser.getIdResponsable(),
-                editUser.getIdDirector()
-        );
+    private UsuarioUnidad usuarioUnidadBuilder(UsuarioUnidadEditRequest user){
+        return UsuarioUnidad.builder()
+                .fkRol(Rol.builder().id(user.getIdRol()).build())
+                .fkUnidad(Unidad.builder().id(user.getIdUni()).build())
+                .fkCargo(Cargo.builder().id(user.getIdCargo()).build())
+                .fkResponsable(UsuarioUnidad.builder().id(user.getIdResponsable()).build())
+                .fkDirector(UsuarioUnidad.builder().id(user.getIdDirector()).build())
+                .build();
     }
 
     @GetMapping(

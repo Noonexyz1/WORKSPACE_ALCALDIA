@@ -20,6 +20,7 @@ public class SolicitudEntity {
     private String descripcion;
     private String fecha;
     private Long autoriFlag;
+    private Boolean isActive;
 
     @ManyToOne
     private UsuarioUnidadEntity fkUsuarioSolicitante;

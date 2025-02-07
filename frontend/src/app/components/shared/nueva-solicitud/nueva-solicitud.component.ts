@@ -1,28 +1,26 @@
-import { HttpClient } from '@angular/common/http';
+import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { SolicitudRequest } from '../../../models/SolicitudRequest';
+import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {SolicitudRequest} from '../../../models/SolicitudRequest';
 import {catchError, map, of} from 'rxjs';
-import { UsuarioResponse } from '../../../models/UsuarioResponse';
-import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
-import { RowDocumentComponent } from './row-document/row-document.component';
-import { RowSolicitud } from '../../../models/RowSolicitud';
+import {UsuarioResponse} from '../../../models/UsuarioResponse';
+import {LocalStorageService} from '../../../services/local-storage/local-storage.service';
+import {RowSolicitud} from '../../../models/RowSolicitud';
 import {SubjectDocumentoService} from "../../../services/subject-documento/subject-documento.service";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
+import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
 
 @Component({
   selector: 'app-nueva-solicitud',
   standalone: true,
-  imports: [ReactiveFormsModule, RowDocumentComponent],
+  imports: [ReactiveFormsModule],
   templateUrl: './nueva-solicitud.component.html',
   styleUrl: './nueva-solicitud.component.css'
 })
-export class NuevaSolicitudComponent implements OnInit{
+export class NuevaSolicitudComponent implements OnInit {
 
   private http: HttpClient;
   private formBuilder: FormBuilder;
-  private router: Router;
   private localStorage: LocalStorageService;
 
   usuario: UsuarioResponse = new UsuarioResponse();
@@ -33,28 +31,36 @@ export class NuevaSolicitudComponent implements OnInit{
   estadoNroDocumentos: boolean = false;
 
   listSolicitud: RowSolicitud[] = []
-  listSolicitudToFor: RowSolicitud[] = []
 
   private observable: SubjectDocumentoService;
+  private rootNavigateService: RootNavigateService;
+  listaTamano: string[] = [];
+  listaAnverRever: string[] = [];
+  listaColor: string[] = [];
 
   constructor(http: HttpClient,
               formBuilder: FormBuilder,
-              router: Router,
               localStorage: LocalStorageService,
-              observable: SubjectDocumentoService){
+              observable: SubjectDocumentoService,
+              rootNavigateService: RootNavigateService) {
 
     this.observable = observable;
+    this.rootNavigateService = rootNavigateService;
     this.http = http;
     this.formBuilder = formBuilder;
-    this.router = router;
     this.localStorage = localStorage;
+
     this.solicitudForm = this.formBuilder.group({
       fkUsuarioSolicitante: [],
       cite: [],
       descripcion: [],
-
       nroDeDocumento: [],
+      documentos: this.formBuilder.array([]), // FormArray para los documentos
     });
+
+    this.listaDeTamano();
+    this.listaDeAnverRever();
+    this.listaDeColor();
 
   }
 
@@ -66,14 +72,83 @@ export class NuevaSolicitudComponent implements OnInit{
     });
   }
 
+  listaDeTamano(): void {
+    this.http.get<string[]>(UrlsProperties.PATH_LIST_TAM)
+      .pipe(
+        map((response: string[]) => {
+          this.listaTamano = response;
+        }),
+        catchError(error => {
+          console.error('Error en la petición:', error);
+          alert('Hubo un error al traer los cargos');
+          return of(null); // Retornar un observable vacío en caso de error
+        })
+      ).subscribe();
+  }
+
+  listaDeAnverRever(): void {
+    this.http.get<string[]>(UrlsProperties.PATH_LIST_ANVER)
+      .pipe(
+        map((response: string[]) => {
+          this.listaAnverRever = response;
+        }),
+        catchError(error => {
+          console.error('Error en la petición:', error);
+          alert('Hubo un error al traer los cargos');
+          return of(null); // Retornar un observable vacío en caso de error
+        })
+      ).subscribe();
+  }
+
+  listaDeColor(): void {
+    this.http.get<string[]>(UrlsProperties.PATH_LIST_COLOR)
+      .pipe(
+        map((response: string[]) => {
+          this.listaColor = response;
+        }),
+        catchError(error => {
+          console.error('Error en la petición:', error);
+          alert('Hubo un error al traer los cargos');
+          return of(null); // Retornar un observable vacío en caso de error
+        })
+      ).subscribe();
+  }
+
+  get documentos(): FormArray {
+    return this.solicitudForm.get('documentos') as FormArray;
+  }
+
+  agregarDocumentosAlFormArray(nroDeDocumentos: number): void {
+    const documentosArray = this.solicitudForm.get('documentos') as FormArray;
+    documentosArray.clear(); // Limpiar el FormArray antes de agregar nuevos documentos
+
+    for (let i = 0; i < nroDeDocumentos; i++) {
+      documentosArray.push(this.crearFormGroupDocumento());
+    }
+  }
+
+  crearFormGroupDocumento(): FormGroup {
+    return this.formBuilder.group({
+      nombreDocumento: [],
+      nroPaginas: [],
+      nroCopias: [],
+      tamanoPagina: [],
+      anversoReverso: [],
+      colorFotocopia: [],
+    });
+  }
+
   botonNuevaSolicitud(): void {
     this.usuario = this.localStorage.getItem('userData');
+
+    // Obtener los documentos del FormArray
+    const documentosArray = this.solicitudForm.get('documentos') as FormArray;
+    this.listSolicitud = documentosArray.value; // Capturar los valores de los documentos
 
     const solicitudRequest: SolicitudRequest = {
       fkUsuarioSolicitante: this.usuario.id,
       cite: this.solicitudForm.get('cite')?.value,
       descripcion: this.solicitudForm.get('descripcion')?.value,
-
       listDetalleSolicitud: this.listSolicitud,
     };
 
@@ -83,20 +158,26 @@ export class NuevaSolicitudComponent implements OnInit{
       solicitudRequest
     ).pipe(
       map(() => {
-        this.router.navigate(['/solicitante/misSolicitudes']);
+        // Reiniciar el estado del componente
+        this.solicitudForm.reset();
+        documentosArray.clear(); // Limpiar el FormArray
+        this.estadoNroDocumentos = false;
+        this.nroDeDocumentos = 0;
+
+        // Redirigir al usuario
+        this.rootNavigateService.valorParaNavegar('Solicitante');
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
         alert('Hubo un error al enviar la solicitud');
-        return of(null); // Retornar un observable vacío en caso de error
+        return of(null);
       })
     ).subscribe();
-
   }
 
   botonSetNumeroDeCopias(): void {
     this.nroDeDocumentos = this.solicitudForm.get('nroDeDocumento')?.value;
-    this.listSolicitudToFor = new Array(this.nroDeDocumentos);
+    this.agregarDocumentosAlFormArray(this.nroDeDocumentos); // Agregar documentos al FormArray
     this.estadoNroDocumentos = true;
   }
 }

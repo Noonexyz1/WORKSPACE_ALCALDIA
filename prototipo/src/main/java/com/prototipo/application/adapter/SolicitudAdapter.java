@@ -5,7 +5,10 @@ import com.prototipo.application.modelDto.*;
 import com.prototipo.application.port.AprobacionAbstract;
 import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.application.useCase.SolicitudService;
+import com.prototipo.domain.enums.AnversoReversoEnum;
+import com.prototipo.domain.enums.ColorFotocopiaEnum;
 import com.prototipo.domain.enums.EstadoByResponsableEnum;
+import com.prototipo.domain.enums.TamanoPaginaEnum;
 import com.prototipo.domain.model.*;
 
 import java.sql.SQLOutput;
@@ -89,7 +92,7 @@ public class SolicitudAdapter implements SolicitudService {
     @Override
     public Solicitud buscarSolicitudService(Long id) {
         SolicitudDto solicitudDto = solicitudAbstract
-                .buscarSolicitudAbstract(id);
+                .buscarSolicitudByIdAbstract(id);
         return mapperApplicationAbstract
                 .mapearAbstract(solicitudDto, Solicitud.class);
     }
@@ -150,4 +153,37 @@ public class SolicitudAdapter implements SolicitudService {
                 .mapearAbstract(finalizacion, FinalizacionDto.class);
         solicitudAbstract.guardarFinalizacionAbs(finalizacionDto);
     }
+
+    @Override
+    public void eliminarSolicitudById(Long idSolicitud) {
+        SolicitudDto solicitudDto = solicitudAbstract
+                .buscarSolicitudByIdAbstract(idSolicitud);
+        solicitudDto.setIsActive(false);
+        solicitudAbstract.guardarSolicitudAbstract(solicitudDto);
+    }
+
+    @Override
+    public List<String> listarTamano() {
+        return List.of(
+                TamanoPaginaEnum.CARTA.getNombre(),
+                TamanoPaginaEnum.OFICIO.getNombre()
+        );
+    }
+
+    @Override
+    public List<String> listarAnversoReverso() {
+        return List.of(
+                AnversoReversoEnum.ANVERSO.getNombre(),
+                AnversoReversoEnum.ANVERSO_REVERSO.getNombre()
+        );
+    }
+
+    @Override
+    public List<String> listarColor() {
+        return List.of(
+                ColorFotocopiaEnum.BLANCO_NEGRO.getNombre(),
+                ColorFotocopiaEnum.COLOR.getNombre()
+        );
+    }
+
 }

@@ -1,15 +1,13 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RolResponse } from '../../../models/RolResponse';
 import { UnidadResponse } from '../../../models/UnidadResponse';
 import { catchError, map, of } from 'rxjs';
-import { UsuarioNuevoRequest } from '../../../models/UsuarioNuevoRequest';
+import { UsuarioUnidadEditRequest } from '../../../models/UsuarioUnidadEditRequest';
 import { RootNavigateService } from '../../../services/root-navigate/root-navigate.service';
-import { Router } from '@angular/router';
 import {CargoResponse} from "../../../models/CargoResponse";
 import {LocalStorageService} from "../../../services/local-storage/local-storage.service";
-import {UsuarioResponse} from "../../../models/UsuarioResponse";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 
 @Component({
@@ -24,7 +22,6 @@ export class NuevoUsuarioComponent {
   private http: HttpClient;
   private formBuilder: FormBuilder;
   private rootNavigateService: RootNavigateService;
-  private router: Router;
   private localStorage: LocalStorageService;
 
   nuevoUsuario: FormGroup;
@@ -36,13 +33,13 @@ export class NuevoUsuarioComponent {
   constructor(http: HttpClient,
               formBuilder: FormBuilder,
               rootNavigateService: RootNavigateService,
-              router: Router,
               localStorage: LocalStorageService) {
 
     this.formBuilder = formBuilder;
     this.localStorage = localStorage;
     this.http = http;
     this.nuevoUsuario = this.formBuilder.group({
+      idUser: [''],
       nombres: [''],
       materno: [''],
       paterno: [''],
@@ -54,7 +51,6 @@ export class NuevoUsuarioComponent {
       idUni: [],
     });
     this.rootNavigateService = rootNavigateService;
-    this.router = router;
 
     this.inicializarDatos();
   }
@@ -110,9 +106,9 @@ export class NuevoUsuarioComponent {
       ).subscribe();
   }
 
-
   botonRegistrarUsuario(): void {
-    const usuarioNuevoRequest: UsuarioNuevoRequest = {
+    const usuarioNuevoRequest: UsuarioUnidadEditRequest = {
+      id: this.nuevoUsuario.get('idUser')?.value,
       nombres: this.nuevoUsuario.get('nombres')?.value,
       materno: this.nuevoUsuario.get('materno')?.value,
       paterno: this.nuevoUsuario.get('paterno')?.value,
@@ -127,14 +123,12 @@ export class NuevoUsuarioComponent {
       idResponsable: 2
     };
 
-    this.http.post<UsuarioNuevoRequest>(
+    this.http.post<UsuarioUnidadEditRequest>(
       UrlsProperties.PATH_CREATE_USER,
       usuarioNuevoRequest
     ).pipe(
       map(() => {
-        let toNavegate = this.rootNavigateService
-          .valorParaNavegar("Administrador");
-        this.router.navigate([toNavegate]);
+        this.rootNavigateService.valorParaNavegar("Administrador");
       }),
       catchError(error => {
         console.error('Error en la petición:', error);

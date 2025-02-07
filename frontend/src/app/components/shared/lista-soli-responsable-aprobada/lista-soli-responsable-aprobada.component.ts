@@ -6,19 +6,15 @@ import { UsuarioResponse } from '../../../models/UsuarioResponse';
 import { SolicitudResponResponse } from '../../../models/SolicitudResponResponse';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {
-  RowSolicitudExtendComponent
-} from "../lista-soli-responsable-pendiente/row-table-responsable-pendiente/row-solicitud-extend/row-solicitud-extend.component";
 import {AutorizacionResponse} from "../../../models/AutorizacionResponse";
 import {FinalizacionRequest} from "../../../models/FinalizacionRequest";
 import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
-import {Router} from "@angular/router";
 import {PageProperties} from "../../../models/PageProperties";
 
 @Component({
   selector: 'app-lista-soli-responsable',
   standalone: true,
-  imports: [FormsModule, RowSolicitudExtendComponent, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './lista-soli-responsable-aprobada.component.html',
   styleUrl: './lista-soli-responsable-aprobada.component.css'
 })
@@ -26,7 +22,6 @@ export class ListaSoliAprobadaResponsableComponent implements OnInit{
 
   private http: HttpClient;
   private localStorage: LocalStorageService;
-  private router: Router;
 
   listSolicitud: SolicitudResponResponse[] = [];
 
@@ -34,14 +29,12 @@ export class ListaSoliAprobadaResponsableComponent implements OnInit{
 
   constructor(http: HttpClient,
               rootNavigateService: RootNavigateService,
-              router: Router,
               formBuilder: FormBuilder,
               localStorage: LocalStorageService){
 
     this.http = http;
     this.localStorage = localStorage;
     this.rootNavigateService = rootNavigateService;
-    this.router = router;
     this.formBuilder = formBuilder;
     this.formGroup = this.formBuilder.group({
       totalEjecutado: [],
@@ -96,8 +89,7 @@ export class ListaSoliAprobadaResponsableComponent implements OnInit{
     // Recibimos la peticion
     this.http.post<FinalizacionRequest>(url, finalizacionRequest).pipe(
       map(() => {
-        let toNavegate = this.rootNavigateService.valorParaNavegar('Responsable');
-        this.router.navigate([toNavegate]);
+        this.rootNavigateService.valorParaNavegar('Responsable');
       }),
       catchError(error => {
         console.error('Error en la petición:', error);

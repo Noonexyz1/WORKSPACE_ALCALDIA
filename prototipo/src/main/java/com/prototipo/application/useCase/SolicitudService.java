@@ -24,4 +24,12 @@ public interface SolicitudService {
     Autorizacion buscarAutorizacionById(Long idAutorizacion);
 
     void guardarFinalizacion(Finalizacion finalizacion);
+
+    void eliminarSolicitudById(Long idSolicitud);
+
+    List<String> listarTamano();
+
+    List<String> listarAnversoReverso();
+
+    List<String> listarColor();
 }

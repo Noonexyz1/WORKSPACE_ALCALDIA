@@ -1,11 +1,23 @@
 export enum UrlsProperties {
-  PATH_LOGIN =              'http://localhost:8081/login',
-  PATH_DELETE_USER =        'http://localhost:8081/administrador/eliminarFuncionario/',
-  PATH_LIST_USERS =         'http://localhost:8081/administrador/listaDeUsuarios',
-  PATH_CHANCE_PASS =        'http://localhost:8081/cambioPassService/cambiarPass',
-  PATH_LIST_CARGOS =        'http://localhost:8081/administrador/listarCargos',
-  PATH_LIST_ROLES =         'http://localhost:8081/administrador/listarRoles',
-  PATH_LIST_UNIDADES =      'http://localhost:8081/administrador/listarUnidades',
-  PATH_CREATE_USER =        'http://localhost:8081/administrador/crearUsuario',
-  PATH_CREATE_SOLICITUD =   'http://localhost:8081/solicitante/v2/solicitarFotocopiar'
+  PATH_LOGIN = 'http://localhost:8081/login',
+  PATH_DELETE_USER = 'http://localhost:8081/administrador/eliminarFuncionario/',
+  PATH_LIST_USERS = 'http://localhost:8081/administrador/listaDeUsuarios',
+  PATH_CHANCE_PASS = 'http://localhost:8081/cambioPassService/cambiarPass',
+  PATH_LIST_CARGOS = 'http://localhost:8081/administrador/listarCargos',
+  PATH_LIST_ROLES = 'http://localhost:8081/administrador/listarRoles',
+  PATH_LIST_UNIDADES = 'http://localhost:8081/administrador/listarUnidades',
+  PATH_CREATE_USER = 'http://localhost:8081/administrador/crearUsuario',
+  PATH_EDIT_USER = 'http://localhost:8081/administrador/editarUsuario',
+  PATH_CREATE_SOLICITUD = 'http://localhost:8081/solicitante/solicitarFotocopiar',
+
+  PATH_SOLICITUD_PDF = 'http://localhost:8081/solicitante/exportSolicitudDPF/',
+  PATH_ORDENFOTO_PDF = 'http://localhost:8081/solicitante/exportOrdenParaFotocopiaDPF/',
+  PATH_COMUINTERNA_PDF = 'http://localhost:8081/solicitante/exportComunicacionInternaDPF/',
+
+  PATH_LIST_SOLIC = 'http://localhost:8081/solicitante/verHistorialSolicitudes',
+  PATH_ELIMINAR_SOLIC = 'http://localhost:8081/solicitante/eliminarSolicitudById/',
+
+  PATH_LIST_TAM = 'http://localhost:8081/solicitante/listarTamano',
+  PATH_LIST_ANVER = 'http://localhost:8081/solicitante/listarAnversoReverso',
+  PATH_LIST_COLOR = 'http://localhost:8081/solicitante/listarColor'
 }

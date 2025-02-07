@@ -1,8 +1,6 @@
 package com.prototipo.infrastructure.persistence.db.repository;
 
-import com.prototipo.application.modelDto.NotaDePedidoDto;
 import com.prototipo.infrastructure.persistence.db.entity.SolicitudEntity;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,6 +16,7 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
             SELECT *
             FROM solicitud s
             WHERE fk_usuario_solicitante_id = :idUsuarioUnidad
+            AND s.is_active = 1
             """, nativeQuery = true)
     List<SolicitudEntity> findAllByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad);
 

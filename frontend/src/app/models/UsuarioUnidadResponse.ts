@@ -1,18 +1,26 @@
 export interface UsuarioUnidadResponse {
-    id: number;
-    ci: string;
-    isActive: boolean;
+  // Curiosamente esta interfaz es compatible con UsuarioUnidadEditRequest
+  // al momento de publicar datos
 
-    idUser: number;
-    nombres: string;
-    paterno: string;
-    materno: string;
-    correo: string;
+  // Es como si las interfazes de atributos matcheen por si solos
+  // atributo a atributo, sin tener que mapear
+  id: number;
+  isActive: boolean;
 
-    nombreRol: string;
-    nombreUnidad: string;
-    nombreCargo: string;
+  idUser: number;
+  nombres: string;
+  materno: string;
+  paterno: string;
+  correo: string;
+  ci: string;
 
-    idRol: number;
-    idUni: number;
+  nombreRol: string;
+  nombreUnidad: string;
+  nombreCargo: string;
+
+  idRol: number;
+  idUni: number;
+  idCargo: number;
+  idResponsable: number;
+  idDirector: number;
 }

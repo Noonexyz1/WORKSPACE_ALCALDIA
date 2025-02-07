@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { SubjectUsuarioUnidadService } from '../../../services/subject-usuario-unidad/subject-usuario-unidad.service';
 import { UsuarioUnidadRequest } from '../../../models/UsuarioUnidadRequest';
 import { HttpClient } from '@angular/common/http';
@@ -8,8 +8,10 @@ import { Router } from '@angular/router';
 import { RolResponse } from '../../../models/RolResponse';
 import { UnidadResponse } from '../../../models/UnidadResponse';
 import { RootNavigateService } from '../../../services/root-navigate/root-navigate.service';
-import {UsuarioRequest} from "../../../models/UsuarioRequest";
 import {CargoResponse} from "../../../models/CargoResponse";
+import {UrlsProperties} from "../../../enums/UrlsProperties";
+import {UsuarioUnidadEditRequest} from "../../../models/UsuarioUnidadEditRequest";
+import {LocalStorageService} from "../../../services/local-storage/local-storage.service";
 
 @Component({
   selector: 'app-editar-usuario',
@@ -18,18 +20,17 @@ import {CargoResponse} from "../../../models/CargoResponse";
   templateUrl: './editar-usuario.component.html',
   styleUrl: './editar-usuario.component.css'
 })
-export class EditarUsuarioComponent implements OnInit {
+export class EditarUsuarioComponent {
 
   //Crear formulario reactivo
   private http: HttpClient;
   private formBuilder: FormBuilder;
   private subjectUsuarioUnidadService: SubjectUsuarioUnidadService;
   private rootNavigateService: RootNavigateService;
-  private router: Router;
+  private localStorage: LocalStorageService;
+
   editUserForm: FormGroup;
-
-  usuario!: UsuarioRequest;
-
+  usuario!: UsuarioUnidadEditRequest;
   listaRoles: RolResponse[] = [];
   listaUnidades: UnidadResponse[] = [];
   listaCargos: CargoResponse[] = [];
@@ -38,24 +39,30 @@ export class EditarUsuarioComponent implements OnInit {
               http: HttpClient,
               formBuilder: FormBuilder,
               rootNavigateService: RootNavigateService,
-              router: Router) {
+              localStorage: LocalStorageService) {
 
-    this.router = router;
     this.http = http;
+    this.localStorage = localStorage;
     this.formBuilder = formBuilder;
     this.subjectUsuarioUnidadService = subjectUsuarioUnidadService;
     this.rootNavigateService = rootNavigateService;
     this.editUserForm = this.formBuilder.group({
-      id: [],
-      nombres: [],
-      materno: [],
-      paterno: [],
-      correo: [],
-      ci: []
+      id: [''],
+      nombres: [''],
+      materno: [''],
+      paterno: [''],
+      correo: [''],
+      ci: [''],
+
+      idRol: [],
+      idCargo: [],
+      idUni: [],
     });
+
+    this.inicializacion();
   }
 
-  ngOnInit(): void {
+  inicializacion(): void {
     this.getObserbable();
     this.listaDeRoles();
     this.listaDeUnidades();
@@ -70,12 +77,16 @@ export class EditarUsuarioComponent implements OnInit {
         console.log('Datos recibidossss:', this.usuario);
 
         this.editUserForm.patchValue({
-          id: this.usuario.id,
+          id: this.usuario.idUni,
           nombres: this.usuario.nombres,
           materno: this.usuario.materno,
           paterno: this.usuario.paterno,
           correo: this.usuario.correo,
           ci: this.usuario.ci,
+
+          idRol: this.usuario.idRol,
+          idCargo: this.usuario.idCargo,
+          idUni: this.usuario.idUni
         });
       });
   }
@@ -126,29 +137,30 @@ export class EditarUsuarioComponent implements OnInit {
   }
 
   botonEditarUsuarioUnidad(): void {
-    //TODO, implementar
-    const url = 'http://localhost:8081/administrador/editarUsuario';
-    const userUniEdit: UsuarioUnidadRequest = {
-      id: this.editUserForm.get('id')?.value,
-      isActive: this.editUserForm.get('isActive')?.value,
-
-      idUser: this.editUserForm.get('idUser')?.value,
+    const userUniEdit: UsuarioUnidadEditRequest = {
+      id: this.usuario.id, //Id de USUARIO, lo de
       nombres: this.editUserForm.get('nombres')?.value,
-      paterno: this.editUserForm.get('paterno')?.value,
       materno: this.editUserForm.get('materno')?.value,
+      paterno: this.editUserForm.get('paterno')?.value,
       correo: this.editUserForm.get('correo')?.value,
       ci: this.editUserForm.get('ci')?.value,
 
-      idUni: this.editUserForm.get('idUni')?.value,
       idRol: this.editUserForm.get('idRol')?.value,
-    }
+      idUni: this.editUserForm.get('idUni')?.value,
+      idCargo: this.editUserForm.get('idCargo')?.value,
+
+      idDirector: this.localStorage.getItem('userData').id,
+      idResponsable: 2
+    };
 
     console.log(userUniEdit);
 
-    this.http.post<UsuarioUnidadRequest>(url, userUniEdit).pipe(
+    this.http.post<UsuarioUnidadEditRequest>(
+      UrlsProperties.PATH_EDIT_USER,
+      userUniEdit
+    ).pipe(
       map(() => {
-        let toNavegate = this.rootNavigateService.valorParaNavegar("Administrador");
-        this.router.navigate([toNavegate]);
+        this.rootNavigateService.valorParaNavegar("Administrador");
       }),
       catchError(error => {
         console.error('Error en la petición:', error);

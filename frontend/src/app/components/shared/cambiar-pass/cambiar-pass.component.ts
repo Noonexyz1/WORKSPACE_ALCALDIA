@@ -50,9 +50,7 @@ export class CambiarPassComponent {
       nuevoPassRequest
     ).pipe(
       map((response: NuevoPassRequest) => {
-        let toNavegate = this.rootNavigateService
-          .valorParaNavegar('Login');
-        this.router.navigate([toNavegate]);
+        this.rootNavigateService.valorParaNavegar('Login');
       }),
       catchError(error => {
         console.error('Error en la petición:', error);

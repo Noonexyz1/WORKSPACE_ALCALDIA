@@ -22,7 +22,6 @@ export class LoginComponent {
   //Angular
   private http: HttpClient;
   private formBuilder: FormBuilder;
-  private router: Router;
 
   //Mis servicios
   private rootNavigateService: RootNavigateService;
@@ -34,13 +33,11 @@ export class LoginComponent {
   constructor(
     http: HttpClient,
     formBuilder: FormBuilder,
-    router: Router,
     rootNavigateService: RootNavigateService,
     localStorage: LocalStorageService){
 
     this.http = http;
     this.formBuilder = formBuilder;
-    this.router = router;
     this.rootNavigateService = rootNavigateService;
     this.localStorage = localStorage;
 
@@ -68,11 +65,7 @@ export class LoginComponent {
       map((response: UsuarioResponse) => {
         //Guardamos en el localStorage
         this.localStorage.setItem('userData', response);
-
-        let toNavegate = this.rootNavigateService
-          .valorParaNavegar(response.nombreRol);
-
-        this.router.navigate([toNavegate]);
+        this.rootNavigateService.valorParaNavegar(response.nombreRol);
       }),
       catchError(error => {
         alert('Hubo un error al iniciar sesión');

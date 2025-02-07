@@ -21,5 +21,4 @@ export class AdministradorComponent implements OnInit{
   ngOnInit(): void {
     this.modoDarkService.metodoModoDark();
   }
-
 }

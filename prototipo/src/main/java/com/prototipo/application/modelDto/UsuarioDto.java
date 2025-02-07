@@ -14,6 +14,7 @@ public class UsuarioDto {
     private String materno;
     private String ci;
     private String correo;
+
     private String nombreRol;
     private String nombreUnidad;
     private String nombreCargo;

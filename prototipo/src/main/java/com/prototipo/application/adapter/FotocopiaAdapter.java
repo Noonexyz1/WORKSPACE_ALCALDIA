@@ -37,50 +37,43 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     @Override
-    public void creaUsuario(
-            Usuario user,
-            Long idRol,
-            Long idUni,
-            Long idCargo,
-            Long idResponsable,
-            Long idDirector){
-
+    public void creaUsuario(Usuario user, UsuarioUnidad userUnidad){
         //Verificar primero si ya existe el usuario registrado
         UsuarioDto usuarioDtoResp = crearUsuario(user);
 
         // insertamos las credenciales a la BD correspondientes para el nuevo usuario
         crearCredencial(usuarioDtoResp);
 
-        // Creamos instancias de RolDto y UnidadDto usando únicamente sus IDs.
-        // No es necesario realizar consultas adicionales a la base de datos para obtener el Rol o la Unidad
-        // a partir de sus IDs, ya que JPA puede manejar estas referencias directamente con los IDs proporcionados.
-        // Esto mejora el rendimiento al evitar llamadas innecesarias a la BD.
-        // Que trucaso no????? jaja
-        RolDto rolDto = RolDto.builder().id(idRol).build();
-        UnidadDto unidadDto = UnidadDto.builder().id(idUni).build();
-        CargoDto cargoDto = CargoDto.builder().id(idCargo).build();
-        UsuarioUnidadDto usuarioUnidadDto = UsuarioUnidadDto.builder().id(idResponsable).build();
-        UsuarioUnidadDto usuarioDirectorDto = UsuarioUnidadDto.builder().id(idDirector).build();
+        //El trucaso de los IDs
+        UsuarioUnidadDto userUniNew = mapperApplicationAbstract
+                .mapearAbstract(userUnidad, UsuarioUnidadDto.class);
 
-        UsuarioUnidadDto userUniNew = UsuarioUnidadDto.builder()
-                .id(null)
-                .isActive(true)
-                .fkRol(rolDto)
-                .fkUnidad(unidadDto)
-                .fkCargo(cargoDto)
-                .fkUsuario(usuarioDtoResp)
-                .fkResponsable(usuarioUnidadDto)
-                .fkDirector(usuarioDirectorDto)
-                .build();
+        userUniNew.setId(null);
+        userUniNew.setIsActive(true);
+        userUniNew.setFkUsuario(usuarioDtoResp);
 
+        //Este metodo unicamente evalua si existe el usuario nuevo en unidadUsuario o no
         UsuarioUnidadDto userRespon = existeUsuarioUnidad(usuarioDtoResp);
+
         if (userRespon == null) {
             usuarioUnidadAbstract.guardarUsuarioUnidad(userUniNew);
         } else {
-            userRespon.setIsActive(false);
-            usuarioUnidadAbstract.guardarUsuarioUnidad(userRespon);
-            usuarioUnidadAbstract.guardarUsuarioUnidad(userUniNew);
+            if (!hayCambioUserUni(userUniNew, userRespon)) {
+                userRespon.setIsActive(false);
+                usuarioUnidadAbstract.guardarUsuarioUnidad(userRespon);
+                usuarioUnidadAbstract.guardarUsuarioUnidad(userUniNew);
+            }
         }
+
+    }
+
+    private boolean hayCambioUserUni(UsuarioUnidadDto userUniNew, UsuarioUnidadDto userRespon){
+        return userRespon.getFkUsuario().getId() == userUniNew.getFkUsuario().getId() &&
+                userRespon.getFkUnidad().getId() == userUniNew.getFkUnidad().getId() &&
+                userRespon.getFkRol().getId() == userUniNew.getFkRol().getId() &&
+                userRespon.getFkCargo().getId() == userUniNew.getFkCargo().getId() &&
+                userRespon.getFkResponsable().getId() == userUniNew.getFkResponsable().getId() &&
+                userRespon.getFkDirector().getId() == userUniNew.getFkDirector().getId();
 
     }
 
@@ -101,19 +94,21 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     private UsuarioDto crearUsuario(Usuario user) {
-        //TODO. por que tendria que buscar por id, si tiene ID entonces lo actualiza,
-        //TODO. si no tiene id, entonces lo crea, NO NECESITAS UN IF(){}
-        UsuarioDto usuarioRes = usuarioAbastract
-                .buscarUsuarioPorCi(user.getCi());
-        if (usuarioRes == null) {
-            UsuarioDto usuarioDto = mapperApplicationAbstract
-                    .mapearAbstract(user, UsuarioDto.class);
-            return usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
-        } else {
-            UsuarioDto usuarioDto = mapperApplicationAbstract
-                    .mapearAbstract(user, UsuarioDto.class);
-            return usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
+        // Por que tendria que buscar por id o ci?, si tiene ID entonces lo actualiza,
+        // si no tiene id, entonces lo crea, NO NECESITAS UN IF(){}
+        UsuarioDto usuarioDto = mapperApplicationAbstract
+                .mapearAbstract(user, UsuarioDto.class);
+
+        UsuarioUnidadDto siExisteUsuario = existeUsuarioUnidadByCi(usuarioDto.getCi());
+        if (siExisteUsuario != null) {
+            return siExisteUsuario.getFkUsuario();
         }
+        return usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
+    }
+
+    private UsuarioUnidadDto existeUsuarioUnidadByCi(String ciUser) {
+        return usuarioUnidadAbstract
+                .encontrarUsuarioUnidadByCi(ciUser);
     }
 
     private UsuarioUnidadDto existeUsuarioUnidad(UsuarioDto usuarioDto) {

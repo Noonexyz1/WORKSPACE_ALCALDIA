@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component, OnInit} from '@angular/core';
 import { RouterLink, RouterOutlet } from '@angular/router';
 import { ModoDarkService } from '../../services/modo-dark/modo-dark.service';
 import { NavBarComponent } from "../shared/nav-bar/nav-bar.component";
@@ -10,7 +10,7 @@ import { NavBarComponent } from "../shared/nav-bar/nav-bar.component";
   templateUrl: './responsable.component.html',
   styleUrl: './responsable.component.css'
 })
-export class ResponsableComponent {
+export class ResponsableComponent implements OnInit{
 
   private modoDarkService: ModoDarkService;
 

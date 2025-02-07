@@ -13,5 +13,7 @@ public class SolicitudDto {
     private String fecha;
     private String descripcion;
     private Long autoriFlag;
+    private Boolean isActive;
+
     private UsuarioUnidadDto fkUsuarioSolicitante;
 }

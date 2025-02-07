@@ -11,21 +11,14 @@ public interface SolicitudAbstract {
     List<SolicitudDto> getListaSolicitudesAbstract(Long idUsuario, Long page, Long size);
     List<SolicitudDto> getListaSolicitudesByUnidad(Long idUnidad);
     void guardarSolicitudAbstract(SolicitudDto solicitudDto);
-    SolicitudDto buscarSolicitudAbstract(Long id);
-
+    SolicitudDto buscarSolicitudByIdAbstract(Long id);
     SolicitudDto buscarSolicitudByFkUnidad(Long idUnidad);
     List<DetalleSolicitudDto> getListaDetalleSolicitudAbstract(Long idSolicitud);
     List<FinalizacionDto> listFinalizacionSolicitudAbs(Long idFunUni, Long page, Long size);
-
     List<DetalleSolicitudDto> findListDetalleSoliBySolicitudIdAbs(Long idSolicitud);
-
     void guardarCotizacionAbs(CotizacionDto cotizacionDto);
-
     void guardarAutorizacionAbs(AutorizacionDto autorizacionDto);
-
     AutorizacionDto buscarAutorizacionByIdSoliAbs(Long idSolicitud);
-
     AutorizacionDto buscarAutorizacionByIdAbs(Long idAutorizacion);
-
     void guardarFinalizacionAbs(FinalizacionDto finalizacionDto);
 }

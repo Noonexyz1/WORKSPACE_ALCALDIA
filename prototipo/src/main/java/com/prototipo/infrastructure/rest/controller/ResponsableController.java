@@ -43,6 +43,7 @@ public class ResponsableController {
     private SolicitudService solicitudService;
 
 
+
     @PostMapping(path = {"/aprobarSolicitud"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public void aprobarSolicitud(@RequestBody AprobacionSoliRequest aprobacionSoliRequest) {
@@ -59,11 +60,12 @@ public class ResponsableController {
         responsableService.rechazarSolicitudService(idAprobacion, idResponsable);
     }
 
+
+
     @PostMapping(path = {"/verSolicitudesPendientes"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudesPendientes(
-            @RequestBody PaginacionResponRequest pageParam
-    ) {
+            @RequestBody PaginacionResponRequest pageParam) {
 
         Long idResponsable = pageParam.getIdUsuarioUnidad();
         Long page = pageParam.getPage();
@@ -142,6 +144,49 @@ public class ResponsableController {
                 .nombreUnidad(x.getFkSolicitud().getFkUsuarioSolicitante().getFkUnidad().getNombre())
                 .build();
     }
+
+    @PostMapping(path = {"/verSolicitudesFinalizadas"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<FinalizacionResponse>> verSolicitudesFinalizadas(
+            @RequestBody PaginacionResponRequest pageParam) {
+
+        Long idResponsable = pageParam.getIdUsuarioUnidad();
+
+        Long page = pageParam.getPage();
+        Long size = pageParam.getSize();
+        String byColumName = pageParam.getByColumName();
+
+        List<Finalizacion> finalizacionList = aprobacionService
+                .listaDeSolicitudesFinalizadasService(
+                        idResponsable,
+                        page,
+                        size,
+                        byColumName
+                );
+
+        List<FinalizacionResponse> listSolicitud = finalizacionList
+                .stream()
+                .map(this::funcion)
+                .toList();
+        return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
+    }
+
+    private FinalizacionResponse funcion(Finalizacion finalizacion){
+        return FinalizacionResponse.builder()
+                .idSoliAutorizada(finalizacion.getFkAutorizacion().getFkSolicitud().getId())
+                .nombreCompleto(finalizacion.getFkAutorizacion().getFkSolicitud().getDescripcion())
+                .nombreUnidad(finalizacion.getFkAutorizacion().getFkSolicitud().getFkUsuarioSolicitante().getFkUnidad().getNombre())
+                .nombreCargo(finalizacion.getFkAutorizacion().getFkSolicitud().getFkUsuarioSolicitante().getFkCargo().getNombreCargo())
+                .descripcion(finalizacion.getFkAutorizacion().getFkSolicitud().getDescripcion())
+                .totalAutorizado(finalizacion.getFkAutorizacion().getTotalAutorizado())
+                .totalCotizadoBs(finalizacion.getFkAutorizacion().getTotalCotizadoBs())
+                .totalEjecutado(finalizacion.getTotalEjecutado())
+                .totalEjecutadoBs(finalizacion.getTotalEjecutadoBs())
+                .fecha(finalizacion.getFecha())
+                .build();
+    }
+
+
 
     /*ver detalle de una solicitud especifica - HECHO
     Una vez viendo el detalle, el responsable lo puede cotizar y registrarlo en la tabla Cotizacion,
@@ -308,46 +353,6 @@ public class ResponsableController {
         return new ResponseEntity<>(autorizacionResponse, HttpStatus.OK);
     }
 
-    @PostMapping(path = {"/verSolicitudesFinalizadas"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<FinalizacionResponse>> verSolicitudesFinalizadas(
-            @RequestBody PaginacionResponRequest pageParam) {
-
-        Long idResponsable = pageParam.getIdUsuarioUnidad();
-
-        Long page = pageParam.getPage();
-        Long size = pageParam.getSize();
-        String byColumName = pageParam.getByColumName();
-
-        List<Finalizacion> finalizacionList = aprobacionService
-                .listaDeSolicitudesFinalizadasService(
-                        idResponsable,
-                        page,
-                        size,
-                        byColumName
-                );
-
-        List<FinalizacionResponse> listSolicitud = finalizacionList
-                .stream()
-                .map(this::funcionSoliFinalizacion)
-                .toList();
-        return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
-    }
-
-    private FinalizacionResponse funcionSoliFinalizacion(Finalizacion finalizacion){
-        return FinalizacionResponse.builder()
-                .idSoliAutorizada(finalizacion.getFkAutorizacion().getFkSolicitud().getId())
-                .nombreCompleto(finalizacion.getFkAutorizacion().getFkSolicitud().getDescripcion())
-                .nombreUnidad(finalizacion.getFkAutorizacion().getFkSolicitud().getFkUsuarioSolicitante().getFkUnidad().getNombre())
-                .nombreCargo(finalizacion.getFkAutorizacion().getFkSolicitud().getFkUsuarioSolicitante().getFkCargo().getNombreCargo())
-                .descripcion(finalizacion.getFkAutorizacion().getFkSolicitud().getDescripcion())
-                .totalAutorizado(finalizacion.getFkAutorizacion().getTotalAutorizado())
-                .totalCotizadoBs(finalizacion.getFkAutorizacion().getTotalCotizadoBs())
-                .totalEjecutado(finalizacion.getTotalEjecutado())
-                .totalEjecutadoBs(finalizacion.getTotalEjecutadoBs())
-                .fecha(finalizacion.getFecha())
-                .build();
-    }
 
 
     //local:8081/responsable/exportNotaPedidoDPF/1/2/2
@@ -380,7 +385,6 @@ public class ResponsableController {
             }
         });
     }
-
 
     //localhost:8081/solicitante/exportSolicitudDPF
     @Async

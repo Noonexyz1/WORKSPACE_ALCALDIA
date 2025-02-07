@@ -13,5 +13,7 @@ public class Solicitud {
     private String fecha;
     private String descripcion;
     private Long autoriFlag;
+    private Boolean isActive;
+
     private UsuarioUnidad fkUsuarioSolicitante;
 }

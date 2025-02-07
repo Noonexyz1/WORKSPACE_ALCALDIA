@@ -4,7 +4,6 @@ import {catchError, map, of} from 'rxjs';
 import {PageRequestID} from '../../../models/PageRequestID';
 import {UsuarioResponse} from '../../../models/UsuarioResponse';
 import {SolicitudResponResponse} from '../../../models/SolicitudResponResponse';
-import {RowTablePendienteResponsableComponent} from './row-table-responsable-pendiente/row-table-responsable-pendiente.component';
 import {LocalStorageService} from '../../../services/local-storage/local-storage.service';
 import {FormsModule} from "@angular/forms";
 import {RowSolicitudExtendComponent} from "./row-table-responsable-pendiente/row-solicitud-extend/row-solicitud-extend.component";
@@ -12,12 +11,11 @@ import {PageProperties} from "../../../models/PageProperties";
 import {DetalleSolicitudExtendidoResponse} from "../../../models/DetalleSolicitudExtendidoResponse";
 import {DetalleSolicitudCotizadoResponse} from "../../../models/DetalleSolicitudCotizadoResponse";
 import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
-import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-lista-soli-responsable',
   standalone: true,
-  imports: [RowTablePendienteResponsableComponent, FormsModule, RowSolicitudExtendComponent],
+  imports: [FormsModule, RowSolicitudExtendComponent],
   templateUrl: './lista-soli-responsable-pendiente.component.html',
   styleUrl: './lista-soli-responsable-pendiente.component.css'
 })
@@ -26,7 +24,6 @@ export class ListaSoliPendienteResponsableComponent implements OnInit {
   private http: HttpClient;
   private localStorage: LocalStorageService;
   private rootNavigateService: RootNavigateService;
-  private router: Router;
 
   listSolicitud: SolicitudResponResponse[] = [];
 
@@ -43,13 +40,11 @@ export class ListaSoliPendienteResponsableComponent implements OnInit {
 
   constructor(http: HttpClient,
               rootNavigateService: RootNavigateService,
-              router: Router,
               localStorage: LocalStorageService) {
 
     this.http = http;
     this.localStorage = localStorage;
     this.rootNavigateService = rootNavigateService;
-    this.router = router;
   }
 
   ngOnInit(): void {
@@ -152,8 +147,7 @@ export class ListaSoliPendienteResponsableComponent implements OnInit {
     // Recibimos la peticion
     this.http.post<DetalleSolicitudCotizadoResponse[]>(url, soliCotizadoList).pipe(
       map(() => {
-        let toNavegate = this.rootNavigateService.valorParaNavegar('Responsable');
-        this.router.navigate([toNavegate]);
+        this.rootNavigateService.valorParaNavegar('Responsable');
       }),
       catchError(error => {
         console.error('Error en la petición:', error);

@@ -3,7 +3,6 @@ import {SolicitudResponResponse} from '../../../../models/SolicitudResponRespons
 import {HttpClient} from '@angular/common/http';
 import {UsuarioResponse} from '../../../../models/UsuarioResponse';
 import {catchError, map, of} from 'rxjs';
-import {Router} from '@angular/router';
 import {RootNavigateService} from '../../../../services/root-navigate/root-navigate.service';
 import {LocalStorageService} from '../../../../services/local-storage/local-storage.service';
 import {ReactiveFormsModule} from "@angular/forms";
@@ -32,7 +31,6 @@ export class RowTablePendienteResponsableComponent implements AfterViewInit{
   estadoModal = false;
 
   private http: HttpClient;
-  private router: Router;
   private rootNavigateService: RootNavigateService
   private localStorage: LocalStorageService;
 
@@ -49,12 +47,10 @@ export class RowTablePendienteResponsableComponent implements AfterViewInit{
   detalleSolicitudCotizado: DetalleSolicitudCotizadoResponse[] = [];
 
   constructor(http: HttpClient,
-              router: Router,
               rootNavigateService: RootNavigateService,
               localStorage: LocalStorageService) {
 
     this.http = http;
-    this.router = router;
     this.rootNavigateService = rootNavigateService;
     this.localStorage = localStorage;
   }
@@ -106,8 +102,7 @@ export class RowTablePendienteResponsableComponent implements AfterViewInit{
     // Recibimos la peticion
     this.http.post<DetalleSolicitudCotizadoResponse[]>(url, soliCotizadoList).pipe(
       map(() => {
-        let toNavegate = this.rootNavigateService.valorParaNavegar('Responsable');
-        this.router.navigate([toNavegate]);
+        this.rootNavigateService.valorParaNavegar('Responsable');
       }),
       catchError(error => {
         console.error('Error en la petición:', error);

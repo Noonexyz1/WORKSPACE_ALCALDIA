@@ -8,8 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEntity, Long> {
 
@@ -36,16 +34,6 @@ public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEnti
             SELECT *
             FROM usuario_unidad uu
             WHERE uu.fk_usuario_id = :idUsuario
-            LIMIT 1
-            """, nativeQuery = true)
-    UsuarioUnidadEntity encontrarUsuarioUnidadPorUsuarioId(
-            @Param("idUsuario") Long idUsuario);
-
-    @Query(value =
-            """
-            SELECT *
-            FROM usuario_unidad uu
-            WHERE uu.fk_usuario_id = :idUsuario
             AND uu.is_active = TRUE
             """, nativeQuery = true)
     UsuarioUnidadEntity findUsuariosUnidadPorUsuarioId(
@@ -58,4 +46,23 @@ public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEnti
             WHERE uu.is_active = TRUE
             """, nativeQuery = true)
     Page<UsuarioUnidadEntity> getListaUsuarioUnidad(Pageable pageable);
+
+    @Query(value =
+            """
+            SELECT *
+            FROM usuario_unidad uu
+            WHERE uu.fk_usuario_id = (
+                SELECT u.id
+                FROM usuario u
+                WHERE u.ci = :ci)
+            AND 0 = ALL (
+                    SELECT uu.is_active
+                    FROM usuario_unidad uu
+                    WHERE uu.fk_usuario_id = (
+                        SELECT u.id
+                        FROM usuario u
+                        WHERE u.ci = :ci))
+            LIMIT 1
+            """, nativeQuery = true)
+    UsuarioUnidadEntity findUserUnidadByCi(@Param("ci") String ci);
 }

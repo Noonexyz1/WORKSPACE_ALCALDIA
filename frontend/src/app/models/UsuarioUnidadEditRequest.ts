@@ -1,4 +1,7 @@
-export interface UsuarioNuevoRequest {
+export interface UsuarioUnidadEditRequest {
+  // Es como si las interfazes de atributos matcheen por si solos
+  // atributo a atributo, sin tener que mapear
+  id: number;
   nombres: string;
   materno: string;
   paterno: string;
@@ -8,7 +11,6 @@ export interface UsuarioNuevoRequest {
   idRol: number;
   idUni: number;
   idCargo: number;
-
   idResponsable: number;
   idDirector: number;
 }

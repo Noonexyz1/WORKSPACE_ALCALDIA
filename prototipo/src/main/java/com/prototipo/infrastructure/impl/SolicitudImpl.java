@@ -49,8 +49,13 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
-    public List<SolicitudDto> getListaSolicitudesAbstract(Long idUsuarioUnidad, Long page, Long size) {
-        List<SolicitudEntity> listSoli = solicitudRepository.findAllByIdUserUnidad(idUsuarioUnidad);
+    public List<SolicitudDto> getListaSolicitudesAbstract(
+            Long idUsuarioUnidad,
+            Long page,
+            Long size) {
+
+        List<SolicitudEntity> listSoli = solicitudRepository
+                .findAllByIdUserUnidad(idUsuarioUnidad);
         return listSoli.stream()
                 .map(x -> modelMapper.map(x, SolicitudDto.class))
                 .toList();
@@ -64,11 +69,12 @@ public class SolicitudImpl implements SolicitudAbstract {
 
     @Override
     public void guardarSolicitudAbstract(SolicitudDto solicitudDto) {
-
+        SolicitudEntity solicitudEntity = modelMapper.map(solicitudDto, SolicitudEntity.class);
+        solicitudRepository.save(solicitudEntity);
     }
 
     @Override
-    public SolicitudDto buscarSolicitudAbstract(Long id) {
+    public SolicitudDto buscarSolicitudByIdAbstract(Long id) {
         SolicitudEntity solicitudEntity = solicitudRepository
                 .findById(id).orElseThrow();
         return modelMapper.map(solicitudEntity, SolicitudDto.class);

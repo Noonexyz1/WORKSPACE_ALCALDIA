@@ -26,13 +26,11 @@ export class ListaDeUsuariosComponent {
   pageProperties: PageProperties = new PageProperties();
 
   listaConsecutiva: number[] = Array.from(
-    {
-      length: this.pageProperties.totalPages
-    },
+    {length: this.pageProperties.totalPages},
     (_, index) => index
   );
 
-  //Esto se ejecuta nates que el ngOnInit()
+  //Esto se ejecuta antes que el ngOnInit()
   constructor(router: Router,
               http: HttpClient,
               subjectUsuarioUnidadService: SubjectUsuarioUnidadService){
@@ -62,9 +60,7 @@ export class ListaDeUsuariosComponent {
         this.pageProperties.totalPages = response.totalPages;
         this.pageProperties.totalElements = response.totalElements;
         this.listaConsecutiva = Array.from(
-          {
-            length: this.pageProperties.totalPages
-          },
+          {length: this.pageProperties.totalPages},
           (_, index) => index
         );
       }),
@@ -100,6 +96,7 @@ export class ListaDeUsuariosComponent {
   }
 
   botonEditarUsuario(usuarioUnidad: UsuarioUnidadResponse): void {
+    usuarioUnidad.id = usuarioUnidad.idUser;
     this.subjectUsuarioUnidadService.publicarDatos(usuarioUnidad);
     this.router.navigate(['/administrador/editarUsuario']);
   }

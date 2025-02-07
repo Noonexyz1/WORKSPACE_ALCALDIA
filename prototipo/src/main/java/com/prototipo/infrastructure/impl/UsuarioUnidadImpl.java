@@ -2,14 +2,11 @@ package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.UsuarioUnidadDto;
 import com.prototipo.application.port.UsuarioUnidadAbstract;
-import com.prototipo.infrastructure.persistence.db.entity.UsuarioEntity;
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioUnidadEntity;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioUnidadRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
-import java.util.List;
 
 @Component
 public class UsuarioUnidadImpl implements UsuarioUnidadAbstract {
@@ -32,7 +29,7 @@ public class UsuarioUnidadImpl implements UsuarioUnidadAbstract {
     public UsuarioUnidadDto encontrarUsuarioUnidadByUsuarioId(Long idUsuario) {
         //Hay un usuario unidad para el usuario previo registrado? este metodo hace esto.
         UsuarioUnidadEntity usuarioUnidad = usuarioUnidadRepository
-                .encontrarUsuarioUnidadPorUsuarioId(idUsuario);
+                .findUsuariosUnidadPorUsuarioId(idUsuario);
         return (usuarioUnidad != null)?
                 mapper.map(usuarioUnidad, UsuarioUnidadDto.class):
                 null;
@@ -41,8 +38,16 @@ public class UsuarioUnidadImpl implements UsuarioUnidadAbstract {
     @Override
     public UsuarioUnidadDto encontarUsuarioUnidadId(Long idUsuarioUnidad) {
         UsuarioUnidadEntity usuarioUnidad = usuarioUnidadRepository
-                .findById(idUsuarioUnidad)
-                .orElse(null);
+                .findById(idUsuarioUnidad).orElse(null);
+        return (usuarioUnidad != null)?
+                mapper.map(usuarioUnidad, UsuarioUnidadDto.class):
+                null;
+    }
+
+    @Override
+    public UsuarioUnidadDto encontrarUsuarioUnidadByCi(String ci) {
+        UsuarioUnidadEntity usuarioUnidad = usuarioUnidadRepository
+                .findUserUnidadByCi(ci);
         return (usuarioUnidad != null)?
                 mapper.map(usuarioUnidad, UsuarioUnidadDto.class):
                 null;

@@ -8,7 +8,6 @@ import com.prototipo.infrastructure.rest.report.SolicitudReport;
 import com.prototipo.infrastructure.rest.report.TablaSolicitudReport;
 import com.prototipo.infrastructure.rest.request.PaginacionSoliRequest;
 import com.prototipo.infrastructure.rest.request.SolicitudRequest;
-import com.prototipo.infrastructure.rest.request.SolicitudRequestPDF;
 import com.prototipo.infrastructure.rest.response.SolicitudSoliciResponse;
 import com.prototipo.infrastructure.service.ComunicacionInternaServiceReport;
 import com.prototipo.infrastructure.service.InformeServiceReport;
@@ -55,34 +54,6 @@ public class SolicitanteController {
 
     @PostMapping(path = {"/solicitarFotocopiar"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void solicitarFotocopiar(@RequestBody SolicitudRequest solicitudRequest) {
-        //Truco de los Ids
-        /*Unidad unidad = Unidad.builder()
-                .id(solicitudRequest.getIdUnidad())
-                .build();
-        Usuario usuario = Usuario.builder()
-                .id(solicitudRequest.getIdSolicitante())
-                .build();
-
-        List<ArchivoPdf> archivoPdfs = solicitudRequest.getArchivosPdf()
-                .stream()
-                .map(x -> modelMapper.map(x, ArchivoPdf.class))
-                .toList();
-
-        //Debo usar los mappeadores de mi Infraestrucutura
-        Solicitud solicitud = Solicitud.builder()
-                .nroDeCopias(solicitudRequest.getNroDeCopias())
-                .tipoDeDocumento(solicitudRequest.getTipoDeDocumento())
-                .nroDePaginas(solicitudRequest.getNroDePaginas())
-                .fkUnidad(unidad)
-                .fkSolicitante(usuario)
-                .build();
-
-        solicitudService.solicitarFotocopiarService(solicitud, archivoPdfs);*/
-    }
-
-    @PostMapping(path = {"/v2/solicitarFotocopiar"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
     public void solicitarFotocopiarV2(@RequestBody SolicitudRequest solicitudRequest) {
         //Truco de los Ids
         UsuarioUnidad usuarioUnidad = UsuarioUnidad.builder()
@@ -102,34 +73,10 @@ public class SolicitanteController {
                 .descripcion(solicitudRequest.getDescripcion())
                 .fkUsuarioSolicitante(usuarioUnidad)
                 .autoriFlag(0L)
+                .isActive(true)
                 .build();
 
         solicitudService.solicitarFotocopiarService(solicitud, listDetalleSolicitud);
-    }
-
-    @PostMapping(path = {"/solicitarFotocopiarPDF"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void solicitarFotocopiar(@RequestBody SolicitudRequestPDF solicitudRequest) {
-        //Truco de los Ids
-        /*Usuario usuario = Usuario.builder()
-                .id(solicitudRequest.getIdSolicitante())
-                .build();
-        Unidad unidad = Unidad.builder()
-                .id(solicitudRequest.getIdUnidad())
-                .build();
-
-        Solicitud solicitud = Solicitud.builder()
-                .fkSolicitante(usuario)
-                .fkUnidad(unidad)
-                .cite(solicitudRequest.getCite())
-                .build();
-
-        List<DetalleSolicitud> list = solicitudRequest.getListSolicitud()
-                .stream()
-                .map(x -> modelMapper.map(x, DetalleSolicitud.class))
-                .toList();
-
-        solicitudService.registrarFotocopiarService(solicitud, list);*/
     }
 
     @PostMapping(path = {"/verHistorialSolicitudes"},
@@ -160,6 +107,31 @@ public class SolicitanteController {
         solicitudSoliciResponse.setCi(x.getFkUsuarioSolicitante().getFkUsuario().getCi());
         solicitudSoliciResponse.setCargo(x.getFkUsuarioSolicitante().getFkCargo().getNombreCargo());
         return solicitudSoliciResponse;
+    }
+
+    @GetMapping("/eliminarSolicitudById/{idSolicitud}")
+    public void eliminarSolicitudById(@PathVariable Long idSolicitud){
+        solicitudService.eliminarSolicitudById(idSolicitud);
+    }
+
+
+
+    @GetMapping("/listarTamano")
+    public ResponseEntity<List<String>> listarTamano(){
+        List<String> listTam = solicitudService.listarTamano();
+        return new ResponseEntity<>(listTam, HttpStatus.OK);
+    }
+
+    @GetMapping("/listarAnversoReverso")
+    public ResponseEntity<List<String>> listarAnversoReverso(){
+        List<String> listAnRev = solicitudService.listarAnversoReverso();
+        return new ResponseEntity<>(listAnRev, HttpStatus.OK);
+    }
+
+    @GetMapping("/listarColor")
+    public ResponseEntity<List<String>> listarColor(){
+        List<String> listColor = solicitudService.listarColor();
+        return new ResponseEntity<>(listColor, HttpStatus.OK);
     }
 
 
