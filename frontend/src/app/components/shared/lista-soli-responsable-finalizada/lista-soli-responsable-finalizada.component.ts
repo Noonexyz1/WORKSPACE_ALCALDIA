@@ -7,6 +7,7 @@ import { LocalStorageService } from '../../../services/local-storage/local-stora
 import {FinalizacionResponse} from "../../../models/FinalizacionResponse";
 import {PageProperties} from "../../../models/PageProperties";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {UrlsProperties} from "../../../enums/UrlsProperties";
 
 @Component({
   selector: 'app-lista-soli-responsable',
@@ -15,7 +16,7 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
   templateUrl: './lista-soli-responsable-finalizada.component.html',
   styleUrl: './lista-soli-responsable-finalizada.component.css'
 })
-export class ListaSoliFinalizadaResponsableComponent implements OnInit{
+export class ListaSoliFinalizadaResponsableComponent{
 
   private http: HttpClient;
   private localStorage: LocalStorageService;
@@ -29,17 +30,11 @@ export class ListaSoliFinalizadaResponsableComponent implements OnInit{
 
     this.http = http;
     this.localStorage = localStorage;
-  }
-
-  ngOnInit(): void {
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
   }
 
   listarSolicitudes(): void {
-    const url = 'http://localhost:8081/responsable/verSolicitudesFinalizadas';
-    this.usuario = this.localStorage.getItem('userData');
-
     const body: PageRequestID = {
       idUsuarioUnidad: this.usuario.id,
       page: 0,
@@ -47,9 +42,11 @@ export class ListaSoliFinalizadaResponsableComponent implements OnInit{
       byColumName: ""
     }
 
-    this.http.post<FinalizacionResponse[]>(url, body).pipe(
+    this.http.post<FinalizacionResponse[]>(
+      UrlsProperties.PATH_LIST_SOLIFINALI,
+      body
+    ).pipe(
       map((response: FinalizacionResponse[]) => {
-        console.log(response);
         this.listSolicitudFinal = response;
       }),
       catchError(error => {
@@ -61,11 +58,40 @@ export class ListaSoliFinalizadaResponsableComponent implements OnInit{
     .subscribe();
   }
 
+  botonDescargoSolicitudPDF(solicitudFinalizada: number): void {
+    this.http.get(
+      UrlsProperties.PATH_REPORTE_PDF + solicitudFinalizada + '/' + this.usuario.id + '/2',
+      { responseType: 'blob' }
+    ).pipe( // Cambiar el tipo de respuesta
+      map((response: Blob) => {
+        this.descargarPDF('reportePDF.pdf', response);
+      }),
+      catchError(error => {
+        this.errorDescargaPDF('reportePDF.pdf', error);
+        return of(null);
+      })
+    ).subscribe();
+  }
+
+  descargarPDF(nombrePdf: string, response: Blob): void {
+    const blob = new Blob([response], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = nombrePdf;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  errorDescargaPDF(nombrePdf: string, error: any): void {
+    console.error('Error en la petición:', error);
+    alert('Hubo un ERROR al generar ' + nombrePdf);
+  }
+
+
   pageProperties: PageProperties = new PageProperties();
   listaConsecutiva: number[] = Array.from(
-    {
-      length: this.pageProperties.totalPages
-    },
+    { length: this.pageProperties.totalPages },
     (_, index) => index
   );
 
@@ -88,30 +114,6 @@ export class ListaSoliFinalizadaResponsableComponent implements OnInit{
       this.pageProperties.currentPage++;
       this.listarSolicitudes();
     }
-  }
-
-  botonDescargoSolicitud(solicitudFinalizada: number): void {
-    const usuario: UsuarioResponse = this.localStorage.getItem('userData');
-    //"/exportOrdenParaFotocopiaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}"
-    const url = 'http://localhost:8081/responsable/exportReporteDPF/' + solicitudFinalizada + '/' + usuario.id + '/2';
-
-    // Recibimos la peticion
-    this.http.get(url, { responseType: 'blob' }).pipe( // Cambiar el tipo de respuesta
-      map((response: Blob) => {
-        const blob = new Blob([response], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'reportePDF.pdf';
-        a.click();
-        window.URL.revokeObjectURL(url);
-      }),
-      catchError(error => {
-        console.error('Error en la petición:', error);
-        alert('Hubo un error al generar el descargo o reporte PDF');
-        return of(null);
-      })
-    ).subscribe();
   }
 
 }

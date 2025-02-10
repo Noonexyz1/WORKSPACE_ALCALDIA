@@ -11,6 +11,7 @@ import {PageProperties} from "../../../models/PageProperties";
 import {DetalleSolicitudExtendidoResponse} from "../../../models/DetalleSolicitudExtendidoResponse";
 import {DetalleSolicitudCotizadoResponse} from "../../../models/DetalleSolicitudCotizadoResponse";
 import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
+import {UrlsProperties} from "../../../enums/UrlsProperties";
 
 @Component({
   selector: 'app-lista-soli-responsable',
@@ -19,7 +20,7 @@ import {RootNavigateService} from "../../../services/root-navigate/root-navigate
   templateUrl: './lista-soli-responsable-pendiente.component.html',
   styleUrl: './lista-soli-responsable-pendiente.component.css'
 })
-export class ListaSoliPendienteResponsableComponent implements OnInit {
+export class ListaSoliPendienteResponsableComponent{
 
   private http: HttpClient;
   private localStorage: LocalStorageService;
@@ -29,12 +30,9 @@ export class ListaSoliPendienteResponsableComponent implements OnInit {
 
   pageProperties: PageProperties = new PageProperties();
   listaConsecutiva: number[] = Array.from(
-    {
-      length: this.pageProperties.totalPages
-    },
+    { length: this.pageProperties.totalPages },
     (_, index) => index
   );
-
 
   usuario: UsuarioResponse = new UsuarioResponse();
 
@@ -45,17 +43,11 @@ export class ListaSoliPendienteResponsableComponent implements OnInit {
     this.http = http;
     this.localStorage = localStorage;
     this.rootNavigateService = rootNavigateService;
-  }
-
-  ngOnInit(): void {
+    this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
   }
 
   listarSolicitudes(): void {
-    const url = 'http://localhost:8081/responsable/verSolicitudesPendientes';
-
-    this.usuario = this.localStorage.getItem('userData');
-
     const body: PageRequestID = {
       idUsuarioUnidad: this.usuario.id,
       page: 0,
@@ -63,7 +55,10 @@ export class ListaSoliPendienteResponsableComponent implements OnInit {
       byColumName: ""
     }
 
-    this.http.post<SolicitudResponResponse[]>(url, body).pipe(
+    this.http.post<SolicitudResponResponse[]>(
+      UrlsProperties.PATH_LIST_SOLIPENDIENTE,
+      body
+    ).pipe(
       map((response: SolicitudResponResponse[]) => {
         this.listSolicitud = response;
       }),
@@ -73,6 +68,88 @@ export class ListaSoliPendienteResponsableComponent implements OnInit {
         return of(null); // Retornar un observable vacío en caso de error
       })
     ).subscribe();
+  }
+
+  estadoModal = false;
+  isModalVisible: boolean = false;
+  detSoliExtendidoResponse: DetalleSolicitudExtendidoResponse = {
+    idSolicitud: 0,
+    cite: '',
+    fecha: '',
+    descripcion: '',
+    detalleSolicitudResponses: [],
+  };
+
+  botonTraerDatosModal(idSolicitud: number): void {
+    this.estadoModal = true;
+    this.isModalVisible = !this.isModalVisible;
+
+    this.http.get<DetalleSolicitudExtendidoResponse>(
+      UrlsProperties.PATH_DETALLE_SOLI + idSolicitud
+    ).pipe(
+      map((response: DetalleSolicitudExtendidoResponse) => {
+        this.detSoliExtendidoResponse = response;
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al listar los datos para el modal');
+        return of(null); // Retornar un observable vacío en caso de error
+      })
+    ).subscribe();
+  }
+
+  toggleModal(): void {
+    this.isModalVisible = !this.isModalVisible;
+  }
+
+  detalleSolicitudCotizado: DetalleSolicitudCotizadoResponse[] = [];
+  onCotizacionRecibida(cotizacion: DetalleSolicitudCotizadoResponse): void {
+    cotizacion.idUsuarioUnidad = this.usuario.id;
+    this.detalleSolicitudCotizado.push(cotizacion);
+  }
+
+  botonAutorizar(): void {
+    // Extraer los valores del formulario
+    const soliCotizadoList: DetalleSolicitudCotizadoResponse[] = this.detalleSolicitudCotizado;
+
+    // Aqui hacer la peticion POST a mi servidor deberia tener la lista
+    // Recibimos la peticion
+    this.http.post<DetalleSolicitudCotizadoResponse[]>(
+      UrlsProperties.PATH_COTIZAR_SOLI,
+      soliCotizadoList
+    ).pipe(
+      map(() => {
+        this.rootNavigateService.valorParaNavegar('Responsable');
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al enviar las solicitudes cotizadas');
+        return of(null); // Retornar un observable vacío en caso de error
+      })
+    ).subscribe();
+
+  }
+
+  botonRechazar(): void {
+    // Extraer los valores del formulario
+    const soliCotizadoList: DetalleSolicitudCotizadoResponse[] = this.detalleSolicitudCotizado;
+
+    // Aqui hacer la peticion POST a mi servidor deberia tener la lista
+    // Recibimos la peticion
+    this.http.post<DetalleSolicitudCotizadoResponse[]>(
+      UrlsProperties.PATH_COTIZAR_SOLI,
+      soliCotizadoList
+    ).pipe(
+      map(() => {
+        this.rootNavigateService.valorParaNavegar('Responsable');
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al enviar las solicitudes cotizadas');
+        return of(null); // Retornar un observable vacío en caso de error
+      })
+    ).subscribe();
+
   }
 
   goToPage(page: number): void {
@@ -94,68 +171,6 @@ export class ListaSoliPendienteResponsableComponent implements OnInit {
       this.pageProperties.currentPage++;
       this.listarSolicitudes();
     }
-  }
-
-  estadoModal = false;
-  isModalVisible: boolean = false;
-  detSoliExtendidoResponse: DetalleSolicitudExtendidoResponse = {
-    idSolicitud: 0,
-    cite: '',
-    fecha: '',
-    descripcion: '',
-    detalleSolicitudResponses: [],
-  };
-
-  botonTraerDatosModal(idSolicitud: number): void {
-    this.estadoModal = true;
-    this.isModalVisible = !this.isModalVisible;
-    //Traer el objeto de SolicitudExtendido mediante el ID de solicitud
-    const url = 'http://localhost:8081/responsable/verDetalleDeSolicitud/' + idSolicitud;
-
-    this.http.get<DetalleSolicitudExtendidoResponse>(url).pipe(
-      map((response: DetalleSolicitudExtendidoResponse) => {
-        this.detSoliExtendidoResponse = response;
-      }),
-      catchError(error => {
-        console.error('Error en la petición:', error);
-        alert('Hubo un error al listar los datos para el modal');
-        return of(null); // Retornar un observable vacío en caso de error
-      })
-    ).subscribe();
-  }
-
-  toggleModal(): void {
-    this.isModalVisible = !this.isModalVisible;
-  }
-
-  detalleSolicitudCotizado: DetalleSolicitudCotizadoResponse[] = [];
-
-  onCotizacionRecibida(cotizacion: DetalleSolicitudCotizadoResponse): void {
-    console.log('Cotización recibida:', cotizacion);
-    this.usuario = this.localStorage.getItem('userData');
-    cotizacion.idUsuarioUnidad = this.usuario.id;
-    this.detalleSolicitudCotizado.push(cotizacion);
-    console.log('Lista actualizada:', this.detalleSolicitudCotizado);
-  }
-
-  botonRegistrar(): void {
-    const url = 'http://localhost:8081/responsable/cotizarAutorizarSolicitud'; // URL de tu API
-    // Extraer los valores del formulario
-    const soliCotizadoList: DetalleSolicitudCotizadoResponse[] = this.detalleSolicitudCotizado;
-
-    //Aqui hacer la peticion POST a mi servidor deberia tener la lista
-    // Recibimos la peticion
-    this.http.post<DetalleSolicitudCotizadoResponse[]>(url, soliCotizadoList).pipe(
-      map(() => {
-        this.rootNavigateService.valorParaNavegar('Responsable');
-      }),
-      catchError(error => {
-        console.error('Error en la petición:', error);
-        alert('Hubo un error al enviar las solicitudes cotizadas');
-        return of(null); // Retornar un observable vacío en caso de error
-      })
-    ).subscribe();
-
   }
 
 }

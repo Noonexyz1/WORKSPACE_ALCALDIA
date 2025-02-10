@@ -79,7 +79,7 @@ public class AdministradorController {
                 .idUni((userUni.getFkUnidad() != null)? userUni.getFkUnidad().getId(): null)
                 .idCargo(userUni.getFkCargo().getId())
                 .idResponsable(userUni.getFkResponsable() != null ? userUni.getFkResponsable().getId(): null)
-                .idDirector(userUni.getFkDirector().getId())
+                .idDirector(userUni.getFkDirector() != null ? userUni.getFkDirector().getId(): null)
                 .build();
     }
 

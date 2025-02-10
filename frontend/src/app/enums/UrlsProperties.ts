@@ -19,5 +19,12 @@ export enum UrlsProperties {
 
   PATH_LIST_TAM = 'http://localhost:8081/solicitante/listarTamano',
   PATH_LIST_ANVER = 'http://localhost:8081/solicitante/listarAnversoReverso',
-  PATH_LIST_COLOR = 'http://localhost:8081/solicitante/listarColor'
+  PATH_LIST_COLOR = 'http://localhost:8081/solicitante/listarColor',
+
+  PATH_LIST_SOLIFINALI = 'http://localhost:8081/responsable/verSolicitudesFinalizadas',
+  PATH_REPORTE_PDF = 'http://localhost:8081/responsable/exportReporteDPF/',
+  PATH_LIST_SOLIPENDIENTE = 'http://localhost:8081/responsable/verSolicitudesPendientes',
+  PATH_DETALLE_SOLI = 'http://localhost:8081/responsable/verDetalleDeSolicitud/',
+  PATH_COTIZAR_SOLI = 'http://localhost:8081/responsable/cotizarAutorizarSolicitud',
+  PATH_AUTORI_SOLI = 'http://localhost:8081/responsable/verAutorizacionSolicitud/'
 }

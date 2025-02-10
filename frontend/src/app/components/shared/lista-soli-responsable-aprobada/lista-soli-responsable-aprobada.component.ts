@@ -10,6 +10,7 @@ import {AutorizacionResponse} from "../../../models/AutorizacionResponse";
 import {FinalizacionRequest} from "../../../models/FinalizacionRequest";
 import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
 import {PageProperties} from "../../../models/PageProperties";
+import {UrlsProperties} from "../../../enums/UrlsProperties";
 
 @Component({
   selector: 'app-lista-soli-responsable',
@@ -52,11 +53,13 @@ export class ListaSoliAprobadaResponsableComponent implements OnInit{
   autorizacion: AutorizacionResponse | null = null;
 
   botonTraerDatosModal(idSolicitud: number): void {
+    this.estadoModal = true;
     this.isModalVisible = !this.isModalVisible;
-    const url = 'http://localhost:8081/responsable/verAutorizacionSolicitud/' + idSolicitud;
 
     // Recibimos la peticion
-    this.http.get<AutorizacionResponse>(url).pipe(
+    this.http.get<AutorizacionResponse>(
+      UrlsProperties.PATH_AUTORI_SOLI + idSolicitud
+    ).pipe(
       map((autorizacion: AutorizacionResponse) => {
         this.autorizacion = autorizacion;
       }),

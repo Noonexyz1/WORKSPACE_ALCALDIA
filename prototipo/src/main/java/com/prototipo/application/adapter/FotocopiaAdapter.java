@@ -68,12 +68,27 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     private boolean hayCambioUserUni(UsuarioUnidadDto userUniNew, UsuarioUnidadDto userRespon){
+        if (userRespon.getFkResponsable() == null &&
+                userRespon.getFkDirector() == null) {
+            return userRespon.getFkUsuario().getId() == userUniNew.getFkUsuario().getId() &&
+                    userRespon.getFkUnidad().getId() == userUniNew.getFkUnidad().getId() &&
+                    userRespon.getFkRol().getId() == userUniNew.getFkRol().getId() &&
+                    userRespon.getFkCargo().getId() == userUniNew.getFkCargo().getId();
+        }
+        if (userRespon.getFkResponsable() == null) {
+            return userRespon.getFkUsuario().getId() == userUniNew.getFkUsuario().getId() &&
+                    userRespon.getFkUnidad().getId() == userUniNew.getFkUnidad().getId() &&
+                    userRespon.getFkRol().getId() == userUniNew.getFkRol().getId() &&
+                    userRespon.getFkCargo().getId() == userUniNew.getFkCargo().getId() &&
+                    userRespon.getFkDirector().getId() == userUniNew.getFkDirector().getId();
+        }
+
         return userRespon.getFkUsuario().getId() == userUniNew.getFkUsuario().getId() &&
                 userRespon.getFkUnidad().getId() == userUniNew.getFkUnidad().getId() &&
                 userRespon.getFkRol().getId() == userUniNew.getFkRol().getId() &&
                 userRespon.getFkCargo().getId() == userUniNew.getFkCargo().getId() &&
-                userRespon.getFkResponsable().getId() == userUniNew.getFkResponsable().getId() &&
-                userRespon.getFkDirector().getId() == userUniNew.getFkDirector().getId();
+                userRespon.getFkDirector().getId() == userUniNew.getFkDirector().getId() &&
+                userRespon.getFkResponsable().getId() == userUniNew.getFkResponsable().getId();
 
     }
 
