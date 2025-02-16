@@ -39,12 +39,12 @@ public class ResponsableAdapter implements ResponsableService {
     }
 
     @Override
-    public void aprobarSolicitudService(Long idAprobacion, Long idResponsable) {
+    public void aprobarSolicitudService(Long idSolicitud, Long idResponsable) {
         //Esto me debe traer las informacion de la tabla de Aprobacion para que el
         //Responsable cambie el estado de la solicitud
         UsuarioDto usuarioDto = UsuarioDto.builder().id(idResponsable).build();
 
-        AprobacionDto aprobacionDto = aprobacionAbstract.findAprovacionByIdSoliAbstract(idAprobacion);
+        AprobacionDto aprobacionDto = aprobacionAbstract.findAprovacionByIdSoliAbstract(idSolicitud);
         aprobacionDto.setEstadoCambio(true);
         aprobacionDto = aprobacionAbstract.guardarAprobacionAbstract(aprobacionDto);
         aprobacionDto.setId(null);
@@ -67,17 +67,11 @@ public class ResponsableAdapter implements ResponsableService {
     }
 
     @Override
-    public void rechazarSolicitudService(Long idAprobacion, Long idResponsable) {
-        UsuarioDto usuarioDto = UsuarioDto.builder().id(idResponsable).build();
-
-        AprobacionDto aprobacionDto = aprobacionAbstract.findAprovacionByIdSoliAbstract(idAprobacion);
-        aprobacionDto.setEstadoCambio(true);
-        aprobacionDto = aprobacionAbstract.guardarAprobacionAbstract(aprobacionDto);
-        aprobacionDto.setId(null);
-        aprobacionDto.setEstadoByResponsable(EstadoByResponsableEnum.RECHAZADA.getNombre());
-        aprobacionDto.setFkResponsable(usuarioDto);
-
-        aprobacionAbstract.guardarAprobacionAbstract(aprobacionDto);
+    public void rechazarSolicitudService(Long idSolicitud, Long idResponsable) {
+        SolicitudDto solicitudDto = solicitudAbstract
+                .buscarSolicitudByIdAbstract(idSolicitud);
+        solicitudDto.setIsActive(false);
+        solicitudAbstract.guardarSolicitudAbstract(solicitudDto);
     }
 
     @Override
@@ -102,6 +96,6 @@ public class ResponsableAdapter implements ResponsableService {
     public void guardarCotizacion(Cotizacion x) {
         CotizacionDto cotizacionDto = mapperApplication
                 .mapearAbstract(x, CotizacionDto.class);
-        solicitudAbstract.guardarCotizacionAbs(cotizacionDto);
+        //solicitudAbstract.guardarCotizacionAbs(cotizacionDto);
     }
 }

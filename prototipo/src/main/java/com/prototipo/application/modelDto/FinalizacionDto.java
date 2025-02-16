@@ -10,10 +10,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FinalizacionDto {
-
     private Long id;
     private String fecha;
-    private Long totalEjecutado;
-    private BigDecimal totalEjecutadoBs;
     private AutorizacionDto fkAutorizacion;
 }

@@ -65,7 +65,15 @@ export class LoginComponent {
       map((response: UsuarioResponse) => {
         //Guardamos en el localStorage
         this.localStorage.setItem('userData', response);
-        this.rootNavigateService.valorParaNavegar(response.nombreRol);
+        if (response.nombreRol == "Administrador") {
+          this.rootNavigateService.valorParaNavegar(response.nombreRol);
+        }
+        if (response.nombreRol == "Responsable") {
+          this.rootNavigateService.valorParaNavegar(response.nombreRol + "Pendientes");
+        }
+        if (response.nombreRol == "Solicitante") {
+          this.rootNavigateService.valorParaNavegar(response.nombreRol + "Pendientes");
+        }
       }),
       catchError(error => {
         alert('Hubo un error al iniciar sesión');

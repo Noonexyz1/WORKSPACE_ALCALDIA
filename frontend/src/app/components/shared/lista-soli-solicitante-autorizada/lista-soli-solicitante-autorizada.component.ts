@@ -9,13 +9,13 @@ import {PageProperties} from "../../../models/PageProperties";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 
 @Component({
-  selector: 'app-lista-soli-solicitante-aprobada',
+  selector: 'app-lista-soli-solicitante-autorizada',
   standalone: true,
   imports: [],
-  templateUrl: './lista-soli-solicitante-aprobada.component.html',
-  styleUrl: './lista-soli-solicitante-aprobada.component.css'
+  templateUrl: './lista-soli-solicitante-autorizada.component.html',
+  styleUrl: './lista-soli-solicitante-autorizada.component.css'
 })
-export class ListaSoliSolicitanteAprobadaComponent {
+export class ListaSoliSolicitanteAutorizadaComponent {
 
   private http: HttpClient;
   private localStorage: LocalStorageService;
@@ -42,7 +42,7 @@ export class ListaSoliSolicitanteAprobadaComponent {
     }
 
     this.http.post<SolicitudResponse[]>(
-      UrlsProperties.PATH_LIST_SOLIC,
+      UrlsProperties.PATH_AUTORIZ_SOLI,
       body
     ).pipe(
       map((response: SolicitudResponse[]) => {

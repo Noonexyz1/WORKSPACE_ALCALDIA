@@ -106,19 +106,4 @@ public class UsuarioImpl implements UsuarioAbastract {
                 .map(x -> modelMapper.map(x, UsuarioDto.class))
                 .toList();
     }
-
-    @Override
-    public UsuarioDto buscarUsuarioPorEmail(String email) {
-        UsuarioEntity usuarioResp = usuarioRepository.encontrarUsuarioPorEmail(email);
-        return (usuarioResp != null)? modelMapper.map(usuarioResp, UsuarioDto.class): null;
-    }
-
-    @Override
-    public UsuarioDto buscarUsuarioPorCi(String userCi) {
-        var usuarioEntity = usuarioRepository
-                .encontrarUsuarioPorCi(userCi);
-        return usuarioEntity != null ?
-                modelMapper.map(usuarioEntity, UsuarioDto.class):
-                null;
-    }
 }

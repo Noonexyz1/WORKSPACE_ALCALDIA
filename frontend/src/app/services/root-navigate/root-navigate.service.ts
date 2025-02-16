@@ -11,9 +11,10 @@ export class RootNavigateService {
   constructor(private router: Router) {
     // Agregar elementos
     this.mapa.set('Administrador', '/administrador/listaDeUsuarios');
-    this.mapa.set('Operador', '/operador/listaDeSolicitudesPendientes');
-    this.mapa.set('Solicitante', '/solicitante/misSolicitudesPendientes');
-    this.mapa.set('Responsable', '/responsable/solicitudesPendienteUnidad');
+    this.mapa.set('SolicitantePendientes', '/solicitante/solicitudesPendientes');
+    this.mapa.set('ResponsablePendientes', '/responsable/solicitudesPendientes');
+    this.mapa.set('ResponsableAutorizadas', '/responsable/solicitudesAutorizadas');
+    this.mapa.set('ResponsableFinalizadas', '/responsable/solicitudesFinalizadas');
     this.mapa.set('Login', '/login');
   }
 

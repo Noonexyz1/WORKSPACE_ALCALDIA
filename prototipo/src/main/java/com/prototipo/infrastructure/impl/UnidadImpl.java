@@ -28,7 +28,6 @@ public class UnidadImpl implements UnidadAbstract {
 
     @Override
     public UnidadDto findUnidadPorIdAbstract(Long idUnidad) {
-        //TODO
         UnidadEntity unidadEntity = unidadRepository.findById(idUnidad).orElseThrow();
         UnidadDto unidadDto = UnidadDto.builder()
                 .id(unidadEntity.getId())
@@ -36,14 +35,5 @@ public class UnidadImpl implements UnidadAbstract {
                 .direccion(unidadEntity.getDireccion())
                 .build();
         return unidadDto;
-    }
-
-    @Override
-    public List<UnidadDto> listaDeUnidadesByDireccionAbstract(String direccion) {
-        /*List<UnidadEntity> listUnidades = unidadRepository.findByDireccion(direccion);
-        return listUnidades.stream()
-                .map(x -> modelMapper.map(x, UnidadDto.class))
-                .toList();*/
-        return null;
     }
 }

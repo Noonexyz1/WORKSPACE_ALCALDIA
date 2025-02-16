@@ -10,6 +10,7 @@ import lombok.*;
 public class SolicitudResponResponse {
 
     private Long idAutorizacion;
+    private Long idFinalizacion;
 
     private Long idSolicitud;
     private String cite;

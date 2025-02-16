@@ -31,12 +31,6 @@ public class OperacionImpl implements OperacionAbstract {
     }
 
     @Override
-    public List<OperacionDto> listaDeOperaciones() {
-
-        return null;
-    }
-
-    @Override
     public List<OperacionDto> findOperacionByIdOperadorPendientesAbstract(Long idOperador, Long page, Long size) {
 
         return null;

@@ -20,52 +20,44 @@ public class SolicitudServiceReport {
     @Autowired
     private ResourceLoader resourceLoader;
 
-    public byte[] exportToPdf(SolicitudReport parametros,
-                              List<TablaSolicitudReport> listDetalleSolicitudResp)
-            throws JRException, IOException {
+    public byte[] exportToPdf(
+            SolicitudReport solicitudReport,
+            List<TablaSolicitudReport> listDetalleFotocopiaResp)
+            throws JRException{
 
-        JasperPrint jasperPrint = getReport(parametros, listDetalleSolicitudResp);
+        JasperPrint jasperPrint = getReport(solicitudReport, listDetalleFotocopiaResp);
         return JasperExportManager.exportReportToPdf(jasperPrint);
     }
 
-    private JasperPrint getReport(SolicitudReport parametros, List<TablaSolicitudReport> listDetalleSolicitudResp)
-            throws IOException, JRException {
+    private JasperPrint getReport(
+            SolicitudReport parametros,
+            List<TablaSolicitudReport> listDetalleSolicitudResp)
+            throws JRException {
 
-        Map<String, Object> params = new HashMap<>();
+        // Asigna los campos de SolicitudReport a los parámetros del reporte plantilla
+        Map<String, Object> parameter = new HashMap<>();
+        parameter.put("funcionarioTo", parametros.getFuncionarioTo());
+        parameter.put("funcionarioFrom", parametros.getFuncionarioFrom());
+        parameter.put("funcionarioToCargo", parametros.getFuncionarioToCargo());
+        parameter.put("funcionarioFromCargo", parametros.getFuncionarioFromCargo());
+        parameter.put("cite", parametros.getCite());
+        parameter.put("fecha", parametros.getFecha());
+        parameter.put("nombreOrganizacion", parametros.getNombreOrganizacion());
+        parameter.put("imageDir", "classpath:/static/images/");
+        parameter.put("ds", new JRBeanCollectionDataSource(listDetalleSolicitudResp));
 
-        //Ruta total
-        String filePath = "src" + File.separator +
+        //Ruta total para traer la plantilla PDF de Solicitud
+        String rutaPlantillaSoliPDF = getRutaPlantillaSolicitudDPF();
+        JasperReport jasperReport = JasperCompileManager.compileReport(rutaPlantillaSoliPDF);
+        return JasperFillManager.fillReport(jasperReport, parameter, new JREmptyDataSource());
+    }
+
+    private String getRutaPlantillaSolicitudDPF(){
+        return "src" + File.separator +
                 "main" + File.separator +
                 "resources" + File.separator +
                 "templates" + File.separator +
                 "report" + File.separator +
                 "solicitud.jrxml";
-
-        // Asigna los campos de SolicitudReport a los parámetros del reporte
-        params.put("funcionarioTo", parametros.getFuncionarioTo());
-        params.put("funcionarioFrom", parametros.getFuncionarioFrom());
-        params.put("funcionarioToCargo", parametros.getFuncionarioToCargo());
-        params.put("funcionarioFromCargo", parametros.getFuncionarioFromCargo());
-        params.put("cite", parametros.getCite());
-        params.put("fecha", parametros.getFecha());
-        params.put("nombreOrganizacion", parametros.getNombreOrganizacion());
-        params.put("imageDir", "classpath:/static/images/");
-
-        /*List<TablaSolicitudReport> list = new ArrayList<>();
-        list.add(new TablaSolicitudReport("Documento Planos", 500));
-        list.add(new TablaSolicitudReport("Notificaciones", 900));*/
-
-        params.put("ds", new JRBeanCollectionDataSource(listDetalleSolicitudResp));
-
-
-        JasperReport jasperReport = JasperCompileManager.compileReport(filePath);
-
-        JasperPrint report = JasperFillManager.fillReport(
-                jasperReport,
-                params,
-                new JREmptyDataSource()
-        );
-
-        return report;
     }
 }

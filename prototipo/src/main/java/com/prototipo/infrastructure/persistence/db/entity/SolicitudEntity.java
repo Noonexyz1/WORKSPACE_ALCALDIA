@@ -22,6 +22,9 @@ public class SolicitudEntity {
     private Long autoriFlag;
     private Boolean isActive;
 
+    private Double precioTotal;
+    private String nombreServicio;
+
     @ManyToOne
     private UsuarioUnidadEntity fkUsuarioSolicitante;
 

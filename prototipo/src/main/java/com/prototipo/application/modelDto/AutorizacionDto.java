@@ -13,8 +13,6 @@ public class AutorizacionDto {
 
     private Long id;
     private String fecha;
-    private Long totalAutorizado;
-    private BigDecimal totalCotizadoBs;
     private Long finaliFlag;
 
     private UsuarioUnidadDto fkUsuarioResponsable;

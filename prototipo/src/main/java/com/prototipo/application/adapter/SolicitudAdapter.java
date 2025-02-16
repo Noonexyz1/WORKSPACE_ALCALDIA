@@ -2,37 +2,33 @@ package com.prototipo.application.adapter;
 
 import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.*;
-import com.prototipo.application.port.AprobacionAbstract;
 import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.application.useCase.SolicitudService;
-import com.prototipo.domain.enums.AnversoReversoEnum;
-import com.prototipo.domain.enums.ColorFotocopiaEnum;
-import com.prototipo.domain.enums.EstadoByResponsableEnum;
-import com.prototipo.domain.enums.TamanoPaginaEnum;
+import com.prototipo.domain.enums.*;
 import com.prototipo.domain.model.*;
 
-import java.sql.SQLOutput;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 public class SolicitudAdapter implements SolicitudService {
 
     private SolicitudAbstract solicitudAbstract;
     private MapperApplicationAbstract mapperApplicationAbstract;
-    private AprobacionAbstract aprobacionAbstract;
 
-    public SolicitudAdapter(SolicitudAbstract solicitudAbstract,
-                            MapperApplicationAbstract mapperApplicationAbstract,
-                            AprobacionAbstract aprobacionAbstract) {
+    public SolicitudAdapter(
+            SolicitudAbstract solicitudAbstract,
+            MapperApplicationAbstract mapperApplicationAbstract) {
 
         this.solicitudAbstract = solicitudAbstract;
         this.mapperApplicationAbstract = mapperApplicationAbstract;
-        this.aprobacionAbstract = aprobacionAbstract;
     }
 
     @Override
-    public void solicitarFotocopiarService(Solicitud solicitudDomain, List<DetalleSolicitud> solicitudes) {
+    public void solicitarFotocopiarService(Solicitud solicitudDomain, List<Fotocopia> fotocopiasList) {
         SolicitudDto solicitudDto = mapperApplicationAbstract
                 .mapearAbstract(solicitudDomain, SolicitudDto.class);
+        solicitudDto.setNombreServicio(TipoServicioEnum.FOTOCOPIA.getNombre());
 
         //Primero guardamos en la tabla Solitcitud
         SolicitudDto solicitudDtoResp = solicitudAbstract
@@ -41,10 +37,40 @@ public class SolicitudAdapter implements SolicitudService {
         Solicitud solicitudResp = mapperApplicationAbstract
                 .mapearAbstract(solicitudDtoResp, Solicitud.class);
 
-        solicitudes.forEach(x -> {
-            x.setFkSolicitud(solicitudResp);
-            guardadDetalleSolicitudAbstrac(x);
-        });
+        Double precioTotalSoli = fotocopiasList.stream()
+                .map(x -> {
+                    x.setFkSolicitud(solicitudResp);
+                    return guardadFotocopiaAbstrac(x);
+                })
+                .reduce(0.0, Double::sum);
+
+        solicitudDtoResp.setPrecioTotal(precioTotalSoli);
+        solicitudAbstract.solicitarFotocopiarAbstract(solicitudDtoResp);
+    }
+
+    private void guardadDetalleSolicitudAbstrac(DetalleSolicitud solicitud){
+        DetalleSolicitudDto detalleSolicitudDto = mapperApplicationAbstract
+                .mapearAbstract(solicitud, DetalleSolicitudDto.class);
+        solicitudAbstract.guardarRegistroSolicitud(detalleSolicitudDto);
+    }
+
+    private double guardadFotocopiaAbstrac(Fotocopia fotocopia){
+        FotocopiaDto fotocopiaDto = mapperApplicationAbstract
+                .mapearAbstract(fotocopia, FotocopiaDto.class);
+
+        ServicioFotocopiaDto solicitudFotocopiaDto = solicitudAbstract
+                .findServicioFotocopia(fotocopiaDto.getFkServicioFotocopia());
+
+        double precioDocu = fotocopia.getNroCopias() *
+                fotocopia.getNroPaginas() *
+                solicitudFotocopiaDto.getPrecioRef();
+
+        fotocopiaDto.setFkServicioFotocopia(solicitudFotocopiaDto);
+        fotocopiaDto.setPrecioDocu(precioDocu);
+
+        solicitudAbstract.guardarRegistroFotocopia(fotocopiaDto);
+
+        return precioDocu;
     }
 
     @Override
@@ -60,13 +86,6 @@ public class SolicitudAdapter implements SolicitudService {
         });
 
     }
-
-    private void guardadDetalleSolicitudAbstrac(DetalleSolicitud solicitud){
-        DetalleSolicitudDto detalleSolicitudDto = mapperApplicationAbstract
-                .mapearAbstract(solicitud, DetalleSolicitudDto.class);
-        solicitudAbstract.guardarRegistroSolicitud(detalleSolicitudDto);
-    }
-
 
     @Override
     public void guardarPdfDeLaSolicitudAbstract(ArchivoPdf archivoPdfDomain) {
@@ -98,15 +117,6 @@ public class SolicitudAdapter implements SolicitudService {
     }
 
     @Override
-    public List<DetalleSolicitud> listDetalleSolicitud(Long idSolicitud) {
-         List<DetalleSolicitudDto> list = solicitudAbstract.
-                 getListaDetalleSolicitudAbstract(idSolicitud);
-        return list.stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, DetalleSolicitud.class))
-                .toList();
-    }
-
-    @Override
     public List<Finalizacion> listFinalizacionSolicitud(Long idFunUni, Long page, Long size) {
         List<FinalizacionDto> listFinDto = solicitudAbstract
                 .listFinalizacionSolicitudAbs(idFunUni, page, size);
@@ -116,19 +126,33 @@ public class SolicitudAdapter implements SolicitudService {
     }
 
     @Override
-    public List<DetalleSolicitud> findListDetalleSoliBySolicitudId(Long idSolicitud) {
-        List<DetalleSolicitudDto> listDetalleDto = solicitudAbstract
+    public List<Fotocopia> findListDetalleSoliBySolicitudId(Long idSolicitud) {
+        List<FotocopiaDto> listDetalleDto = solicitudAbstract
                 .findListDetalleSoliBySolicitudIdAbs(idSolicitud);
         return listDetalleDto.stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, DetalleSolicitud.class))
+                .map(x ->
+                        mapperApplicationAbstract.mapearAbstract(x, Fotocopia.class)
+                )
                 .toList();
     }
 
     @Override
     public void guardarAutorizacion(Autorizacion autorizacion) {
+        //Unicamente aqui va la logica, utilizando los mismos recuros de su dominio
+        LocalDate fechaActual = LocalDate.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+        autorizacion.setFecha(fechaActual.format(formato));
+        autorizacion.setFinaliFlag(0L);
+
         AutorizacionDto autorizacionDto = mapperApplicationAbstract
                 .mapearAbstract(autorizacion, AutorizacionDto.class);
         solicitudAbstract.guardarAutorizacionAbs(autorizacionDto);
+
+        SolicitudDto solicitudDto = solicitudAbstract
+                .buscarSolicitudByIdAbstract(autorizacion.getFkSolicitud().getId());
+        solicitudDto.setAutoriFlag(1L);
+        solicitudAbstract.guardarSolicitudAbstract(solicitudDto);
     }
 
     @Override
@@ -149,9 +173,20 @@ public class SolicitudAdapter implements SolicitudService {
 
     @Override
     public void guardarFinalizacion(Finalizacion finalizacion) {
+        //Aqui tiene que ir la logica
         FinalizacionDto finalizacionDto = mapperApplicationAbstract
                 .mapearAbstract(finalizacion, FinalizacionDto.class);
+
+        LocalDate fechaActual = LocalDate.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+        finalizacionDto.setFecha(fechaActual.format(formato));
         solicitudAbstract.guardarFinalizacionAbs(finalizacionDto);
+
+        AutorizacionDto autorizacionDto = solicitudAbstract
+                .buscarAutorizacionByIdAbs(finalizacion.getFkAutorizacion().getId());
+
+        autorizacionDto.setFinaliFlag(1L);
+        solicitudAbstract.guardarAutorizacionAbs(autorizacionDto);
     }
 
     @Override
@@ -186,4 +221,43 @@ public class SolicitudAdapter implements SolicitudService {
         );
     }
 
+    @Override
+    public List<Solicitud> getListaSolicitudesAutoriService(Long idUserUni, Long page, Long size) {
+        List<SolicitudDto> listSoli = solicitudAbstract
+                .getListaSolicitudesAutoriAbstract(idUserUni, page, size);
+        //Quiero filtar las solicitudes segun el Usuario que lo esta pidiendo
+        return listSoli.stream()
+                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
+                .toList();
+    }
+
+    @Override
+    public List<Solicitud> getListaSolicitudesFinaliService(Long idUserUni, Long page, Long size) {
+        List<SolicitudDto> listSoli = solicitudAbstract
+                .getListaSolicitudesFinaliAbstract(idUserUni, page, size);
+        //Quiero filtar las solicitudes segun el Usuario que lo esta pidiendo
+        return listSoli.stream()
+                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
+                .toList();
+    }
+
+    @Override
+    public List<DetalleSolicitud> listDetalleSolicitud(Long idSolicitud) {
+        List<DetalleSolicitudDto> list = solicitudAbstract.
+                getListaDetalleSolicitudAbstract(idSolicitud);
+        return list.stream()
+                .map(x ->
+                        mapperApplicationAbstract.mapearAbstract(x, DetalleSolicitud.class))
+                .toList();
+    }
+
+    @Override
+    public List<Fotocopia> listFotocopiaSolicitud(Long idSolicitud) {
+        List<FotocopiaDto> list = solicitudAbstract.
+                getListaFotocopiaSolicitudAbstract(idSolicitud);
+        return list.stream()
+                .map(x ->
+                        mapperApplicationAbstract.mapearAbstract(x, Fotocopia.class))
+                .toList();
+    }
 }

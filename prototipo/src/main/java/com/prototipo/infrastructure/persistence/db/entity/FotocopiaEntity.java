@@ -11,8 +11,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "detalle_solicitud")
-public class DetalleSolicitudEntity {
+@Table(name = "fotocopia")
+public class FotocopiaEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,13 +23,11 @@ public class DetalleSolicitudEntity {
     private Long nroPaginas;
     private Long nroCopias;
 
-    private String tamanoPagina;
-    private String anversoReverso;
-    private String colorFotocopia;
+    private Double precioDocu;
 
     @ManyToOne
     private SolicitudEntity fkSolicitud;
 
-    @OneToOne(mappedBy = "fkDetalleSolicitud")
-    private CotizacionEntity cotizacion;
+    @ManyToOne
+    private ServicioFotocopiaEntity fkServicioFotocopia;
 }

@@ -8,6 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class AprobacionSoliRequest {
-    private Long idAprobacion;
+    private Long idSolicitud;
     private Long idResponsable;
 }

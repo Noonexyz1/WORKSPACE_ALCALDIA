@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map, of} from 'rxjs';
 import {PageRequestID} from '../../../models/PageRequestID';
@@ -12,9 +12,10 @@ import {DetalleSolicitudExtendidoResponse} from "../../../models/DetalleSolicitu
 import {DetalleSolicitudCotizadoResponse} from "../../../models/DetalleSolicitudCotizadoResponse";
 import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
+import {AprobacionSoliRequest} from "../../../models/AutorizacionRequest";
 
 @Component({
-  selector: 'app-lista-soli-responsable',
+  selector: 'app-lista-soli-responsable-pendiente',
   standalone: true,
   imports: [FormsModule, RowSolicitudExtendComponent],
   templateUrl: './lista-soli-responsable-pendiente.component.html',
@@ -70,13 +71,15 @@ export class ListaSoliPendienteResponsableComponent{
     ).subscribe();
   }
 
-  estadoModal = false;
+  estadoModal: boolean = false;
   isModalVisible: boolean = false;
   detSoliExtendidoResponse: DetalleSolicitudExtendidoResponse = {
     idSolicitud: 0,
     cite: '',
     fecha: '',
     descripcion: '',
+    nombreServicio: '',
+    precioTotal: 0,
     detalleSolicitudResponses: [],
   };
 
@@ -102,24 +105,16 @@ export class ListaSoliPendienteResponsableComponent{
     this.isModalVisible = !this.isModalVisible;
   }
 
-  detalleSolicitudCotizado: DetalleSolicitudCotizadoResponse[] = [];
-  onCotizacionRecibida(cotizacion: DetalleSolicitudCotizadoResponse): void {
-    cotizacion.idUsuarioUnidad = this.usuario.id;
-    this.detalleSolicitudCotizado.push(cotizacion);
-  }
-
   botonAutorizar(): void {
-    // Extraer los valores del formulario
-    const soliCotizadoList: DetalleSolicitudCotizadoResponse[] = this.detalleSolicitudCotizado;
-
-    // Aqui hacer la peticion POST a mi servidor deberia tener la lista
-    // Recibimos la peticion
-    this.http.post<DetalleSolicitudCotizadoResponse[]>(
-      UrlsProperties.PATH_COTIZAR_SOLI,
-      soliCotizadoList
+    this.http.post<AprobacionSoliRequest>(
+      UrlsProperties.PATH_AUTORIZAR_SOLI,
+      {
+        idResponsable: this.usuario.id,
+        idSolicitud: this.detSoliExtendidoResponse.idSolicitud
+      }
     ).pipe(
       map(() => {
-        this.rootNavigateService.valorParaNavegar('Responsable');
+        this.rootNavigateService.valorParaNavegar('ResponsableAutorizadas');
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
@@ -127,29 +122,26 @@ export class ListaSoliPendienteResponsableComponent{
         return of(null); // Retornar un observable vacío en caso de error
       })
     ).subscribe();
-
   }
 
   botonRechazar(): void {
-    // Extraer los valores del formulario
-    const soliCotizadoList: DetalleSolicitudCotizadoResponse[] = this.detalleSolicitudCotizado;
-
-    // Aqui hacer la peticion POST a mi servidor deberia tener la lista
-    // Recibimos la peticion
-    this.http.post<DetalleSolicitudCotizadoResponse[]>(
-      UrlsProperties.PATH_COTIZAR_SOLI,
-      soliCotizadoList
+    this.http.post<AprobacionSoliRequest>(
+      UrlsProperties.PATH_RECHAZAR_SOLI,
+      {
+        idResponsable: this.usuario.id,
+        idSolicitud: this.detSoliExtendidoResponse.idSolicitud
+      }
     ).pipe(
       map(() => {
-        this.rootNavigateService.valorParaNavegar('Responsable');
+        this.toggleModal();
+        this.listarSolicitudes();
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
-        alert('Hubo un error al enviar las solicitudes cotizadas');
+        alert('Hubo un error al rechazar las solicitudes cotizadas');
         return of(null); // Retornar un observable vacío en caso de error
       })
     ).subscribe();
-
   }
 
   goToPage(page: number): void {
@@ -172,5 +164,4 @@ export class ListaSoliPendienteResponsableComponent{
       this.listarSolicitudes();
     }
   }
-
 }

@@ -12,20 +12,21 @@ import {SolicitanteComponent} from './components/solicitante/solicitante.compone
 import {ResponsableComponent} from './components/responsable/responsable.component';
 import {EditarUsuarioComponent} from './components/shared/editar-usuario/editar-usuario.component';
 import {
-  ListaSoliAprobadaResponsableComponent
-} from './components/shared/lista-soli-responsable-aprobada/lista-soli-responsable-aprobada.component';
+  ListaSoliAutorizadaResponsableComponent
+} from './components/shared/lista-soli-responsable-autorizada/lista-soli-responsable-autorizada.component';
 import {
   ListaSoliPendienteResponsableComponent
 } from './components/shared/lista-soli-responsable-pendiente/lista-soli-responsable-pendiente.component';
 import {
   ListaSoliFinalizadaResponsableComponent
 } from './components/shared/lista-soli-responsable-finalizada/lista-soli-responsable-finalizada.component';
-import {
-  ListaSoliSolicitanteAprobadaComponent
-} from "./components/shared/lista-soli-solicitante-aprobada/lista-soli-solicitante-aprobada.component";
+
 import {
   ListaSoliSolicitanteFinalizadaComponent
 } from "./components/shared/lista-soli-solicitante-finalizada/lista-soli-solicitante-finalizada.component";
+import {
+  ListaSoliSolicitanteAutorizadaComponent
+} from "./components/shared/lista-soli-solicitante-autorizada/lista-soli-solicitante-autorizada.component";
 
 export const routes: Routes = [
   {path: '', redirectTo: "login", pathMatch: "full"},
@@ -43,12 +44,12 @@ export const routes: Routes = [
         component: NuevoUsuarioComponent,
       },
       {
-        path: 'cambiarPass',
-        component: CambiarPassComponent,
-      },
-      {
         path: 'editarUsuario',
         component: EditarUsuarioComponent,
+      },
+      {
+        path: 'cambiarPass',
+        component: CambiarPassComponent,
       },
     ]
   },
@@ -57,15 +58,15 @@ export const routes: Routes = [
     component: SolicitanteComponent,
     children: [
       {
-        path: 'misSolicitudesPendientes',
+        path: 'solicitudesPendientes',
         component: ListaSoliSolicitantePendienteComponent,
       },
       {
-        path: 'misSolicitudesAprobadas',
-        component: ListaSoliSolicitanteAprobadaComponent,
+        path: 'solicitudesAutorizadas',
+        component: ListaSoliSolicitanteAutorizadaComponent,
       },
       {
-        path: 'misSolicitudesFinalizadas',
+        path: 'solicitudesFinalizadas',
         component: ListaSoliSolicitanteFinalizadaComponent,
       },
       {
@@ -83,15 +84,15 @@ export const routes: Routes = [
     component: ResponsableComponent,
     children: [
       {
-        path: 'solicitudesPendienteUnidad',
+        path: 'solicitudesPendientes',
         component: ListaSoliPendienteResponsableComponent,
       },
       {
-        path: 'solicitudesAprobadaUnidad',
-        component: ListaSoliAprobadaResponsableComponent,
+        path: 'solicitudesAutorizadas',
+        component: ListaSoliAutorizadaResponsableComponent,
       },
       {
-        path: 'solicitudesRechazadaUnidad',
+        path: 'solicitudesFinalizadas',
         component: ListaSoliFinalizadaResponsableComponent,
       },
       {

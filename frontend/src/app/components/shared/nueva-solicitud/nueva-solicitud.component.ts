@@ -165,7 +165,7 @@ export class NuevaSolicitudComponent implements OnInit {
         this.nroDeDocumentos = 0;
 
         // Redirigir al usuario
-        this.rootNavigateService.valorParaNavegar('Solicitante');
+        this.rootNavigateService.valorParaNavegar('SolicitantePendientes');
       }),
       catchError(error => {
         console.error('Error en la petición:', error);

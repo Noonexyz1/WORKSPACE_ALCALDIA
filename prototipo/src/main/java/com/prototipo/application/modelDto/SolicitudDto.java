@@ -15,5 +15,8 @@ public class SolicitudDto {
     private Long autoriFlag;
     private Boolean isActive;
 
+    private Double precioTotal;
+    private String nombreServicio;
+
     private UsuarioUnidadDto fkUsuarioSolicitante;
 }

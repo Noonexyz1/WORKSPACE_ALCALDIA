@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, of } from 'rxjs';
 import { PageRequestID } from '../../../models/PageRequestID';
@@ -7,19 +7,18 @@ import { SolicitudResponResponse } from '../../../models/SolicitudResponResponse
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {AutorizacionResponse} from "../../../models/AutorizacionResponse";
-import {FinalizacionRequest} from "../../../models/FinalizacionRequest";
 import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
 import {PageProperties} from "../../../models/PageProperties";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 
 @Component({
-  selector: 'app-lista-soli-responsable',
+  selector: 'app-lista-soli-responsable-autorizada',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule],
-  templateUrl: './lista-soli-responsable-aprobada.component.html',
-  styleUrl: './lista-soli-responsable-aprobada.component.css'
+  templateUrl: './lista-soli-responsable-autorizada.component.html',
+  styleUrl: './lista-soli-responsable-autorizada.component.css'
 })
-export class ListaSoliAprobadaResponsableComponent implements OnInit{
+export class ListaSoliAutorizadaResponsableComponent {
 
   private http: HttpClient;
   private localStorage: LocalStorageService;
@@ -41,9 +40,6 @@ export class ListaSoliAprobadaResponsableComponent implements OnInit{
       totalEjecutado: [],
       totalEjecutadoBs: [],
     });
-  }
-
-  ngOnInit(): void {
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
   }
@@ -80,19 +76,12 @@ export class ListaSoliAprobadaResponsableComponent implements OnInit{
   private rootNavigateService: RootNavigateService;
 
   botonFinalizarSolicitud(solicitud: SolicitudResponResponse): void {
-    const url = 'http://localhost:8081/responsable/finalizarSolicitud'; // URL de tu API
-
-    // Extraer los valores del formulario
-    const finalizacionRequest: FinalizacionRequest = {
-      idAutorizacion: solicitud.idAutorizacion,
-      totalEjecutado: this.formGroup.get('totalEjecutado')?.value, // Obtener el valor de correo
-      totalEjecutadoBs: this.formGroup.get('totalEjecutadoBs')?.value // Obtener el valor de correo
-    };
-
-    // Recibimos la peticion
-    this.http.post<FinalizacionRequest>(url, finalizacionRequest).pipe(
+    this.http.post<number>(
+      UrlsProperties.PATH_FINALIZAR_SOLI,
+      solicitud.idAutorizacion
+    ).pipe(
       map(() => {
-        this.rootNavigateService.valorParaNavegar('Responsable');
+        this.rootNavigateService.valorParaNavegar('ResponsableFinalizadas');
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
@@ -155,9 +144,7 @@ export class ListaSoliAprobadaResponsableComponent implements OnInit{
 
   pageProperties: PageProperties = new PageProperties();
   listaConsecutiva: number[] = Array.from(
-    {
-      length: this.pageProperties.totalPages
-    },
+    { length: this.pageProperties.totalPages},
     (_, index) => index
   );
 

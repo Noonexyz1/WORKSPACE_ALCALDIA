@@ -28,7 +28,8 @@ public class OperadorController {
     private ModelMapper modelMapper;
 
 
-    @PostMapping(path = {"/iniciarOperacion"},
+    @PostMapping(
+            path = {"/iniciarOperacion"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<ArchivoPdfResponse>> iniciarSolicitudOperacion(
             @RequestBody OperacionSoliRequest opeSoliRequest) {
@@ -44,7 +45,8 @@ public class OperadorController {
         return new ResponseEntity<>(listArchivosResp, HttpStatus.OK);
     }
 
-    @PostMapping(path = {"/terminarOperacion"},
+    @PostMapping(
+            path = {"/terminarOperacion"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public void finalizarSolicitudOperacion(
             @RequestBody OperacionSoliRequest opeSoliRequest) {
@@ -55,7 +57,8 @@ public class OperadorController {
 
     //Este operador tiene una forma de trabajar, y es por piso,
     //entonces se deberia mostrar las solicitudes correspondientes a su piso
-    @PostMapping(path = {"/verSolicitudesPendientes"},
+    @PostMapping(
+            path = {"/verSolicitudesPendientes"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudes(
             @RequestBody PaginacionOpeRequest pageParam) {
@@ -75,7 +78,8 @@ public class OperadorController {
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    @PostMapping(path = {"/verSolicitudesIniciadas"},
+    @PostMapping(
+            path = {"/verSolicitudesIniciadas"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesIniciadas(
             @RequestBody PaginacionOpeRequest pageParam) {
@@ -95,7 +99,8 @@ public class OperadorController {
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    @PostMapping(path = {"/verSolicitudesCompletas"},
+    @PostMapping(
+            path = {"/verSolicitudesCompletas"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudOperaResponse>> verSolicitudesCompletadas(
             @RequestBody PaginacionOpeRequest pageParam) {

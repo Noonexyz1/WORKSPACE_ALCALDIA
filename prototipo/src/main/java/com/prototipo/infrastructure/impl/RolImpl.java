@@ -19,12 +19,6 @@ public class RolImpl implements RolAbstract {
     private ModelMapper modelMapper;
 
     @Override
-    public RolDto encontrarRolPorId(Long idRol) {
-        RolEntity rolEntity = rolRepository.findById(idRol).orElseThrow();
-        return modelMapper.map(rolEntity, RolDto.class);
-    }
-
-    @Override
     public List<RolDto> listarRoles() {
         List<RolEntity> listRoles = rolRepository.findAll();
         return listRoles.stream()

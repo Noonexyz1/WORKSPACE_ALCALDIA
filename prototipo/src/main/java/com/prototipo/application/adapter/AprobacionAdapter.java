@@ -3,6 +3,7 @@ package com.prototipo.application.adapter;
 import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.*;
 import com.prototipo.application.port.AprobacionAbstract;
+import com.prototipo.application.port.AutorizacionAbstract;
 import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.application.port.UsuarioAbastract;
 import com.prototipo.application.useCase.AprobacionService;
@@ -19,16 +20,20 @@ public class AprobacionAdapter implements AprobacionService {
     private MapperApplicationAbstract mapperApplicationAbstract;
     private UsuarioAbastract usuarioAbastract;
     private SolicitudAbstract solicitudAbstract;
+    private AutorizacionAbstract autorizacionAbstract;
 
-    public AprobacionAdapter(AprobacionAbstract aprobacionAbstract,
-                             MapperApplicationAbstract mapperApplicationAbstract,
-                             UsuarioAbastract usuarioAbastract,
-                             SolicitudAbstract solicitudAbstract) {
+    public AprobacionAdapter(
+            AprobacionAbstract aprobacionAbstract,
+            MapperApplicationAbstract mapperApplicationAbstract,
+            UsuarioAbastract usuarioAbastract,
+            SolicitudAbstract solicitudAbstract,
+            AutorizacionAbstract autorizacionAbstract) {
 
         this.aprobacionAbstract = aprobacionAbstract;
         this.mapperApplicationAbstract = mapperApplicationAbstract;
         this.usuarioAbastract = usuarioAbastract;
         this.solicitudAbstract = solicitudAbstract;
+        this.autorizacionAbstract = autorizacionAbstract;
     }
 
     @Override
@@ -47,11 +52,12 @@ public class AprobacionAdapter implements AprobacionService {
             String byColumName){
 
         List<SolicitudDto> solicitudDtos = aprobacionAbstract
-                .listaDeAprobacionesPendientesAbstractPage(
+                .listaDeSolicitudesPendientesAbstractPage(
                         idSupervisor,
                         page,
                         size,
-                        byColumName);
+                        byColumName
+                );
 
         return solicitudDtos.stream()
                 .map(x -> mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
@@ -154,5 +160,13 @@ public class AprobacionAdapter implements AprobacionService {
         AutorizacionDto autorizacionDto = mapperApplicationAbstract
                 .mapearAbstract(autorizacion, AutorizacionDto.class);
         aprobacionAbstract.guardarAutorizacionAbstract(autorizacionDto);
+    }
+
+    @Override
+    public Autorizacion findAutorizacionByIdSoliService(Long idSolicitud) {
+        AutorizacionDto autorizacionDto = autorizacionAbstract
+                .findAutorizacionByIdSoli(idSolicitud);
+        return mapperApplicationAbstract
+                .mapearAbstract(autorizacionDto, Autorizacion.class);
     }
 }

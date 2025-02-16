@@ -12,7 +12,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 86400)
-//@Validated
 @RestController
 @RequestMapping(path = "/login")
 public class LoginController {
@@ -22,7 +21,8 @@ public class LoginController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping(path = {""},
+    @PostMapping(
+            path = {""},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UsuarioResponse> iniciarSesion(
             @RequestBody CredencialRequest request){

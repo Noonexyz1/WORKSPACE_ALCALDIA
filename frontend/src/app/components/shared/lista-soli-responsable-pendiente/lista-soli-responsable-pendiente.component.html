@@ -76,7 +76,15 @@
                         <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
                           <!-- Modal header -->
                           <div
-                            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                            class="gap-3 flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                            <div>
+                              <svg class="w-10 h-10 text-gray-400 dark:text-gray-500 mb-4" aria-hidden="true"
+                                   xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
+                                <path
+                                  d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Z"
+                                  clip-rule="evenodd"/>
+                              </svg>
+                            </div>
                             <h3 class="text-2xl font-bold text-gray-900 dark:text-white">
                               Detalles de solicitud
                             </h3>
@@ -95,45 +103,49 @@
 
                           @if (estadoModal) {
                             <!-- Modal body Aqui debo enviar los ID de las solicitud-->
-                            <form class="p-4 md:p-5">
-
-                              <div class="grid lg:grid-cols-5">
-                                <div>
-                                  <svg class="w-10 h-10 text-gray-400 dark:text-gray-500 mb-4" aria-hidden="true"
-                                       xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 16 20">
-                                    <path
-                                      d="M9 2.221V7H4.221a2 2 0 0 1 .365-.5L8.5 2.586A2 2 0 0 1 9 2.22ZM11 2v5a2 2 0 0 1-2 2H4v11a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2h-7Z"
-                                      clip-rule="evenodd"/>
-                                  </svg>
-                                </div>
-
-                                <div>
+                            <div class="p-4 md:p-5">
+                              <div class="grid lg:grid-cols-1">
+                                <div class="flex gap-4">
                                   <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Id de
                                     Solicitud:</h3>
-                                  <p class="text-gray-500 dark:text-gray-400 mb-6">
+                                  <p class="text-gray-500 dark:text-gray-400 mb-1 text-xl">
                                     {{ detSoliExtendidoResponse.idSolicitud }}
                                   <p>
                                 </div>
 
-                                <div>
+                                <div class="flex gap-4">
                                   <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">CITE:</h3>
-                                  <p class="text-gray-500 dark:text-gray-400 mb-6">
+                                  <p class="text-gray-500 dark:text-gray-400 mb-1 text-xl">
                                     {{ detSoliExtendidoResponse.cite }}
                                   <p>
                                 </div>
 
-                                <div>
+                                <div class="flex gap-4">
                                   <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Fecha de
                                     creacion:</h3>
-                                  <p class="text-gray-500 dark:text-gray-400 mb-6">
+                                  <p class="text-gray-500 dark:text-gray-400 mb-1 text-xl">
                                     {{ detSoliExtendidoResponse.fecha }}
                                   <p>
                                 </div>
 
-                                <div>
+                                <div class="flex gap-4">
                                   <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Descripcion:</h3>
-                                  <p class="text-gray-500 dark:text-gray-400 mb-6">
+                                  <p class="text-gray-500 dark:text-gray-400 mb-1 text-xl">
                                     {{ detSoliExtendidoResponse.descripcion }}
+                                  <p>
+                                </div>
+
+                                <div class="flex gap-4">
+                                  <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">Servicio:</h3>
+                                  <p class="text-gray-500 dark:text-gray-400 mb-1 text-xl">
+                                    {{ detSoliExtendidoResponse.nombreServicio }}
+                                  <p>
+                                </div>
+
+                                <div class="flex gap-4">
+                                  <h3 class="mb-1 text-xl font-bold text-gray-900 dark:text-white">PRECIO TOTAL:</h3>
+                                  <p class="text-gray-500 dark:text-gray-400 mb-1 text-xl">
+                                    {{ detSoliExtendidoResponse.precioTotal }} Bs.
                                   <p>
                                 </div>
                               </div>
@@ -142,10 +154,8 @@
                                 <!-- Lista de solicitudes -->
                                 @if (detSoliExtendidoResponse.detalleSolicitudResponses != null && detSoliExtendidoResponse.detalleSolicitudResponses.length > 0) {
                                   @for (solicitudDetalle of detSoliExtendidoResponse.detalleSolicitudResponses; track solicitudDetalle.idDetalleSolicitud) {
-                                    <app-row-solicitud-extend [solicitudDetalle]="solicitudDetalle"
-                                                              (cotizacionEmitida)="onCotizacionRecibida($event)"></app-row-solicitud-extend>
+                                    <app-row-solicitud-extend [solicitudDetalle]="solicitudDetalle"></app-row-solicitud-extend>
                                   }
-
                                 }
                               </div>
 
@@ -160,7 +170,7 @@
                                             d="M5 3a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7.414A2 2 0 0 0 20.414 6L18 3.586A2 2 0 0 0 16.586 3H5Zm10 11a3 3 0 1 1-6 0 3 3 0 0 1 6 0ZM8 7V5h8v2a1 1 0 0 1-1 1H9a1 1 0 0 1-1-1Z"
                                             clip-rule="evenodd"/>
                                     </svg>
-                                    Registrar
+                                    Aprobar
                                   </button>
                                 </div>
                                 <div>
@@ -177,12 +187,11 @@
                                   </button>
                                 </div>
                               </div>
-
-                            </form>
+                            </div>
                           }
-
                         </div>
                       </div>
+
                     </div>
                   }
 

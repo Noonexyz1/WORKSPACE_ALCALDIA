@@ -6,29 +6,25 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.math.BigDecimal;
+import java.util.List;
 
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "cotizacion")
-public class CotizacionEntity {
-
+@Table(name = "serv_fotocopia")
+public class ServicioFotocopiaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(updatable = false, nullable = false)
     private Long id;
-    private BigDecimal precioTotal;
+    private String color;
+    private String tamano;
+    private String anverRever;
+    private Double precioRef;
+    private Boolean isActive;
 
-    //TODO, este atributo debe retirarse?
-    private BigDecimal precioUnitario;
-
-    @OneToOne
-    private DetalleSolicitudEntity fkDetalleSolicitud;
-
-    @ManyToOne
-    private DetalleServicioEntity fkDetalleServicio;
-
+    @OneToMany(mappedBy = "fkServicioFotocopia")
+    private List<FotocopiaEntity> listFotocopia;
 }

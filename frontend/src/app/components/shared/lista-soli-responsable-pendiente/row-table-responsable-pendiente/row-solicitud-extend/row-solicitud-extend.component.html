@@ -1,4 +1,4 @@
-<form [formGroup]="cotizacionForm">
+<div>
   <div class="p-3 border border-gray-500 rounded-2xl py-4 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-9">
 
     <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
@@ -41,25 +41,17 @@
       </dd>
     </dl>
 
-    <div class="w-full grid sm:grid-cols-2 lg:flex lg:w-64 lg:items-center lg:justify-end gap-4">
-      @if (estadoBotonEstablecer) {
-        <div>
-          <input type="number" id="precUnitario"
-                 formControlName="precUnitario"
-                 class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                 placeholder="Precio Unitario" required/>
-        </div>
-        <button type="button" (click)="botonSetPrecioUnitario()"
-                class="w-full rounded-lg border border-blue-700 px-3 py-2 text-center text-sm font-medium text-blue-700 hover:bg-blue-700 hover:text-white focus:outline-none focus:ring-4 focus:ring-red-300 dark:border-blue-500 dark:text-blue-500 dark:hover:bg-blue-600 dark:hover:text-white dark:focus:ring-blue-900 lg:w-auto">
-          Establecer
-        </button>
-      } @else {
-        <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-          <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Prec. Unitario:</dt>
-          <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ precioEstablecido }}</dd>
-        </dl>
-      }
-    </div>
+    <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Precio/Ref:</dt>
+      <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.precioRef }} Bs.
+      </dd>
+    </dl>
+
+    <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Precio/Documento:</dt>
+      <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.precioDocu }} Bs.
+      </dd>
+    </dl>
 
   </div>
-</form>
+</div>

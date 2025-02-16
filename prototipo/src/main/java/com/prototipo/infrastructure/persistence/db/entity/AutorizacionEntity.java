@@ -19,8 +19,6 @@ public class AutorizacionEntity {
     @Column(updatable = false, nullable = false)
     private Long id;
     private String fecha;
-    private Long totalAutorizado;
-    private BigDecimal totalCotizadoBs;
     private Long finaliFlag;
 
     @ManyToOne

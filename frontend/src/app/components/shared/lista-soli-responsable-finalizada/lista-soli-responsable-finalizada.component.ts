@@ -4,13 +4,13 @@ import { catchError, map, of } from 'rxjs';
 import { PageRequestID } from '../../../models/PageRequestID';
 import { UsuarioResponse } from '../../../models/UsuarioResponse';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
-import {FinalizacionResponse} from "../../../models/FinalizacionResponse";
 import {PageProperties} from "../../../models/PageProperties";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
+import {SolicitudResponResponse} from "../../../models/SolicitudResponResponse";
 
 @Component({
-  selector: 'app-lista-soli-responsable',
+  selector: 'app-lista-soli-responsable-finalizada',
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './lista-soli-responsable-finalizada.component.html',
@@ -21,7 +21,7 @@ export class ListaSoliFinalizadaResponsableComponent{
   private http: HttpClient;
   private localStorage: LocalStorageService;
 
-  listSolicitudFinal: FinalizacionResponse[] = [];
+  listSolicitudFinal: SolicitudResponResponse[] = [];
 
   usuario: UsuarioResponse = new UsuarioResponse();
 
@@ -42,11 +42,11 @@ export class ListaSoliFinalizadaResponsableComponent{
       byColumName: ""
     }
 
-    this.http.post<FinalizacionResponse[]>(
+    this.http.post<SolicitudResponResponse[]>(
       UrlsProperties.PATH_LIST_SOLIFINALI,
       body
     ).pipe(
-      map((response: FinalizacionResponse[]) => {
+      map((response: SolicitudResponResponse[]) => {
         this.listSolicitudFinal = response;
       }),
       catchError(error => {

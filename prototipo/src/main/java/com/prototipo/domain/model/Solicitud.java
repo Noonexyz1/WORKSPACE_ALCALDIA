@@ -15,5 +15,8 @@ public class Solicitud {
     private Long autoriFlag;
     private Boolean isActive;
 
+    private Double precioTotal;
+    private String nombreServicio;
+
     private UsuarioUnidad fkUsuarioSolicitante;
 }

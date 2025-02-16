@@ -42,7 +42,7 @@ export class ListaSoliSolicitanteFinalizadaComponent {
     }
 
     this.http.post<SolicitudResponse[]>(
-      UrlsProperties.PATH_LIST_SOLIC,
+      UrlsProperties.PATH_FINALIZADAS_SOLI,
       body
     ).pipe(
       map((response: SolicitudResponse[]) => {

@@ -19,4 +19,6 @@ public interface AprobacionService {
     Autorizacion findAutorizacionById(Long idAutorizacion);
 
     void guardarAutorizacionService(Autorizacion autorizacion);
+
+    Autorizacion findAutorizacionByIdSoliService(Long idSolicitud);
 }

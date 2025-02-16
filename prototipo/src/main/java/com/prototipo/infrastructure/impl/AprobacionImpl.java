@@ -44,24 +44,6 @@ public class AprobacionImpl implements AprobacionAbstract {
     }
 
     @Override
-    public List<AprobacionDto> listaDeSolicitudesAbstract() {
-
-        return null;
-    }
-
-    @Override
-    public List<AprobacionDto> listaDeSolicitudesByFkSoliAbstract(Long idSoli) {
-
-        return null;
-    }
-
-    @Override
-    public List<AprobacionDto> listaDeSolicitudesByUnidad(String nombreUnidad) {
-
-        return null;
-    }
-
-    @Override
     public List<AutorizacionDto> listaDeSoliAutorizadasAbstractPage(
             Long idSupervisor,
             Long page,
@@ -80,8 +62,7 @@ public class AprobacionImpl implements AprobacionAbstract {
     public AutorizacionDto findAutorizacionByIdAbstract(Long idAutorizacion) {
         Optional<AutorizacionEntity> autorizacion = autorizacionRepository
                 .findById(idAutorizacion);
-        return modelMapper
-                .map(autorizacion.orElse(null), AutorizacionDto.class);
+        return modelMapper.map(autorizacion.get(), AutorizacionDto.class);
     }
 
     @Override
@@ -103,14 +84,14 @@ public class AprobacionImpl implements AprobacionAbstract {
     }
 
     @Override
-    public List<SolicitudDto> listaDeAprobacionesPendientesAbstractPage(
+    public List<SolicitudDto> listaDeSolicitudesPendientesAbstractPage(
             Long idResponsable,
             Long page,
             Long size,
             String byColumName) {
 
         List<SolicitudEntity> listSolEnt = solicitudRepository
-                .findAllByIdUserUnidadRespon(idResponsable);
+                .findAllSoliByIdResponsable(idResponsable);
         return listSolEnt.stream()
                 .map(x -> modelMapper.map(x, SolicitudDto.class))
                 .toList();

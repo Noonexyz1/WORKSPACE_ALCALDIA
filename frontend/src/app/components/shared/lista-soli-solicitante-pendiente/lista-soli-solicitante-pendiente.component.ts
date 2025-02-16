@@ -74,7 +74,7 @@ export class ListaSoliSolicitantePendienteComponent {
   }
 
   botonSolicitudFotocopiaPDF(idSolicitud: number): void {
-    const url = UrlsProperties.PATH_SOLICITUD_PDF + idSolicitud + '/' + this.usuario.id + '/2';
+    const url = UrlsProperties.PATH_SOLICITUD_PDF + idSolicitud;
 
     // Recibimos la peticion
     this.http.get(
