@@ -11,7 +11,7 @@ export enum UrlsProperties {
   PATH_CREATE_SOLICITUD = 'http://localhost:8081/solicitante/solicitarFotocopiar',
 
   PATH_SOLICITUD_PDF = 'http://localhost:8081/solicitante/exportSolicitudDPF/',
-  PATH_ORDENFOTO_PDF = 'http://localhost:8081/solicitante/exportOrdenParaFotocopiaDPF/',
+  PATH_ORDENFOTO_PDF = 'http://localhost:8081/solicitante/exportOrdenDeSolicitudDPF/',
   PATH_COMUINTERNA_PDF = 'http://localhost:8081/solicitante/exportComunicacionInternaDPF/',
 
   PATH_LIST_SOLIC = 'http://localhost:8081/solicitante/verSolicitudesPendientes',

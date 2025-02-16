@@ -210,34 +210,58 @@ public class SolicitanteController {
     }
 
     @Async
-    @GetMapping("/exportComunicacionInternaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
-    public CompletableFuture<ResponseEntity<byte[]>> exportComunicacionInternaDPF(
-            @PathVariable Long idSolicitud,
-            @PathVariable Long idSolicitante,
-            @PathVariable Long idResponsable) {
+    @GetMapping("/exportOrdenDeSolicitudDPF/{idSolicitud}")
+    public CompletableFuture<ResponseEntity<byte[]>> exportOrdenDeSolicitudDPF(
+            @PathVariable Long idSolicitud) {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
+                // Recuperar datos necesarios
+                List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService
+                        .listDetalleSolicitud(idSolicitud);
+
+                // Generar el PDF
+                byte[] pdfData = ordenFotoServiceReport.exportToPdf(listDetalleSolicitudResp);
+
                 // Configurar encabezados de la respuesta
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_PDF);
                 headers.setContentDispositionFormData(
-                        "comunicacionInternaPDF",
-                        "comunicacionInterna.pdf"
+                        "ordenParaFotocopiaPDF",
+                        "ordenParaFotocopia.pdf"
                 );
 
+                // Crear y devolver la respuesta
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .body(pdfData);
+
+            } catch (IOException | JRException e) {
+                throw new RuntimeException("Error al generar el PDF", e);
+            }
+        });
+    }
+
+    @Async
+    @GetMapping("/exportComunicacionInternaDPF/{idSolicitud}")
+    public CompletableFuture<ResponseEntity<byte[]>> exportComunicacionInternaDPF(
+            @PathVariable Long idSolicitud) {
+
+        return CompletableFuture.supplyAsync(() -> {
+            try {
                 // Recuperar datos necesarios
                 Solicitud solicitudResp = solicitudService.buscarSolicitudService(idSolicitud);
+
                 List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService
                         .listDetalleSolicitud(idSolicitud);
 
                 String documentos = formatListaDocumentos(listDetalleSolicitudResp);
-                Long totalCopias = listDetalleSolicitudResp.stream()
+                long totalCopias = listDetalleSolicitudResp.stream()
                         .mapToLong(DetalleSolicitud::getNroCopias)
                         .sum();
 
-                UsuarioUnidad usuarioResponsable = usuarioService.findUsuarioUnidadByIdUSer(idResponsable);
-                UsuarioUnidad usuarioSolicitante = usuarioService.findUsuarioUnidadByIdUSer(idSolicitante);
+                UsuarioUnidad usuarioSolicitante = solicitudResp.getFkUsuarioSolicitante();
+                UsuarioUnidad usuarioResponsable = solicitudResp.getFkUsuarioSolicitante().getFkResponsable();
 
                 // Crear objeto de reporte
                 ComunicacionReport comunicacionReport = ComunicacionReport.builder()
@@ -256,11 +280,19 @@ public class SolicitanteController {
                         .cite(solicitudResp.getCite())
                         .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
                         .documentos(documentos)
-                        .totalCopias(totalCopias.intValue())
+                        .totalCopias((int) totalCopias)
                         .build();
 
                 // Generar el PDF
                 byte[] pdfBytes = comunicacionInternaServiceReport.exportToPdf(comunicacionReport);
+
+                // Configurar encabezados de la respuesta
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                headers.setContentDispositionFormData(
+                        "comunicacionInternaPDF",
+                        "comunicacionInterna.pdf"
+                );
 
                 // Crear y devolver la respuesta
                 return ResponseEntity.ok()
@@ -289,6 +321,12 @@ public class SolicitanteController {
                     + " y " + nombres.get(nombres.size() - 1);
         }
     }
+
+
+
+
+
+
 
     @GetMapping("/exportInformeDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
     public ResponseEntity<byte[]> exportInformeDPF(
@@ -365,43 +403,5 @@ public class SolicitanteController {
 
         }
 
-    }
-
-    @Async
-    @GetMapping("/exportOrdenParaFotocopiaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
-    public CompletableFuture<ResponseEntity<byte[]>> exportOrdenParaFotocopiaDPF(
-            @PathVariable Long idSolicitud,
-            @PathVariable Long idSolicitante,
-            @PathVariable Long idResponsable) {
-
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                // Configurar encabezados de la respuesta
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_PDF);
-                headers.setContentDispositionFormData(
-                        "ordenParaFotocopiaPDF",
-                        "ordenParaFotocopia.pdf"
-                );
-
-                // Recuperar datos necesarios
-                Solicitud solicitudResp = solicitudService
-                        .buscarSolicitudService(idSolicitud);
-                List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService
-                        .listDetalleSolicitud(idSolicitud);
-
-                // Generar el PDF
-                byte[] pdfBytes = ordenFotoServiceReport
-                        .exportToPdf(listDetalleSolicitudResp);
-
-                // Crear y devolver la respuesta
-                return ResponseEntity.ok()
-                        .headers(headers)
-                        .body(pdfBytes);
-
-            } catch (IOException | JRException e) {
-                throw new RuntimeException("Error al generar el PDF", e);
-            }
-        });
     }
 }

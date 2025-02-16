@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -36,7 +35,7 @@ public class OrdenFotoServiceReport {
     }
 
     private List<JasperPrint> getReportByList(List<DetalleSolicitud> listDetalleSolicitudResp)
-            throws IOException, JRException {
+            throws JRException {
 
         List<JasperPrint> paginasJasperPrints = new ArrayList<>();
 
@@ -104,22 +103,9 @@ public class OrdenFotoServiceReport {
         return paginasJasperPrints;
     }
 
-    public byte[] exportToPdfByList(List<JasperPrint> jasperPrintList) throws JRException {
-        // 1. Crea un flujo de salida en memoria (no se escribe en disco)
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    public byte[] exportToPdfByListByJRPdfExporter(List<JasperPrint> jasperPrintList)
+            throws JRException {
 
-        // 2. Usa JasperExportManager para exportar todas las páginas de JasperPrint
-        for (JasperPrint jasperPrint : jasperPrintList) {
-            //Aqui esta el Problema?? porque solo me manda uno, osea el ultimo
-            //ESTE METODO SOLO ES CAPAZ DE EXPORTA UN SOLO REPORTE
-            JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
-        }
-
-        // 3. Convierte el contenido del flujo de salida a un arreglo de bytes
-        return baos.toByteArray();
-    }
-
-    public byte[] exportToPdfByListByJRPdfExporter(List<JasperPrint> jasperPrintList) throws JRException {
         // 1. Crea un flujo de salida en memoria
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -146,5 +132,4 @@ public class OrdenFotoServiceReport {
         // 4. Convierte el contenido del flujo de salida a un arreglo de bytes
         return baos.toByteArray();
     }
-
 }

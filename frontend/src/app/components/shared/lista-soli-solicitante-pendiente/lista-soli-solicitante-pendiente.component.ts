@@ -92,7 +92,7 @@ export class ListaSoliSolicitantePendienteComponent {
   }
 
   botonOrdenFotocopiaPDF(idSolicitud: number): void {
-    const url = UrlsProperties.PATH_ORDENFOTO_PDF + idSolicitud + '/' + this.usuario.id + '/2';
+    const url = UrlsProperties.PATH_ORDENFOTO_PDF + idSolicitud;
 
     // Recibimos la peticion
     this.http.get(
@@ -110,7 +110,7 @@ export class ListaSoliSolicitantePendienteComponent {
   }
 
   botonComunicacionInternaPDF(idSolicitud: number): void {
-    const url = UrlsProperties.PATH_COMUINTERNA_PDF + idSolicitud + '/' + this.usuario.id + '/2';
+    const url = UrlsProperties.PATH_COMUINTERNA_PDF + idSolicitud;
 
     // Recibimos la peticion
     this.http.get(
