@@ -1,7 +1,12 @@
 package com.prototipo.infrastructure.service;
 
+import com.prototipo.application.useCase.SolicitudService;
+import com.prototipo.domain.model.Fotocopia;
+import com.prototipo.domain.model.Solicitud;
+import com.prototipo.domain.model.UsuarioUnidad;
 import com.prototipo.infrastructure.rest.report.SolicitudReport;
 import com.prototipo.infrastructure.rest.report.TablaSolicitudReport;
+import lombok.SneakyThrows;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,19 +25,19 @@ public class SolicitudServiceReport {
 
     @Autowired
     private ResourceLoader resourceLoader;
+    @Autowired
+    private SolicitudService solicitudService;
 
-    public byte[] exportToPdf(
-            SolicitudReport solicitudReport,
-            List<TablaSolicitudReport> listDetalleFotocopiaResp)
+    //@SneakyThrows
+    public byte[] exportToPdf(SolicitudReport solicitudReport)
             throws JRException{
 
-        JasperPrint jasperPrint = getReport(solicitudReport, listDetalleFotocopiaResp);
+        JasperPrint jasperPrint = getReport(solicitudReport);
         return JasperExportManager.exportReportToPdf(jasperPrint);
     }
 
-    private JasperPrint getReport(
-            SolicitudReport parametros,
-            List<TablaSolicitudReport> listDetalleSolicitudResp)
+    //Deberias enviar el Mapa por parametro para reutilizar codigo
+    private JasperPrint getReport(SolicitudReport parametros)
             throws JRException {
 
         // Asigna los campos de SolicitudReport a los parámetros del reporte plantilla
@@ -43,8 +49,9 @@ public class SolicitudServiceReport {
         parameter.put("cite", parametros.getCite());
         parameter.put("fecha", parametros.getFecha());
         parameter.put("nombreOrganizacion", parametros.getNombreOrganizacion());
+        parameter.put("cantidadSumado", parametros.getCantidadSumado());
+        parameter.put("ds", new JRBeanCollectionDataSource(parametros.getListReportFotocopias()));
         parameter.put("imageDir", "classpath:/static/images/");
-        parameter.put("ds", new JRBeanCollectionDataSource(listDetalleSolicitudResp));
 
         //Ruta total para traer la plantilla PDF de Solicitud
         String rutaPlantillaSoliPDF = getRutaPlantillaSolicitudDPF();
@@ -59,5 +66,42 @@ public class SolicitudServiceReport {
                 "templates" + File.separator +
                 "report" + File.separator +
                 "solicitud.jrxml";
+    }
+
+    public SolicitudReport getObtenerDatosForReport(Long idSolicitud) {
+        // Traemos los datos necesarios para el reporte
+        Solicitud solicitudResp = solicitudService.buscarSolicitudService(idSolicitud);
+        UsuarioUnidad usuarioResponsable = solicitudResp.getFkUsuarioSolicitante().getFkResponsable();
+        UsuarioUnidad usuarioSolicitante = solicitudResp.getFkUsuarioSolicitante();
+        List<Fotocopia> listFotocopias = solicitudService.listFotocopiaSolicitud(idSolicitud);
+
+        // Mapeamos con los datos obtenidos para exportar el PDF
+        List<TablaSolicitudReport> listReportFotocopias = listFotocopias.stream()
+                .map(x -> TablaSolicitudReport.builder()
+                        .documento(x.getNombreDocumento())
+                        .cantidad(x.getNroCopias().intValue())
+                        .build())
+                .toList();
+
+        // Calcular Cantidad sumados
+        Long cantidadSumado = listFotocopias.stream()
+                .map(Fotocopia::getNroCopias)
+                .reduce(0L, Long::sum);
+
+        return SolicitudReport.builder()
+                .funcionarioTo(usuarioResponsable.getFkUsuario().getNombres() + " " +
+                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                        usuarioResponsable.getFkUsuario().getMaterno())
+                .funcionarioToCargo(usuarioResponsable.getFkCargo().getNombreCargo())
+                .funcionarioFrom(usuarioSolicitante.getFkUsuario().getNombres() + " " +
+                        usuarioSolicitante.getFkUsuario().getPaterno() + " " +
+                        usuarioSolicitante.getFkUsuario().getMaterno())
+                .funcionarioFromCargo(usuarioSolicitante.getFkCargo().getNombreCargo())
+                .cite(solicitudResp.getCite())
+                .fecha(LocalDate.now().toString())
+                .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
+                .cantidadSumado(cantidadSumado + "")
+                .listReportFotocopias(listReportFotocopias)
+                .build();
     }
 }

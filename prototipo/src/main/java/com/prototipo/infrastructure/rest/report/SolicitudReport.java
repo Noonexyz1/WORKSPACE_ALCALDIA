@@ -2,6 +2,8 @@ package com.prototipo.infrastructure.rest.report;
 
 import lombok.*;
 
+import java.util.List;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -15,4 +17,6 @@ public class SolicitudReport {
     private String cite;
     private String fecha;
     private String nombreOrganizacion;
+    private String cantidadSumado;
+    private List<TablaSolicitudReport> listReportFotocopias;
 }

@@ -39,10 +39,6 @@ public class SolicitanteController {
     @Autowired
     private ModelMapper modelMapper;
     @Autowired
-    private AprobacionService aprobacionService;
-    @Autowired
-    private OperacionService operacionService;
-    @Autowired
     private SolicitudServiceReport solicitudServiceReport;
     @Autowired
     private ComunicacionInternaServiceReport comunicacionInternaServiceReport;
@@ -193,41 +189,15 @@ public class SolicitanteController {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
+                SolicitudReport solicitudReport = solicitudServiceReport.getObtenerDatosForReport(idSolicitud);
+
+                // PDF generado
+                byte[] pdfData = solicitudServiceReport.exportToPdf(solicitudReport);
+
                 // Los heades para el reponse
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_PDF);
                 headers.setContentDispositionFormData("solicitudPDF", "solicitudPDF.pdf");
-
-                // Traemos los datos necesarios para el reporte
-                Solicitud solicitudResp = solicitudService.buscarSolicitudService(idSolicitud);
-                UsuarioUnidad usuarioResponsable = solicitudResp.getFkUsuarioSolicitante().getFkResponsable();
-                UsuarioUnidad usuarioSolicitante = solicitudResp.getFkUsuarioSolicitante();
-                List<Fotocopia> listFotocopias = solicitudService.listFotocopiaSolicitud(idSolicitud);
-
-                // Mapeamos con los datos obtenidos para exportar el PDF
-                List<TablaSolicitudReport> listReportFotocopias = listFotocopias.stream()
-                        .map(x -> TablaSolicitudReport.builder()
-                                .documento(x.getNombreDocumento())
-                                .cantidad(x.getNroCopias().intValue())
-                                .build())
-                        .toList();
-
-                SolicitudReport solicitudReport = SolicitudReport.builder()
-                        .funcionarioTo(usuarioResponsable.getFkUsuario().getNombres() + " " +
-                                usuarioResponsable.getFkUsuario().getPaterno() + " " +
-                                usuarioResponsable.getFkUsuario().getMaterno())
-                        .funcionarioToCargo(usuarioResponsable.getFkCargo().getNombreCargo())
-                        .funcionarioFrom(usuarioSolicitante.getFkUsuario().getNombres() + " " +
-                                usuarioSolicitante.getFkUsuario().getPaterno() + " " +
-                                usuarioSolicitante.getFkUsuario().getMaterno())
-                        .funcionarioFromCargo(usuarioSolicitante.getFkCargo().getNombreCargo())
-                        .cite(solicitudResp.getCite())
-                        .fecha(LocalDate.now().toString())
-                        .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
-                        .build();
-
-                // PDF generado
-                byte[] pdfData = solicitudServiceReport.exportToPdf(solicitudReport, listReportFotocopias);
 
                 return ResponseEntity.ok()
                         .headers(headers)
