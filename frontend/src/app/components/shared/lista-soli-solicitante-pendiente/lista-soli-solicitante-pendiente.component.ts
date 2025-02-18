@@ -1,12 +1,13 @@
 import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {SolicitudResponse} from '../../../models/SolicitudResponse';
-import {catchError, map, of} from 'rxjs';
+import {BehaviorSubject, catchError, map, of} from 'rxjs';
 import {PageRequestID} from '../../../models/PageRequestID';
 import {UsuarioResponse} from '../../../models/UsuarioResponse';
 import {LocalStorageService} from '../../../services/local-storage/local-storage.service';
 import {PageProperties} from "../../../models/PageProperties";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
+import {UsuarioUnidadEditRequest} from "../../../models/UsuarioUnidadEditRequest";
 
 @Component({
   selector: 'app-lista-soli-solicitante-pendiente',
@@ -73,7 +74,19 @@ export class ListaSoliSolicitantePendienteComponent {
     ).subscribe();
   }
 
-  botonSolicitudFotocopiaPDF(idSolicitud: number): void {
+  private subject$ = new BehaviorSubject<number>(0);
+  isModalVisible: boolean = false;
+  toggleModal(idSolicitud: number): void {
+    this.subject$.next(idSolicitud);
+    this.isModalVisible = !this.isModalVisible;
+  }
+
+  botonSolicitudFotocopiaPDF(): void {
+    let idSolicitud: number = 0;
+    this.subject$.asObservable().subscribe(x => {
+      idSolicitud = x;
+    });
+
     const url = UrlsProperties.PATH_SOLICITUD_PDF + idSolicitud;
 
     // Recibimos la peticion
@@ -91,7 +104,11 @@ export class ListaSoliSolicitantePendienteComponent {
     ).subscribe();
   }
 
-  botonOrdenFotocopiaPDF(idSolicitud: number): void {
+  botonOrdenFotocopiaPDF(): void {
+    let idSolicitud: number = 0;
+    this.subject$.asObservable().subscribe(x => {
+      idSolicitud = x;
+    });
     const url = UrlsProperties.PATH_ORDENFOTO_PDF + idSolicitud;
 
     // Recibimos la peticion
@@ -109,7 +126,11 @@ export class ListaSoliSolicitantePendienteComponent {
     ).subscribe();
   }
 
-  botonComunicacionInternaPDF(idSolicitud: number): void {
+  botonComunicacionInternaPDF(): void {
+    let idSolicitud: number = 0;
+    this.subject$.asObservable().subscribe(x => {
+      idSolicitud = x;
+    });
     const url = UrlsProperties.PATH_COMUINTERNA_PDF + idSolicitud;
 
     // Recibimos la peticion
@@ -143,10 +164,6 @@ export class ListaSoliSolicitantePendienteComponent {
   }
 
 
-  isModalVisible: boolean = false;
-  toggleModal(): void {
-    this.isModalVisible = !this.isModalVisible;
-  }
 
 
   pageProperties: PageProperties = new PageProperties();
@@ -175,5 +192,4 @@ export class ListaSoliSolicitantePendienteComponent {
       this.listarSolicitudes();
     }
   }
-
 }

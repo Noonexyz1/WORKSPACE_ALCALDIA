@@ -169,5 +169,4 @@ export class EditarUsuarioComponent {
       })
     ).subscribe();
   }
-
 }

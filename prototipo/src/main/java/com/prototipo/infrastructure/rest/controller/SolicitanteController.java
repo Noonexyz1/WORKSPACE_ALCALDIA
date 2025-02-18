@@ -199,9 +199,7 @@ public class SolicitanteController {
                 headers.setContentType(MediaType.APPLICATION_PDF);
                 headers.setContentDispositionFormData("solicitudPDF", "solicitudPDF.pdf");
 
-                return ResponseEntity.ok()
-                        .headers(headers)
-                        .body(pdfData);
+                return ResponseEntity.ok().headers(headers).body(pdfData);
 
             } catch (Exception e) {
                 throw new RuntimeException("Error al generar el PDF", e);

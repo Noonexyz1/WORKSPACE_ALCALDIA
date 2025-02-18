@@ -47,6 +47,9 @@
     <parameter name="cantidadSumado" class="java.lang.String"/>
     <parameter name="ds" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
     <parameter name="imageDir" class="java.lang.String"/>
+
+    <style name="NEGRITA" pdfFontName="Helvetica-Bold" backcolor="#FFFFFF"/>
+
     <background splitType="Stretch"/>
     <pageHeader height="121" splitType="Stretch">
         <element kind="image" uuid="b082e94e-7c39-4443-8dd6-6b50e66e1ce5" x="433" y="12" width="104" height="75">
@@ -61,7 +64,7 @@
         <element kind="staticText" uuid="643f4a2c-a2cb-4030-99c3-bd3ea62c77a0" x="113" y="30" width="316" height="20" bold="true">
             <text><![CDATA[_________________________________________________________________________________________________________________________________]]></text>
         </element>
-        <element kind="textField" uuid="0edee4b0-1084-4c24-8e8a-a9afa7d627c4" x="125" y="71" width="295" height="21" bold="true" hTextAlign="Right">
+        <element style="NEGRITA" kind="textField" uuid="0edee4b0-1084-4c24-8e8a-a9afa7d627c4" x="125" y="71" width="295" height="21" bold="true" hTextAlign="Right">
             <expression><![CDATA[ "CITE: " + $P{cite}]]></expression>
         </element>
         <element kind="textField" uuid="2e9f3bbc-dae0-44b8-8388-00e4e3d05164" x="198" y="51" width="222" height="20" hTextAlign="Right">
@@ -70,22 +73,22 @@
     </pageHeader>
     <detail>
         <band height="320" splitType="Stretch">
-            <element kind="staticText" uuid="005cdb85-fcb9-41b2-ad77-67842a2915b8" x="105" y="10" width="20" height="20" bold="true">
+            <element style="NEGRITA" kind="staticText" uuid="005cdb85-fcb9-41b2-ad77-67842a2915b8" x="105" y="10" width="20" height="20" bold="true">
                 <text><![CDATA[A:]]></text>
             </element>
-            <element kind="staticText" uuid="2ae0082e-f741-463f-9a02-9988b7a54dcf" x="105" y="73" width="20" height="20" bold="true">
+            <element style="NEGRITA" kind="staticText" uuid="2ae0082e-f741-463f-9a02-9988b7a54dcf" x="105" y="73" width="20" height="20" bold="true">
                 <text><![CDATA[DE:]]></text>
             </element>
-            <element kind="staticText" uuid="d7887803-18b7-4410-b4b1-94c5d4e6c744" x="157" y="50" width="357" height="20" bold="true">
+            <element style="NEGRITA" kind="staticText" uuid="d7887803-18b7-4410-b4b1-94c5d4e6c744" x="157" y="50" width="357" height="20" bold="true">
                 <text><![CDATA[GOBIERNO AUTÓNOMO MUNICIPAL DE EL ALTO]]></text>
             </element>
-            <element kind="staticText" uuid="30bcba4d-dfc3-4b76-9897-d63eab306f53" x="157" y="113" width="357" height="20" bold="true">
+            <element style="NEGRITA" kind="staticText" uuid="30bcba4d-dfc3-4b76-9897-d63eab306f53" x="157" y="113" width="357" height="20" bold="true">
                 <text><![CDATA[GOBIERNO AUTÓNOMO MUNICIPAL DE EL ALTO]]></text>
             </element>
-            <element kind="staticText" uuid="fcb49312-b89e-4794-9128-c75f229e3b8f" x="105" y="137" width="32" height="20" bold="true">
+            <element style="NEGRITA" kind="staticText" uuid="fcb49312-b89e-4794-9128-c75f229e3b8f" x="105" y="137" width="32" height="20" bold="true">
                 <text><![CDATA[REF:]]></text>
             </element>
-            <element kind="staticText" uuid="29116084-667d-4e8d-87b5-d9ff4107258b" x="157" y="137" width="357" height="20" bold="true">
+            <element style="NEGRITA" kind="staticText" uuid="29116084-667d-4e8d-87b5-d9ff4107258b" x="157" y="137" width="357" height="20" bold="true">
                 <text><![CDATA[SOLICITUD DE AUTORIZACIÓN DE FOTOCOPIAS]]></text>
             </element>
             <element kind="staticText" uuid="238c84c0-1c08-401e-82e4-cbe17b07ec8b" x="40" y="153" width="474" height="20" bold="true" hTextAlign="Center">
@@ -97,10 +100,10 @@
             <element kind="textField" uuid="68f5e11a-0c63-4e72-a8ae-4a3ddf2c8930" x="157" y="73" width="357" height="20">
                 <expression><![CDATA[$P{funcionarioFrom}]]></expression>
             </element>
-            <element kind="textField" uuid="09f85ebf-3780-46c8-81bc-ad01b47e8d36" x="157" y="30" width="357" height="20" bold="true">
+            <element style="NEGRITA" kind="textField" uuid="09f85ebf-3780-46c8-81bc-ad01b47e8d36" x="157" y="30" width="357" height="20" bold="true">
                 <expression><![CDATA[$P{funcionarioToCargo}]]></expression>
             </element>
-            <element kind="textField" uuid="5d9a9fa3-fddf-45ed-8f1f-3dd76f721d42" x="157" y="93" width="357" height="20" bold="true">
+            <element style="NEGRITA" kind="textField" uuid="5d9a9fa3-fddf-45ed-8f1f-3dd76f721d42" x="157" y="93" width="357" height="20" bold="true">
                 <expression><![CDATA[$P{funcionarioFromCargo}]]></expression>
             </element>
             <element kind="staticText" uuid="20a9aaea-4ed1-4683-9558-0411c6fa2f57" x="50" y="186" width="150" height="15">
@@ -174,7 +177,7 @@
         </element>
     </pageFooter>
     <summary height="136" splitType="Stretch">
-        <element kind="staticText" uuid="dc34ac4c-9412-4e0e-97a9-38a34e058dd8" x="110" y="0" width="300" height="20" bold="true" hTextAlign="Center" vTextAlign="Middle">
+        <element style="NEGRITA" kind="staticText" uuid="dc34ac4c-9412-4e0e-97a9-38a34e058dd8" x="110" y="0" width="300" height="20" bold="true" hTextAlign="Center" vTextAlign="Middle">
             <text><![CDATA[Total]]></text>
             <box>
                 <topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
@@ -183,7 +186,7 @@
                 <rightPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
             </box>
         </element>
-        <element kind="textField" uuid="09f85ebf-3780-46c8-81bc-ad01b47e8d36" x="410" y="0" width="80" height="20" bold="true" hTextAlign="Center" vTextAlign="Middle">
+        <element style="NEGRITA" kind="textField" uuid="09f85ebf-3780-46c8-81bc-ad01b47e8d36" x="410" y="0" width="80" height="20" bold="true" hTextAlign="Center" vTextAlign="Middle">
             <expression><![CDATA[$P{cantidadSumado}]]></expression>
             <box>
                 <topPen lineWidth="1.0" lineStyle="Solid" lineColor="#000000"/>
