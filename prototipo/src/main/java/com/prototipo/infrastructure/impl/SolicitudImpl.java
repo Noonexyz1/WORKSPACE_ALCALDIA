@@ -122,16 +122,7 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
-    public List<DetalleSolicitudDto> getListaDetalleSolicitudAbstract(Long idSolicitud) {
-        List<FotocopiaEntity> list = detalleSolicitudRepository
-                .findAllFotocopiaByIdSoli(idSolicitud);
-        return list.stream()
-                .map(x -> modelMapper.map(x, DetalleSolicitudDto.class))
-                .toList();
-    }
-
-    @Override
-    public List<FotocopiaDto> getListaFotocopiaSolicitudAbstract(Long idSolicitud) {
+    public List<FotocopiaDto> getFotocopiasSolicitudAbstract(Long idSolicitud) {
         List<FotocopiaEntity> list = detalleSolicitudRepository
                 .findAllFotocopiaByIdSoli(idSolicitud);
         return list.stream()

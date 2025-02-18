@@ -50,7 +50,7 @@
 				<expression><![CDATA[$P{litCantidadFotocopia1} == null? "SIN VALOR": $P{litCantidadFotocopia1}]]></expression>
 			</element>
 			<element kind="textField" uuid="c804c39c-47a0-4c3c-b93a-d7b8be5b94fc" x="239" y="176" width="110" height="10" fontSize="6.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
-				<expression><![CDATA[$P{nroCantidadFotocopia1} == null ? 0: $P{nroCantidadFotocopia1}]]></expression>
+				<expression><![CDATA[$P{precio1} == null ? 0: $P{precio1}]]></expression>
 			</element>
 			<element kind="textField" uuid="200233fe-9568-4ca1-be78-80be9fffcfad" x="147" y="190" width="173" height="10" fontSize="6.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
 				<expression><![CDATA[$P{literalPrecio1} == null ? "SIN VALOR": $P{literalPrecio1}]]></expression>
@@ -69,7 +69,7 @@
 				<expression><![CDATA[$P{litCantidadFotocopia2} == null? "SIN VALOR": $P{litCantidadFotocopia2}]]></expression>
 			</element>
 			<element kind="textField" uuid="5d46a45a-ef52-460b-a2d6-3c66f74743c4" x="603" y="176" width="110" height="10" fontSize="6.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
-				<expression><![CDATA[$P{nroCantidadFotocopia2} == null ? 0: $P{nroCantidadFotocopia2}]]></expression>
+				<expression><![CDATA[$P{precio2} == null ? 0: $P{precio2}]]></expression>
 			</element>
 			<element kind="textField" uuid="dee0bc5a-c66d-4d4a-b80a-25458776274f" x="511" y="190" width="173" height="10" fontSize="6.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
 				<expression><![CDATA[$P{literalPrecio2} == null ? "SIN VALOR": $P{literalPrecio2}]]></expression>
@@ -88,7 +88,7 @@
 				<expression><![CDATA[$P{litCantidadFotocopia3} == null? "SIN VALOR": $P{litCantidadFotocopia3}]]></expression>
 			</element>
 			<element kind="textField" uuid="95e92f94-5341-4f4d-a9d1-41c5af5ab37a" x="240" y="401" width="110" height="10" fontSize="6.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
-				<expression><![CDATA[$P{nroCantidadFotocopia3} == null ? 0: $P{nroCantidadFotocopia3}]]></expression>
+				<expression><![CDATA[$P{precio3} == null ? 0: $P{precio3}]]></expression>
 			</element>
 			<element kind="textField" uuid="f8af245d-bbcd-4eeb-ab0d-0f7480c7c16f" x="148" y="415" width="173" height="10" fontSize="6.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
 				<expression><![CDATA[$P{literalPrecio3} == null ? "SIN VALOR": $P{literalPrecio3}]]></expression>
@@ -107,7 +107,7 @@
 				<expression><![CDATA[$P{litCantidadFotocopia4} == null? "SIN VALOR": $P{litCantidadFotocopia4}]]></expression>
 			</element>
 			<element kind="textField" uuid="fe0bbf80-3801-4000-b70b-f918cd1ab913" x="603" y="401" width="110" height="10" fontSize="6.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
-				<expression><![CDATA[$P{nroCantidadFotocopia4} == null ? 0: $P{nroCantidadFotocopia4}]]></expression>
+				<expression><![CDATA[$P{precio4} == null ? 0: $P{precio4}]]></expression>
 			</element>
 			<element kind="textField" uuid="4a9d3a13-5d35-4715-925b-45502d402457" x="511" y="415" width="173" height="10" fontSize="6.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
 				<expression><![CDATA[$P{literalPrecio4} == null ? "SIN VALOR": $P{literalPrecio4}]]></expression>

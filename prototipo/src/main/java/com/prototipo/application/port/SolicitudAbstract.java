@@ -13,7 +13,7 @@ public interface SolicitudAbstract {
     void guardarSolicitudAbstract(SolicitudDto solicitudDto);
     SolicitudDto buscarSolicitudByIdAbstract(Long id);
     SolicitudDto buscarSolicitudByFkUnidad(Long idUnidad);
-    List<DetalleSolicitudDto> getListaDetalleSolicitudAbstract(Long idSolicitud);
+    List<FotocopiaDto> getFotocopiasSolicitudAbstract(Long idSolicitud);
     List<FinalizacionDto> listFinalizacionSolicitudAbs(Long idFunUni, Long page, Long size);
     List<FotocopiaDto> findListDetalleSoliBySolicitudIdAbs(Long idSolicitud);
     void guardarAutorizacionAbs(AutorizacionDto autorizacionDto);
@@ -24,5 +24,4 @@ public interface SolicitudAbstract {
     ServicioFotocopiaDto findServicioFotocopia(ServicioFotocopiaDto fkServicioFotocopia);
     List<SolicitudDto> getListaSolicitudesAutoriAbstract(Long idUserUni, Long page, Long size);
     List<SolicitudDto> getListaSolicitudesFinaliAbstract(Long idUserUni, Long page, Long size);
-    List<FotocopiaDto> getListaFotocopiaSolicitudAbstract(Long idSolicitud);
 }

@@ -6,25 +6,16 @@ import java.util.List;
 
 public interface SolicitudService {
     void solicitarFotocopiarService(Solicitud solicitudDomain, List<Fotocopia> list);
-    void registrarFotocopiarService(Solicitud solicitudDomain, List<DetalleSolicitud> list);
-    void guardarPdfDeLaSolicitudAbstract(ArchivoPdf archivoPdfDomain);
-    void guardarSolicitudService(Solicitud solicitudDomain);
     List<Solicitud> getListaSolicitudesService(Long idUsuarioUnidad, Long page, Long size);
     Solicitud buscarSolicitudService(Long id);
-    List<DetalleSolicitud> listDetalleSolicitud(Long idSolicitud);
-    List<Finalizacion> listFinalizacionSolicitud(Long idFunUni, Long page, Long size);
+    List<Fotocopia> listFotocopiaSolicitud(Long idSolicitud);
     List<Fotocopia> findListDetalleSoliBySolicitudId(Long idSolicitud);
     void guardarAutorizacion(Autorizacion autorizacion);
-    Autorizacion buscarAutorizacionByIdSoli(Long idSolicitud);
-    Autorizacion buscarAutorizacionById(Long idAutorizacion);
     void guardarFinalizacion(Finalizacion finalizacion);
     void eliminarSolicitudById(Long idSolicitud);
     List<String> listarTamano();
     List<String> listarAnversoReverso();
     List<String> listarColor();
     List<Solicitud> getListaSolicitudesAutoriService(Long idUserUni, Long page, Long size);
-
     List<Solicitud> getListaSolicitudesFinaliService(Long idUserUni, Long page, Long size);
-
-    List<Fotocopia> listFotocopiaSolicitud(Long idSolicitud);
 }

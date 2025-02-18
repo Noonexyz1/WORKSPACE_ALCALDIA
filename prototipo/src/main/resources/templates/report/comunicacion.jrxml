@@ -159,7 +159,7 @@
 	</detail>
 	<pageFooter height="63" splitType="Stretch">
 		<element kind="staticText" uuid="4f52b373-1e52-4789-8a93-1361ea646575" x="43" y="6" width="476" height="21" bold="true" hTextAlign="Center">
-			<text><![CDATA[______________________________________________________________________________________]]></text>
+			<text><![CDATA[_____________________________________________________________________________________]]></text>
 		</element>
 		<element kind="staticText" uuid="cc0c25a2-1ca5-4298-9c82-11cc49e7fcd0" x="43" y="27" width="476" height="30" fontSize="10.0" hTextAlign="Center">
 			<text><![CDATA[Avenida Costanera Nro. 5022, Urbanizacion Libertad entre calles JJ Torres y Hernan Siles Zuazo, Casa Municipal (Jach'a Uta), a media cuadra de la Estacion de Bomberos El Alto.]]></text>

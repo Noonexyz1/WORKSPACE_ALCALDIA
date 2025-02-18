@@ -215,11 +215,11 @@ public class SolicitanteController {
         return CompletableFuture.supplyAsync(() -> {
             try {
                 // Recuperar datos necesarios
-                List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService
-                        .listDetalleSolicitud(idSolicitud);
+                List<Fotocopia> listFotocopia = solicitudService
+                        .listFotocopiaSolicitud(idSolicitud);
 
                 // Generar el PDF
-                byte[] pdfData = ordenFotoServiceReport.exportToPdf(listDetalleSolicitudResp);
+                byte[] pdfData = ordenFotoServiceReport.exportToPdf(listFotocopia);
 
                 // Configurar encabezados de la respuesta
                 HttpHeaders headers = new HttpHeaders();
@@ -250,12 +250,12 @@ public class SolicitanteController {
                 // Recuperar datos necesarios
                 Solicitud solicitudResp = solicitudService.buscarSolicitudService(idSolicitud);
 
-                List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService
-                        .listDetalleSolicitud(idSolicitud);
+                List<Fotocopia> listFotocopiaSolicitudResp = solicitudService
+                        .listFotocopiaSolicitud(idSolicitud);
 
-                String documentos = formatListaDocumentos(listDetalleSolicitudResp);
-                long totalCopias = listDetalleSolicitudResp.stream()
-                        .mapToLong(DetalleSolicitud::getNroCopias)
+                String documentos = formatListaDocumentos(listFotocopiaSolicitudResp);
+                long totalCopias = listFotocopiaSolicitudResp.stream()
+                        .mapToLong(Fotocopia::getNroCopias)
                         .sum();
 
                 UsuarioUnidad usuarioSolicitante = solicitudResp.getFkUsuarioSolicitante();
@@ -303,10 +303,10 @@ public class SolicitanteController {
         });
     }
 
-    private String formatListaDocumentos(List<DetalleSolicitud> listDetalleSolicitudResp) {
+    private String formatListaDocumentos(List<Fotocopia> listFotocopiaSolicitudResp) {
         // Usamos collect() para obtener una lista en versiones de Java anteriores a 16
-        List<String> nombres = listDetalleSolicitudResp.stream()
-                .map(DetalleSolicitud::getNombreDocumento).toList();
+        List<String> nombres = listFotocopiaSolicitudResp.stream()
+                .map(Fotocopia::getNombreDocumento).toList();
 
         // Verifica la cantidad de documentos
         if (nombres.size() == 1) {
@@ -334,15 +334,12 @@ public class SolicitanteController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData(
-                "informePDF",
-                "informePDF.pdf"
-        );
+        headers.setContentDispositionFormData("informePDF", "informePDF.pdf");
 
         Solicitud solicitudResp = solicitudService
                 .buscarSolicitudService(idSolicitud);
-        List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService
-                .listDetalleSolicitud(idSolicitud);
+        List<Fotocopia> listDetalleSolicitudResp = solicitudService
+                .listFotocopiaSolicitud(idSolicitud);
 
         List<TablaSolicitudReport> listReport = listDetalleSolicitudResp.stream()
                 .map(x -> TablaSolicitudReport.builder()
@@ -357,7 +354,7 @@ public class SolicitanteController {
                 .findUsuarioUnidadByIdUSer(idSolicitante);
 
         Long totalCopias = listDetalleSolicitudResp.stream()
-                .mapToLong(DetalleSolicitud::getNroCopias)  // Convierte a stream de long
+                .mapToLong(Fotocopia::getNroCopias)  // Convierte a stream de long
                 .sum();  // Suma todos los valores
 
 
