@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {afterNextRender, Component} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, of } from 'rxjs';
 import { PageRequestID } from '../../../models/PageRequestID';
@@ -6,7 +6,6 @@ import { UsuarioResponse } from '../../../models/UsuarioResponse';
 import { SolicitudResponResponse } from '../../../models/SolicitudResponResponse';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {AutorizacionResponse} from "../../../models/AutorizacionResponse";
 import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
 import {PageProperties} from "../../../models/PageProperties";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
@@ -44,33 +43,6 @@ export class ListaSoliAutorizadaResponsableComponent {
     this.listarSolicitudes();
   }
 
-  estadoModal = false;
-  isModalVisible: boolean = false;
-  autorizacion: AutorizacionResponse | null = null;
-
-  botonTraerDatosModal(idSolicitud: number): void {
-    this.estadoModal = true;
-    this.isModalVisible = !this.isModalVisible;
-
-    // Recibimos la peticion
-    this.http.get<AutorizacionResponse>(
-      UrlsProperties.PATH_AUTORI_SOLI + idSolicitud
-    ).pipe(
-      map((autorizacion: AutorizacionResponse) => {
-        this.autorizacion = autorizacion;
-      }),
-      catchError(error => {
-        console.error('Error en la petición:', error);
-        alert('Hubo un error al traer la solicitud autorizada');
-        return of(null); // Retornar un observable vacío en caso de error
-      })
-    ).subscribe();
-  }
-
-  toggleModal(): void {
-    this.isModalVisible = !this.isModalVisible;
-  }
-
   formGroup: FormGroup;
   private formBuilder: FormBuilder;
   private rootNavigateService: RootNavigateService;
@@ -93,27 +65,33 @@ export class ListaSoliAutorizadaResponsableComponent {
   }
 
   botonNotaDeSolicitud(idSolicitud: number): void {
-    const usuario: UsuarioResponse = this.localStorage.getItem('userData');
-    //"/exportOrdenParaFotocopiaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}"
-    const url = 'http://localhost:8081/responsable/exportNotaPedidoDPF/' + idSolicitud + '/' + usuario.id + '/2';
-
-    // Recibimos la peticion
-    this.http.get(url, { responseType: 'blob' }).pipe( // Cambiar el tipo de respuesta
+    this.http.get(
+      UrlsProperties.PATH_NOTA_PDF + idSolicitud,
+      { responseType: 'blob' }
+    ).pipe( // Cambiar el tipo de respuesta
       map((response: Blob) => {
-        const blob = new Blob([response], { type: 'application/pdf' });
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = 'notaPedidoPDF.pdf';
-        a.click();
-        window.URL.revokeObjectURL(url);
+        this.descargarPDF("notaPedidoPDF.pdf", response);
       }),
       catchError(error => {
-        console.error('Error en la petición:', error);
-        alert('Hubo un error al generar la orden de fotocopia PDF');
+        this.errorDescargaPDF("notaPedidoPDF.pdf", error)
         return of(null);
       })
     ).subscribe();
+  }
+
+  descargarPDF(nombrePdf: string, response: Blob): void {
+    const blob = new Blob([response], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = nombrePdf;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  errorDescargaPDF(nombrePdf: string, error: any): void {
+    console.error('Error en la petición:', error);
+    alert('Hubo un ERROR al generar ' + nombrePdf);
   }
 
   listarSolicitudes(): void {

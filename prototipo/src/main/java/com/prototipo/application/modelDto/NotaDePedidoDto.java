@@ -8,18 +8,14 @@ import java.math.BigDecimal;
 @Setter
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class NotaDePedidoDto {
-    private Integer nroCopias; // Para la columna ds.nro_copias
-    private String nombreDocumento; // Para la columna ds.nombre_documento
-    private BigDecimal precioUnitario; // Para la columna d.precio_unitario
-    private BigDecimal precioTotal; // Para la columna d.precio_total
-
-
-    public NotaDePedidoDto(Integer nroCopias, String nombreDocumento, BigDecimal precioUnitario, BigDecimal precioTotal) {
-        this.nroCopias = nroCopias;
-        this.nombreDocumento = nombreDocumento;
-        this.precioUnitario = precioUnitario;
-        this.precioTotal = precioTotal;
-    }
-
+    private String nombreDocumento;
+    private Integer nroPaginas;
+    private Integer nroCopias;
+    private String tamano;
+    private String color;
+    private String anverRever;
+    private Double precioRef;
+    private Double precioDocu;
 }

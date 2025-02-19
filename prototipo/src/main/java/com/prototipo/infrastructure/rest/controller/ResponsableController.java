@@ -280,37 +280,32 @@ public class ResponsableController {
     }
 
 
-
     //local:8081/responsable/exportNotaPedidoDPF/1/2/2
     @Async  // La anotación para indicar que este méttodo es asincrónico
-    @GetMapping("/exportNotaPedidoDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
+    @GetMapping("/exportNotaPedidoDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportNotaPedidoDPF(
-            @PathVariable Long idSolicitud,
-            @PathVariable Long idSolicitante,
-            @PathVariable Long idResponsable) throws IOException, JRException {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData(
-                "notaPedidoPDF",
-                "notaPedidoPDF.pdf"
-        );
+            @PathVariable Long idSolicitud) throws JRException {
 
         // Llamar al servicio de manera sincrónica en este caso
         List<NotaDePedido> notaDePedidoList = responsableService
                 .generarNotaDePedidoPDF(idSolicitud);
 
+        byte[] exportToPdf = notaPedidoServiceReport.exportToPdf(idSolicitud, notaDePedidoList);
+
         // Procesar el archivo PDF y devolver el resultado asincrónicamente
         return CompletableFuture.supplyAsync(() -> {
-            try {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                headers.setContentDispositionFormData("notaPedidoPDF", "notaPedidoPDF.pdf");
                 return ResponseEntity.ok()
                         .headers(headers)
-                        .body(notaPedidoServiceReport.exportToPdf(notaDePedidoList));
-            } catch (IOException | JRException e) {
-                throw new RuntimeException("Error al generar el PDF", e);
-            }
+                        .body(exportToPdf);
         });
     }
+
+
+
+
 
     //localhost:8081/solicitante/exportSolicitudDPF
     @Async

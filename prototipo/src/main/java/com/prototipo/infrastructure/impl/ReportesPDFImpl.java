@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,17 +24,20 @@ public class ReportesPDFImpl implements ReportesPDFAbstract {
     @Override
     public List<NotaDePedidoDto> getNotaDePedidoAbstract(Long idSolicitud) {
         List<Object[]> notaDePedido = reportesPDFRepository.getNotaDePedido(idSolicitud);
-        List<NotaDePedidoDto> dtos = new ArrayList<>();
-        for (Object[] result : notaDePedido) {
+        List<NotaDePedidoDto> dtosNota = notaDePedido.stream().map(x -> {
             // Convertir Long a Integer explícitamente
-            Integer nroCopias = ((Long) result[0]).intValue();
-            String nombreDocumento = (String) result[1];
-            BigDecimal precioUnitario = (BigDecimal) result[2];
-            BigDecimal precioTotal = (BigDecimal) result[3];
-            NotaDePedidoDto dto = new NotaDePedidoDto(nroCopias, nombreDocumento, precioUnitario, precioTotal);
-            dtos.add(dto);
-        }
-        return dtos;
+            String nombreDocumento = (String) x[0];
+            Integer nroPaginas = ((Long) x[1]).intValue();
+            Integer nroCopias = ((Long) x[2]).intValue();
+            String tamano = (String) x[3];
+            String color = (String) x[4];
+            String anverRever = (String) x[5];
+            Double precioRef = BigDecimal.valueOf((Double) x[6]).setScale(2, RoundingMode.HALF_UP).doubleValue();
+            Double precioDocu = BigDecimal.valueOf((Double) x[7]).setScale(2, RoundingMode.HALF_UP).doubleValue();
+            return new NotaDePedidoDto(nombreDocumento, nroPaginas, nroCopias, tamano, color, anverRever, precioRef, precioDocu);
+        }).toList();
+
+        return dtosNota;
     }
 
     @Override

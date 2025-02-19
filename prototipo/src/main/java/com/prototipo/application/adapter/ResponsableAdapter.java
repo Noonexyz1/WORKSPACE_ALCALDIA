@@ -80,7 +80,8 @@ public class ResponsableAdapter implements ResponsableService {
                 .getNotaDePedidoAbstract(idSolicitud);
 
         return notaDePedidoDtoList.stream()
-                .map(x -> mapperApplication.mapearAbstract(x, NotaDePedido.class))
+                .map(x ->
+                        mapperApplication.mapearAbstract(x, NotaDePedido.class))
                 .toList();
     }
 

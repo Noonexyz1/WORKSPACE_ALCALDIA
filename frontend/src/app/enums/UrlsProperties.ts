@@ -14,6 +14,8 @@ export enum UrlsProperties {
   PATH_ORDENFOTO_PDF = 'http://localhost:8081/solicitante/exportOrdenDeSolicitudDPF/',
   PATH_COMUINTERNA_PDF = 'http://localhost:8081/solicitante/exportComunicacionInternaDPF/',
 
+  PATH_NOTA_PDF = 'http://localhost:8081/responsable/exportNotaPedidoDPF/',
+
   PATH_LIST_SOLIC = 'http://localhost:8081/solicitante/verSolicitudesPendientes',
   PATH_AUTORIZ_SOLI = 'http://localhost:8081/solicitante/verSolicitudesAutorizadas',
   PATH_FINALIZADAS_SOLI = 'http://localhost:8081/solicitante/verSolicitudesFinalizadas',

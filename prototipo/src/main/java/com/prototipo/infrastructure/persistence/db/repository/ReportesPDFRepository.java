@@ -13,18 +13,21 @@ public interface ReportesPDFRepository extends JpaRepository<FotocopiaEntity, Lo
 
     @Query(value =
             """
-            SELECT 
-                ds.nro_copias AS nroCopias,
-                ds.nombre_documento AS nombreDocumento,
-                c.precio_unitario AS precioUnitario,
-                c.precio_total AS precioTotal
-            FROM detalle_solicitud ds
-            INNER JOIN cotizacion c ON ds.id = c.fk_detalle_solicitud_id
-            WHERE ds.fk_solicitud_id = :idSolicitud
+            SELECT
+                f.nombre_documento,
+                f.nro_paginas,
+                f.nro_copias,
+                sf.tamano,
+                sf.color,
+                sf.anver_rever,
+                sf.precio_ref,
+                f.precio_docu
+            FROM solicitud s, fotocopia f, serv_fotocopia sf
+            WHERE f.fk_solicitud_id = s.id
+            AND f.fk_servicio_fotocopia_id = sf.id
+            AND f.fk_solicitud_id = :idSolicitud;
             """, nativeQuery = true)
     List<Object[]> getNotaDePedido(@Param("idSolicitud") Long idSolicitud);
-
-
 
     @Query(value =
             """
