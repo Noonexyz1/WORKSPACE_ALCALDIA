@@ -33,8 +33,6 @@ public class SolicitanteController {
     @Autowired
     private SolicitudService solicitudService;
     @Autowired
-    private UnidadService unidadService;
-    @Autowired
     private UsuarioService usuarioService;
     @Autowired
     private ModelMapper modelMapper;

@@ -26,9 +26,9 @@ public class FotocopiaConfig {
             @Qualifier("usuarioUnidadImpl")
             UsuarioUnidadAbstract usuarioUnidadAbstract,
             @Qualifier("cargoImpl")
-            CargoAbstract cargoAbstract
-    ){
-        //En los construntores, EL ORDEN IMPORTA
+            CargoAbstract cargoAbstract){
+
+        //En los constructores, EL ORDEN IMPORTA
         return new FotocopiaAdapter(
                 usuarioAbastract,
                 rolAbstract,
@@ -36,7 +36,6 @@ public class FotocopiaConfig {
                 credencialAbstract,
                 unidadAbstract,
                 usuarioUnidadAbstract,
-                cargoAbstract
-        );
+                cargoAbstract);
     }
 }

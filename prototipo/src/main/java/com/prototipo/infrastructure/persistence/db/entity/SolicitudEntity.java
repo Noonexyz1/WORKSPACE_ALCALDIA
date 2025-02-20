@@ -25,6 +25,9 @@ public class SolicitudEntity {
     private Double precioTotal;
     private String nombreServicio;
 
+    private Long paginaTotal;
+    private Long copiaTotal;
+
     @ManyToOne
     private UsuarioUnidadEntity fkUsuarioSolicitante;
 

@@ -140,13 +140,6 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     @Override
-    public void editarUsuarioUnidad(Usuario userEdit) {
-        UsuarioDto usuarioDto = mapperApplicationAbstract
-                .mapearAbstract(userEdit, UsuarioDto.class);
-        usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
-    }
-
-    @Override
     public List<Rol> listarRolesService() {
         List<RolDto> listaRolesDto = rolAbstract.listarRoles();
         return listaRolesDto.stream()

@@ -39,18 +39,6 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
-    public void guardarPdfDeLaSolicitudAbstract(ArchivoPdfDto archivoPdfDto) {
-
-    }
-
-    @Override
-    public void guardarRegistroSolicitud(DetalleSolicitudDto detalleSolicitudDto) {
-        FotocopiaEntity solicitud = modelMapper
-                .map(detalleSolicitudDto, FotocopiaEntity.class);
-        detalleSolicitudRepository.save(solicitud);
-    }
-
-    @Override
     public void guardarRegistroFotocopia(FotocopiaDto fotocopiaDto) {
         FotocopiaEntity fotocopiaEntity = modelMapper
                 .map(fotocopiaDto, FotocopiaEntity.class);
@@ -97,12 +85,6 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
-    public List<SolicitudDto> getListaSolicitudesByUnidad(Long idUnidad) {
-
-        return null;
-    }
-
-    @Override
     public void guardarSolicitudAbstract(SolicitudDto solicitudDto) {
         SolicitudEntity solicitudEntity = modelMapper.map(solicitudDto, SolicitudEntity.class);
         solicitudRepository.save(solicitudEntity);
@@ -116,24 +98,12 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
-    public SolicitudDto buscarSolicitudByFkUnidad(Long idUnidad) {
-
-        return null;
-    }
-
-    @Override
     public List<FotocopiaDto> getFotocopiasSolicitudAbstract(Long idSolicitud) {
         List<FotocopiaEntity> list = detalleSolicitudRepository
                 .findAllFotocopiaByIdSoli(idSolicitud);
         return list.stream()
                 .map(x -> modelMapper.map(x, FotocopiaDto.class))
                 .toList();
-    }
-
-    @Override
-    public List<FinalizacionDto> listFinalizacionSolicitudAbs(Long idFunUni, Long page, Long size) {
-
-        return null;
     }
 
     @Override
@@ -164,13 +134,6 @@ public class SolicitudImpl implements SolicitudAbstract {
                 .build();
 
         autorizacionRepository.save(autorizacion);
-    }
-
-    @Override
-    public AutorizacionDto buscarAutorizacionByIdSoliAbs(Long idSolicitud) {
-        AutorizacionEntity autorizacion = autorizacionRepository
-                .buscarAutorizacionByIdSoli(idSolicitud);
-        return modelMapper.map(autorizacion, AutorizacionDto.class);
     }
 
     @Override

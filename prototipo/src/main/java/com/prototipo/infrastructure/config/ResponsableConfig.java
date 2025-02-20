@@ -12,27 +12,17 @@ import org.springframework.context.annotation.Configuration;
 public class ResponsableConfig {
 
     @Bean
-    public ResponsableService responsableServiceBean(@Qualifier("solicitudImpl")
-                                                     SolicitudAbstract solicitudAbstract,
-                                                     @Qualifier("aprobacionImpl")
-                                                     AprobacionAbstract aprobacionAbstract,
-                                                     @Qualifier("usuarioImpl")
-                                                     UsuarioAbastract usuarioAbstract,
-                                                     @Qualifier("operacionImpl")
-                                                     OperacionAbstract operacionAbstract,
-                                                     @Qualifier("mapperApplicationImpl")
-                                                     MapperApplicationAbstract mapperApplicationAbstract,
-                                                     @Qualifier("reportesPDFImpl")
-                                                     ReportesPDFAbstract reportesPDFAbstract) {
+    public ResponsableService responsableServiceBean(
+            @Qualifier("solicitudImpl")
+            SolicitudAbstract solicitudAbstract,
+            @Qualifier("mapperApplicationImpl")
+            MapperApplicationAbstract mapperApplicationAbstract,
+            @Qualifier("reportesPDFImpl")
+            ReportesPDFAbstract reportesPDFAbstract) {
 
         return new ResponsableAdapter(
                 solicitudAbstract,
-                aprobacionAbstract,
-                usuarioAbstract,
-                operacionAbstract,
                 mapperApplicationAbstract,
-                reportesPDFAbstract
-        );
-
+                reportesPDFAbstract);
     }
 }

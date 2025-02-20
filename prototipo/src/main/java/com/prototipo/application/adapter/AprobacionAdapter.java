@@ -4,10 +4,7 @@ import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.*;
 import com.prototipo.application.port.AprobacionAbstract;
 import com.prototipo.application.port.AutorizacionAbstract;
-import com.prototipo.application.port.SolicitudAbstract;
-import com.prototipo.application.port.UsuarioAbastract;
 import com.prototipo.application.useCase.AprobacionService;
-import com.prototipo.domain.model.Aprobacion;
 import com.prototipo.domain.model.Autorizacion;
 import com.prototipo.domain.model.Finalizacion;
 import com.prototipo.domain.model.Solicitud;
@@ -18,30 +15,16 @@ public class AprobacionAdapter implements AprobacionService {
 
     private AprobacionAbstract aprobacionAbstract;
     private MapperApplicationAbstract mapperApplicationAbstract;
-    private UsuarioAbastract usuarioAbastract;
-    private SolicitudAbstract solicitudAbstract;
     private AutorizacionAbstract autorizacionAbstract;
 
     public AprobacionAdapter(
             AprobacionAbstract aprobacionAbstract,
             MapperApplicationAbstract mapperApplicationAbstract,
-            UsuarioAbastract usuarioAbastract,
-            SolicitudAbstract solicitudAbstract,
             AutorizacionAbstract autorizacionAbstract) {
 
         this.aprobacionAbstract = aprobacionAbstract;
         this.mapperApplicationAbstract = mapperApplicationAbstract;
-        this.usuarioAbastract = usuarioAbastract;
-        this.solicitudAbstract = solicitudAbstract;
         this.autorizacionAbstract = autorizacionAbstract;
-    }
-
-    @Override
-    public Aprobacion findAprovacionByIdSoliService(Long idSolicitud) {
-        AprobacionDto aprobacionDto = aprobacionAbstract
-                .findAprovacionByIdSoliAbstract(idSolicitud);
-        return mapperApplicationAbstract
-                .mapearAbstract(aprobacionDto, Aprobacion.class);
     }
 
     @Override
@@ -61,46 +44,6 @@ public class AprobacionAdapter implements AprobacionService {
 
         return solicitudDtos.stream()
                 .map(x -> mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
-                .toList();
-    }
-
-    @Override
-    public List<Aprobacion> listaDeSolicitudesAprobadasService(
-            Long idSupervisor,
-            Long page,
-            Long size,
-            String byColumName) {
-
-        List<AprobacionDto> aprobacionDtos = aprobacionAbstract
-                .listaDeAprobacionesAprobadasAbstractPage(
-                        idSupervisor,
-                        page,
-                        size,
-                        byColumName);
-
-        return aprobacionDtos.stream()
-                .map(aprobacionDto -> mapperApplicationAbstract
-                        .mapearAbstract(aprobacionDto, Aprobacion.class))
-                .toList();
-    }
-
-    @Override
-    public List<Aprobacion> listaDeSolicitudesRechazadasService(
-            Long idSupervisor,
-            Long page,
-            Long size,
-            String byColumName) {
-
-        List<AprobacionDto> aprobacionDtos = aprobacionAbstract
-                .listaDeAprobacionesRechazadasAbstractPage(
-                        idSupervisor,
-                        page,
-                        size,
-                        byColumName);
-
-        return aprobacionDtos.stream()
-                .map(aprobacionDto -> mapperApplicationAbstract
-                        .mapearAbstract(aprobacionDto, Aprobacion.class))
                 .toList();
     }
 
@@ -142,24 +85,6 @@ public class AprobacionAdapter implements AprobacionService {
                 .map(x -> mapperApplicationAbstract
                         .mapearAbstract(x, Autorizacion.class))
                 .toList();
-    }
-
-    @Override
-    public Autorizacion findAutorizacionById(Long idAutorizacion) {
-        AutorizacionDto autorizacionDto = aprobacionAbstract
-                .findAutorizacionByIdAbstract(idAutorizacion);
-        return mapperApplicationAbstract
-                .mapearAbstract(
-                        autorizacionDto,
-                        Autorizacion.class
-                );
-    }
-
-    @Override
-    public void guardarAutorizacionService(Autorizacion autorizacion) {
-        AutorizacionDto autorizacionDto = mapperApplicationAbstract
-                .mapearAbstract(autorizacion, AutorizacionDto.class);
-        aprobacionAbstract.guardarAutorizacionAbstract(autorizacionDto);
     }
 
     @Override

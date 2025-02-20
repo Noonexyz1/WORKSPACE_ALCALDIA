@@ -18,5 +18,8 @@ public class Solicitud {
     private Double precioTotal;
     private String nombreServicio;
 
+    private Long paginaTotal;
+    private Long copiaTotal;
+
     private UsuarioUnidad fkUsuarioSolicitante;
 }

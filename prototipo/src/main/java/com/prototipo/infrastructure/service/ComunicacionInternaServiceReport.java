@@ -1,19 +1,14 @@
 package com.prototipo.infrastructure.service;
 
 import com.prototipo.infrastructure.rest.report.ComunicacionReport;
-import com.prototipo.infrastructure.rest.report.SolicitudReport;
-import com.prototipo.infrastructure.rest.report.TablaSolicitudReport;
 import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 @Service

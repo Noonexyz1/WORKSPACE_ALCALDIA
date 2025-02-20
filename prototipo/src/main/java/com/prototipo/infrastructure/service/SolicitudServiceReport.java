@@ -6,7 +6,6 @@ import com.prototipo.domain.model.Solicitud;
 import com.prototipo.domain.model.UsuarioUnidad;
 import com.prototipo.infrastructure.rest.report.SolicitudReport;
 import com.prototipo.infrastructure.rest.report.TablaSolicitudReport;
-import lombok.SneakyThrows;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +13,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
@@ -83,11 +81,6 @@ public class SolicitudServiceReport {
                         .build())
                 .toList();
 
-        // Calcular Cantidad sumados
-        Long cantidadSumado = listFotocopias.stream()
-                .map(Fotocopia::getNroCopias)
-                .reduce(0L, Long::sum);
-
         return SolicitudReport.builder()
                 .funcionarioTo(usuarioResponsable.getFkUsuario().getNombres() + " " +
                         usuarioResponsable.getFkUsuario().getPaterno() + " " +
@@ -100,7 +93,7 @@ public class SolicitudServiceReport {
                 .cite(solicitudResp.getCite())
                 .fecha(LocalDate.now().toString())
                 .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
-                .cantidadSumado(cantidadSumado + "")
+                .cantidadSumado(solicitudResp.getCopiaTotal() + "")
                 .listReportFotocopias(listReportFotocopias)
                 .build();
     }

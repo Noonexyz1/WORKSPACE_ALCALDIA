@@ -280,16 +280,13 @@ public class ResponsableController {
     }
 
 
-    //local:8081/responsable/exportNotaPedidoDPF/1/2/2
     @Async  // La anotación para indicar que este méttodo es asincrónico
     @GetMapping("/exportNotaPedidoDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportNotaPedidoDPF(
             @PathVariable Long idSolicitud) throws JRException {
 
         // Llamar al servicio de manera sincrónica en este caso
-        List<NotaDePedido> notaDePedidoList = responsableService
-                .generarNotaDePedidoPDF(idSolicitud);
-
+        List<NotaDePedido> notaDePedidoList = responsableService.generarNotaDePedidoPDF(idSolicitud);
         byte[] exportToPdf = notaPedidoServiceReport.exportToPdf(idSolicitud, notaDePedidoList);
 
         // Procesar el archivo PDF y devolver el resultado asincrónicamente
@@ -297,39 +294,25 @@ public class ResponsableController {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_PDF);
                 headers.setContentDispositionFormData("notaPedidoPDF", "notaPedidoPDF.pdf");
-                return ResponseEntity.ok()
-                        .headers(headers)
-                        .body(exportToPdf);
+                return ResponseEntity.ok().headers(headers).body(exportToPdf);
         });
     }
 
-
-
-
-
-    //localhost:8081/solicitante/exportSolicitudDPF
     @Async
-    @GetMapping("/exportReporteDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
+    @GetMapping("/exportReporteDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportReporteDPF(
-            @PathVariable Long idSolicitud,
-            @PathVariable Long idSolicitante,
-            @PathVariable Long idResponsable ) throws IOException, JRException {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData(
-                "reportePDF",
-                "reportePDF.pdf"
-        );
-
-        List<Reporte> listReport = responsableService
-                .generarReportePDF(idSolicitud);
+            @PathVariable Long idSolicitud) {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
-                return ResponseEntity.ok()
-                        .headers(headers)
-                        .body(reporteServiceReport.exportToPdf(listReport));
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                headers.setContentDispositionFormData("reportePDF", "reportePDF.pdf");
+
+                List<Reporte> listReport = responsableService.generarReportePDF(idSolicitud);
+                byte[] bytes = reporteServiceReport.exportToPdf(idSolicitud, listReport);
+
+                return ResponseEntity.ok().headers(headers).body(bytes);
             } catch (IOException | JRException e) {
                 throw new RuntimeException("Error al generar el PDF", e);
             }

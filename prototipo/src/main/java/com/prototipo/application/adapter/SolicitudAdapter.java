@@ -44,14 +44,23 @@ public class SolicitudAdapter implements SolicitudService {
                 })
                 .reduce(0.0, Double::sum);
 
-        solicitudDtoResp.setPrecioTotal(precioTotalSoli);
-        solicitudAbstract.solicitarFotocopiarAbstract(solicitudDtoResp);
-    }
+        List<FotocopiaDto> fotocopiaSoliReso = solicitudAbstract
+                .getFotocopiasSolicitudAbstract(solicitudDtoResp.getId());
 
-    private void guardadDetalleSolicitudAbstrac(DetalleSolicitud solicitud){
-        DetalleSolicitudDto detalleSolicitudDto = mapperApplicationAbstract
-                .mapearAbstract(solicitud, DetalleSolicitudDto.class);
-        solicitudAbstract.guardarRegistroSolicitud(detalleSolicitudDto);
+        Long paginaTotal = fotocopiaSoliReso.stream()
+                .map(x -> x.getNroPaginas())
+                .reduce(0L, Long::sum);
+
+        Long copiaTotal = fotocopiaSoliReso.stream()
+                .map(x -> x.getNroCopias())
+                .reduce(0L, Long::sum);
+
+        solicitudDtoResp.setPrecioTotal(precioTotalSoli);
+
+        solicitudDtoResp.setPaginaTotal(paginaTotal);
+        solicitudDtoResp.setCopiaTotal(copiaTotal);
+
+        solicitudAbstract.solicitarFotocopiarAbstract(solicitudDtoResp);
     }
 
     private double guardadFotocopiaAbstrac(Fotocopia fotocopia){

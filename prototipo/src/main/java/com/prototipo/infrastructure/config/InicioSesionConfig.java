@@ -12,10 +12,11 @@ import org.springframework.context.annotation.Configuration;
 public class InicioSesionConfig {
 
     @Bean
-    public InicioSesionService inicioSesionServiceBean(@Qualifier("inicioSesionImpl")
-                                                       InicioSesionAbstract inicioSesionAbstract,
-                                                       @Qualifier("mapperApplicationImpl")
-                                                       MapperApplicationAbstract mapperApplicationAbstract){
+    public InicioSesionService inicioSesionServiceBean(
+            @Qualifier("inicioSesionImpl")
+            InicioSesionAbstract inicioSesionAbstract,
+            @Qualifier("mapperApplicationImpl")
+            MapperApplicationAbstract mapperApplicationAbstract){
 
         return new InicioSesionAdapter(inicioSesionAbstract, mapperApplicationAbstract);
     }

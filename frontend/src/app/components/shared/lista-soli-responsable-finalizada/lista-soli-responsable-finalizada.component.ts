@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, of } from 'rxjs';
 import { PageRequestID } from '../../../models/PageRequestID';
@@ -60,7 +60,7 @@ export class ListaSoliFinalizadaResponsableComponent{
 
   botonDescargoSolicitudPDF(solicitudFinalizada: number): void {
     this.http.get(
-      UrlsProperties.PATH_REPORTE_PDF + solicitudFinalizada + '/' + this.usuario.id + '/2',
+      UrlsProperties.PATH_REPORTE_PDF + solicitudFinalizada,
       { responseType: 'blob' }
     ).pipe( // Cambiar el tipo de respuesta
       map((response: Blob) => {

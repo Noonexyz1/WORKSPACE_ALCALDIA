@@ -2,8 +2,6 @@ package com.prototipo.infrastructure.rest.report;
 
 import lombok.*;
 
-import java.math.BigDecimal;
-
 @Getter
 @Setter
 @AllArgsConstructor

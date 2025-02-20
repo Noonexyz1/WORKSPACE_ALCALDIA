@@ -24,15 +24,15 @@ public class SolicitudConfig {
         //Se necesita una dependencia
         return new SolicitudAdapter(
                 solicitudAbstract,
-                mapperApplicationAbstract
-        );
+                mapperApplicationAbstract);
     }
 
     @Bean
-    public UsuarioService usuarioServiceBean(@Qualifier("usuarioImpl")
-                                             UsuarioAbastract usuarioAbastract,
-                                             @Qualifier("mapperApplicationAbstractBean")
-                                             MapperApplicationAbstract mapperApplicationAbstract) {
+    public UsuarioService usuarioServiceBean(
+            @Qualifier("usuarioImpl")
+            UsuarioAbastract usuarioAbastract,
+            @Qualifier("mapperApplicationAbstractBean")
+            MapperApplicationAbstract mapperApplicationAbstract) {
 
         return new UsuarioAdapter(usuarioAbastract, mapperApplicationAbstract);
     }
