@@ -3,8 +3,6 @@ package com.prototipo.infrastructure.persistence.db.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.math.BigDecimal;
-
 @Getter
 @Setter
 @Builder
@@ -19,8 +17,6 @@ public class AutorizacionEntity {
     @Column(updatable = false, nullable = false)
     private Long id;
     private String fecha;
-    private Long totalAutorizado;
-    private BigDecimal totalCotizadoBs;
     private Long finaliFlag;
 
     @ManyToOne

@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -43,27 +42,35 @@ public class ResponsableController {
     private SolicitudService solicitudService;
 
 
-    @PostMapping(path = {"/aprobarSolicitud"},
+    @PostMapping(
+            path = {"/autorizarSolicitud"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void aprobarSolicitud(@RequestBody AprobacionSoliRequest aprobacionSoliRequest) {
-        Long idAprobacion = aprobacionSoliRequest.getIdAprobacion();
+    public void autorizarSolicitud(@RequestBody AprobacionSoliRequest aprobacionSoliRequest) {
+        //Para persistir en la BD SECUENCIA BIEN HECHA
+        Long idSolicitud = aprobacionSoliRequest.getIdSolicitud();
         Long idResponsable = aprobacionSoliRequest.getIdResponsable();
-        responsableService.aprobarSolicitudService(idAprobacion, idResponsable);
+
+        Autorizacion autorizacion = Autorizacion.builder()
+                .fkSolicitud(Solicitud.builder().id(idSolicitud).build())
+                .fkUsuarioResponsable(UsuarioUnidad.builder().id(idResponsable).build())
+                .build();
+        solicitudService.guardarAutorizacion(autorizacion);
     }
 
-    @PostMapping(path = {"/rechazarSolicitud"},
+    @PostMapping(
+            path = {"/rechazarSolicitud"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public void rechazarSolicitud(@RequestBody AprobacionSoliRequest aprobacionSoliRequest) {
-        Long idAprobacion = aprobacionSoliRequest.getIdAprobacion();
+        Long idSolicitud = aprobacionSoliRequest.getIdSolicitud();
         Long idResponsable = aprobacionSoliRequest.getIdResponsable();
-        responsableService.rechazarSolicitudService(idAprobacion, idResponsable);
+        responsableService.rechazarSolicitudService(idSolicitud, idResponsable);
     }
 
-    @PostMapping(path = {"/verSolicitudesPendientes"},
+    @PostMapping(
+            path = {"/verSolicitudesPendientes"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudesPendientes(
-            @RequestBody PaginacionResponRequest pageParam
-    ) {
+            @RequestBody PaginacionResponRequest pageParam) {
 
         Long idResponsable = pageParam.getIdUsuarioUnidad();
         Long page = pageParam.getPage();
@@ -101,7 +108,8 @@ public class ResponsableController {
                 .build();
     }
 
-    @PostMapping(path = {"/verSolicitudesAprobadas"},
+    @PostMapping(
+            path = {"/verSolicitudesAprobadas"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudesAprobadas(
             @RequestBody PaginacionResponRequest pageParam) {
@@ -143,174 +151,10 @@ public class ResponsableController {
                 .build();
     }
 
-    /*ver detalle de una solicitud especifica - HECHO
-    Una vez viendo el detalle, el responsable lo puede cotizar y registrarlo en la tabla Cotizacion,
-    dandole un precio unitario a cada detalle una vez cotizado, se registra la solicitud en la
-    tabla autorizacion.
-    Una vez terminado la operacion por parte de un externo, entonces se
-    registra como finalizado en la tabla Finalizacion*/
-
-    @PostMapping(path = {"/finalizarSolicitud"},
+    @PostMapping(
+            path = {"/verSolicitudesFinalizadas"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void finalizarSolicitud(@RequestBody FinalizacionRequest request) {
-        Autorizacion autorizacion = solicitudService
-                .buscarAutorizacionById(request.getIdAutorizacion());
-        autorizacion.setFinaliFlag(1L);
-
-        aprobacionService.guardarAutorizacionService(autorizacion);
-
-        Finalizacion finalizacion = Finalizacion.builder()
-                .fecha(LocalDate.now().toString())
-                .totalEjecutado(request.getTotalEjecutado())
-                .totalEjecutadoBs(request.getTotalEjecutadoBs())
-                .fkAutorizacion(autorizacion)
-                .build();
-
-        solicitudService.guardarFinalizacion(finalizacion);
-    }
-
-    @PostMapping(path = {"/cotizarAutorizarSolicitud"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void cotizarAutorizarSolicitud(
-            @RequestBody List<DetalleSolicitudCotizRequest> listSoliCoti) {
-
-        //Esto sirve para cotizar el detalle de una solicitud, por cada uno de ellos
-        listSoliCoti.forEach(x -> {
-
-            DetalleSolicitud detalleSolicitud = DetalleSolicitud.builder()
-                    .id(x.getIdDetalleSolicitud())
-                    .build();
-
-            BigDecimal total = x.getPrecioUnit()
-                    .multiply(BigDecimal.valueOf(x.getNroCopias()))
-                    .multiply(BigDecimal.valueOf(x.getNroPaginas()));
-
-            Cotizacion cotizacion = Cotizacion.builder()
-                    .precioUnitario(x.getPrecioUnit())
-                    .precioTotal(total)
-                    .fkDetalleSolicitud(detalleSolicitud)
-                    .build();
-
-            responsableService.guardarCotizacion(cotizacion);
-        });
-
-
-        Long idUsuarioUnidadResponsable = listSoliCoti.getFirst().getIdUsuarioUnidad();
-        UsuarioUnidad usuarioUnidadResponsable = UsuarioUnidad.builder()
-                .id(idUsuarioUnidadResponsable)
-                .build();
-
-
-        Long idSolicitud = listSoliCoti.getFirst().getIdSolicitud();
-        Solicitud solicitud = Solicitud.builder()
-                .id(idSolicitud)
-                .autoriFlag(1L)
-                .build();
-
-        //EStas son OPERACIONES para la sumatoria para guardar el Autorizacion
-        List<DetalleSolicitud> list = solicitudService
-                .findListDetalleSoliBySolicitudId(idSolicitud);
-
-        Long totalAutorizado = 0L;
-        for (DetalleSolicitud y: list) {
-            totalAutorizado = totalAutorizado + y.getNroCopias();
-        }
-
-        //EStas son OPERACIONES para el producto para guardar el Autorizacion
-        BigDecimal totalAutorizadoBs = list.stream()
-                .map(detalle -> {
-                    BigDecimal paginas = detalle.getNroPaginas() != null ?
-                            BigDecimal.valueOf(detalle.getNroPaginas()) : BigDecimal.ZERO;
-                    BigDecimal copias = detalle.getNroCopias() != null ?
-                            BigDecimal.valueOf(detalle.getNroCopias()) : BigDecimal.ZERO;
-
-                    return paginas.multiply(copias);
-                })
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-
-        //Para persistir en la BD
-        Autorizacion autorizacion = Autorizacion.builder()
-                .fecha(LocalDate.now().toString())
-                .totalAutorizado(totalAutorizado)
-                .totalCotizadoBs(totalAutorizadoBs)
-                .fkUsuarioResponsable(usuarioUnidadResponsable)
-                .fkSolicitud(solicitud)
-                .finaliFlag(0L)
-                .build();
-
-        solicitudService.guardarAutorizacion(autorizacion);
-    }
-
-    @GetMapping(path = {"/verDetalleDeSolicitud/{idSolicitud}"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<DetalleSolicitudExtendidoResponse> verDetalleDeSolicitud(
-            @PathVariable Long idSolicitud) {
-
-        List<DetalleSolicitud> listDetSoli = solicitudService
-                .findListDetalleSoliBySolicitudId(idSolicitud);
-
-        List<DetalleSolicitudResponse> listDetSoliRespone = listDetSoli.stream()
-                .map(this::funcion)
-                .toList();
-
-        DetalleSolicitudExtendidoResponse solicitudExtendido = DetalleSolicitudExtendidoResponse.builder()
-                .idSolicitud(listDetSoli.getFirst().getFkSolicitud().getId())
-                .cite(listDetSoli.getFirst().getFkSolicitud().getCite())
-                .fecha(listDetSoli.getFirst().getFkSolicitud().getFecha())
-                .descripcion(listDetSoli.getFirst().getFkSolicitud().getDescripcion())
-                .detalleSolicitudResponses(listDetSoliRespone)
-                .build();
-
-        return new ResponseEntity<>(solicitudExtendido, HttpStatus.OK);
-    }
-
-    private DetalleSolicitudResponse funcion(DetalleSolicitud detalleSolicitud){
-        return DetalleSolicitudResponse.builder()
-                .idSolicitud(detalleSolicitud.getFkSolicitud().getId())
-                .idDetalleSolicitud(detalleSolicitud.getId())
-                .nroCopias(detalleSolicitud.getNroCopias())
-                .nombreDocumento(detalleSolicitud.getNombreDocumento())
-                .nroPaginas(detalleSolicitud.getNroPaginas())
-                .tamanoPagina(detalleSolicitud.getTamanoPagina())
-                .anversoReverso(detalleSolicitud.getAnversoReverso())
-                .colorFotocopia(detalleSolicitud.getColorFotocopia())
-                .build();
-    }
-
-    @GetMapping(path = {"/verAutorizacionSolicitud/{idAutorizacion}"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<AutorizacionResponse> verAutorizacionSolicitud(
-            @PathVariable Long idAutorizacion) {
-
-        Autorizacion autorizacion = aprobacionService.findAutorizacionById(idAutorizacion);
-        AutorizacionResponse autorizacionResponse = null;
-
-        if (autorizacion != null) {
-            autorizacionResponse = AutorizacionResponse.builder()
-                    .idAutorizacion(autorizacion.getId())
-                    .idSolicitud(autorizacion.getFkSolicitud().getId())
-                    .cite(autorizacion.getFkSolicitud().getCite())
-                    .fecha(autorizacion.getFkSolicitud().getFecha())
-                    .nomCompleto(
-                            autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getNombres() + " " +
-                            autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getPaterno() + " " +
-                            autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getMaterno()
-                    )
-                    .nomCargo(autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkCargo().getNombreCargo())
-                    .nombreUnidad(autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkUnidad().getNombre())
-
-                    .totalAutorizado(autorizacion.getTotalAutorizado())
-                    .totalCotizadoBs(autorizacion.getTotalCotizadoBs())
-                    .fechaCotizado(autorizacion.getFecha())
-                    .build();
-        }
-
-        return new ResponseEntity<>(autorizacionResponse, HttpStatus.OK);
-    }
-
-    @PostMapping(path = {"/verSolicitudesFinalizadas"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<FinalizacionResponse>> verSolicitudesFinalizadas(
+    public ResponseEntity<List<SolicitudResponResponse>> verSolicitudesFinalizadas(
             @RequestBody PaginacionResponRequest pageParam) {
 
         Long idResponsable = pageParam.getIdUsuarioUnidad();
@@ -327,84 +171,148 @@ public class ResponsableController {
                         byColumName
                 );
 
-        List<FinalizacionResponse> listSolicitud = finalizacionList
+        List<SolicitudResponResponse> listSolicitud = finalizacionList
                 .stream()
-                .map(this::funcionSoliFinalizacion)
+                .map(this::funcion)
                 .toList();
         return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
     }
 
-    private FinalizacionResponse funcionSoliFinalizacion(Finalizacion finalizacion){
-        return FinalizacionResponse.builder()
-                .idSoliAutorizada(finalizacion.getFkAutorizacion().getFkSolicitud().getId())
-                .nombreCompleto(finalizacion.getFkAutorizacion().getFkSolicitud().getDescripcion())
-                .nombreUnidad(finalizacion.getFkAutorizacion().getFkSolicitud().getFkUsuarioSolicitante().getFkUnidad().getNombre())
-                .nombreCargo(finalizacion.getFkAutorizacion().getFkSolicitud().getFkUsuarioSolicitante().getFkCargo().getNombreCargo())
-                .descripcion(finalizacion.getFkAutorizacion().getFkSolicitud().getDescripcion())
-                .totalAutorizado(finalizacion.getFkAutorizacion().getTotalAutorizado())
-                .totalCotizadoBs(finalizacion.getFkAutorizacion().getTotalCotizadoBs())
-                .totalEjecutado(finalizacion.getTotalEjecutado())
-                .totalEjecutadoBs(finalizacion.getTotalEjecutadoBs())
-                .fecha(finalizacion.getFecha())
+    private SolicitudResponResponse funcion(Finalizacion x){
+        return SolicitudResponResponse.builder()
+                .idAutorizacion(x.getId())
+                .idSolicitud(x.getFkAutorizacion().getId())
+                .cite(x.getFkAutorizacion().getFkSolicitud().getCite())
+                .fecha(x.getFecha())
+                .nomCompleto(
+                        x.getFkAutorizacion().getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getNombres() + " " +
+                                x.getFkAutorizacion().getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getPaterno() + " " +
+                                x.getFkAutorizacion().getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getMaterno()
+                )
+                .nomCargo(x.getFkAutorizacion().getFkSolicitud().getFkUsuarioSolicitante().getFkCargo().getNombreCargo())
+                .nombreUnidad(x.getFkAutorizacion().getFkSolicitud().getFkUsuarioSolicitante().getFkUnidad().getNombre())
                 .build();
     }
 
+    @PostMapping(
+            path = {"/finalizarSolicitud"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void finalizarSolicitud(@RequestBody Long idAutorizacion) {
+        Finalizacion finalizacion = Finalizacion.builder()
+                .fkAutorizacion(
+                        Autorizacion.builder().id(idAutorizacion).build()
+                )
+                .build();
+        solicitudService.guardarFinalizacion(finalizacion);
+    }
 
-    //local:8081/responsable/exportNotaPedidoDPF/1/2/2
-    @Async  // La anotación para indicar que este méttodo es asincrónico
-    @GetMapping("/exportNotaPedidoDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
-    public CompletableFuture<ResponseEntity<byte[]>> exportNotaPedidoDPF(
-            @PathVariable Long idSolicitud,
-            @PathVariable Long idSolicitante,
-            @PathVariable Long idResponsable) throws IOException, JRException {
+    @GetMapping(
+            path = {"/verDetalleDeSolicitud/{idSolicitud}"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<DetalleSolicitudExtendidoResponse> verDetalleDeSolicitud(
+            @PathVariable Long idSolicitud) {
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData(
-                "notaPedidoPDF",
-                "notaPedidoPDF.pdf"
-        );
+        List<Fotocopia> listDetSoli = solicitudService
+                .findListDetalleSoliBySolicitudId(idSolicitud);
 
-        // Llamar al servicio de manera sincrónica en este caso
-        List<NotaDePedido> notaDePedidoList = responsableService
-                .generarNotaDePedidoPDF(idSolicitud);
+        List<DetalleSolicitudResponse> listDetSoliRespone = listDetSoli.stream()
+                .map(this::funcion)
+                .toList();
 
-        // Procesar el archivo PDF y devolver el resultado asincrónicamente
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                return ResponseEntity.ok()
-                        .headers(headers)
-                        .body(notaPedidoServiceReport.exportToPdf(notaDePedidoList));
-            } catch (IOException | JRException e) {
-                throw new RuntimeException("Error al generar el PDF", e);
-            }
-        });
+        DetalleSolicitudExtendidoResponse solicitudExtendido = DetalleSolicitudExtendidoResponse.builder()
+                .idSolicitud(listDetSoli.getFirst().getFkSolicitud().getId())
+                .cite(listDetSoli.getFirst().getFkSolicitud().getCite())
+                .fecha(listDetSoli.getFirst().getFkSolicitud().getFecha())
+                .descripcion(listDetSoli.getFirst().getFkSolicitud().getDescripcion())
+                .nombreServicio(listDetSoli.getFirst().getFkSolicitud().getNombreServicio())
+                .precioTotal(listDetSoli.getFirst().getFkSolicitud().getPrecioTotal())
+                .detalleSolicitudResponses(listDetSoliRespone)
+                .build();
+
+        return new ResponseEntity<>(solicitudExtendido, HttpStatus.OK);
+    }
+
+    private DetalleSolicitudResponse funcion(Fotocopia detalleSolicitud){
+        return DetalleSolicitudResponse.builder()
+                .idSolicitud(detalleSolicitud.getFkSolicitud().getId())
+                .idDetalleSolicitud(detalleSolicitud.getId())
+                .nroCopias(detalleSolicitud.getNroCopias())
+                .nombreDocumento(detalleSolicitud.getNombreDocumento())
+                .nroPaginas(detalleSolicitud.getNroPaginas())
+                .tamanoPagina(detalleSolicitud.getFkServicioFotocopia().getTamano())
+                .anversoReverso(detalleSolicitud.getFkServicioFotocopia().getAnverRever())
+                .colorFotocopia(detalleSolicitud.getFkServicioFotocopia().getColor())
+                .precioRef(detalleSolicitud.getFkServicioFotocopia().getPrecioRef())
+                .precioDocu(detalleSolicitud.getPrecioDocu())
+                .build();
+    }
+
+    @GetMapping(
+            path = {"/verAutorizacionSolicitud/{idSolicitud}"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<AutorizacionResponse> verAutorizacionSolicitud(
+            @PathVariable Long idSolicitud) {
+
+        Autorizacion autorizacion = aprobacionService.findAutorizacionByIdSoliService(idSolicitud);
+        AutorizacionResponse autorizacionResponse = null;
+
+        if (autorizacion != null) {
+            autorizacionResponse = AutorizacionResponse.builder()
+                    .idAutorizacion(autorizacion.getId())
+                    .idSolicitud(autorizacion.getFkSolicitud().getId())
+                    .cite(autorizacion.getFkSolicitud().getCite())
+                    .fecha(autorizacion.getFkSolicitud().getFecha())
+                    .nomCompleto(
+                            autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getNombres() + " " +
+                            autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getPaterno() + " " +
+                            autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getMaterno()
+                    )
+                    .nomCargo(autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkCargo().getNombreCargo())
+                    .nombreUnidad(autorizacion.getFkSolicitud().getFkUsuarioSolicitante().getFkUnidad().getNombre())
+
+                    .totalAutorizado(0L)
+                    .totalCotizadoBs(BigDecimal.valueOf(0.0))
+                    .fechaCotizado(autorizacion.getFecha())
+                    .build();
+        }
+
+        return new ResponseEntity<>(autorizacionResponse, HttpStatus.OK);
     }
 
 
-    //localhost:8081/solicitante/exportSolicitudDPF
+    @Async  // La anotación para indicar que este méttodo es asincrónico
+    @GetMapping("/exportNotaPedidoDPF/{idSolicitud}")
+    public CompletableFuture<ResponseEntity<byte[]>> exportNotaPedidoDPF(
+            @PathVariable Long idSolicitud) throws JRException {
+
+        // Llamar al servicio de manera sincrónica en este caso
+        List<NotaDePedido> notaDePedidoList = responsableService.generarNotaDePedidoPDF(idSolicitud);
+        byte[] exportToPdf = notaPedidoServiceReport.exportToPdf(idSolicitud, notaDePedidoList);
+
+        // Procesar el archivo PDF y devolver el resultado asincrónicamente
+        return CompletableFuture.supplyAsync(() -> {
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                headers.setContentDispositionFormData("notaPedidoPDF", "notaPedidoPDF.pdf");
+                return ResponseEntity.ok().headers(headers).body(exportToPdf);
+        });
+    }
+
     @Async
-    @GetMapping("/exportReporteDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
+    @GetMapping("/exportReporteDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportReporteDPF(
-            @PathVariable Long idSolicitud,
-            @PathVariable Long idSolicitante,
-            @PathVariable Long idResponsable ) throws IOException, JRException {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData(
-                "reportePDF",
-                "reportePDF.pdf"
-        );
-
-        List<Reporte> listReport = responsableService
-                .generarReportePDF(idSolicitud);
+            @PathVariable Long idSolicitud) {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
-                return ResponseEntity.ok()
-                        .headers(headers)
-                        .body(reporteServiceReport.exportToPdf(listReport));
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                headers.setContentDispositionFormData("reportePDF", "reportePDF.pdf");
+
+                List<Reporte> listReport = responsableService.generarReportePDF(idSolicitud);
+                byte[] bytes = reporteServiceReport.exportToPdf(idSolicitud, listReport);
+
+                return ResponseEntity.ok().headers(headers).body(bytes);
             } catch (IOException | JRException e) {
                 throw new RuntimeException("Error al generar el PDF", e);
             }

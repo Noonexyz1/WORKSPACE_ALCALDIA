@@ -9,4 +9,6 @@ export interface DetalleSolicitudResponse {
   tamanoPagina: string;
   anversoReverso: string;
   colorFotocopia: string;
+  precioRef: number;
+  precioDocu: number;
 }

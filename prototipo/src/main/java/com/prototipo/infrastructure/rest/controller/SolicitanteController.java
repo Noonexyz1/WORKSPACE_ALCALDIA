@@ -8,7 +8,6 @@ import com.prototipo.infrastructure.rest.report.SolicitudReport;
 import com.prototipo.infrastructure.rest.report.TablaSolicitudReport;
 import com.prototipo.infrastructure.rest.request.PaginacionSoliRequest;
 import com.prototipo.infrastructure.rest.request.SolicitudRequest;
-import com.prototipo.infrastructure.rest.request.SolicitudRequestPDF;
 import com.prototipo.infrastructure.rest.response.SolicitudSoliciResponse;
 import com.prototipo.infrastructure.service.ComunicacionInternaServiceReport;
 import com.prototipo.infrastructure.service.InformeServiceReport;
@@ -34,15 +33,9 @@ public class SolicitanteController {
     @Autowired
     private SolicitudService solicitudService;
     @Autowired
-    private UnidadService unidadService;
-    @Autowired
     private UsuarioService usuarioService;
     @Autowired
     private ModelMapper modelMapper;
-    @Autowired
-    private AprobacionService aprobacionService;
-    @Autowired
-    private OperacionService operacionService;
     @Autowired
     private SolicitudServiceReport solicitudServiceReport;
     @Autowired
@@ -55,45 +48,26 @@ public class SolicitanteController {
 
     @PostMapping(path = {"/solicitarFotocopiar"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void solicitarFotocopiar(@RequestBody SolicitudRequest solicitudRequest) {
-        //Truco de los Ids
-        /*Unidad unidad = Unidad.builder()
-                .id(solicitudRequest.getIdUnidad())
-                .build();
-        Usuario usuario = Usuario.builder()
-                .id(solicitudRequest.getIdSolicitante())
-                .build();
-
-        List<ArchivoPdf> archivoPdfs = solicitudRequest.getArchivosPdf()
+    public void solicitarFotocopiarV2(@RequestBody SolicitudRequest solicitudRequest) {
+        List<Fotocopia> listFotocopias = solicitudRequest
+                .getListDetalleSolicitud()
                 .stream()
-                .map(x -> modelMapper.map(x, ArchivoPdf.class))
+                .map(x -> {
+                    ServicioFotocopia serFoto = ServicioFotocopia.builder()
+                            .color(x.getColorFotocopia())
+                            .tamano(x.getTamanoPagina())
+                            .anverRever(x.getAnversoReverso())
+                            .build();
+                    Fotocopia fot = modelMapper.map(x, Fotocopia.class);
+                    fot.setFkServicioFotocopia(serFoto);
+                    return fot;
+                })
                 .toList();
 
-        //Debo usar los mappeadores de mi Infraestrucutura
-        Solicitud solicitud = Solicitud.builder()
-                .nroDeCopias(solicitudRequest.getNroDeCopias())
-                .tipoDeDocumento(solicitudRequest.getTipoDeDocumento())
-                .nroDePaginas(solicitudRequest.getNroDePaginas())
-                .fkUnidad(unidad)
-                .fkSolicitante(usuario)
-                .build();
-
-        solicitudService.solicitarFotocopiarService(solicitud, archivoPdfs);*/
-    }
-
-    @PostMapping(path = {"/v2/solicitarFotocopiar"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void solicitarFotocopiarV2(@RequestBody SolicitudRequest solicitudRequest) {
         //Truco de los Ids
         UsuarioUnidad usuarioUnidad = UsuarioUnidad.builder()
                 .id(solicitudRequest.getFkUsuarioSolicitante())
                 .build();
-
-        List<DetalleSolicitud> listDetalleSolicitud = solicitudRequest
-                .getListDetalleSolicitud()
-                .stream()
-                .map(x -> modelMapper.map(x, DetalleSolicitud.class))
-                .toList();
 
         //Debo usar los mappeadores de mi Infraestrucutura
         Solicitud solicitud = Solicitud.builder()
@@ -102,39 +76,15 @@ public class SolicitanteController {
                 .descripcion(solicitudRequest.getDescripcion())
                 .fkUsuarioSolicitante(usuarioUnidad)
                 .autoriFlag(0L)
+                .isActive(true)
                 .build();
 
-        solicitudService.solicitarFotocopiarService(solicitud, listDetalleSolicitud);
+        solicitudService.solicitarFotocopiarService(solicitud, listFotocopias);
     }
 
-    @PostMapping(path = {"/solicitarFotocopiarPDF"},
+    @PostMapping(path = {"/verSolicitudesPendientes"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void solicitarFotocopiar(@RequestBody SolicitudRequestPDF solicitudRequest) {
-        //Truco de los Ids
-        /*Usuario usuario = Usuario.builder()
-                .id(solicitudRequest.getIdSolicitante())
-                .build();
-        Unidad unidad = Unidad.builder()
-                .id(solicitudRequest.getIdUnidad())
-                .build();
-
-        Solicitud solicitud = Solicitud.builder()
-                .fkSolicitante(usuario)
-                .fkUnidad(unidad)
-                .cite(solicitudRequest.getCite())
-                .build();
-
-        List<DetalleSolicitud> list = solicitudRequest.getListSolicitud()
-                .stream()
-                .map(x -> modelMapper.map(x, DetalleSolicitud.class))
-                .toList();
-
-        solicitudService.registrarFotocopiarService(solicitud, list);*/
-    }
-
-    @PostMapping(path = {"/verHistorialSolicitudes"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudSoliciResponse>> verHistorialSolicitudes(
+    public ResponseEntity<List<SolicitudSoliciResponse>> verSolicitudesPendientes(
             @RequestBody PaginacionSoliRequest pageArg ) {
 
         Long idUserUni = pageArg.getIdUsuarioUnidad();
@@ -153,6 +103,48 @@ public class SolicitanteController {
         return new ResponseEntity<>(list, HttpStatus.OK);
     }
 
+    @PostMapping(path = {"/verSolicitudesAutorizadas"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudSoliciResponse>> verSolicitudesAutorizadas(
+            @RequestBody PaginacionSoliRequest pageArg ) {
+
+        Long idUserUni = pageArg.getIdUsuarioUnidad();
+
+        Long page = pageArg.getPage();
+        Long size = pageArg.getSize();
+        //String byColumName = pageArg.getByColumName();
+
+        List<Solicitud> listSoli = solicitudService
+                .getListaSolicitudesAutoriService(idUserUni, page, size);
+
+        List<SolicitudSoliciResponse> list = listSoli.stream()
+                .map(this::funcToReturn)
+                .toList();
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
+    @PostMapping(path = {"/verSolicitudesFinalizadas"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<SolicitudSoliciResponse>> verSolicitudesFinalizadas(
+            @RequestBody PaginacionSoliRequest pageArg ) {
+
+        Long idUserUni = pageArg.getIdUsuarioUnidad();
+
+        Long page = pageArg.getPage();
+        Long size = pageArg.getSize();
+        //String byColumName = pageArg.getByColumName();
+
+        List<Solicitud> listSoli = solicitudService
+                .getListaSolicitudesFinaliService(idUserUni, page, size);
+
+        List<SolicitudSoliciResponse> list = listSoli.stream()
+                .map(this::funcToReturn)
+                .toList();
+
+        return new ResponseEntity<>(list, HttpStatus.OK);
+    }
+
     private SolicitudSoliciResponse funcToReturn(Solicitud x) {
         SolicitudSoliciResponse solicitudSoliciResponse = modelMapper
                 .map(x, SolicitudSoliciResponse.class);
@@ -162,54 +154,51 @@ public class SolicitanteController {
         return solicitudSoliciResponse;
     }
 
+    @GetMapping("/eliminarSolicitudById/{idSolicitud}")
+    public void eliminarSolicitudById(@PathVariable Long idSolicitud){
+        solicitudService.eliminarSolicitudById(idSolicitud);
+    }
+
+    @GetMapping("/listarTamano")
+    public ResponseEntity<List<String>> listarTamano(){
+        List<String> listTam = solicitudService.listarTamano();
+        return new ResponseEntity<>(listTam, HttpStatus.OK);
+    }
+
+    @GetMapping("/listarAnversoReverso")
+    public ResponseEntity<List<String>> listarAnversoReverso(){
+        List<String> listAnRev = solicitudService.listarAnversoReverso();
+        return new ResponseEntity<>(listAnRev, HttpStatus.OK);
+    }
+
+    @GetMapping("/listarColor")
+    public ResponseEntity<List<String>> listarColor(){
+        List<String> listColor = solicitudService.listarColor();
+        return new ResponseEntity<>(listColor, HttpStatus.OK);
+    }
 
 
     //localhost:8081/solicitante/exportSolicitudDPF
     @Async
-    @GetMapping("/exportSolicitudDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
+    @GetMapping("/exportSolicitudDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportSolicitudDPF(
-            @PathVariable Long idSolicitud,
-            @PathVariable Long idSolicitante,
-            @PathVariable Long idResponsable) {
+            // Unicamente con el Id de Solicitud puedes traer toda la informacion debido a sus relaciones
+            @PathVariable Long idSolicitud) {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
+                SolicitudReport solicitudReport = solicitudServiceReport.getObtenerDatosForReport(idSolicitud);
+
+                // PDF generado
+                byte[] pdfData = solicitudServiceReport.exportToPdf(solicitudReport);
+
+                // Los heades para el reponse
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_PDF);
                 headers.setContentDispositionFormData("solicitudPDF", "solicitudPDF.pdf");
 
-                Solicitud solicitudResp = solicitudService.buscarSolicitudService(idSolicitud);
-                List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService.listDetalleSolicitud(idSolicitud);
+                return ResponseEntity.ok().headers(headers).body(pdfData);
 
-                List<TablaSolicitudReport> listReport = listDetalleSolicitudResp.stream()
-                        .map(x -> TablaSolicitudReport.builder()
-                                .documento(x.getNombreDocumento())
-                                .cantidad(x.getNroCopias().intValue())
-                                .build())
-                        .toList();
-
-                UsuarioUnidad usuarioResponsable = usuarioService.findUsuarioUnidadByIdUSer(idResponsable);
-                UsuarioUnidad usuarioSolicitante = usuarioService.findUsuarioUnidadByIdUSer(idSolicitante);
-
-                SolicitudReport solicitudReport = SolicitudReport.builder()
-                        .funcionarioTo(usuarioResponsable.getFkUsuario().getNombres() + " " +
-                                usuarioResponsable.getFkUsuario().getPaterno() + " " +
-                                usuarioResponsable.getFkUsuario().getMaterno())
-                        .funcionarioToCargo(usuarioResponsable.getFkCargo().getNombreCargo())
-                        .funcionarioFrom(usuarioSolicitante.getFkUsuario().getNombres() + " " +
-                                usuarioSolicitante.getFkUsuario().getPaterno() + " " +
-                                usuarioSolicitante.getFkUsuario().getMaterno())
-                        .funcionarioFromCargo(usuarioSolicitante.getFkCargo().getNombreCargo())
-                        .cite(solicitudResp.getCite())
-                        .fecha(LocalDate.now().toString())
-                        .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
-                        .build();
-
-                byte[] pdfData = solicitudServiceReport.exportToPdf(solicitudReport, listReport);
-
-                return ResponseEntity.ok()
-                        .headers(headers)
-                        .body(pdfData);
             } catch (Exception e) {
                 throw new RuntimeException("Error al generar el PDF", e);
             }
@@ -217,34 +206,58 @@ public class SolicitanteController {
     }
 
     @Async
-    @GetMapping("/exportComunicacionInternaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
-    public CompletableFuture<ResponseEntity<byte[]>> exportComunicacionInternaDPF(
-            @PathVariable Long idSolicitud,
-            @PathVariable Long idSolicitante,
-            @PathVariable Long idResponsable) {
+    @GetMapping("/exportOrdenDeSolicitudDPF/{idSolicitud}")
+    public CompletableFuture<ResponseEntity<byte[]>> exportOrdenDeSolicitudDPF(
+            @PathVariable Long idSolicitud) {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
+                // Recuperar datos necesarios
+                List<Fotocopia> listFotocopia = solicitudService
+                        .listFotocopiaSolicitud(idSolicitud);
+
+                // Generar el PDF
+                byte[] pdfData = ordenFotoServiceReport.exportToPdf(listFotocopia);
+
                 // Configurar encabezados de la respuesta
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_PDF);
                 headers.setContentDispositionFormData(
-                        "comunicacionInternaPDF",
-                        "comunicacionInterna.pdf"
+                        "ordenParaFotocopiaPDF",
+                        "ordenParaFotocopia.pdf"
                 );
 
+                // Crear y devolver la respuesta
+                return ResponseEntity.ok()
+                        .headers(headers)
+                        .body(pdfData);
+
+            } catch (IOException | JRException e) {
+                throw new RuntimeException("Error al generar el PDF", e);
+            }
+        });
+    }
+
+    @Async
+    @GetMapping("/exportComunicacionInternaDPF/{idSolicitud}")
+    public CompletableFuture<ResponseEntity<byte[]>> exportComunicacionInternaDPF(
+            @PathVariable Long idSolicitud) {
+
+        return CompletableFuture.supplyAsync(() -> {
+            try {
                 // Recuperar datos necesarios
                 Solicitud solicitudResp = solicitudService.buscarSolicitudService(idSolicitud);
-                List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService
-                        .listDetalleSolicitud(idSolicitud);
 
-                String documentos = formatListaDocumentos(listDetalleSolicitudResp);
-                Long totalCopias = listDetalleSolicitudResp.stream()
-                        .mapToLong(DetalleSolicitud::getNroCopias)
+                List<Fotocopia> listFotocopiaSolicitudResp = solicitudService
+                        .listFotocopiaSolicitud(idSolicitud);
+
+                String documentos = formatListaDocumentos(listFotocopiaSolicitudResp);
+                long totalCopias = listFotocopiaSolicitudResp.stream()
+                        .mapToLong(Fotocopia::getNroCopias)
                         .sum();
 
-                UsuarioUnidad usuarioResponsable = usuarioService.findUsuarioUnidadByIdUSer(idResponsable);
-                UsuarioUnidad usuarioSolicitante = usuarioService.findUsuarioUnidadByIdUSer(idSolicitante);
+                UsuarioUnidad usuarioSolicitante = solicitudResp.getFkUsuarioSolicitante();
+                UsuarioUnidad usuarioResponsable = solicitudResp.getFkUsuarioSolicitante().getFkResponsable();
 
                 // Crear objeto de reporte
                 ComunicacionReport comunicacionReport = ComunicacionReport.builder()
@@ -263,11 +276,19 @@ public class SolicitanteController {
                         .cite(solicitudResp.getCite())
                         .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
                         .documentos(documentos)
-                        .totalCopias(totalCopias.intValue())
+                        .totalCopias((int) totalCopias)
                         .build();
 
                 // Generar el PDF
                 byte[] pdfBytes = comunicacionInternaServiceReport.exportToPdf(comunicacionReport);
+
+                // Configurar encabezados de la respuesta
+                HttpHeaders headers = new HttpHeaders();
+                headers.setContentType(MediaType.APPLICATION_PDF);
+                headers.setContentDispositionFormData(
+                        "comunicacionInternaPDF",
+                        "comunicacionInterna.pdf"
+                );
 
                 // Crear y devolver la respuesta
                 return ResponseEntity.ok()
@@ -280,10 +301,10 @@ public class SolicitanteController {
         });
     }
 
-    private String formatListaDocumentos(List<DetalleSolicitud> listDetalleSolicitudResp) {
+    private String formatListaDocumentos(List<Fotocopia> listFotocopiaSolicitudResp) {
         // Usamos collect() para obtener una lista en versiones de Java anteriores a 16
-        List<String> nombres = listDetalleSolicitudResp.stream()
-                .map(DetalleSolicitud::getNombreDocumento).toList();
+        List<String> nombres = listFotocopiaSolicitudResp.stream()
+                .map(Fotocopia::getNombreDocumento).toList();
 
         // Verifica la cantidad de documentos
         if (nombres.size() == 1) {
@@ -297,6 +318,12 @@ public class SolicitanteController {
         }
     }
 
+
+
+
+
+
+
     @GetMapping("/exportInformeDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
     public ResponseEntity<byte[]> exportInformeDPF(
             @PathVariable Long idSolicitud,
@@ -305,15 +332,12 @@ public class SolicitanteController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData(
-                "informePDF",
-                "informePDF.pdf"
-        );
+        headers.setContentDispositionFormData("informePDF", "informePDF.pdf");
 
         Solicitud solicitudResp = solicitudService
                 .buscarSolicitudService(idSolicitud);
-        List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService
-                .listDetalleSolicitud(idSolicitud);
+        List<Fotocopia> listDetalleSolicitudResp = solicitudService
+                .listFotocopiaSolicitud(idSolicitud);
 
         List<TablaSolicitudReport> listReport = listDetalleSolicitudResp.stream()
                 .map(x -> TablaSolicitudReport.builder()
@@ -328,7 +352,7 @@ public class SolicitanteController {
                 .findUsuarioUnidadByIdUSer(idSolicitante);
 
         Long totalCopias = listDetalleSolicitudResp.stream()
-                .mapToLong(DetalleSolicitud::getNroCopias)  // Convierte a stream de long
+                .mapToLong(Fotocopia::getNroCopias)  // Convierte a stream de long
                 .sum();  // Suma todos los valores
 
 
@@ -373,43 +397,4 @@ public class SolicitanteController {
         }
 
     }
-
-    @Async
-    @GetMapping("/exportOrdenParaFotocopiaDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
-    public CompletableFuture<ResponseEntity<byte[]>> exportOrdenParaFotocopiaDPF(
-            @PathVariable Long idSolicitud,
-            @PathVariable Long idSolicitante,
-            @PathVariable Long idResponsable) {
-
-        return CompletableFuture.supplyAsync(() -> {
-            try {
-                // Configurar encabezados de la respuesta
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_PDF);
-                headers.setContentDispositionFormData(
-                        "ordenParaFotocopiaPDF",
-                        "ordenParaFotocopia.pdf"
-                );
-
-                // Recuperar datos necesarios
-                Solicitud solicitudResp = solicitudService
-                        .buscarSolicitudService(idSolicitud);
-                List<DetalleSolicitud> listDetalleSolicitudResp = solicitudService
-                        .listDetalleSolicitud(idSolicitud);
-
-                // Generar el PDF
-                byte[] pdfBytes = ordenFotoServiceReport
-                        .exportToPdf(listDetalleSolicitudResp);
-
-                // Crear y devolver la respuesta
-                return ResponseEntity.ok()
-                        .headers(headers)
-                        .body(pdfBytes);
-
-            } catch (IOException | JRException e) {
-                throw new RuntimeException("Error al generar el PDF", e);
-            }
-        });
-    }
-
 }

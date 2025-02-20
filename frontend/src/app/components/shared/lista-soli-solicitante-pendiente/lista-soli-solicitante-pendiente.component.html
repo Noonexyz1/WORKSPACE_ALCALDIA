@@ -1,0 +1,204 @@
+<section class="dark:bg-gray-900">
+  <div class="mx-auto px-4 2xl:px-0">
+
+    @if (listSolicitud != null && listSolicitud.length > 0) {
+      <div class="gap-4 sm:flex sm:items-center sm:justify-between pb-4">
+        <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+          Lista de solicitudes enviadas
+        </h2>
+      </div>
+
+      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
+
+        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
+          <!-- Cabera de la tabla -->
+          <thead class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
+          <tr>
+            <th scope="col" class="px-6 py-3">Id</th>
+            <th scope="col" class="px-6 py-3">Cite</th>
+            <th scope="col" class="px-6 py-3">Fecha</th>
+            <th scope="col" class="px-6 py-3">Descripcion</th>
+            <th scope="col" class="px-6 py-3">Accion</th>
+          </tr>
+          </thead>
+
+          <!-- Contenido de la tabla -->
+          <tbody>
+            @for (solicitud of listSolicitud; track solicitud.id) {
+              <tr
+                class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
+                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                  {{ solicitud.id }}
+                </th>
+                <td class="px-6 py-4">
+                  {{ solicitud.cite }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ solicitud.fecha }}
+                </td>
+                <td class="px-6 py-4">
+                  {{ solicitud.descripcion }}
+                </td>
+                <td class="px-6 py-4 flex gap-2">
+                  <button type="button" (click)="eliminarSolicitudById(solicitud.id)"
+                          class="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+                    Eliminar
+                  </button>
+
+                  <!-- Modal toggle -->
+                  <button type="button" (click)="toggleModal(solicitud.id)"
+                          class="block focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                    Documentos DPF
+                  </button>
+
+                  @if (isModalVisible) {
+                    <!-- Main modal -->
+                    <div id="select-modal" tabindex="-1" aria-hidden="true"
+                         class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full h-full">
+                      <div class="relative p-4 w-full max-w-md max-h-full">
+                        <!-- Modal content -->
+                        <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+                          <!-- Modal header -->
+                          <div
+                            class="flex items-center justify-between p-4 md:p-5 border-b rounded-t dark:border-gray-600">
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                              Documentos de solicitud
+                            </h3>
+                            <button type="button" (click)="toggleModal(solicitud.id)"
+                                    class="text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm h-8 w-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white">
+                              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none"
+                                   viewBox="0 0 14 14">
+                                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                      stroke-width="2"
+                                      d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+                              </svg>
+                              <span class="sr-only">Close modal</span>
+                            </button>
+                          </div>
+                          <!-- Modal body -->
+                          <div class="p-4 md:p-5">
+                            <p class="text-gray-500 dark:text-gray-400 mb-4">
+                              Selecciona los documentos que desea descargar:
+                            </p>
+                            <ul class="space-y-4 mb-4">
+                              <li>
+                                <input type="radio" id="job-1" name="job" value="job-1" class="hidden peer" required/>
+                                <label for="job-1"
+                                       (click)="botonSolicitudFotocopiaPDF()"
+                                       class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
+                                  <div class="block">
+                                    <div class="w-full text-lg font-semibold">Solicitud de fotocopia PDF</div>
+                                  </div>
+                                  <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                       xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                       viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2m-8 1V4m0 12-4-4m4 4 4-4"/>
+                                  </svg>
+                                </label>
+                              </li>
+                              <li>
+                                <input type="radio" id="job-2" name="job" value="job-2" class="hidden peer">
+                                <label for="job-2"
+                                       (click)="botonOrdenFotocopiaPDF()"
+                                       class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
+                                  <div class="block">
+                                    <div class="w-full text-lg font-semibold">Orden de fotocopia PDF</div>
+                                  </div>
+                                  <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                       xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                       viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2m-8 1V4m0 12-4-4m4 4 4-4"/>
+                                  </svg>
+                                </label>
+                              </li>
+                              <li>
+                                <input type="radio" id="job-3" name="job" value="job-3" class="hidden peer">
+                                <label for="job-3"
+                                       (click)="botonComunicacionInternaPDF()"
+                                       class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
+                                  <div class="block">
+                                    <div class="w-full text-lg font-semibold">Comunicacion interna PDF</div>
+                                  </div>
+                                  <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                       xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                       viewBox="0 0 24 24">
+                                    <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                          stroke-width="2"
+                                          d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2m-8 1V4m0 12-4-4m4 4 4-4"/>
+                                  </svg>
+                                </label>
+                              </li>
+                            </ul>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                  }
+
+                </td>
+              </tr>
+            }
+          </tbody>
+
+        </table>
+
+      </div>
+
+      <!-- Opciones de paginacion -->
+      <nav class="mt-6 flex items-center justify-center sm:mt-8" aria-label="Page navigation example">
+        <ul class="flex h-8 items-center -space-x-px text-sm">
+
+          <li>
+            <a (click)="goToPreviousPage()"
+               class="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-e-0 border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+              <span class="sr-only">Anterior</span>
+              <svg class="h-4 w-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                   width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="2" d="m15 19-7-7 7-7"/>
+              </svg>
+            </a>
+          </li>
+
+          @for (element of listaConsecutiva; track element) {
+            @if (pageProperties.currentPage != element) {
+              <li>
+                <button (click)="goToPage(element)"
+                        class="flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                  {{ element + 1 }}
+                </button>
+              </li>
+            } @else {
+              <li>
+                <button (click)="goToPage(element)"
+                        class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
+                  {{ element + 1 }}
+                </button>
+              </li>
+            }
+          }
+
+          <li>
+            <a (click)="goToNextPage()"
+               class="flex h-8 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+              <span class="sr-only">Siguiente</span>
+              <svg class="h-4 w-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+                   width="24" height="24" fill="none" viewBox="0 0 24 24">
+                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                      stroke-width="2" d="m9 5 7 7-7 7"/>
+              </svg>
+            </a>
+          </li>
+
+        </ul>
+      </nav>
+
+    }
+
+  </div>
+</section>

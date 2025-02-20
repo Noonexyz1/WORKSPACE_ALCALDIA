@@ -1,5 +1,4 @@
 export interface DetalleSolicitudCotizadoResponse {
-
   idSolicitud: number;
 
   idDetalleSolicitud: number;

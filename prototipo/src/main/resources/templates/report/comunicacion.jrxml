@@ -1,5 +1,5 @@
 <!-- Created with Jaspersoft Studio version 7.0.1.final using JasperReports Library version 7.0.1-573496633c2b4074e32f433154b543003f7d2498  -->
-<jasperReport name="comunicacion" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5ab73023-67ae-4935-9e43-66e1ebf8b5d8">
+<jasperReport name="comunicacion" language="java" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="5ab73023-67ae-4935-9e43-66e1ebf8b5d8" summaryWithPageHeaderAndFooter="true">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
 		<box>
@@ -81,9 +81,12 @@
 	<parameter name="documentos" class="java.lang.String"/>
 	<parameter name="ds" class="net.sf.jasperreports.engine.data.JRBeanArrayDataSource"/>
 	<parameter name="imageDir" class="java.lang.String"/>
+
+	<style name="NEGRITA" pdfFontName="Helvetica-Bold" backcolor="#FFFFFF"/>
+
 	<query language="sql"><![CDATA[]]></query>
 	<background splitType="Stretch"/>
-	<pageHeader height="168" splitType="Stretch">
+	<pageHeader height="163" splitType="Stretch">
 		<element kind="image" uuid="b082e94e-7c39-4443-8dd6-6b50e66e1ce5" x="433" y="21" width="104" height="75">
 			<expression><![CDATA[$P{imageDir} + "logo.png"]]></expression>
 		</element>
@@ -93,66 +96,78 @@
 		<element kind="image" uuid="65651d79-7937-4bd0-b29b-f95ce60bc799" x="30" y="9" width="83" height="101">
 			<expression><![CDATA[$P{imageDir} + "escudo.jpg"]]></expression>
 		</element>
-		<element kind="staticText" uuid="643f4a2c-a2cb-4030-99c3-bd3ea62c77a0" x="113" y="39" width="316" height="20" bold="true">
+		<element hTextAlign="Center" kind="staticText" uuid="643f4a2c-a2cb-4030-99c3-bd3ea62c77a0" x="113" y="39" width="316" height="20" bold="true">
 			<text><![CDATA[_________________________________________________________________________________________________________________________________]]></text>
 		</element>
-		<element kind="staticText" uuid="ab74a749-f466-460e-ae7e-a9931bea8023" x="131" y="66" width="298" height="28" fontSize="19.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
+		<element style="NEGRITA" kind="staticText" uuid="ab74a749-f466-460e-ae7e-a9931bea8023" x="131" y="66" width="298" height="28" fontSize="19.0" bold="true" hTextAlign="Center" vTextAlign="Middle">
 			<text><![CDATA[COMUNICACIÓN INTERNA]]></text>
 		</element>
-		<element kind="textField" uuid="0edee4b0-1084-4c24-8e8a-a9afa7d627c4" x="199" y="126" width="222" height="21" bold="true" hTextAlign="Right" vTextAlign="Middle">
+		<element style="NEGRITA" kind="textField" uuid="0edee4b0-1084-4c24-8e8a-a9afa7d627c4" x="199" y="126" width="222" height="21" bold="true" hTextAlign="Right" vTextAlign="Middle">
 			<expression><![CDATA[ "CITE: " + $P{cite}]]></expression>
 		</element>
-		<element kind="staticText" uuid="4a17d75d-3728-491b-8cf5-5fd3fbfacedc" x="199" y="106" width="222" height="20" bold="true" hTextAlign="Right" vTextAlign="Middle">
+		<element style="NEGRITA" kind="staticText" uuid="4a17d75d-3728-491b-8cf5-5fd3fbfacedc" x="199" y="106" width="222" height="20" bold="true" hTextAlign="Right" vTextAlign="Middle">
 			<text><![CDATA[FECHA: ........../..................../..........]]></text>
 		</element>
 	</pageHeader>
 	<detail>
-		<band height="502" splitType="Stretch">
-			<element kind="staticText" uuid="005cdb85-fcb9-41b2-ad77-67842a2915b8" x="105" y="-4" width="20" height="20" fontSize="12.0" bold="true">
+		<band height="285" splitType="Stretch">
+			<element style="NEGRITA" kind="staticText" uuid="005cdb85-fcb9-41b2-ad77-67842a2915b8" x="105" y="4" width="20" height="20" fontSize="12.0" bold="true">
 				<text><![CDATA[A:]]></text>
 			</element>
-			<element kind="staticText" uuid="2ae0082e-f741-463f-9a02-9988b7a54dcf" x="105" y="59" width="20" height="20" fontSize="12.0" bold="true">
+			<element style="NEGRITA" kind="staticText" uuid="2ae0082e-f741-463f-9a02-9988b7a54dcf" x="105" y="67" width="20" height="20" fontSize="12.0" bold="true">
 				<text><![CDATA[DE:]]></text>
 			</element>
-			<element kind="staticText" uuid="d7887803-18b7-4410-b4b1-94c5d4e6c744" x="157" y="36" width="357" height="20" fontSize="12.0" bold="true">
+			<element style="NEGRITA" kind="staticText" uuid="d7887803-18b7-4410-b4b1-94c5d4e6c744" x="157" y="44" width="357" height="20" fontSize="12.0" bold="true">
 				<text><![CDATA[GOBIERNO AUTÓNOMO MUNICIPAL DE EL ALTO]]></text>
 			</element>
-			<element kind="staticText" uuid="30bcba4d-dfc3-4b76-9897-d63eab306f53" x="157" y="99" width="357" height="20" fontSize="12.0" bold="true">
+			<element style="NEGRITA" kind="staticText" uuid="30bcba4d-dfc3-4b76-9897-d63eab306f53" x="157" y="107" width="357" height="20" fontSize="12.0" bold="true">
 				<text><![CDATA[GOBIERNO AUTÓNOMO MUNICIPAL DE EL ALTO]]></text>
 			</element>
-			<element kind="staticText" uuid="fcb49312-b89e-4794-9128-c75f229e3b8f" x="105" y="123" width="32" height="20" fontSize="12.0" bold="true">
+			<element style="NEGRITA" kind="staticText" uuid="fcb49312-b89e-4794-9128-c75f229e3b8f" x="105" y="131" width="32" height="20" fontSize="12.0" bold="true">
 				<text><![CDATA[REF:]]></text>
 			</element>
-			<element kind="staticText" uuid="29116084-667d-4e8d-87b5-d9ff4107258b" x="157" y="123" width="357" height="20" fontSize="12.0" bold="true">
+			<element style="NEGRITA" kind="staticText" uuid="29116084-667d-4e8d-87b5-d9ff4107258b" x="157" y="131" width="357" height="20" fontSize="12.0" bold="true">
 				<text><![CDATA[AUTORIZACIÓN DE FOTOCOPIAS]]></text>
 			</element>
-			<element kind="staticText" uuid="238c84c0-1c08-401e-82e4-cbe17b07ec8b" x="40" y="157" width="474" height="20" bold="true">
+			<element kind="staticText" uuid="238c84c0-1c08-401e-82e4-cbe17b07ec8b" x="40" y="165" width="474" height="20" bold="true">
 				<text><![CDATA[_________________________________________________________________________________________________________________________________]]></text>
 			</element>
-			<element kind="textField" uuid="14628743-8c24-46cc-94f5-0579f47506f2" x="157" y="-4" width="357" height="20" fontSize="12.0">
+			<element kind="textField" uuid="14628743-8c24-46cc-94f5-0579f47506f2" x="157" y="4" width="357" height="20" fontSize="12.0">
 				<expression><![CDATA[$P{funcionarioTo}]]></expression>
 			</element>
-			<element kind="textField" uuid="68f5e11a-0c63-4e72-a8ae-4a3ddf2c8930" x="157" y="59" width="357" height="20" fontSize="12.0">
+			<element kind="textField" uuid="68f5e11a-0c63-4e72-a8ae-4a3ddf2c8930" x="157" y="67" width="357" height="20" fontSize="12.0">
 				<expression><![CDATA[$P{funcionarioFrom}]]></expression>
 			</element>
-			<element kind="textField" uuid="09f85ebf-3780-46c8-81bc-ad01b47e8d36" x="157" y="16" width="357" height="20" fontSize="12.0" bold="true">
+			<element style="NEGRITA" kind="textField" uuid="09f85ebf-3780-46c8-81bc-ad01b47e8d36" x="157" y="24" width="357" height="20" fontSize="12.0" bold="true">
 				<expression><![CDATA[$P{funcionarioToCargo}]]></expression>
 			</element>
-			<element kind="textField" uuid="5d9a9fa3-fddf-45ed-8f1f-3dd76f721d42" x="157" y="79" width="357" height="20" fontSize="12.0" bold="true">
+			<element style="NEGRITA" kind="textField" uuid="5d9a9fa3-fddf-45ed-8f1f-3dd76f721d42" x="157" y="87" width="357" height="20" fontSize="12.0" bold="true">
 				<expression><![CDATA[$P{funcionarioFromCargo}]]></expression>
 			</element>
-			<element kind="textField" uuid="2abe62bb-904b-4938-8541-07dbaf4ad078" stretchType="ElementGroupHeight" x="63" y="200" width="432" height="300" fontSize="12.0" hTextAlign="Justified">
-				<expression><![CDATA["Por medio de la presente, solicito su autorización para realizar " + $P{totalCopias} + " copias para la " + $P{nombreOrganizacion} + ". Dichas copias serán utilizadas para los siguientes documentos:  " + $P{documentos}+ ".\nCon este particular saludo a Ud. con las consideraciones mas distinguidas. \nAtentamente.\n \n \n \n \n \n                                    ............................................."]]></expression>
+
+			<element kind="textField" uuid="2abe62bb-904b-4938-8541-07dbaf4ad078" x="63" y="200" width="432" height="79" fontSize="12.0" hTextAlign="Justified" stretchType="NoStretch" textAdjust="StretchHeight">
+				<expression><![CDATA[
+					"Por medio de la presente, solicito su autorización para realizar "
+					+ $P{totalCopias} + " copias para la " + $P{nombreOrganizacion}
+					+ ". Dichas copias serán utilizadas para los siguientes documentos:  "
+					+ $P{documentos} + ".\n\nCon este particular saludo a Ud. con las consideraciones más distinguidas. \nAtentamente."
+				]]></expression>
 			</element>
-			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</band>
 	</detail>
-	<pageFooter height="71" splitType="Stretch">
-		<element kind="staticText" uuid="4f52b373-1e52-4789-8a93-1361ea646575" x="43" y="12" width="476" height="21" bold="true">
-			<text><![CDATA[_________________________________________________________________________________________________________________________________]]></text>
+	<pageFooter height="63" splitType="Stretch">
+		<element kind="staticText" uuid="4f52b373-1e52-4789-8a93-1361ea646575" x="43" y="6" width="476" height="21" bold="true" hTextAlign="Center">
+			<text><![CDATA[_____________________________________________________________________________________]]></text>
 		</element>
-		<element kind="staticText" uuid="cc0c25a2-1ca5-4298-9c82-11cc49e7fcd0" x="43" y="33" width="476" height="30" fontSize="10.0" hTextAlign="Center">
+		<element kind="staticText" uuid="cc0c25a2-1ca5-4298-9c82-11cc49e7fcd0" x="43" y="27" width="476" height="30" fontSize="10.0" hTextAlign="Center">
 			<text><![CDATA[Avenida Costanera Nro. 5022, Urbanizacion Libertad entre calles JJ Torres y Hernan Siles Zuazo, Casa Municipal (Jach'a Uta), a media cuadra de la Estacion de Bomberos El Alto.]]></text>
 		</element>
 	</pageFooter>
+	<summary height="98">
+		<element kind="staticText" uuid="98bab63a-8d63-4f62-b663-ee90091af84e" x="200" y="71" width="160" height="20" hTextAlign="Center" vTextAlign="Middle">
+			<text><![CDATA[............................................]]></text>
+		</element>
+	</summary>
 </jasperReport>

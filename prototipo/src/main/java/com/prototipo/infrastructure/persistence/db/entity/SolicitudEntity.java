@@ -20,6 +20,13 @@ public class SolicitudEntity {
     private String descripcion;
     private String fecha;
     private Long autoriFlag;
+    private Boolean isActive;
+
+    private Double precioTotal;
+    private String nombreServicio;
+
+    private Long paginaTotal;
+    private Long copiaTotal;
 
     @ManyToOne
     private UsuarioUnidadEntity fkUsuarioSolicitante;

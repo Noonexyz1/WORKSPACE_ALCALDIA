@@ -1,5 +1,9 @@
 package com.prototipo.infrastructure.service;
 
+import com.prototipo.application.useCase.SolicitudService;
+import com.prototipo.domain.model.Fotocopia;
+import com.prototipo.domain.model.Solicitud;
+import com.prototipo.domain.model.UsuarioUnidad;
 import com.prototipo.infrastructure.rest.report.SolicitudReport;
 import com.prototipo.infrastructure.rest.report.TablaSolicitudReport;
 import net.sf.jasperreports.engine.*;
@@ -9,7 +13,7 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.io.IOException;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,53 +23,78 @@ public class SolicitudServiceReport {
 
     @Autowired
     private ResourceLoader resourceLoader;
+    @Autowired
+    private SolicitudService solicitudService;
 
-    public byte[] exportToPdf(SolicitudReport parametros,
-                              List<TablaSolicitudReport> listDetalleSolicitudResp)
-            throws JRException, IOException {
+    //@SneakyThrows
+    public byte[] exportToPdf(SolicitudReport solicitudReport)
+            throws JRException{
 
-        JasperPrint jasperPrint = getReport(parametros, listDetalleSolicitudResp);
+        JasperPrint jasperPrint = getReport(solicitudReport);
         return JasperExportManager.exportReportToPdf(jasperPrint);
     }
 
-    private JasperPrint getReport(SolicitudReport parametros, List<TablaSolicitudReport> listDetalleSolicitudResp)
-            throws IOException, JRException {
+    //Deberias enviar el Mapa por parametro para reutilizar codigo
+    private JasperPrint getReport(SolicitudReport parametros)
+            throws JRException {
 
-        Map<String, Object> params = new HashMap<>();
+        // Asigna los campos de SolicitudReport a los parámetros del reporte plantilla
+        Map<String, Object> parameter = new HashMap<>();
+        parameter.put("funcionarioTo", parametros.getFuncionarioTo());
+        parameter.put("funcionarioFrom", parametros.getFuncionarioFrom());
+        parameter.put("funcionarioToCargo", parametros.getFuncionarioToCargo());
+        parameter.put("funcionarioFromCargo", parametros.getFuncionarioFromCargo());
+        parameter.put("cite", parametros.getCite());
+        parameter.put("fecha", parametros.getFecha());
+        parameter.put("nombreOrganizacion", parametros.getNombreOrganizacion());
+        parameter.put("cantidadSumado", parametros.getCantidadSumado());
+        parameter.put("ds", new JRBeanCollectionDataSource(parametros.getListReportFotocopias()));
+        parameter.put("imageDir", "classpath:/static/images/");
 
-        //Ruta total
-        String filePath = "src" + File.separator +
+        //Ruta total para traer la plantilla PDF de Solicitud
+        String rutaPlantillaSoliPDF = getRutaPlantillaSolicitudDPF();
+        JasperReport jasperReport = JasperCompileManager.compileReport(rutaPlantillaSoliPDF);
+        return JasperFillManager.fillReport(jasperReport, parameter, new JREmptyDataSource());
+    }
+
+    private String getRutaPlantillaSolicitudDPF(){
+        return "src" + File.separator +
                 "main" + File.separator +
                 "resources" + File.separator +
                 "templates" + File.separator +
                 "report" + File.separator +
                 "solicitud.jrxml";
+    }
 
-        // Asigna los campos de SolicitudReport a los parámetros del reporte
-        params.put("funcionarioTo", parametros.getFuncionarioTo());
-        params.put("funcionarioFrom", parametros.getFuncionarioFrom());
-        params.put("funcionarioToCargo", parametros.getFuncionarioToCargo());
-        params.put("funcionarioFromCargo", parametros.getFuncionarioFromCargo());
-        params.put("cite", parametros.getCite());
-        params.put("fecha", parametros.getFecha());
-        params.put("nombreOrganizacion", parametros.getNombreOrganizacion());
-        params.put("imageDir", "classpath:/static/images/");
+    public SolicitudReport getObtenerDatosForReport(Long idSolicitud) {
+        // Traemos los datos necesarios para el reporte
+        Solicitud solicitudResp = solicitudService.buscarSolicitudService(idSolicitud);
+        UsuarioUnidad usuarioResponsable = solicitudResp.getFkUsuarioSolicitante().getFkResponsable();
+        UsuarioUnidad usuarioSolicitante = solicitudResp.getFkUsuarioSolicitante();
+        List<Fotocopia> listFotocopias = solicitudService.listFotocopiaSolicitud(idSolicitud);
 
-        /*List<TablaSolicitudReport> list = new ArrayList<>();
-        list.add(new TablaSolicitudReport("Documento Planos", 500));
-        list.add(new TablaSolicitudReport("Notificaciones", 900));*/
+        // Mapeamos con los datos obtenidos para exportar el PDF
+        List<TablaSolicitudReport> listReportFotocopias = listFotocopias.stream()
+                .map(x -> TablaSolicitudReport.builder()
+                        .documento(x.getNombreDocumento())
+                        .cantidad(x.getNroCopias().intValue())
+                        .build())
+                .toList();
 
-        params.put("ds", new JRBeanCollectionDataSource(listDetalleSolicitudResp));
-
-
-        JasperReport jasperReport = JasperCompileManager.compileReport(filePath);
-
-        JasperPrint report = JasperFillManager.fillReport(
-                jasperReport,
-                params,
-                new JREmptyDataSource()
-        );
-
-        return report;
+        return SolicitudReport.builder()
+                .funcionarioTo(usuarioResponsable.getFkUsuario().getNombres() + " " +
+                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                        usuarioResponsable.getFkUsuario().getMaterno())
+                .funcionarioToCargo(usuarioResponsable.getFkCargo().getNombreCargo())
+                .funcionarioFrom(usuarioSolicitante.getFkUsuario().getNombres() + " " +
+                        usuarioSolicitante.getFkUsuario().getPaterno() + " " +
+                        usuarioSolicitante.getFkUsuario().getMaterno())
+                .funcionarioFromCargo(usuarioSolicitante.getFkCargo().getNombreCargo())
+                .cite(solicitudResp.getCite())
+                .fecha(LocalDate.now().toString())
+                .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
+                .cantidadSumado(solicitudResp.getCopiaTotal() + "")
+                .listReportFotocopias(listReportFotocopias)
+                .build();
     }
 }

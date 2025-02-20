@@ -6,7 +6,6 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { catchError, map, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { RootNavigateService } from '../../services/root-navigate/root-navigate.service';
-import { SubjectUserLoginService } from '../../services/subject-user-login/subject-user-login.service';
 import { LocalStorageService } from '../../services/local-storage/local-storage.service';
 import {UrlsProperties} from "../../enums/UrlsProperties";
 import {ImagesProperties} from "../../enums/ImagesProperties";
@@ -23,8 +22,6 @@ export class LoginComponent {
   //Angular
   private http: HttpClient;
   private formBuilder: FormBuilder;
-  private router: Router;
-  private observable: SubjectUserLoginService;
 
   //Mis servicios
   private rootNavigateService: RootNavigateService;
@@ -36,16 +33,12 @@ export class LoginComponent {
   constructor(
     http: HttpClient,
     formBuilder: FormBuilder,
-    router: Router,
     rootNavigateService: RootNavigateService,
-    observable: SubjectUserLoginService,
     localStorage: LocalStorageService){
 
     this.http = http;
     this.formBuilder = formBuilder;
-    this.router = router;
     this.rootNavigateService = rootNavigateService;
-    this.observable = observable;
     this.localStorage = localStorage;
 
     this.loginForm = this.formBuilder
@@ -72,18 +65,18 @@ export class LoginComponent {
       map((response: UsuarioResponse) => {
         //Guardamos en el localStorage
         this.localStorage.setItem('userData', response);
-        //Publicamos los datos
-        this.observable.publicarDatos(response);
-
-        let toNavegate = this.rootNavigateService
-          .valorParaNavegar(response.dashConfig);
-
-        this.router.navigate([toNavegate]);
+        if (response.nombreRol == "Administrador") {
+          this.rootNavigateService.valorParaNavegar(response.nombreRol);
+        }
+        if (response.nombreRol == "Responsable") {
+          this.rootNavigateService.valorParaNavegar(response.nombreRol + "Pendientes");
+        }
+        if (response.nombreRol == "Solicitante") {
+          this.rootNavigateService.valorParaNavegar(response.nombreRol + "Pendientes");
+        }
       }),
       catchError(error => {
-        console.error('Error en la petición:', error);
         alert('Hubo un error al iniciar sesión');
-        // Retornar un observable vacío en caso de error
         return of(null);
       })
     ).subscribe();

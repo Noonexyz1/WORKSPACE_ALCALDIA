@@ -1,15 +1,14 @@
 import { HttpClient } from '@angular/common/http';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { RolResponse } from '../../../models/RolResponse';
 import { UnidadResponse } from '../../../models/UnidadResponse';
 import { catchError, map, of } from 'rxjs';
-import { UsuarioNuevoRequest } from '../../../models/UsuarioNuevoRequest';
+import { UsuarioUnidadEditRequest } from '../../../models/UsuarioUnidadEditRequest';
 import { RootNavigateService } from '../../../services/root-navigate/root-navigate.service';
-import { Router } from '@angular/router';
 import {CargoResponse} from "../../../models/CargoResponse";
 import {LocalStorageService} from "../../../services/local-storage/local-storage.service";
-import {UsuarioResponse} from "../../../models/UsuarioResponse";
+import {UrlsProperties} from "../../../enums/UrlsProperties";
 
 @Component({
   selector: 'app-nuevo-usuario',
@@ -18,12 +17,11 @@ import {UsuarioResponse} from "../../../models/UsuarioResponse";
   templateUrl: './nuevo-usuario.component.html',
   styleUrl: './nuevo-usuario.component.css'
 })
-export class NuevoUsuarioComponent implements OnInit {
+export class NuevoUsuarioComponent {
 
   private http: HttpClient;
   private formBuilder: FormBuilder;
   private rootNavigateService: RootNavigateService;
-  private router: Router;
   private localStorage: LocalStorageService;
 
   nuevoUsuario: FormGroup;
@@ -35,13 +33,13 @@ export class NuevoUsuarioComponent implements OnInit {
   constructor(http: HttpClient,
               formBuilder: FormBuilder,
               rootNavigateService: RootNavigateService,
-              router: Router,
               localStorage: LocalStorageService) {
 
     this.formBuilder = formBuilder;
     this.localStorage = localStorage;
     this.http = http;
     this.nuevoUsuario = this.formBuilder.group({
+      idUser: [''],
       nombres: [''],
       materno: [''],
       paterno: [''],
@@ -53,67 +51,64 @@ export class NuevoUsuarioComponent implements OnInit {
       idUni: [],
     });
     this.rootNavigateService = rootNavigateService;
-    this.router = router;
+
+    this.inicializarDatos();
   }
 
-  ngOnInit(): void {
+  inicializarDatos(): void {
     this.listaDeRoles();
     this.listaDeUnidades();
     this.listaDeCargos();
   }
 
   listaDeCargos(): void {
-    const url = 'http://localhost:8081/administrador/listarCargos';
-    this.http.get<CargoResponse[]>(url).pipe(
-      map((response: CargoResponse[]) => {
-        this.listaCargos = response;
-        console.log(this.listaRoles);
-      }),
-      catchError(error => {
-        console.error('Error en la petición:', error);
-        alert('Hubo un error al traer los cargos');
-        return of(null); // Retornar un observable vacío en caso de error
-      })
-    ).subscribe();
+    this.http.get<CargoResponse[]>(UrlsProperties.PATH_LIST_CARGOS)
+      .pipe(
+        map((response: CargoResponse[]) => {
+          this.listaCargos = response;
+          console.log(this.listaRoles);
+        }),
+        catchError(error => {
+          console.error('Error en la petición:', error);
+          alert('Hubo un error al traer los cargos');
+          return of(null); // Retornar un observable vacío en caso de error
+        })
+      ).subscribe();
   }
 
   listaDeRoles(): void {
-    const url = 'http://localhost:8081/administrador/listarRoles';
-    this.http.get<RolResponse[]>(url).pipe(
-      map((response: RolResponse[]) => {
-        this.listaRoles = response;
-        console.log(this.listaRoles);
-      }),
-      catchError(error => {
-        console.error('Error en la petición:', error);
-        alert('Hubo un error al traer los roles');
-        return of(null); // Retornar un observable vacío en caso de error
-      })
-    )
-    .subscribe();
+    this.http.get<RolResponse[]>(UrlsProperties.PATH_LIST_ROLES)
+      .pipe(
+        map((response: RolResponse[]) => {
+          this.listaRoles = response;
+          console.log(this.listaRoles);
+        }),
+        catchError(error => {
+          console.error('Error en la petición:', error);
+          alert('Hubo un error al traer los roles');
+          return of(null); // Retornar un observable vacío en caso de error
+        })
+      ).subscribe();
   }
 
   listaDeUnidades(): void {
-    const url = 'http://localhost:8081/administrador/listarUnidades';
-    this.http.get<UnidadResponse[]>(url).pipe(
-      map((response: UnidadResponse[]) => {
-        this.listaUnidades = response;
-        console.log(this.listaUnidades);
-      }),
-      catchError(error => {
-        console.error('Error en la petición:', error);
-        alert('Hubo un error al traer las unidades');
-        return of(null); // Retornar un observable vacío en caso de error
-      })
-    )
-    .subscribe();
+    this.http.get<UnidadResponse[]>(UrlsProperties.PATH_LIST_UNIDADES)
+      .pipe(
+        map((response: UnidadResponse[]) => {
+          this.listaUnidades = response;
+          console.log(this.listaUnidades);
+        }),
+        catchError(error => {
+          console.error('Error en la petición:', error);
+          alert('Hubo un error al traer las unidades');
+          return of(null); // Retornar un observable vacío en caso de error
+        })
+      ).subscribe();
   }
 
-
   botonRegistrarUsuario(): void {
-    const url = 'http://localhost:8081/administrador/crearUsuario';
-
-    const usuarioNuevoRequest: UsuarioNuevoRequest = {
+    const usuarioNuevoRequest: UsuarioUnidadEditRequest = {
+      id: this.nuevoUsuario.get('idUser')?.value,
       nombres: this.nuevoUsuario.get('nombres')?.value,
       materno: this.nuevoUsuario.get('materno')?.value,
       paterno: this.nuevoUsuario.get('paterno')?.value,
@@ -128,17 +123,19 @@ export class NuevoUsuarioComponent implements OnInit {
       idResponsable: 2
     };
 
-    this.http.post<UsuarioNuevoRequest>(url, usuarioNuevoRequest).pipe(
+    this.http.post<UsuarioUnidadEditRequest>(
+      UrlsProperties.PATH_CREATE_USER,
+      usuarioNuevoRequest
+    ).pipe(
       map(() => {
-        let toNavegate = this.rootNavigateService.valorParaNavegar("Administrador");
-        this.router.navigate([toNavegate]);
+        this.rootNavigateService.valorParaNavegar("Administrador");
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
         alert('Hubo un error al crear usuario');
-        return of(null); // Retornar un observable vacío en caso de error
+        // Retornar un observable vacío en caso de error
+        return of(null);
       })
     ).subscribe();
-
   }
 }

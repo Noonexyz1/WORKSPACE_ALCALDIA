@@ -1,9 +1,6 @@
 package com.prototipo.application.modelDto;
 
-import com.prototipo.domain.model.UsuarioUnidad;
 import lombok.*;
-
-import java.util.List;
 
 @Getter
 @Setter

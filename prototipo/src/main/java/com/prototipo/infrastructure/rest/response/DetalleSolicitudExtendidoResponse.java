@@ -14,5 +14,8 @@ public class DetalleSolicitudExtendidoResponse {
     private String cite;
     private String fecha;
     private String descripcion;
+    private String nombreServicio;
+    private Double precioTotal;
+
     private List<DetalleSolicitudResponse> detalleSolicitudResponses;
 }

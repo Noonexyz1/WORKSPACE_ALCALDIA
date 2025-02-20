@@ -1,8 +1,6 @@
 package com.prototipo.infrastructure.persistence.db.repository;
 
-import com.prototipo.application.modelDto.NotaDePedidoDto;
 import com.prototipo.infrastructure.persistence.db.entity.SolicitudEntity;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,6 +16,8 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
             SELECT *
             FROM solicitud s
             WHERE fk_usuario_solicitante_id = :idUsuarioUnidad
+            AND s.is_active = 1
+            AND s.autori_flag = 0;
             """, nativeQuery = true)
     List<SolicitudEntity> findAllByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad);
 
@@ -31,23 +31,39 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
                 WHERE fk_responsable_id = :idResponsable
             )
             AND autori_flag = 0
+            AND is_active = 1;
             """, nativeQuery = true)
-    List<SolicitudEntity> findAllByIdUserUnidadRespon(@Param("idResponsable") Long idResponsable);
+    List<SolicitudEntity> findAllSoliByIdResponsable(@Param("idResponsable") Long idResponsable);
 
-    /*Este méto-do busca todas las solicitudes cuyo campo fkSolicitante
-    * (que es una relación con la entidad Usuario) tenga un id igual al
-    * valor proporcionado. La sintaxis FkSolicitante_Id le indica a
-    * Spring Data JPA que debe usar el campo id de la entidad Usuario
-    * relacionada con fkSolicitante. */
+    @Query(value =
+            """
+            SELECT *
+            FROM solicitud s
+            WHERE fk_usuario_solicitante_id = :idUsuarioUnidad
+            AND s.id IN (
+                SELECT a.fk_solicitud_id
+                FROM solicitud s , autorizacion a
+                WHERE s.id = a.fk_solicitud_id
+                AND s.is_active = 1
+                AND s.autori_flag = 1
+                AND a.finali_flag = 0
+            )
+            """, nativeQuery = true)
+    List<SolicitudEntity> findAllAutoriByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad);
 
-    //List<SolicitudEntity> findAllByFkSolicitante_Id(Long fkSolicitanteId, Pageable pageable);
-
-    /*Si no hay elementos coincidentes, retorna una lista vacía ([])
-    * Este comportamiento es predeterminado en las listas devueltas por
-    * métodos de repositorio en Spring Data JPA: nunca se retorna null,
-    * siempre es una lista vacía si no hay resultados. */
-
-//    List<SolicitudEntity> findAllByFkUnidad_Id(Long fkUnidadId);
-//    SolicitudEntity findByFkUnidad_Id(Long fkUnidadId);
-
+    @Query(value =
+            """
+            SELECT *
+            FROM solicitud s
+            WHERE fk_usuario_solicitante_id = :idUsuarioUnidad
+            AND s.id IN (
+                SELECT a.fk_solicitud_id
+                FROM solicitud s , autorizacion a
+                WHERE s.id = a.fk_solicitud_id
+                AND s.is_active = 1
+                AND s.autori_flag = 1
+                AND a.finali_flag = 1
+            )
+            """, nativeQuery = true)
+    List<SolicitudEntity> findAllFinaliByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad);
 }

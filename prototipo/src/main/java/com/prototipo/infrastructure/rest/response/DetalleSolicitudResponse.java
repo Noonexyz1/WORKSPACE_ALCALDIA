@@ -8,9 +8,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class DetalleSolicitudResponse {
-
     private Long idSolicitud;
-
     private Long idDetalleSolicitud;
     private String nombreDocumento;
     private Long nroCopias;
@@ -18,4 +16,6 @@ public class DetalleSolicitudResponse {
     private String tamanoPagina;
     private String anversoReverso;
     private String colorFotocopia;
+    private Double precioRef;
+    private Double precioDocu;
 }

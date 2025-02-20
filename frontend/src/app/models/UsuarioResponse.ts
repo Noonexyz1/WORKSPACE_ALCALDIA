@@ -1,13 +1,10 @@
-export interface UsuarioResponse {
-  id: number,
-  fkUsuario: number,
-  fkUnidad: number,
-  fkRol: number,
-  nombreRol: string,
-  dashConfig: string,
-  fkCargo: number,
-  fkResponsable: number
-
-  nombreUsuario: string;
-  apellidoUsuario: string;
+export class UsuarioResponse {
+  id: number = 0;
+  nombres: string = '';
+  paterno: string = '';
+  materno: string = '';
+  ci: string = '';
+  nombreRol: string = '';
+  nombreUnidad: string = '';
+  nombreCargo: string = '';
 }

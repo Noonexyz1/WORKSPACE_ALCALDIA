@@ -9,7 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
+import java.math.RoundingMode;
 import java.util.List;
 
 @Component
@@ -23,33 +23,38 @@ public class ReportesPDFImpl implements ReportesPDFAbstract {
     @Override
     public List<NotaDePedidoDto> getNotaDePedidoAbstract(Long idSolicitud) {
         List<Object[]> notaDePedido = reportesPDFRepository.getNotaDePedido(idSolicitud);
-        List<NotaDePedidoDto> dtos = new ArrayList<>();
-        for (Object[] result : notaDePedido) {
+        List<NotaDePedidoDto> dtosNota = notaDePedido.stream().map(x -> {
             // Convertir Long a Integer explícitamente
-            Integer nroCopias = ((Long) result[0]).intValue();
-            String nombreDocumento = (String) result[1];
-            BigDecimal precioUnitario = (BigDecimal) result[2];
-            BigDecimal precioTotal = (BigDecimal) result[3];
-            NotaDePedidoDto dto = new NotaDePedidoDto(nroCopias, nombreDocumento, precioUnitario, precioTotal);
-            dtos.add(dto);
-        }
-        return dtos;
+            String nombreDocumento = (String) x[0];
+            Integer nroPaginas = ((Long) x[1]).intValue();
+            Integer nroCopias = ((Long) x[2]).intValue();
+            String tamano = (String) x[3];
+            String color = (String) x[4];
+            String anverRever = (String) x[5];
+            Double precioRef = BigDecimal.valueOf((Double) x[6]).setScale(2, RoundingMode.HALF_UP).doubleValue();
+            Double precioDocu = BigDecimal.valueOf((Double) x[7]).setScale(2, RoundingMode.HALF_UP).doubleValue();
+            return new NotaDePedidoDto(nombreDocumento, nroPaginas, nroCopias, tamano, color, anverRever, precioRef, precioDocu);
+        }).toList();
+
+        return dtosNota;
     }
 
     @Override
     public List<ReporteDto> generarReportePDFAbstract(Long idSolicitud) {
         List<Object[]> reportes = reportesPDFRepository.getListReporte(idSolicitud);
-        List<ReporteDto> reporteDtos = new ArrayList<>();
-        for (Object[] result : reportes) {
+        List<ReporteDto> reporteDtos = reportes.stream().map(x -> {
             // Convertir Long a Integer explícitamente
-            Integer nroCopias = ((Long) result[0]).intValue();
-            BigDecimal precioUnitario = (BigDecimal) result[1];
-            BigDecimal precioTotal = (BigDecimal) result[2];
-            // Crear el DTO
-            ReporteDto reporteDto = new ReporteDto(nroCopias, precioUnitario, precioTotal);
-            // Agregar el DTO a la lista
-            reporteDtos.add(reporteDto);
-        }
+            String nombreDocumento = (String) x[0];
+            Integer nroPaginas = ((Long) x[1]).intValue();
+            Integer nroCopias = ((Long) x[2]).intValue();
+            String tamano = (String) x[3];
+            String color = (String) x[4];
+            String anverRever = (String) x[5];
+            Double precioRef = BigDecimal.valueOf((Double) x[6]).setScale(2, RoundingMode.HALF_UP).doubleValue();
+            Double precioDocu = BigDecimal.valueOf((Double) x[7]).setScale(2, RoundingMode.HALF_UP).doubleValue();
+            return new ReporteDto(nombreDocumento, nroPaginas, nroCopias, tamano, color, anverRever, precioRef, precioDocu);
+        }).toList();
+
         return reporteDtos;
     }
 }

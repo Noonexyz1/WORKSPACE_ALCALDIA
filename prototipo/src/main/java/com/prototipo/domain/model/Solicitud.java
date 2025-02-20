@@ -13,5 +13,13 @@ public class Solicitud {
     private String fecha;
     private String descripcion;
     private Long autoriFlag;
+    private Boolean isActive;
+
+    private Double precioTotal;
+    private String nombreServicio;
+
+    private Long paginaTotal;
+    private Long copiaTotal;
+
     private UsuarioUnidad fkUsuarioSolicitante;
 }

@@ -31,7 +31,10 @@ public class CredencialImpl implements CredencialAbstract {
 
     @Override
     public CredencialDto encontrarCredencialPorUsuarioId(Long idUsuario) {
-        CredencialEntity credencialEntity = credencialRepository.encontrarCredencialPorUsuarioId(idUsuario);
-        return (credencialEntity != null)? modelMapper.map(credencialEntity, CredencialDto.class): null;
+        CredencialEntity credencialEntity = credencialRepository
+                .encontrarCredencialPorUsuarioId(idUsuario);
+        return (credencialEntity != null)?
+                modelMapper.map(credencialEntity, CredencialDto.class):
+                null;
     }
 }

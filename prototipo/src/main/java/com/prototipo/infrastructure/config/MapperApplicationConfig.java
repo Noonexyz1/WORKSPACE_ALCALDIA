@@ -11,7 +11,9 @@ import org.springframework.context.annotation.Configuration;
 public class MapperApplicationConfig {
 
     @Bean
-    public MapperApplicationAbstract mapperApplicationAbstractBean(@Qualifier("modelMapperBean") ModelMapper modelMapper){
+    public MapperApplicationAbstract mapperApplicationAbstractBean(
+            @Qualifier("modelMapperBean") ModelMapper modelMapper){
+
         return new MapperApplicationImpl(modelMapper);
     }
 }

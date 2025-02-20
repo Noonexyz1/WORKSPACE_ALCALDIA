@@ -1,6 +1,6 @@
 package com.prototipo.infrastructure.service;
 
-import com.prototipo.domain.model.DetalleSolicitud;
+import com.prototipo.domain.model.Fotocopia;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
@@ -14,7 +14,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -27,28 +26,32 @@ public class OrdenFotoServiceReport {
 
     @Autowired
     private ResourceLoader resourceLoader;
+    @Autowired
+    private NumeroALiteral numeroALiteral;
+    @Autowired
+    private DoublesALiteral doublesALiteral;
 
-    public byte[] exportToPdf(List<DetalleSolicitud> listDetalleSolicitudResp)
+    public byte[] exportToPdf(List<Fotocopia> listFotocopiaSolicitud)
             throws JRException, IOException {
 
-        List<JasperPrint> jasperPrintList = getReportByList(listDetalleSolicitudResp);
+        List<JasperPrint> jasperPrintList = getReportByList(listFotocopiaSolicitud);
         return exportToPdfByListByJRPdfExporter(jasperPrintList);
     }
 
-    private List<JasperPrint> getReportByList(List<DetalleSolicitud> listDetalleSolicitudResp)
-            throws IOException, JRException {
+    private List<JasperPrint> getReportByList(List<Fotocopia> listFotocopiaSolicitud)
+            throws JRException {
 
         List<JasperPrint> paginasJasperPrints = new ArrayList<>();
 
-        DetalleSolicitud[] detalleVect = listDetalleSolicitudResp
-                .toArray(new DetalleSolicitud[0]);
+        Fotocopia[] detalleFotoVect = listFotocopiaSolicitud
+                .toArray(new Fotocopia[0]);
 
         int marcador = 0;
 
         //1. Determinar cuantas paginas son necesarias para poder imprimir los datos
         //digamos que son 7 y necesito 2 paginas
         int nroPaginas = (int) Math.ceil(
-                (double) listDetalleSolicitudResp.size() / 4
+                (double) listFotocopiaSolicitud.size() / 4
         );
 
         //para dos paginas en total, solo debo recorrer 2 paginas
@@ -65,15 +68,19 @@ public class OrdenFotoServiceReport {
             //sabes que, con esta primera pagina, quiero que lo pobles con datos
             Map<String, Object> params = new HashMap<>();
             int j = marcador;
-            for (int k = 1; k <= 4 && j < detalleVect.length; k++) {
+            for (int k = 1; k <= 4 && j < detalleFotoVect.length; k++) {
                 // Verificar que j no esté fuera del rango
-                if (j < detalleVect.length) {
+                if (j < detalleFotoVect.length) {
                     // Asigna los parámetros relacionados con la fotocopia
-                    params.put("nroCantidadFotocopia" + k, detalleVect[j].getNroCopias().intValue());
-                    params.put("precio" + k, new BigDecimal("207.00"));
-                    params.put("litCantidadFotocopia" + k, "Un mil trecientos ochenta");
-                    params.put("literalPrecio" + k, "Doscientos siete");
-                    params.put("detalle" + k, "trabajos comunitarios");
+                    params.put("nroCantidadFotocopia" + k, detalleFotoVect[j].getNroCopias().intValue());
+                    params.put("litCantidadFotocopia" + k, numeroALiteral
+                            .convertirNumeroALiteral(detalleFotoVect[j].getNroCopias().intValue()));
+
+                    params.put("precio" + k, BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu()));
+                    params.put("literalPrecio" + k, doublesALiteral
+                            .convertir(BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu())));
+
+                    params.put("detalle" + k, detalleFotoVect[j].getNombreDocumento());
                     j++; // Avanzar al siguiente elemento
                 } else {
                     // Si no hay más elementos, puedes asignar valores predeterminados
@@ -104,22 +111,9 @@ public class OrdenFotoServiceReport {
         return paginasJasperPrints;
     }
 
-    public byte[] exportToPdfByList(List<JasperPrint> jasperPrintList) throws JRException {
-        // 1. Crea un flujo de salida en memoria (no se escribe en disco)
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+    public byte[] exportToPdfByListByJRPdfExporter(List<JasperPrint> jasperPrintList)
+            throws JRException {
 
-        // 2. Usa JasperExportManager para exportar todas las páginas de JasperPrint
-        for (JasperPrint jasperPrint : jasperPrintList) {
-            //Aqui esta el Problema?? porque solo me manda uno, osea el ultimo
-            //ESTE METODO SOLO ES CAPAZ DE EXPORTA UN SOLO REPORTE
-            JasperExportManager.exportReportToPdfStream(jasperPrint, baos);
-        }
-
-        // 3. Convierte el contenido del flujo de salida a un arreglo de bytes
-        return baos.toByteArray();
-    }
-
-    public byte[] exportToPdfByListByJRPdfExporter(List<JasperPrint> jasperPrintList) throws JRException {
         // 1. Crea un flujo de salida en memoria
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
@@ -146,5 +140,4 @@ public class OrdenFotoServiceReport {
         // 4. Convierte el contenido del flujo de salida a un arreglo de bytes
         return baos.toByteArray();
     }
-
 }

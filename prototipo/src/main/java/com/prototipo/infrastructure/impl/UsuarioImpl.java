@@ -29,32 +29,14 @@ public class UsuarioImpl implements UsuarioAbastract {
     @Autowired
     private ModelMapper modelMapper;
 
-    @Override
-    public UsuarioDto findUsuarioPorIdAbastract(Long idUsuario) {
-        UsuarioEntity usuarioEntity = usuarioRepository.findById(idUsuario).orElseThrow();
-        return modelMapper.map(usuarioEntity, UsuarioDto.class);
-    }
-
-    @Override
-    public UsuarioUnidadDto guardarUsuarioUnidadAbastract(UsuarioUnidadDto usuarioUnidadDto) {
-        UsuarioUnidadEntity usuarioUnidadReq = modelMapper
-                .map(usuarioUnidadDto, UsuarioUnidadEntity.class);
-        UsuarioUnidadEntity usuarioUnidadResp = usuarioUnidadRepository
-                .save(usuarioUnidadReq);
-        return modelMapper.map(usuarioUnidadResp, UsuarioUnidadDto.class);
-    }
 
     @Override
     public UsuarioDto guardarUsuarioAbastract(UsuarioDto usuarioDto) {
         UsuarioEntity usuarioEntity = modelMapper
                 .map(usuarioDto, UsuarioEntity.class);
-
         UsuarioEntity userRespo = usuarioRepository
                 .save(usuarioEntity);
-
-        UsuarioDto usuarioDtoResp = modelMapper
-                .map(userRespo, UsuarioDto.class);
-        return usuarioDtoResp;
+        return modelMapper.map(userRespo, UsuarioDto.class);
     }
 
     @Override
@@ -99,29 +81,5 @@ public class UsuarioImpl implements UsuarioAbastract {
                 .build();
 
         return paginableOut;
-    }
-
-    @Override
-    public List<UsuarioDto> listaDeUsuariosAbsAsc(Long page, Long size, String byColumName) {
-        Sort sort = Sort.by(Sort.Direction.ASC, byColumName);
-        Pageable pageable = PageRequest.of(page.intValue(), size.intValue(), sort);
-        return usuarioRepository.findAll(pageable).stream()
-                .map(x -> modelMapper.map(x, UsuarioDto.class))
-                .toList();
-    }
-
-    @Override
-    public List<UsuarioDto> listaDeUsuariosAbsDesc(Long page, Long size, String byColumName) {
-        Sort sort = Sort.by(Sort.Direction.DESC, byColumName);
-        Pageable pageable = PageRequest.of(page.intValue(), size.intValue(), sort);
-        return usuarioRepository.findAll(pageable).stream()
-                .map(x -> modelMapper.map(x, UsuarioDto.class))
-                .toList();
-    }
-
-    @Override
-    public UsuarioDto buscarUsuarioPorEmail(String email) {
-        UsuarioEntity usuarioResp = usuarioRepository.encontrarUsuarioPorEmail(email);
-        return (usuarioResp != null)? modelMapper.map(usuarioResp, UsuarioDto.class): null;
     }
 }

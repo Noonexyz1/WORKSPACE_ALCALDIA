@@ -11,14 +11,14 @@ import lombok.*;
 //@EqualsAndHashCode
 public class UsuarioUnidadResponse {
     private Long id;
-    private String ci;
     private Boolean isActive;
 
     private Long idUser;
     private String nombres;
-    private String paterno;
     private String materno;
+    private String paterno;
     private String correo;
+    private String ci;
 
     private String nombreRol;
     private String nombreUnidad;
@@ -26,4 +26,7 @@ public class UsuarioUnidadResponse {
 
     private Long idRol;
     private Long idUni;
+    private Long idCargo;
+    private Long idResponsable;
+    private Long idDirector;
 }

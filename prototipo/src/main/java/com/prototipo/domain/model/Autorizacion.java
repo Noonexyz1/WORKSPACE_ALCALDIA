@@ -13,8 +13,6 @@ public class Autorizacion {
 
     private Long id;
     private String fecha;
-    private Long totalAutorizado;
-    private BigDecimal totalCotizadoBs;
     private Long finaliFlag;
 
     private UsuarioUnidad fkUsuarioResponsable;

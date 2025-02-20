@@ -28,7 +28,8 @@ public class AdministradorController {
     @Autowired
     private ModelMapper modelMapper;
 
-    @PostMapping(path = {"/listaDeUsuarios"},
+    @PostMapping(
+            path = {"/listaDeUsuarios"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PageResponse<UsuarioUnidadResponse>> listaDeUsuarios(
             @RequestBody PageRequest pageReq) {
@@ -63,61 +64,58 @@ public class AdministradorController {
                 .id(userUni.getId())
                 .isActive(userUni.getIsActive())
 
-                .idUser(userUni.getFkUsuario().getId())
-                .nombres(userUni.getFkUsuario().getNombres())
-                .paterno(userUni.getFkUsuario().getPaterno())
-                .materno(userUni.getFkUsuario().getMaterno())
-                .correo(userUni.getFkUsuario().getCorreo())
+                .idUser((userUni.getFkUsuario() != null)? userUni.getFkUsuario().getId(): null)
+                .nombres((userUni.getFkUsuario() != null)? userUni.getFkUsuario().getNombres(): null)
+                .materno((userUni.getFkUsuario() != null)? userUni.getFkUsuario().getMaterno(): null)
+                .paterno((userUni.getFkUsuario() != null)? userUni.getFkUsuario().getPaterno(): null)
+                .correo((userUni.getFkUsuario() != null)? userUni.getFkUsuario().getCorreo(): null)
+                .ci((userUni.getFkUsuario() != null)? userUni.getFkUsuario().getCi(): null)
 
                 .nombreRol(userUni.getFkRol().getNombreRol())
-                .nombreUnidad(
-                        (userUni.getFkUnidad() != null)?
-                                userUni.getFkUnidad().getNombre():
-                                "Unidad Servicios Generales"
-                )
+                .nombreUnidad((userUni.getFkUnidad() != null)? userUni.getFkUnidad().getNombre(): "Unidad Servicios Generales")
+                .nombreCargo((userUni.getFkCargo() != null)? userUni.getFkCargo().getNombreCargo(): "Unidad Servicios Generales")
+
                 .idRol(userUni.getFkRol().getId())
                 .idUni((userUni.getFkUnidad() != null)? userUni.getFkUnidad().getId(): null)
-                .nombreCargo(
-                        (userUni.getFkCargo() != null)?
-                        userUni.getFkCargo().getNombreCargo():
-                        "Unidad Servicios Generales"
-                )
-                .ci(userUni.getFkUsuario().getCi())
+                .idCargo(userUni.getFkCargo().getId())
+                .idResponsable(userUni.getFkResponsable() != null ? userUni.getFkResponsable().getId(): null)
+                .idDirector(userUni.getFkDirector() != null ? userUni.getFkDirector().getId(): null)
                 .build();
     }
 
-    @PostMapping(path = {"/crearUsuario"},
+    @PostMapping(
+            path = {"/crearUsuario"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void crearUsuario(@RequestBody UsuarioNuevoRequest newUser){
-        Long idRol = newUser.getIdRol();
-        Long idUni = newUser.getIdUni();
-        Long idCargo = newUser.getIdCargo();
-
-        Long idResponsable = newUser.getIdResponsable();
-        Long idDirector = newUser.getIdDirector();
-
+    public void crearUsuario(@RequestBody UsuarioUnidadEditRequest newUser){
         Usuario usuario = modelMapper.map(newUser, Usuario.class);
-        fotocopiaService.creaUsuario(
-                usuario,
-                idRol,
-                idUni,
-                idCargo,
-                idResponsable,
-                idDirector);
-
+        UsuarioUnidad usuarioUnidad = usuarioUnidadBuilder(newUser);
+        fotocopiaService.creaUsuario(usuario, usuarioUnidad);
     }
 
-    @GetMapping(path = {"/eliminarFuncionario/{idUsuarioUnidad}"},
+    @PostMapping(
+            path = {"/editarUsuario"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void editarUsuario(@RequestBody UsuarioUnidadEditRequest editUser) {
+        Usuario usuario = modelMapper.map(editUser, Usuario.class);
+        UsuarioUnidad usuarioUnidad = usuarioUnidadBuilder(editUser);
+        fotocopiaService.creaUsuario(usuario, usuarioUnidad);
+    }
+
+    private UsuarioUnidad usuarioUnidadBuilder(UsuarioUnidadEditRequest user){
+        return UsuarioUnidad.builder()
+                .fkRol(Rol.builder().id(user.getIdRol()).build())
+                .fkUnidad(Unidad.builder().id(user.getIdUni()).build())
+                .fkCargo(Cargo.builder().id(user.getIdCargo()).build())
+                .fkResponsable(UsuarioUnidad.builder().id(user.getIdResponsable()).build())
+                .fkDirector(UsuarioUnidad.builder().id(user.getIdDirector()).build())
+                .build();
+    }
+
+    @GetMapping(
+            path = {"/eliminarFuncionario/{idUsuarioUnidad}"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public void eliminarUsuario(@PathVariable Long idUsuarioUnidad){
         fotocopiaService.eliminarUsuario(idUsuarioUnidad);
-    }
-
-    @PostMapping(path = {"/editarUsuario"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void editarUsuario(@RequestBody UsuarioRequest request){
-        Usuario usuario = modelMapper.map(request, Usuario.class);
-        fotocopiaService.editarUsuarioUnidad(usuario);
     }
 
     @GetMapping(path = {"/listarRoles"})
@@ -159,7 +157,8 @@ public class AdministradorController {
         fotocopiaService.cambiarPass(credencial, request.getNuevoPass());
     }
 
-    @GetMapping(path = {"/generarReporte"},
+    @GetMapping(
+            path = {"/generarReporte"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<ReporteResponse> generarReporte(){
         //TODO, generar reporte

@@ -10,8 +10,12 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 public class NotaDePedido {
-    private Integer nroCopias; // Para la columna ds.nro_copias
-    private String nombreDocumento; // Para la columna ds.nombre_documento
-    private BigDecimal precioUnitario; // Para la columna d.precio_unitario
-    private BigDecimal precioTotal; // Para la columna d.precio_total
+    private String nombreDocumento;
+    private Integer nroPaginas;
+    private Integer nroCopias;
+    private String tamano;
+    private String color;
+    private String anverRever;
+    private Double precioRef;
+    private Double precioDocu;
 }

@@ -5,6 +5,7 @@ import {Router} from '@angular/router';
 import {RootNavigateService} from '../../../services/root-navigate/root-navigate.service';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
+import {UrlsProperties} from "../../../enums/UrlsProperties";
 
 @Component({
   selector: 'app-cambiar-pass',
@@ -38,25 +39,24 @@ export class CambiarPassComponent {
   }
 
   botonCambiarPass(): void {
-    const url = 'http://localhost:8081/cambioPassService/cambiarPass';
     const nuevoPassRequest: NuevoPassRequest = {
       ci: this.nuevoPassForm.get('ci')?.value,
       pass: this.nuevoPassForm.get('pass')?.value,
       nuevoPass: this.nuevoPassForm.get('nuevoPass')?.value,
     };
 
-    console.log(nuevoPassRequest);
-
-    this.http.post<NuevoPassRequest>(url, nuevoPassRequest).pipe(
+    this.http.post<NuevoPassRequest>(
+      UrlsProperties.PATH_CHANCE_PASS,
+      nuevoPassRequest
+    ).pipe(
       map((response: NuevoPassRequest) => {
-        let toNavegate = this.rootNavigateService
-          .valorParaNavegar('Login');
-        this.router.navigate([toNavegate]);
+        this.rootNavigateService.valorParaNavegar('Login');
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
         alert('Hubo un error al cambiar la contrasena');
-        return of(null); // Retornar un observable vacío en caso de error
+        // Retornar un observable vacío en caso de error
+        return of(null);
       })
     ).subscribe();
 

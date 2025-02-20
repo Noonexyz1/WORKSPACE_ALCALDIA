@@ -16,7 +16,4 @@ public class ComunicacionReport {
     private String nombreOrganizacion;
     private String documentos;
     private Integer totalCopias;
-
-/*    private String fecha;
-    private String parameter1;*/
 }
