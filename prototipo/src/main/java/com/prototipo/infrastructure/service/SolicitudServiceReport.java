@@ -13,7 +13,6 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
-import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -91,7 +90,7 @@ public class SolicitudServiceReport {
                         usuarioSolicitante.getFkUsuario().getMaterno())
                 .funcionarioFromCargo(usuarioSolicitante.getFkCargo().getNombreCargo())
                 .cite(solicitudResp.getCite())
-                .fecha(LocalDate.now().toString())
+                .fecha(solicitudResp.getFecha())
                 .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
                 .cantidadSumado(solicitudResp.getCopiaTotal() + "")
                 .listReportFotocopias(listReportFotocopias)
