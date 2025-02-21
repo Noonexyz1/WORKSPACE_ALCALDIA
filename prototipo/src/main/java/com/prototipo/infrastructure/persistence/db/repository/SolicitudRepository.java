@@ -17,7 +17,8 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
             FROM solicitud s
             WHERE fk_usuario_solicitante_id = :idUsuarioUnidad
             AND s.is_active = 1
-            AND s.autori_flag = 0;
+            AND s.autori_flag = 0
+            ORDER BY s.id DESC;
             """, nativeQuery = true)
     List<SolicitudEntity> findAllByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad);
 
@@ -31,7 +32,8 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
                 WHERE fk_responsable_id = :idResponsable
             )
             AND autori_flag = 0
-            AND is_active = 1;
+            AND is_active = 1
+            ORDER BY s.id DESC;
             """, nativeQuery = true)
     List<SolicitudEntity> findAllSoliByIdResponsable(@Param("idResponsable") Long idResponsable);
 
@@ -48,6 +50,7 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
                 AND s.autori_flag = 1
                 AND a.finali_flag = 0
             )
+            ORDER BY s.id DESC;
             """, nativeQuery = true)
     List<SolicitudEntity> findAllAutoriByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad);
 
@@ -64,6 +67,7 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
                 AND s.autori_flag = 1
                 AND a.finali_flag = 1
             )
+            ORDER BY s.id DESC;
             """, nativeQuery = true)
     List<SolicitudEntity> findAllFinaliByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad);
 }

@@ -12,6 +12,7 @@ import com.prototipo.infrastructure.persistence.db.repository.FinalizacionReposi
 import com.prototipo.infrastructure.persistence.db.repository.SolicitudRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -60,12 +61,14 @@ public class AprobacionImpl implements AprobacionAbstract {
 
     @Override
     public List<FinalizacionDto> listaDeAprobacionesFinalizadasAbstractPage(
-            Long idSupervisor,
+            Long idResponsable,
             Long page,
             Long size,
             String byColumName) {
 
-        List<FinalizacionEntity> finalizacionList = finalizacionRepository.findAll();
+        // Ordena por ID en orden descendente
+        Sort sort = Sort.by(Sort.Order.desc("id"));
+        List<FinalizacionEntity> finalizacionList = finalizacionRepository.findAll(sort);
         return finalizacionList.stream()
                 .map(x -> modelMapper.map(x, FinalizacionDto.class))
                 .toList();

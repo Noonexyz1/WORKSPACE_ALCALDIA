@@ -8,5 +8,4 @@ import com.prototipo.application.pager.PaginableOut;
 public interface UsuarioAbastract {
     PaginableOut<UsuarioUnidadDto> listaDeUsuariosAbsDef(PaginableIn paginableIn);
     UsuarioDto guardarUsuarioAbastract(UsuarioDto usuarioDto);
-    UsuarioUnidadDto findUsuarioUnidadPorIdUserAbastract(Long id);
 }

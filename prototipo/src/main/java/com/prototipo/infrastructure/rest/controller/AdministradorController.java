@@ -156,12 +156,4 @@ public class AdministradorController {
                 .build();
         fotocopiaService.cambiarPass(credencial, request.getNuevoPass());
     }
-
-    @GetMapping(
-            path = {"/generarReporte"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ReporteResponse> generarReporte(){
-        //TODO, generar reporte
-        return new ResponseEntity<>(null, HttpStatus.OK);
-    }
 }

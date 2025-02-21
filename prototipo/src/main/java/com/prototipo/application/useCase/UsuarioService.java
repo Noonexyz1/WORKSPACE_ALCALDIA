@@ -6,5 +6,4 @@ import com.prototipo.domain.model.UsuarioUnidad;
 
 public interface UsuarioService {
     PaginableOut<UsuarioUnidad> listaDeUsuariosServiceDef(PaginableIn paginableIn);
-    UsuarioUnidad findUsuarioUnidadByIdUSer(Long id);
 }
