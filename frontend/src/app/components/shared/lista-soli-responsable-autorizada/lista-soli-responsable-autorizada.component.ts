@@ -1,4 +1,4 @@
-import {afterNextRender, Component} from '@angular/core';
+import {Component} from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, of } from 'rxjs';
 import { PageRequestID } from '../../../models/PageRequestID';
@@ -47,21 +47,23 @@ export class ListaSoliAutorizadaResponsableComponent {
   private formBuilder: FormBuilder;
   private rootNavigateService: RootNavigateService;
 
+  isActiveBtnFinalizar: boolean = false;
   botonFinalizarSolicitud(solicitud: SolicitudResponResponse): void {
-    this.http.post<number>(
-      UrlsProperties.PATH_FINALIZAR_SOLI,
-      solicitud.idAutorizacion
-    ).pipe(
-      map(() => {
-        this.rootNavigateService.valorParaNavegar('ResponsableFinalizadas');
-      }),
-      catchError(error => {
-        console.error('Error en la petición:', error);
-        alert('Hubo un error al guardar la Finalizacion');
-        return of(null); // Retornar un observable vacío en caso de error
-      })
-    ).subscribe();
-
+    if (this.isActiveBtnFinalizar) {
+      this.http.post<number>(
+        UrlsProperties.PATH_FINALIZAR_SOLI,
+        solicitud.idAutorizacion
+      ).pipe(
+        map(() => {
+          this.rootNavigateService.valorParaNavegar('ResponsableFinalizadas');
+        }),
+        catchError(error => {
+          console.error('Error en la petición:', error);
+          alert('Hubo un error al guardar la Finalizacion');
+          return of(null); // Retornar un observable vacío en caso de error
+        })
+      ).subscribe();
+    }
   }
 
   botonNotaDeSolicitud(idSolicitud: number): void {
@@ -71,6 +73,7 @@ export class ListaSoliAutorizadaResponsableComponent {
     ).pipe( // Cambiar el tipo de respuesta
       map((response: Blob) => {
         this.descargarPDF("notaPedidoPDF.pdf", response);
+        this.isActiveBtnFinalizar = true;
       }),
       catchError(error => {
         this.errorDescargaPDF("notaPedidoPDF.pdf", error)

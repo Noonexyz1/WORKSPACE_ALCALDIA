@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -33,15 +34,11 @@ public class SolicitanteController {
     @Autowired
     private SolicitudService solicitudService;
     @Autowired
-    private UsuarioService usuarioService;
-    @Autowired
     private ModelMapper modelMapper;
     @Autowired
     private SolicitudServiceReport solicitudServiceReport;
     @Autowired
     private ComunicacionInternaServiceReport comunicacionInternaServiceReport;
-    @Autowired
-    private InformeServiceReport informeServiceReport;
     @Autowired
     private OrdenFotoServiceReport ordenFotoServiceReport;
 
@@ -69,10 +66,14 @@ public class SolicitanteController {
                 .id(solicitudRequest.getFkUsuarioSolicitante())
                 .build();
 
+        LocalDate fechaActual = LocalDate.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+
         //Debo usar los mappeadores de mi Infraestrucutura
         Solicitud solicitud = Solicitud.builder()
                 .cite(solicitudRequest.getCite())
-                .fecha(LocalDate.now().toString())
+                .fecha(fechaActual.format(formato))
                 .descripcion(solicitudRequest.getDescripcion())
                 .fkUsuarioSolicitante(usuarioUnidad)
                 .autoriFlag(0L)
@@ -178,7 +179,6 @@ public class SolicitanteController {
     }
 
 
-    //localhost:8081/solicitante/exportSolicitudDPF
     @Async
     @GetMapping("/exportSolicitudDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportSolicitudDPF(
@@ -316,85 +316,5 @@ public class SolicitanteController {
             return String.join(", ", nombres.subList(0, nombres.size() - 1))
                     + " y " + nombres.get(nombres.size() - 1);
         }
-    }
-
-
-
-
-
-
-
-    @GetMapping("/exportInformeDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
-    public ResponseEntity<byte[]> exportInformeDPF(
-            @PathVariable Long idSolicitud,
-            @PathVariable Long idSolicitante,
-            @PathVariable Long idResponsable ) throws IOException, JRException {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("informePDF", "informePDF.pdf");
-
-        Solicitud solicitudResp = solicitudService
-                .buscarSolicitudService(idSolicitud);
-        List<Fotocopia> listDetalleSolicitudResp = solicitudService
-                .listFotocopiaSolicitud(idSolicitud);
-
-        List<TablaSolicitudReport> listReport = listDetalleSolicitudResp.stream()
-                .map(x -> TablaSolicitudReport.builder()
-                        .documento(x.getNombreDocumento())
-                        .cantidad(x.getNroCopias().intValue())
-                        .build())
-                .toList();
-
-        UsuarioUnidad usuarioResponsable = usuarioService
-                .findUsuarioUnidadByIdUSer(idResponsable);
-        UsuarioUnidad usuarioSolicitante = usuarioService
-                .findUsuarioUnidadByIdUSer(idSolicitante);
-
-        Long totalCopias = listDetalleSolicitudResp.stream()
-                .mapToLong(Fotocopia::getNroCopias)  // Convierte a stream de long
-                .sum();  // Suma todos los valores
-
-
-        if (totalCopias >= 5000) {
-            InformeReport report = InformeReport.builder()
-                    .funcionarioTo(
-                            usuarioResponsable.getFkUsuario().getNombres() + " " +
-                            usuarioResponsable.getFkUsuario().getPaterno() + " " +
-                            usuarioResponsable.getFkUsuario().getMaterno())
-                    .funcionarioToCargo(
-                            usuarioResponsable.getFkCargo().getNombreCargo())
-                    .funcionarioFrom(
-                            usuarioSolicitante.getFkUsuario().getNombres() + " " +
-                            usuarioResponsable.getFkUsuario().getPaterno() + " " +
-                            usuarioResponsable.getFkUsuario().getMaterno())
-                    .funcionarioFromCargo(
-                            usuarioSolicitante.getFkCargo().getNombreCargo())
-                    .cite(solicitudResp.getCite())
-                    .fecha(LocalDate.now().toString())
-                    .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
-                    .build();
-
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .body(informeServiceReport.exportToPdf(report, listReport));
-
-        } else {
-            InformeReport report = InformeReport.builder()
-                    .funcionarioTo("-----NO SE SUPERA LOS 5000 UNIDADES PARA UN INFORME-----")
-                    .funcionarioToCargo("-----NO SE SUPERA LOS 5000 UNIDADES PARA UN INFORME-----")
-                    .funcionarioFrom("-----NO SE SUPERA LOS 5000 UNIDADES PARA UN INFORME-----")
-                    .funcionarioFromCargo("-----NO SE SUPERA LOS 5000 UNIDADES PARA UN INFORME-----")
-                    .cite("-----NO SE SUPERA LOS 5000 UNIDADES PARA UN INFORME-----")
-                    .fecha("-----NO SE SUPERA LOS 5000 UNIDADES PARA UN INFORME-----")
-                    .nombreOrganizacion("-----NO SE SUPERA LOS 5000 UNIDADES PARA UN INFORME-----")
-                    .build();
-
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .body(informeServiceReport.exportToPdf(report, null));
-
-        }
-
     }
 }

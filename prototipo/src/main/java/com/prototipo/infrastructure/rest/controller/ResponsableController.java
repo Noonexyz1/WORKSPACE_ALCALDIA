@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -30,8 +31,6 @@ public class ResponsableController {
 
     @Autowired
     private AprobacionService aprobacionService;
-    @Autowired
-    private ModelMapper modelMapper;
     @Autowired
     private ResponsableService responsableService;
     @Autowired
@@ -225,7 +224,7 @@ public class ResponsableController {
                 .fecha(listDetSoli.getFirst().getFkSolicitud().getFecha())
                 .descripcion(listDetSoli.getFirst().getFkSolicitud().getDescripcion())
                 .nombreServicio(listDetSoli.getFirst().getFkSolicitud().getNombreServicio())
-                .precioTotal(listDetSoli.getFirst().getFkSolicitud().getPrecioTotal())
+                .precioTotal(BigDecimal.valueOf(listDetSoli.getFirst().getFkSolicitud().getPrecioTotal()).setScale(2, RoundingMode.HALF_UP).doubleValue())
                 .detalleSolicitudResponses(listDetSoliRespone)
                 .build();
 
@@ -243,7 +242,7 @@ public class ResponsableController {
                 .anversoReverso(detalleSolicitud.getFkServicioFotocopia().getAnverRever())
                 .colorFotocopia(detalleSolicitud.getFkServicioFotocopia().getColor())
                 .precioRef(detalleSolicitud.getFkServicioFotocopia().getPrecioRef())
-                .precioDocu(detalleSolicitud.getPrecioDocu())
+                .precioDocu(BigDecimal.valueOf(detalleSolicitud.getPrecioDocu()).setScale(2, RoundingMode.HALF_UP).doubleValue())
                 .build();
     }
 
