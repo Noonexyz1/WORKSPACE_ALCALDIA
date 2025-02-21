@@ -18,9 +18,7 @@ public class LoginController {
     @Autowired
     private InicioSesionService inicioSesionService;
 
-    @PostMapping(
-            path = {""},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UsuarioResponse> iniciarSesion(
             @RequestBody CredencialRequest request){
 
