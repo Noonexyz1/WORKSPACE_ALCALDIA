@@ -2,6 +2,8 @@ package com.prototipo.application.adapter;
 
 import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.*;
+import com.prototipo.application.pager.PaginableIn;
+import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.application.useCase.SolicitudService;
 import com.prototipo.domain.enums.*;
@@ -83,13 +85,25 @@ public class SolicitudAdapter implements SolicitudService {
     }
 
     @Override
-    public List<Solicitud> getListaSolicitudesService(Long idUsuarioUnidad, Long page, Long size) {
-        List<SolicitudDto> listSoli = solicitudAbstract
-                .getListaSolicitudesAbstract(idUsuarioUnidad, page, size);
+    public PaginableOut<Solicitud> getListaSolicitudesService(PaginableIn paginableIn) {
+        PaginableOut<SolicitudDto> paginableOut = solicitudAbstract
+                .getListaSolicitudesAbstract(paginableIn);
+
+        PaginableOut<Solicitud> paginableResponse = PaginableOut
+                .<Solicitud>builder()
+                .content(
+                        paginableOut.getContent().stream()
+                                .map(x -> mapperApplicationAbstract
+                                        .mapearAbstract(x, Solicitud.class)
+                                )
+                                .toList()
+                )
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
         //Quiero filtar las solicitudes segun el Usuario que lo esta pidiendo
-        return listSoli.stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
-                .toList();
+        return paginableResponse;
     }
 
     @Override
@@ -181,23 +195,46 @@ public class SolicitudAdapter implements SolicitudService {
     }
 
     @Override
-    public List<Solicitud> getListaSolicitudesAutoriService(Long idUserUni, Long page, Long size) {
-        List<SolicitudDto> listSoli = solicitudAbstract
-                .getListaSolicitudesAutoriAbstract(idUserUni, page, size);
+    public PaginableOut<Solicitud> getListaSolicitudesAutoriService(PaginableIn paginableIn) {
+        PaginableOut<SolicitudDto> paginableOut = solicitudAbstract
+                .getListaSolicitudesAutoriAbstract(paginableIn);
+
+        PaginableOut<Solicitud> paginableResponse = PaginableOut
+                .<Solicitud>builder()
+                .content(
+                        paginableOut.getContent()
+                                .stream()
+                                .map(x ->
+                                        mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
+                                .toList()
+                )
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
         //Quiero filtar las solicitudes segun el Usuario que lo esta pidiendo
-        return listSoli.stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
-                .toList();
+        return paginableResponse;
     }
 
     @Override
-    public List<Solicitud> getListaSolicitudesFinaliService(Long idUserUni, Long page, Long size) {
-        List<SolicitudDto> listSoli = solicitudAbstract
-                .getListaSolicitudesFinaliAbstract(idUserUni, page, size);
+    public PaginableOut<Solicitud> getListaSolicitudesFinaliService(PaginableIn paginableIn) {
+        PaginableOut<SolicitudDto> paginableOut = solicitudAbstract
+                .getListaSolicitudesFinaliAbstract(paginableIn);
+
+        PaginableOut<Solicitud> paginableResponse = PaginableOut
+                .<Solicitud>builder()
+                .content(
+                        paginableOut.getContent()
+                                .stream()
+                                .map(x ->
+                                        mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
+                                .toList()
+                )
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
         //Quiero filtar las solicitudes segun el Usuario que lo esta pidiendo
-        return listSoli.stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
-                .toList();
+        return paginableResponse;
     }
 
     @Override

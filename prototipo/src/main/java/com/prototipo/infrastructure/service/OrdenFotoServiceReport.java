@@ -113,7 +113,7 @@ public class OrdenFotoServiceReport {
         return paginasJasperPrints;
     }
 
-    public byte[] exportToPdfByListByJRPdfExporter(List<JasperPrint> jasperPrintList)
+    private byte[] exportToPdfByListByJRPdfExporter(List<JasperPrint> jasperPrintList)
             throws JRException {
 
         // 1. Crea un flujo de salida en memoria

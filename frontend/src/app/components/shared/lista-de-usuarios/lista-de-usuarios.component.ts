@@ -23,12 +23,6 @@ export class ListaDeUsuariosComponent {
   private subjectUsuarioUnidadService: SubjectUsuarioUnidadService;
 
   listUsuarios: UsuarioUnidadResponse[] = [];
-  pageProperties: PageProperties = new PageProperties();
-
-  listaConsecutiva: number[] = Array.from(
-    {length: this.pageProperties.totalPages},
-    (_, index) => index
-  );
 
   //Esto se ejecuta antes que el ngOnInit()
   constructor(router: Router,
@@ -41,8 +35,14 @@ export class ListaDeUsuariosComponent {
     this.listarUsuarios();
   }
 
+  pageProperties: PageProperties = new PageProperties();
+  listaConsecutiva: number[] = Array.from(
+    {length: this.pageProperties.totalPages},
+    (_, index) => index
+  );
   listarUsuarios(): void {
     const body: PageRequest = {
+      id: this.pageProperties.id,
       page: this.pageProperties.currentPage,
       size: this.pageProperties.pageSize,
       sortBy: this.pageProperties.sortBy,
@@ -54,11 +54,15 @@ export class ListaDeUsuariosComponent {
       body
     ).pipe(
       map((response: PageResponse<UsuarioUnidadResponse>) => {
-        this.listUsuarios = response.content;
         this.pageProperties.currentPage = response.page;
         this.pageProperties.pageSize = response.size;
+        this.pageProperties.sortBy = response.sortBy;
+        this.pageProperties.direction = response.direction;
+
+        this.listUsuarios = response.content;
         this.pageProperties.totalPages = response.totalPages;
         this.pageProperties.totalElements = response.totalElements;
+
         this.listaConsecutiva = Array.from(
           {length: this.pageProperties.totalPages},
           (_, index) => index

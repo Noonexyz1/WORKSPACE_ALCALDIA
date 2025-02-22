@@ -1,5 +1,7 @@
 package com.prototipo.infrastructure.rest.controller;
 
+import com.prototipo.application.pager.PaginableIn;
+import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.useCase.AprobacionService;
 import com.prototipo.application.useCase.ResponsableService;
 import com.prototipo.application.useCase.SolicitudService;
@@ -9,6 +11,7 @@ import com.prototipo.infrastructure.rest.response.*;
 import com.prototipo.infrastructure.service.NotaPedidoServiceReport;
 import com.prototipo.infrastructure.service.ReporteServiceReport;
 import net.sf.jasperreports.engine.JRException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -38,6 +41,8 @@ public class ResponsableController {
     private ReporteServiceReport reporteServiceReport;
     @Autowired
     private SolicitudService solicitudService;
+    @Autowired
+    private ModelMapper modelMapper;
 
 
     @PostMapping(
@@ -67,28 +72,30 @@ public class ResponsableController {
     @PostMapping(
             path = {"/verSolicitudesPendientes"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudesPendientes(
-            @RequestBody PaginacionResponRequest pageParam) {
+    public ResponseEntity<PageResponse<SolicitudResponResponse>> verListaSolicitudesPendientes(
+            @RequestBody PageRequest pageReq) {
 
-        Long idResponsable = pageParam.getIdUsuarioUnidad();
-        Long page = pageParam.getPage();
-        Long size = pageParam.getSize();
-        String byColumName = pageParam.getByColumName();
+        PaginableOut<Solicitud> paginableOut = aprobacionService
+                .listaDeSolicitudesPendientesService(modelMapper.map(pageReq, PaginableIn.class));
 
-        List<Solicitud> solicituds = aprobacionService
-                .listaDeSolicitudesPendientesService(
-                        idResponsable,
-                        page,
-                        size,
-                        byColumName
-                );
-
-        List<SolicitudResponResponse> listSolicitud = solicituds
+        List<SolicitudResponResponse> listSolicitud = paginableOut.getContent()
                 .stream()
                 .map(this::funcion)
                 .toList();
 
-        return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
+        PageResponse<SolicitudResponResponse> pageResponse = PageResponse
+                .<SolicitudResponResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(listSolicitud)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
     }
 
     private SolicitudResponResponse funcion(Solicitud x){
@@ -109,28 +116,30 @@ public class ResponsableController {
     @PostMapping(
             path = {"/verSolicitudesAprobadas"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudResponResponse>> verListaSolicitudesAprobadas(
-            @RequestBody PaginacionResponRequest pageParam) {
+    public ResponseEntity<PageResponse<SolicitudResponResponse>> verListaSolicitudesAprobadas(
+            @RequestBody PageRequest pageReq) {
 
-        Long idResponsable = pageParam.getIdUsuarioUnidad();
+        PaginableOut<Autorizacion> paginableOut = aprobacionService
+                .listaDeSolicitudesAutorizadasService(modelMapper.map(pageReq, PaginableIn.class));
 
-        Long page = pageParam.getPage();
-        Long size = pageParam.getSize();
-        String byColumName = pageParam.getByColumName();
-
-        List<Autorizacion> autorizacionList = aprobacionService
-                .listaDeSolicitudesAutorizadasService(
-                        idResponsable,
-                        page,
-                        size,
-                        byColumName
-                );
-
-        List<SolicitudResponResponse> listSolicitud = autorizacionList
+        List<SolicitudResponResponse> listSolicitud = paginableOut.getContent()
                 .stream()
                 .map(this::funcion)
                 .toList();
-        return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
+
+        PageResponse<SolicitudResponResponse> pageResponse = PageResponse
+                .<SolicitudResponResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(listSolicitud)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
     }
 
     private SolicitudResponResponse funcion(Autorizacion x){
@@ -152,28 +161,30 @@ public class ResponsableController {
     @PostMapping(
             path = {"/verSolicitudesFinalizadas"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudResponResponse>> verSolicitudesFinalizadas(
-            @RequestBody PaginacionResponRequest pageParam) {
+    public ResponseEntity<PageResponse<SolicitudResponResponse>> verSolicitudesFinalizadas(
+            @RequestBody PageRequest pageReq) {
 
-        Long idResponsable = pageParam.getIdUsuarioUnidad();
+        PaginableOut<Finalizacion> paginableOut = aprobacionService
+                .listaDeSolicitudesFinalizadasService(modelMapper.map(pageReq, PaginableIn.class));
 
-        Long page = pageParam.getPage();
-        Long size = pageParam.getSize();
-        String byColumName = pageParam.getByColumName();
-
-        List<Finalizacion> finalizacionList = aprobacionService
-                .listaDeSolicitudesFinalizadasService(
-                        idResponsable,
-                        page,
-                        size,
-                        byColumName
-                );
-
-        List<SolicitudResponResponse> listSolicitud = finalizacionList
+        List<SolicitudResponResponse> listSolicitud = paginableOut.getContent()
                 .stream()
                 .map(this::funcion)
                 .toList();
-        return new ResponseEntity<>(listSolicitud, HttpStatus.OK);
+
+        PageResponse<SolicitudResponResponse> pageResponse = PageResponse
+                .<SolicitudResponResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(listSolicitud)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
     }
 
     private SolicitudResponResponse funcion(Finalizacion x){

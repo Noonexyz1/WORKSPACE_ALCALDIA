@@ -35,9 +35,7 @@ public class AdministradorController {
             @RequestBody PageRequest pageReq) {
 
         PaginableOut<UsuarioUnidad> paginableOut = usuarioService
-                .listaDeUsuariosServiceDef(
-                        modelMapper.map(pageReq, PaginableIn.class)
-                );
+                .listaDeUsuariosServiceDef(modelMapper.map(pageReq, PaginableIn.class));
 
         List<UsuarioUnidadResponse> listResponse = paginableOut.getContent()
                 .stream()

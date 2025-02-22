@@ -8,6 +8,8 @@ import {LocalStorageService} from '../../../services/local-storage/local-storage
 import {PageProperties} from "../../../models/PageProperties";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {UsuarioUnidadEditRequest} from "../../../models/UsuarioUnidadEditRequest";
+import {PageRequest} from "../../../models/PageRequest";
+import {PageResponse} from "../../../models/PageResponse";
 
 @Component({
   selector: 'app-lista-soli-solicitante-pendiente',
@@ -34,20 +36,39 @@ export class ListaSoliSolicitantePendienteComponent {
   }
 
   listSolicitud: SolicitudResponse[] = [];
+
+  pageProperties: PageProperties = new PageProperties();
+  listaConsecutiva: number[] = Array.from(
+    { length: this.pageProperties.totalPages },
+    (_, index) => index
+  );
   listarSolicitudes(): void {
-    const body: PageRequestID = {
-      idUsuarioUnidad: this.usuario.id,
-      page: 0,
-      size: 10,
-      byColumName: ''
+    const body: PageRequest = {
+      id: this.usuario.id,
+      page: this.pageProperties.currentPage,
+      size: this.pageProperties.pageSize,
+      sortBy: this.pageProperties.sortBy,
+      direction: this.pageProperties.direction
     }
 
-    this.http.post<SolicitudResponse[]>(
+    this.http.post<PageResponse<SolicitudResponse>>(
       UrlsProperties.PATH_LIST_SOLIC,
       body
     ).pipe(
-      map((response: SolicitudResponse[]) => {
-        this.listSolicitud = response;
+      map((response: PageResponse<SolicitudResponse>) => {
+        this.pageProperties.currentPage = response.page;
+        this.pageProperties.pageSize = response.size;
+        this.pageProperties.sortBy = response.sortBy;
+        this.pageProperties.direction = response.direction;
+
+        this.listSolicitud = response.content;
+        this.pageProperties.totalPages = response.totalPages;
+        this.pageProperties.totalElements = response.totalElements;
+
+        this.listaConsecutiva = Array.from(
+          {length: this.pageProperties.totalPages},
+          (_, index) => index
+        );
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
@@ -166,11 +187,7 @@ export class ListaSoliSolicitantePendienteComponent {
 
 
 
-  pageProperties: PageProperties = new PageProperties();
-  listaConsecutiva: number[] = Array.from(
-    { length: this.pageProperties.totalPages },
-    (_, index) => index
-  );
+
 
   goToPage(page: number): void {
     if (page >= 0 && page < this.pageProperties.totalPages) {

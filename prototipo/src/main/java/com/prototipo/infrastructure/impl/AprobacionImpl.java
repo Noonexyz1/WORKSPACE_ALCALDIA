@@ -3,6 +3,9 @@ package com.prototipo.infrastructure.impl;
 import com.prototipo.application.modelDto.AutorizacionDto;
 import com.prototipo.application.modelDto.FinalizacionDto;
 import com.prototipo.application.modelDto.SolicitudDto;
+import com.prototipo.application.modelDto.UsuarioUnidadDto;
+import com.prototipo.application.pager.PaginableIn;
+import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.port.AprobacionAbstract;
 import com.prototipo.infrastructure.persistence.db.entity.AutorizacionEntity;
 import com.prototipo.infrastructure.persistence.db.entity.FinalizacionEntity;
@@ -12,6 +15,9 @@ import com.prototipo.infrastructure.persistence.db.repository.FinalizacionReposi
 import com.prototipo.infrastructure.persistence.db.repository.SolicitudRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
@@ -31,46 +37,73 @@ public class AprobacionImpl implements AprobacionAbstract {
 
 
     @Override
-    public List<AutorizacionDto> listaDeSoliAutorizadasAbstractPage(
-            Long idSupervisor,
-            Long page,
-            Long size,
-            String byColumName) {
+    public PaginableOut<AutorizacionDto> listaDeSoliAutorizadasAbstractPage(PaginableIn paginableIn) {
+        Pageable pageable = PageRequest.of(
+                paginableIn.getPage().intValue(),
+                paginableIn.getSize().intValue()
+        );
 
-        List<AutorizacionEntity> autorizacionList = autorizacionRepository
-                .buscarAutorizacionByIdResponsable(idSupervisor);
+        Page<AutorizacionEntity> autorizacionList = autorizacionRepository
+                .buscarAutorizacionByIdResponsable(paginableIn.getId(), pageable);
 
-        return autorizacionList.stream()
+        List<AutorizacionDto> list = autorizacionList.getContent().stream()
                 .map(x -> modelMapper.map(x, AutorizacionDto.class))
                 .toList();
+
+        PaginableOut<AutorizacionDto> paginableOut = PaginableOut
+                .<AutorizacionDto>builder()
+                .content(list)
+                .totalPages(autorizacionList.getTotalPages())
+                .totalElements(autorizacionList.getTotalElements())
+                .build();
+
+        return paginableOut;
     }
 
     @Override
-    public List<SolicitudDto> listaDeSolicitudesPendientesAbstractPage(
-            Long idResponsable,
-            Long page,
-            Long size,
-            String byColumName) {
+    public PaginableOut<SolicitudDto> listaDeSolicitudesPendientesAbstractPage(PaginableIn paginableIn) {
+        Pageable pageable = PageRequest.of(
+                paginableIn.getPage().intValue(),
+                paginableIn.getSize().intValue()
+        );
 
-        List<SolicitudEntity> listSolEnt = solicitudRepository
-                .findAllSoliByIdResponsable(idResponsable);
-        return listSolEnt.stream()
+        Page<SolicitudEntity> pageResponse = solicitudRepository
+                .findAllSoliByIdResponsable(paginableIn.getId(), pageable);
+
+        List<SolicitudDto> listResponse = pageResponse.getContent().stream()
                 .map(x -> modelMapper.map(x, SolicitudDto.class))
                 .toList();
+
+        PaginableOut<SolicitudDto> paginableOut = PaginableOut
+                .<SolicitudDto>builder()
+                .content(listResponse)
+                .totalPages(pageResponse.getTotalPages())
+                .totalElements(pageResponse.getTotalElements())
+                .build();
+
+        return paginableOut;
     }
 
     @Override
-    public List<FinalizacionDto> listaDeAprobacionesFinalizadasAbstractPage(
-            Long idResponsable,
-            Long page,
-            Long size,
-            String byColumName) {
+    public PaginableOut<FinalizacionDto> listaDeAprobacionesFinalizadasAbstractPage(PaginableIn paginableIn) {
+        Pageable pageable = PageRequest.of(
+                paginableIn.getPage().intValue(),
+                paginableIn.getSize().intValue()
+        );
 
-        // Ordena por ID en orden descendente
-        Sort sort = Sort.by(Sort.Order.desc("id"));
-        List<FinalizacionEntity> finalizacionList = finalizacionRepository.findAll(sort);
-        return finalizacionList.stream()
+        Page<FinalizacionEntity> finalizacionList = finalizacionRepository.findAll(pageable);
+
+        List<FinalizacionDto> list = finalizacionList.getContent().stream()
                 .map(x -> modelMapper.map(x, FinalizacionDto.class))
                 .toList();
+
+        PaginableOut<FinalizacionDto> paginableOut = PaginableOut
+                .<FinalizacionDto>builder()
+                .content(list)
+                .totalPages(finalizacionList.getTotalPages())
+                .totalElements(finalizacionList.getTotalElements())
+                .build();
+
+        return paginableOut;
     }
 }

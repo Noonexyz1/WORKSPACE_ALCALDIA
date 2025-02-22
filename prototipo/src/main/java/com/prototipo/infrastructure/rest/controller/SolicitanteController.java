@@ -1,12 +1,17 @@
 package com.prototipo.infrastructure.rest.controller;
 
+import com.prototipo.application.pager.PaginableIn;
+import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.useCase.*;
 import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.rest.report.ComunicacionReport;
 import com.prototipo.infrastructure.rest.report.SolicitudReport;
+import com.prototipo.infrastructure.rest.request.PageRequest;
 import com.prototipo.infrastructure.rest.request.PaginacionSoliRequest;
 import com.prototipo.infrastructure.rest.request.SolicitudRequest;
+import com.prototipo.infrastructure.rest.response.PageResponse;
 import com.prototipo.infrastructure.rest.response.SolicitudSoliciResponse;
+import com.prototipo.infrastructure.rest.response.UsuarioUnidadResponse;
 import com.prototipo.infrastructure.service.ComunicacionInternaServiceReport;
 import com.prototipo.infrastructure.service.OrdenFotoServiceReport;
 import com.prototipo.infrastructure.service.SolicitudServiceReport;
@@ -82,65 +87,86 @@ public class SolicitanteController {
 
     @PostMapping(path = {"/verSolicitudesPendientes"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudSoliciResponse>> verSolicitudesPendientes(
-            @RequestBody PaginacionSoliRequest pageArg ) {
+    public ResponseEntity<PageResponse<SolicitudSoliciResponse>> verSolicitudesPendientes(
+            @RequestBody PageRequest pageReq) {
 
-        Long idUserUni = pageArg.getIdUsuarioUnidad();
+        PaginableOut<Solicitud> paginableOut = solicitudService
+                .getListaSolicitudesService(modelMapper.map(pageReq, PaginableIn.class));
 
-        Long page = pageArg.getPage();
-        Long size = pageArg.getSize();
-        //String byColumName = pageArg.getByColumName();
-
-        List<Solicitud> listSoli = solicitudService
-                .getListaSolicitudesService(idUserUni, page, size);
-
-        List<SolicitudSoliciResponse> list = listSoli.stream()
+        List<SolicitudSoliciResponse> list = paginableOut.getContent()
+                .stream()
                 .map(this::funcToReturn)
                 .toList();
 
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        PageResponse<SolicitudSoliciResponse> pageResponse = PageResponse
+                .<SolicitudSoliciResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(list)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
     }
 
     @PostMapping(path = {"/verSolicitudesAutorizadas"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudSoliciResponse>> verSolicitudesAutorizadas(
-            @RequestBody PaginacionSoliRequest pageArg ) {
+    public ResponseEntity<PageResponse<SolicitudSoliciResponse>> verSolicitudesAutorizadas(
+            @RequestBody PageRequest pageReq) {
 
-        Long idUserUni = pageArg.getIdUsuarioUnidad();
+        PaginableOut<Solicitud> paginableOut = solicitudService
+                .getListaSolicitudesAutoriService(modelMapper.map(pageReq, PaginableIn.class));
 
-        Long page = pageArg.getPage();
-        Long size = pageArg.getSize();
-        //String byColumName = pageArg.getByColumName();
-
-        List<Solicitud> listSoli = solicitudService
-                .getListaSolicitudesAutoriService(idUserUni, page, size);
-
-        List<SolicitudSoliciResponse> list = listSoli.stream()
+        List<SolicitudSoliciResponse> list = paginableOut.getContent()
+                .stream()
                 .map(this::funcToReturn)
                 .toList();
 
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        PageResponse<SolicitudSoliciResponse> pageResponse = PageResponse
+                .<SolicitudSoliciResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(list)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
     }
 
     @PostMapping(path = {"/verSolicitudesFinalizadas"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudSoliciResponse>> verSolicitudesFinalizadas(
-            @RequestBody PaginacionSoliRequest pageArg ) {
+    public ResponseEntity<PageResponse<SolicitudSoliciResponse>> verSolicitudesFinalizadas(
+            @RequestBody PageRequest pageReq) {
 
-        Long idUserUni = pageArg.getIdUsuarioUnidad();
+        PaginableOut<Solicitud> paginableOut = solicitudService
+                .getListaSolicitudesFinaliService(modelMapper.map(pageReq, PaginableIn.class));
 
-        Long page = pageArg.getPage();
-        Long size = pageArg.getSize();
-        //String byColumName = pageArg.getByColumName();
 
-        List<Solicitud> listSoli = solicitudService
-                .getListaSolicitudesFinaliService(idUserUni, page, size);
-
-        List<SolicitudSoliciResponse> list = listSoli.stream()
+        List<SolicitudSoliciResponse> list = paginableOut.getContent().stream()
                 .map(this::funcToReturn)
                 .toList();
 
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        PageResponse<SolicitudSoliciResponse> pageResponse = PageResponse
+                .<SolicitudSoliciResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(list)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
     }
 
     private SolicitudSoliciResponse funcToReturn(Solicitud x) {

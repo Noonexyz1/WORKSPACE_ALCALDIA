@@ -8,6 +8,8 @@ import {PageProperties} from "../../../models/PageProperties";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {SolicitudResponResponse} from "../../../models/SolicitudResponResponse";
+import {PageRequest} from "../../../models/PageRequest";
+import {PageResponse} from "../../../models/PageResponse";
 
 @Component({
   selector: 'app-lista-soli-responsable-finalizada',
@@ -34,20 +36,39 @@ export class ListaSoliFinalizadaResponsableComponent{
     this.listarSolicitudes();
   }
 
+  pageProperties: PageProperties = new PageProperties();
+  listaConsecutiva: number[] = Array.from(
+    { length: this.pageProperties.totalPages },
+    (_, index) => index
+  );
+
   listarSolicitudes(): void {
-    const body: PageRequestID = {
-      idUsuarioUnidad: this.usuario.id,
-      page: 0,
-      size: 100,
-      byColumName: ""
+    const body: PageRequest = {
+      id: this.usuario.id,
+      page: this.pageProperties.currentPage,
+      size: this.pageProperties.pageSize,
+      sortBy: this.pageProperties.sortBy,
+      direction: this.pageProperties.direction
     }
 
-    this.http.post<SolicitudResponResponse[]>(
+    this.http.post<PageResponse<SolicitudResponResponse>>(
       UrlsProperties.PATH_LIST_SOLIFINALI,
       body
     ).pipe(
-      map((response: SolicitudResponResponse[]) => {
-        this.listSolicitudFinal = response;
+      map((response: PageResponse<SolicitudResponResponse>) => {
+        this.pageProperties.currentPage = response.page;
+        this.pageProperties.pageSize = response.size;
+        this.pageProperties.sortBy = response.sortBy;
+        this.pageProperties.direction = response.direction;
+
+        this.listSolicitudFinal = response.content;
+        this.pageProperties.totalPages = response.totalPages;
+        this.pageProperties.totalElements = response.totalElements;
+
+        this.listaConsecutiva = Array.from(
+          {length: this.pageProperties.totalPages},
+          (_, index) => index
+        );
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
@@ -89,11 +110,7 @@ export class ListaSoliFinalizadaResponsableComponent{
   }
 
 
-  pageProperties: PageProperties = new PageProperties();
-  listaConsecutiva: number[] = Array.from(
-    { length: this.pageProperties.totalPages },
-    (_, index) => index
-  );
+
 
   goToPage(page: number): void {
     if (page >= 0 && page < this.pageProperties.totalPages) {

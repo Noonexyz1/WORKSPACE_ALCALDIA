@@ -1,11 +1,16 @@
 package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.*;
+import com.prototipo.application.pager.PaginableIn;
+import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.infrastructure.persistence.db.entity.*;
 import com.prototipo.infrastructure.persistence.db.repository.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -58,30 +63,76 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
-    public List<SolicitudDto> getListaSolicitudesAutoriAbstract(Long idUserUni, Long page, Long size) {
-        List<SolicitudEntity> listSoli = solicitudRepository
-                .findAllAutoriByIdUserUnidad(idUserUni);
-        return listSoli.stream()
+    public PaginableOut<SolicitudDto> getListaSolicitudesAutoriAbstract(PaginableIn paginableIn) {
+        Pageable pageable = PageRequest.of(
+                paginableIn.getPage().intValue(),
+                paginableIn.getSize().intValue()
+        );
+
+        Page<SolicitudEntity> pageResponse = solicitudRepository
+                .findAllAutoriByIdUserUnidad(paginableIn.getId(), pageable);
+
+        List<SolicitudDto> list = pageResponse.getContent().stream()
                 .map(x -> modelMapper.map(x, SolicitudDto.class))
                 .toList();
+
+        PaginableOut<SolicitudDto> build = PaginableOut
+                .<SolicitudDto>builder()
+                .content(list)
+                .totalPages(pageResponse.getTotalPages())
+                .totalElements(pageResponse.getTotalElements())
+                .build();
+
+        return build;
     }
 
     @Override
-    public List<SolicitudDto> getListaSolicitudesFinaliAbstract(Long idUserUni, Long page, Long size) {
-        List<SolicitudEntity> listSoli = solicitudRepository
-                .findAllFinaliByIdUserUnidad(idUserUni);
-        return listSoli.stream()
+    public PaginableOut<SolicitudDto> getListaSolicitudesFinaliAbstract(PaginableIn paginableIn) {
+        Pageable pageable = PageRequest.of(
+                paginableIn.getPage().intValue(),
+                paginableIn.getSize().intValue()
+        );
+
+        Page<SolicitudEntity> pageResponse = solicitudRepository
+                .findAllFinaliByIdUserUnidad(paginableIn.getId(), pageable);
+
+        List<SolicitudDto> list = pageResponse.getContent().stream()
                 .map(x -> modelMapper.map(x, SolicitudDto.class))
                 .toList();
+
+        PaginableOut<SolicitudDto> build = PaginableOut
+                .<SolicitudDto>builder()
+                .content(list)
+                .totalPages(pageResponse.getTotalPages())
+                .totalElements(pageResponse.getTotalElements())
+                .build();
+
+        return build;
     }
 
     @Override
-    public List<SolicitudDto> getListaSolicitudesAbstract(Long idUsuarioUnidad, Long page, Long size) {
-        List<SolicitudEntity> listSoli = solicitudRepository
-                .findAllByIdUserUnidad(idUsuarioUnidad);
-        return listSoli.stream()
-                .map(x -> modelMapper.map(x, SolicitudDto.class))
+    public PaginableOut<SolicitudDto> getListaSolicitudesAbstract(PaginableIn paginableIn) {
+        Pageable pageable = PageRequest.of(
+                paginableIn.getPage().intValue(),
+                paginableIn.getSize().intValue()
+        );
+
+        Page<SolicitudEntity> pageResponse = solicitudRepository
+                .findAllByIdUserUnidad(paginableIn.getId(), pageable);
+
+        List<SolicitudDto> list = pageResponse.getContent().stream()
+                .map(x -> modelMapper
+                        .map(x, SolicitudDto.class))
                 .toList();
+
+        PaginableOut<SolicitudDto> build = PaginableOut
+                .<SolicitudDto>builder()
+                .content(list)
+                .totalPages(pageResponse.getTotalPages())
+                .totalElements(pageResponse.getTotalElements())
+                .build();
+
+        return build;
     }
 
     @Override
