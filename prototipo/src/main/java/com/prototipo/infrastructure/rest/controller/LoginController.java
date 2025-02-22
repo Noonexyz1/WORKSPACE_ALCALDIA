@@ -4,7 +4,6 @@ import com.prototipo.application.useCase.InicioSesionService;
 import com.prototipo.domain.model.Usuario;
 import com.prototipo.infrastructure.rest.request.CredencialRequest;
 import com.prototipo.infrastructure.rest.response.UsuarioResponse;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,12 +17,8 @@ public class LoginController {
 
     @Autowired
     private InicioSesionService inicioSesionService;
-    @Autowired
-    private ModelMapper modelMapper;
 
-    @PostMapping(
-            path = {""},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UsuarioResponse> iniciarSesion(
             @RequestBody CredencialRequest request){
 

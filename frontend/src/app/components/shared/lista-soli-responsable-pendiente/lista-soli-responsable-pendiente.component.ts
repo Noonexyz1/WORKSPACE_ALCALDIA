@@ -13,6 +13,8 @@ import {DetalleSolicitudCotizadoResponse} from "../../../models/DetalleSolicitud
 import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {AprobacionSoliRequest} from "../../../models/AutorizacionRequest";
+import {PageRequest} from "../../../models/PageRequest";
+import {PageResponse} from "../../../models/PageResponse";
 
 @Component({
   selector: 'app-lista-soli-responsable-pendiente',
@@ -49,19 +51,32 @@ export class ListaSoliPendienteResponsableComponent{
   }
 
   listarSolicitudes(): void {
-    const body: PageRequestID = {
-      idUsuarioUnidad: this.usuario.id,
-      page: 0,
-      size: 100,
-      byColumName: ""
+    const body: PageRequest = {
+      id: this.usuario.id,
+      page: this.pageProperties.currentPage,
+      size: this.pageProperties.pageSize,
+      sortBy: this.pageProperties.sortBy,
+      direction: this.pageProperties.direction
     }
 
-    this.http.post<SolicitudResponResponse[]>(
+    this.http.post<PageResponse<SolicitudResponResponse>>(
       UrlsProperties.PATH_LIST_SOLIPENDIENTE,
       body
     ).pipe(
-      map((response: SolicitudResponResponse[]) => {
-        this.listSolicitud = response;
+      map((response: PageResponse<SolicitudResponResponse>) => {
+        this.pageProperties.currentPage = response.page;
+        this.pageProperties.pageSize = response.size;
+        this.pageProperties.sortBy = response.sortBy;
+        this.pageProperties.direction = response.direction;
+
+        this.listSolicitud = response.content;
+        this.pageProperties.totalPages = response.totalPages;
+        this.pageProperties.totalElements = response.totalElements;
+
+        this.listaConsecutiva = Array.from(
+          {length: this.pageProperties.totalPages},
+          (_, index) => index
+        );
       }),
       catchError(error => {
         console.error('Error en la petición:', error);

@@ -2,22 +2,22 @@
 <jasperReport name="orden" language="java" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="4f5a811b-4794-4356-a0d2-bde94a8f7425">
 	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
 	<parameter name="nroCantidadFotocopia1" class="java.lang.Integer"/>
-	<parameter name="precio1" class="java.math.BigDecimal"/>
+	<parameter name="precio1" class="java.lang.Double"/>
 	<parameter name="litCantidadFotocopia1" class="java.lang.String"/>
 	<parameter name="literalPrecio1" class="java.lang.String"/>
 	<parameter name="detalle1" class="java.lang.String"/>
 	<parameter name="nroCantidadFotocopia2" class="java.lang.Integer"/>
-	<parameter name="precio2" class="java.math.BigDecimal"/>
+	<parameter name="precio2" class="java.lang.Double"/>
 	<parameter name="litCantidadFotocopia2" class="java.lang.String"/>
 	<parameter name="literalPrecio2" class="java.lang.String"/>
 	<parameter name="detalle2" class="java.lang.String"/>
 	<parameter name="nroCantidadFotocopia3" class="java.lang.Integer"/>
-	<parameter name="precio3" class="java.math.BigDecimal"/>
+	<parameter name="precio3" class="java.lang.Double"/>
 	<parameter name="litCantidadFotocopia3" class="java.lang.String"/>
 	<parameter name="literalPrecio3" class="java.lang.String"/>
 	<parameter name="detalle3" class="java.lang.String"/>
 	<parameter name="nroCantidadFotocopia4" class="java.lang.Integer"/>
-	<parameter name="precio4" class="java.math.BigDecimal"/>
+	<parameter name="precio4" class="java.lang.Double"/>
 	<parameter name="litCantidadFotocopia4" class="java.lang.String"/>
 	<parameter name="literalPrecio4" class="java.lang.String"/>
 	<parameter name="detalle4" class="java.lang.String"/>

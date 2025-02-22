@@ -16,6 +16,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -76,7 +77,8 @@ public class OrdenFotoServiceReport {
                     params.put("litCantidadFotocopia" + k, numeroALiteral
                             .convertirNumeroALiteral(detalleFotoVect[j].getNroCopias().intValue()));
 
-                    params.put("precio" + k, BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu()));
+                    params.put("precio" + k, BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu()).setScale(2, RoundingMode.HALF_UP).doubleValue());
+
                     params.put("literalPrecio" + k, doublesALiteral
                             .convertir(BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu())));
 
@@ -111,7 +113,7 @@ public class OrdenFotoServiceReport {
         return paginasJasperPrints;
     }
 
-    public byte[] exportToPdfByListByJRPdfExporter(List<JasperPrint> jasperPrintList)
+    private byte[] exportToPdfByListByJRPdfExporter(List<JasperPrint> jasperPrintList)
             throws JRException {
 
         // 1. Crea un flujo de salida en memoria

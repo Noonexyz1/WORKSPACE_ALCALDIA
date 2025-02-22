@@ -1,12 +1,12 @@
 package com.prototipo.infrastructure.persistence.db.repository;
 
 import com.prototipo.infrastructure.persistence.db.entity.SolicitudEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
 
 @Repository
 public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long> {
@@ -19,7 +19,7 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
             AND s.is_active = 1
             AND s.autori_flag = 0;
             """, nativeQuery = true)
-    List<SolicitudEntity> findAllByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad);
+    Page<SolicitudEntity> findAllByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad, Pageable pageable);
 
     @Query(value =
             """
@@ -33,7 +33,7 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
             AND autori_flag = 0
             AND is_active = 1;
             """, nativeQuery = true)
-    List<SolicitudEntity> findAllSoliByIdResponsable(@Param("idResponsable") Long idResponsable);
+    Page<SolicitudEntity> findAllSoliByIdResponsable(@Param("idResponsable") Long idResponsable, Pageable pageable);
 
     @Query(value =
             """
@@ -47,9 +47,9 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
                 AND s.is_active = 1
                 AND s.autori_flag = 1
                 AND a.finali_flag = 0
-            )
+            );
             """, nativeQuery = true)
-    List<SolicitudEntity> findAllAutoriByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad);
+    Page<SolicitudEntity> findAllAutoriByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad, Pageable pageable);
 
     @Query(value =
             """
@@ -63,7 +63,7 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
                 AND s.is_active = 1
                 AND s.autori_flag = 1
                 AND a.finali_flag = 1
-            )
+            );
             """, nativeQuery = true)
-    List<SolicitudEntity> findAllFinaliByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad);
+    Page<SolicitudEntity> findAllFinaliByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad, Pageable pageable);
 }

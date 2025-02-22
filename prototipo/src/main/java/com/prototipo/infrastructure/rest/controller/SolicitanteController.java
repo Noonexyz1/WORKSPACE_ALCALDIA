@@ -1,16 +1,18 @@
 package com.prototipo.infrastructure.rest.controller;
 
+import com.prototipo.application.pager.PaginableIn;
+import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.useCase.*;
 import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.rest.report.ComunicacionReport;
-import com.prototipo.infrastructure.rest.report.InformeReport;
 import com.prototipo.infrastructure.rest.report.SolicitudReport;
-import com.prototipo.infrastructure.rest.report.TablaSolicitudReport;
+import com.prototipo.infrastructure.rest.request.PageRequest;
 import com.prototipo.infrastructure.rest.request.PaginacionSoliRequest;
 import com.prototipo.infrastructure.rest.request.SolicitudRequest;
+import com.prototipo.infrastructure.rest.response.PageResponse;
 import com.prototipo.infrastructure.rest.response.SolicitudSoliciResponse;
+import com.prototipo.infrastructure.rest.response.UsuarioUnidadResponse;
 import com.prototipo.infrastructure.service.ComunicacionInternaServiceReport;
-import com.prototipo.infrastructure.service.InformeServiceReport;
 import com.prototipo.infrastructure.service.OrdenFotoServiceReport;
 import com.prototipo.infrastructure.service.SolicitudServiceReport;
 import net.sf.jasperreports.engine.JRException;
@@ -22,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -33,15 +36,11 @@ public class SolicitanteController {
     @Autowired
     private SolicitudService solicitudService;
     @Autowired
-    private UsuarioService usuarioService;
-    @Autowired
     private ModelMapper modelMapper;
     @Autowired
     private SolicitudServiceReport solicitudServiceReport;
     @Autowired
     private ComunicacionInternaServiceReport comunicacionInternaServiceReport;
-    @Autowired
-    private InformeServiceReport informeServiceReport;
     @Autowired
     private OrdenFotoServiceReport ordenFotoServiceReport;
 
@@ -69,10 +68,14 @@ public class SolicitanteController {
                 .id(solicitudRequest.getFkUsuarioSolicitante())
                 .build();
 
+        LocalDate fechaActual = LocalDate.now();
+        DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
+
+
         //Debo usar los mappeadores de mi Infraestrucutura
         Solicitud solicitud = Solicitud.builder()
                 .cite(solicitudRequest.getCite())
-                .fecha(LocalDate.now().toString())
+                .fecha(fechaActual.format(formato))
                 .descripcion(solicitudRequest.getDescripcion())
                 .fkUsuarioSolicitante(usuarioUnidad)
                 .autoriFlag(0L)
@@ -84,65 +87,86 @@ public class SolicitanteController {
 
     @PostMapping(path = {"/verSolicitudesPendientes"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudSoliciResponse>> verSolicitudesPendientes(
-            @RequestBody PaginacionSoliRequest pageArg ) {
+    public ResponseEntity<PageResponse<SolicitudSoliciResponse>> verSolicitudesPendientes(
+            @RequestBody PageRequest pageReq) {
 
-        Long idUserUni = pageArg.getIdUsuarioUnidad();
+        PaginableOut<Solicitud> paginableOut = solicitudService
+                .getListaSolicitudesService(modelMapper.map(pageReq, PaginableIn.class));
 
-        Long page = pageArg.getPage();
-        Long size = pageArg.getSize();
-        //String byColumName = pageArg.getByColumName();
-
-        List<Solicitud> listSoli = solicitudService
-                .getListaSolicitudesService(idUserUni, page, size);
-
-        List<SolicitudSoliciResponse> list = listSoli.stream()
+        List<SolicitudSoliciResponse> list = paginableOut.getContent()
+                .stream()
                 .map(this::funcToReturn)
                 .toList();
 
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        PageResponse<SolicitudSoliciResponse> pageResponse = PageResponse
+                .<SolicitudSoliciResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(list)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
     }
 
     @PostMapping(path = {"/verSolicitudesAutorizadas"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudSoliciResponse>> verSolicitudesAutorizadas(
-            @RequestBody PaginacionSoliRequest pageArg ) {
+    public ResponseEntity<PageResponse<SolicitudSoliciResponse>> verSolicitudesAutorizadas(
+            @RequestBody PageRequest pageReq) {
 
-        Long idUserUni = pageArg.getIdUsuarioUnidad();
+        PaginableOut<Solicitud> paginableOut = solicitudService
+                .getListaSolicitudesAutoriService(modelMapper.map(pageReq, PaginableIn.class));
 
-        Long page = pageArg.getPage();
-        Long size = pageArg.getSize();
-        //String byColumName = pageArg.getByColumName();
-
-        List<Solicitud> listSoli = solicitudService
-                .getListaSolicitudesAutoriService(idUserUni, page, size);
-
-        List<SolicitudSoliciResponse> list = listSoli.stream()
+        List<SolicitudSoliciResponse> list = paginableOut.getContent()
+                .stream()
                 .map(this::funcToReturn)
                 .toList();
 
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        PageResponse<SolicitudSoliciResponse> pageResponse = PageResponse
+                .<SolicitudSoliciResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(list)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
     }
 
     @PostMapping(path = {"/verSolicitudesFinalizadas"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<List<SolicitudSoliciResponse>> verSolicitudesFinalizadas(
-            @RequestBody PaginacionSoliRequest pageArg ) {
+    public ResponseEntity<PageResponse<SolicitudSoliciResponse>> verSolicitudesFinalizadas(
+            @RequestBody PageRequest pageReq) {
 
-        Long idUserUni = pageArg.getIdUsuarioUnidad();
+        PaginableOut<Solicitud> paginableOut = solicitudService
+                .getListaSolicitudesFinaliService(modelMapper.map(pageReq, PaginableIn.class));
 
-        Long page = pageArg.getPage();
-        Long size = pageArg.getSize();
-        //String byColumName = pageArg.getByColumName();
 
-        List<Solicitud> listSoli = solicitudService
-                .getListaSolicitudesFinaliService(idUserUni, page, size);
-
-        List<SolicitudSoliciResponse> list = listSoli.stream()
+        List<SolicitudSoliciResponse> list = paginableOut.getContent().stream()
                 .map(this::funcToReturn)
                 .toList();
 
-        return new ResponseEntity<>(list, HttpStatus.OK);
+        PageResponse<SolicitudSoliciResponse> pageResponse = PageResponse
+                .<SolicitudSoliciResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(list)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
     }
 
     private SolicitudSoliciResponse funcToReturn(Solicitud x) {
@@ -178,7 +202,6 @@ public class SolicitanteController {
     }
 
 
-    //localhost:8081/solicitante/exportSolicitudDPF
     @Async
     @GetMapping("/exportSolicitudDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportSolicitudDPF(
@@ -316,85 +339,5 @@ public class SolicitanteController {
             return String.join(", ", nombres.subList(0, nombres.size() - 1))
                     + " y " + nombres.get(nombres.size() - 1);
         }
-    }
-
-
-
-
-
-
-
-    @GetMapping("/exportInformeDPF/{idSolicitud}/{idSolicitante}/{idResponsable}")
-    public ResponseEntity<byte[]> exportInformeDPF(
-            @PathVariable Long idSolicitud,
-            @PathVariable Long idSolicitante,
-            @PathVariable Long idResponsable ) throws IOException, JRException {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_PDF);
-        headers.setContentDispositionFormData("informePDF", "informePDF.pdf");
-
-        Solicitud solicitudResp = solicitudService
-                .buscarSolicitudService(idSolicitud);
-        List<Fotocopia> listDetalleSolicitudResp = solicitudService
-                .listFotocopiaSolicitud(idSolicitud);
-
-        List<TablaSolicitudReport> listReport = listDetalleSolicitudResp.stream()
-                .map(x -> TablaSolicitudReport.builder()
-                        .documento(x.getNombreDocumento())
-                        .cantidad(x.getNroCopias().intValue())
-                        .build())
-                .toList();
-
-        UsuarioUnidad usuarioResponsable = usuarioService
-                .findUsuarioUnidadByIdUSer(idResponsable);
-        UsuarioUnidad usuarioSolicitante = usuarioService
-                .findUsuarioUnidadByIdUSer(idSolicitante);
-
-        Long totalCopias = listDetalleSolicitudResp.stream()
-                .mapToLong(Fotocopia::getNroCopias)  // Convierte a stream de long
-                .sum();  // Suma todos los valores
-
-
-        if (totalCopias >= 5000) {
-            InformeReport report = InformeReport.builder()
-                    .funcionarioTo(
-                            usuarioResponsable.getFkUsuario().getNombres() + " " +
-                            usuarioResponsable.getFkUsuario().getPaterno() + " " +
-                            usuarioResponsable.getFkUsuario().getMaterno())
-                    .funcionarioToCargo(
-                            usuarioResponsable.getFkCargo().getNombreCargo())
-                    .funcionarioFrom(
-                            usuarioSolicitante.getFkUsuario().getNombres() + " " +
-                            usuarioResponsable.getFkUsuario().getPaterno() + " " +
-                            usuarioResponsable.getFkUsuario().getMaterno())
-                    .funcionarioFromCargo(
-                            usuarioSolicitante.getFkCargo().getNombreCargo())
-                    .cite(solicitudResp.getCite())
-                    .fecha(LocalDate.now().toString())
-                    .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
-                    .build();
-
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .body(informeServiceReport.exportToPdf(report, listReport));
-
-        } else {
-            InformeReport report = InformeReport.builder()
-                    .funcionarioTo("-----NO SE SUPERA LOS 5000 UNIDADES PARA UN INFORME-----")
-                    .funcionarioToCargo("-----NO SE SUPERA LOS 5000 UNIDADES PARA UN INFORME-----")
-                    .funcionarioFrom("-----NO SE SUPERA LOS 5000 UNIDADES PARA UN INFORME-----")
-                    .funcionarioFromCargo("-----NO SE SUPERA LOS 5000 UNIDADES PARA UN INFORME-----")
-                    .cite("-----NO SE SUPERA LOS 5000 UNIDADES PARA UN INFORME-----")
-                    .fecha("-----NO SE SUPERA LOS 5000 UNIDADES PARA UN INFORME-----")
-                    .nombreOrganizacion("-----NO SE SUPERA LOS 5000 UNIDADES PARA UN INFORME-----")
-                    .build();
-
-            return ResponseEntity.ok()
-                    .headers(headers)
-                    .body(informeServiceReport.exportToPdf(report, null));
-
-        }
-
     }
 }

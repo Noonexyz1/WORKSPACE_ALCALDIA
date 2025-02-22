@@ -8,6 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class PageRequest {
+    private Long id;
+
     private Long page;
     private Long size;
     private String sortBy;

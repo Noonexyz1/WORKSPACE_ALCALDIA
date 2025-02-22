@@ -35,9 +35,7 @@ public class AdministradorController {
             @RequestBody PageRequest pageReq) {
 
         PaginableOut<UsuarioUnidad> paginableOut = usuarioService
-                .listaDeUsuariosServiceDef(
-                        modelMapper.map(pageReq, PaginableIn.class)
-                );
+                .listaDeUsuariosServiceDef(modelMapper.map(pageReq, PaginableIn.class));
 
         List<UsuarioUnidadResponse> listResponse = paginableOut.getContent()
                 .stream()
@@ -155,13 +153,5 @@ public class AdministradorController {
                 .pass(request.getPass())
                 .build();
         fotocopiaService.cambiarPass(credencial, request.getNuevoPass());
-    }
-
-    @GetMapping(
-            path = {"/generarReporte"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<ReporteResponse> generarReporte(){
-        //TODO, generar reporte
-        return new ResponseEntity<>(null, HttpStatus.OK);
     }
 }

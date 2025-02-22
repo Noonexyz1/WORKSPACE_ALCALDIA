@@ -1,12 +1,15 @@
 package com.prototipo.application.useCase;
 
+import com.prototipo.application.pager.PaginableIn;
+import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.domain.model.*;
+import com.prototipo.infrastructure.rest.request.PageRequest;
 
 import java.util.List;
 
 public interface SolicitudService {
     void solicitarFotocopiarService(Solicitud solicitudDomain, List<Fotocopia> list);
-    List<Solicitud> getListaSolicitudesService(Long idUsuarioUnidad, Long page, Long size);
+    PaginableOut<Solicitud> getListaSolicitudesService(PaginableIn paginableIn);
     Solicitud buscarSolicitudService(Long id);
     List<Fotocopia> listFotocopiaSolicitud(Long idSolicitud);
     List<Fotocopia> findListDetalleSoliBySolicitudId(Long idSolicitud);
@@ -16,6 +19,6 @@ public interface SolicitudService {
     List<String> listarTamano();
     List<String> listarAnversoReverso();
     List<String> listarColor();
-    List<Solicitud> getListaSolicitudesAutoriService(Long idUserUni, Long page, Long size);
-    List<Solicitud> getListaSolicitudesFinaliService(Long idUserUni, Long page, Long size);
+    PaginableOut<Solicitud> getListaSolicitudesAutoriService(PaginableIn paginableIn);
+    PaginableOut<Solicitud> getListaSolicitudesFinaliService(PaginableIn paginableIn);
 }

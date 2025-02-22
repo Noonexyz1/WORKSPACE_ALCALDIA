@@ -2,8 +2,6 @@ package com.prototipo.domain.model;
 
 import lombok.*;
 
-import java.math.BigDecimal;
-
 @Getter
 @Setter
 @Builder

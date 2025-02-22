@@ -1,12 +1,14 @@
 package com.prototipo.application.port;
 
 import com.prototipo.application.modelDto.*;
+import com.prototipo.application.pager.PaginableIn;
+import com.prototipo.application.pager.PaginableOut;
 
 import java.util.List;
 
 public interface SolicitudAbstract {
     SolicitudDto solicitarFotocopiarAbstract(SolicitudDto solicitudDto);
-    List<SolicitudDto> getListaSolicitudesAbstract(Long idUsuario, Long page, Long size);
+    PaginableOut<SolicitudDto> getListaSolicitudesAbstract(PaginableIn paginableIn);
     void guardarSolicitudAbstract(SolicitudDto solicitudDto);
     SolicitudDto buscarSolicitudByIdAbstract(Long id);
     List<FotocopiaDto> getFotocopiasSolicitudAbstract(Long idSolicitud);
@@ -16,6 +18,6 @@ public interface SolicitudAbstract {
     void guardarFinalizacionAbs(FinalizacionDto finalizacionDto);
     void guardarRegistroFotocopia(FotocopiaDto fotocopiaDto);
     ServicioFotocopiaDto findServicioFotocopia(ServicioFotocopiaDto fkServicioFotocopia);
-    List<SolicitudDto> getListaSolicitudesAutoriAbstract(Long idUserUni, Long page, Long size);
-    List<SolicitudDto> getListaSolicitudesFinaliAbstract(Long idUserUni, Long page, Long size);
+    PaginableOut<SolicitudDto> getListaSolicitudesAutoriAbstract(PaginableIn paginableIn);
+    PaginableOut<SolicitudDto> getListaSolicitudesFinaliAbstract(PaginableIn paginableIn);
 }

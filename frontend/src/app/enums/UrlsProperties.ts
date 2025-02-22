@@ -36,4 +36,5 @@ export enum UrlsProperties {
 
   PATH_AUTORI_SOLI = 'http://localhost:8081/responsable/verAutorizacionSolicitud/',
   PATH_FINALIZAR_SOLI = 'http://localhost:8081/responsable/finalizarSolicitud',
+  PATH_LIST_SOLIAPRO = 'http://localhost:8081/responsable/verSolicitudesAprobadas',
 }

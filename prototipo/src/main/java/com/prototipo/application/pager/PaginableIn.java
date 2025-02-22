@@ -8,6 +8,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class PaginableIn {
+    private Long id;
+
     private Long page;
     private Long size;
     private String sortBy;

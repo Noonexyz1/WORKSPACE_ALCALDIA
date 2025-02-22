@@ -43,7 +43,7 @@ public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEnti
             """
             SELECT *
             FROM usuario_unidad uu
-            WHERE uu.is_active = TRUE
+            WHERE uu.is_active = TRUE;
             """, nativeQuery = true)
     Page<UsuarioUnidadEntity> getListaUsuarioUnidad(Pageable pageable);
 

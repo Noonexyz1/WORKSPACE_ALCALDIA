@@ -8,4 +8,3 @@ export interface PageResponse<T> {
   totalPages: number;      // Total de páginas disponibles
   totalElements: number;   // Total de elementos en la BD
 }
-

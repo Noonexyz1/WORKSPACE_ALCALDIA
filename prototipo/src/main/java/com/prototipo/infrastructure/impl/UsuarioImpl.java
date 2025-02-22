@@ -40,25 +40,7 @@ public class UsuarioImpl implements UsuarioAbastract {
     }
 
     @Override
-    public UsuarioUnidadDto findUsuarioUnidadPorIdUserAbastract(Long id) {
-        UsuarioUnidadEntity user = usuarioUnidadRepository
-                .findUsuariosUnidadPorUsuarioId(id);
-        return modelMapper.map(user, UsuarioUnidadDto.class);
-    }
-
-    @Override
     public PaginableOut<UsuarioUnidadDto> listaDeUsuariosAbsDef(PaginableIn paginableIn) {
-
-        Sort sort = paginableIn.getDirection().equalsIgnoreCase("DESC")?
-                Sort.by(paginableIn.getSortBy()).descending() :
-                Sort.by(paginableIn.getSortBy()).ascending();
-
-        /*Pageable pageable = PageRequest.of(
-                paginableIn.getPage().intValue(),
-                paginableIn.getSize().intValue(),
-                sort
-        );*/
-
         Pageable pageable = PageRequest.of(
                 paginableIn.getPage().intValue(),
                 paginableIn.getSize().intValue()

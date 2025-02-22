@@ -2,12 +2,15 @@ package com.prototipo.application.adapter;
 
 import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.*;
+import com.prototipo.application.pager.PaginableIn;
+import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.port.AprobacionAbstract;
 import com.prototipo.application.port.AutorizacionAbstract;
 import com.prototipo.application.useCase.AprobacionService;
 import com.prototipo.domain.model.Autorizacion;
 import com.prototipo.domain.model.Finalizacion;
 import com.prototipo.domain.model.Solicitud;
+import com.prototipo.domain.model.UsuarioUnidad;
 
 import java.util.List;
 
@@ -28,63 +31,65 @@ public class AprobacionAdapter implements AprobacionService {
     }
 
     @Override
-    public List<Solicitud> listaDeSolicitudesPendientesService(
-            Long idSupervisor,
-            Long page,
-            Long size,
-            String byColumName){
+    public PaginableOut<Solicitud> listaDeSolicitudesPendientesService(PaginableIn paginableIn){
 
-        List<SolicitudDto> solicitudDtos = aprobacionAbstract
-                .listaDeSolicitudesPendientesAbstractPage(
-                        idSupervisor,
-                        page,
-                        size,
-                        byColumName
-                );
+        PaginableOut<SolicitudDto> solicitudDtos = aprobacionAbstract
+                .listaDeSolicitudesPendientesAbstractPage(paginableIn);
 
-        return solicitudDtos.stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
-                .toList();
+        PaginableOut<Solicitud> paginableResponse = PaginableOut
+                .<Solicitud>builder()
+                .content(
+                        solicitudDtos.getContent().stream()
+                                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
+                                .toList()
+                )
+                .totalPages(solicitudDtos.getTotalPages())
+                .totalElements(solicitudDtos.getTotalElements())
+                .build();
+
+        return paginableResponse;
     }
 
     @Override
-    public List<Finalizacion> listaDeSolicitudesFinalizadasService(
-            Long idSupervisor,
-            Long page,
-            Long size,
-            String byColumName) {
+    public PaginableOut<Finalizacion> listaDeSolicitudesFinalizadasService(PaginableIn paginableIn) {
 
-        List<FinalizacionDto> finalizacionDtoList = aprobacionAbstract
-                .listaDeAprobacionesFinalizadasAbstractPage(
-                        idSupervisor,
-                        page,
-                        size,
-                        byColumName);
+        PaginableOut<FinalizacionDto> finalizacionDtoList = aprobacionAbstract
+                .listaDeAprobacionesFinalizadasAbstractPage(paginableIn);
 
-        return finalizacionDtoList.stream()
-                .map(x -> mapperApplicationAbstract
-                        .mapearAbstract(x, Finalizacion.class))
-                .toList();
+        PaginableOut<Finalizacion> paginableResponse = PaginableOut
+                .<Finalizacion>builder()
+                .content(
+                        finalizacionDtoList.getContent().stream()
+                                .map(x -> mapperApplicationAbstract
+                                        .mapearAbstract(x, Finalizacion.class))
+                                .toList()
+                )
+                .totalPages(finalizacionDtoList.getTotalPages())
+                .totalElements(finalizacionDtoList.getTotalElements())
+                .build();
+
+        return paginableResponse;
     }
 
     @Override
-    public List<Autorizacion> listaDeSolicitudesAutorizadasService(
-            Long idSupervisor,
-            Long page,
-            Long size,
-            String byColumName) {
+    public PaginableOut<Autorizacion> listaDeSolicitudesAutorizadasService(PaginableIn paginableIn) {
 
-        List<AutorizacionDto> soliAutorizadas = aprobacionAbstract
-                .listaDeSoliAutorizadasAbstractPage(
-                        idSupervisor,
-                        page,
-                        size,
-                        byColumName);
+        PaginableOut<AutorizacionDto> soliAutorizadas = aprobacionAbstract
+                .listaDeSoliAutorizadasAbstractPage(paginableIn);
 
-        return soliAutorizadas.stream()
-                .map(x -> mapperApplicationAbstract
-                        .mapearAbstract(x, Autorizacion.class))
-                .toList();
+        PaginableOut<Autorizacion> paginableResponse = PaginableOut
+                .<Autorizacion>builder()
+                .content(
+                        soliAutorizadas.getContent().stream()
+                                .map(x -> mapperApplicationAbstract
+                                        .mapearAbstract(x, Autorizacion.class))
+                                .toList()
+                )
+                .totalPages(soliAutorizadas.getTotalPages())
+                .totalElements(soliAutorizadas.getTotalElements())
+                .build();
+
+        return paginableResponse;
     }
 
     @Override
