@@ -1,9 +1,8 @@
 import {Component} from '@angular/core';
 import {NuevoPassRequest} from '../../../models/NuevoPassRequest';
 import {catchError, map, of} from 'rxjs';
-import {Router} from '@angular/router';
 import {RootNavigateService} from '../../../services/root-navigate/root-navigate.service';
-import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 
@@ -19,30 +18,27 @@ export class CambiarPassComponent {
   private http: HttpClient;
   private formBuilder: FormBuilder;
   private rootNavigateService: RootNavigateService;
-  private router: Router;
   nuevoPassForm: FormGroup;
 
   constructor(http: HttpClient,
               formBuilder: FormBuilder,
-              rootNavigateService: RootNavigateService,
-              router: Router) {
+              rootNavigateService: RootNavigateService) {
 
     this.formBuilder = formBuilder;
     this.http = http;
     this.nuevoPassForm = this.formBuilder.group({
-      ci: [''],
-      pass: [''],
-      nuevoPass: [''],
+      ci: ['', [Validators.required, Validators.minLength(6)]],
+      pass: ['', Validators.required],
+      nuevoPass: ['', Validators.required],
     });
     this.rootNavigateService = rootNavigateService;
-    this.router = router;
   }
 
   botonCambiarPass(): void {
     const nuevoPassRequest: NuevoPassRequest = {
-      ci: this.nuevoPassForm.get('ci')?.value,
-      pass: this.nuevoPassForm.get('pass')?.value,
-      nuevoPass: this.nuevoPassForm.get('nuevoPass')?.value,
+      ci: this.nuevoPassForm.get('ci')?.value.trim(),
+      pass: this.nuevoPassForm.get('pass')?.value.trim(),
+      nuevoPass: this.nuevoPassForm.get('nuevoPass')?.value.trim(),
     };
 
     this.http.post<NuevoPassRequest>(

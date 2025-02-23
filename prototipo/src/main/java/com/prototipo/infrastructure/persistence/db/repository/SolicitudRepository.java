@@ -17,7 +17,7 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
             FROM solicitud s
             WHERE fk_usuario_solicitante_id = :idUsuarioUnidad
             AND s.is_active = 1
-            AND s.autori_flag = 0;
+            AND s.autori_flag = 0
             """, nativeQuery = true)
     Page<SolicitudEntity> findAllByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad, Pageable pageable);
 

@@ -1,6 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Component, OnInit} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {SolicitudRequest} from '../../../models/SolicitudRequest';
 import {catchError, map, of} from 'rxjs';
 import {UsuarioResponse} from '../../../models/UsuarioResponse';
@@ -9,6 +9,7 @@ import {RowSolicitud} from '../../../models/RowSolicitud';
 import {SubjectDocumentoService} from "../../../services/subject-documento/subject-documento.service";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
+import {numeroMayorACeroValidator} from "../../../validation/Validation";
 
 @Component({
   selector: 'app-nueva-solicitud',
@@ -52,9 +53,9 @@ export class NuevaSolicitudComponent implements OnInit {
 
     this.solicitudForm = this.formBuilder.group({
       fkUsuarioSolicitante: [],
-      cite: [],
-      descripcion: [],
-      nroDeDocumento: [],
+      cite: ['', Validators.required],
+      descripcion: ['', Validators.required],
+      nroDeDocumento: ['', [Validators.required, numeroMayorACeroValidator]],
       documentos: this.formBuilder.array([]), // FormArray para los documentos
     });
 
@@ -129,12 +130,12 @@ export class NuevaSolicitudComponent implements OnInit {
 
   crearFormGroupDocumento(): FormGroup {
     return this.formBuilder.group({
-      nombreDocumento: [],
-      nroPaginas: [],
-      nroCopias: [],
-      tamanoPagina: [],
-      anversoReverso: [],
-      colorFotocopia: [],
+      nombreDocumento: ['', Validators.required],
+      nroPaginas: ['', [Validators.required, numeroMayorACeroValidator]],
+      nroCopias: ['', [Validators.required, numeroMayorACeroValidator]],
+      tamanoPagina: ['', Validators.required],
+      anversoReverso: ['', Validators.required],
+      colorFotocopia: ['', Validators.required]
     });
   }
 

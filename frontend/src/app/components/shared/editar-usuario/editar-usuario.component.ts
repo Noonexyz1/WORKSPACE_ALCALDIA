@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { SubjectUsuarioUnidadService } from '../../../services/subject-usuario-unidad/subject-usuario-unidad.service';
 import { UsuarioUnidadRequest } from '../../../models/UsuarioUnidadRequest';
 import { HttpClient } from '@angular/common/http';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { catchError, map, of } from 'rxjs';
 import { Router } from '@angular/router';
 import { RolResponse } from '../../../models/RolResponse';
@@ -47,16 +47,15 @@ export class EditarUsuarioComponent {
     this.subjectUsuarioUnidadService = subjectUsuarioUnidadService;
     this.rootNavigateService = rootNavigateService;
     this.editUserForm = this.formBuilder.group({
-      id: [''],
-      nombres: [''],
-      materno: [''],
-      paterno: [''],
-      correo: [''],
-      ci: [''],
-
-      idRol: [],
-      idCargo: [],
-      idUni: [],
+      idUser: [''],
+      ci: ['', [Validators.required, Validators.minLength(6)]],
+      nombres: ['', [Validators.required, Validators.minLength(3)]],
+      paterno: ['', [Validators.required, Validators.minLength(3)]],
+      materno: ['', [Validators.required, Validators.minLength(3)]],
+      correo: ['', [Validators.required, Validators.email]],
+      idRol: ['', Validators.required],
+      idCargo: ['', Validators.required],
+      idUni: ['', Validators.required],
     });
 
     this.inicializacion();
@@ -139,17 +138,20 @@ export class EditarUsuarioComponent {
   botonEditarUsuarioUnidad(): void {
     const userUniEdit: UsuarioUnidadEditRequest = {
       id: this.usuario.id, //Id de USUARIO, lo de
-      nombres: this.editUserForm.get('nombres')?.value,
-      materno: this.editUserForm.get('materno')?.value,
-      paterno: this.editUserForm.get('paterno')?.value,
-      correo: this.editUserForm.get('correo')?.value,
-      ci: this.editUserForm.get('ci')?.value,
+
+      ci: this.editUserForm.get('ci')?.value.trim(),
+      nombres: this.editUserForm.get('nombres')?.value.trim(),
+      materno: this.editUserForm.get('materno')?.value.trim(),
+      paterno: this.editUserForm.get('paterno')?.value.trim(),
+      correo: this.editUserForm.get('correo')?.value.trim(),
 
       idRol: this.editUserForm.get('idRol')?.value,
       idUni: this.editUserForm.get('idUni')?.value,
       idCargo: this.editUserForm.get('idCargo')?.value,
 
       idDirector: this.localStorage.getItem('userData').id,
+
+      //TODO, averiguar que hace esta variable
       idResponsable: 2
     };
 

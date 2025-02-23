@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { RolResponse } from '../../../models/RolResponse';
 import { UnidadResponse } from '../../../models/UnidadResponse';
 import { catchError, map, of } from 'rxjs';
@@ -40,15 +40,14 @@ export class NuevoUsuarioComponent {
     this.http = http;
     this.nuevoUsuario = this.formBuilder.group({
       idUser: [''],
-      nombres: [''],
-      materno: [''],
-      paterno: [''],
-      correo: [''],
-      ci: [''],
-
-      idRol: [],
-      idCargo: [],
-      idUni: [],
+      ci: ['', [Validators.required, Validators.minLength(6)]],
+      nombres: ['', [Validators.required, Validators.minLength(3)]],
+      paterno: ['', [Validators.required, Validators.minLength(3)]],
+      materno: ['', [Validators.required, Validators.minLength(3)]],
+      correo: ['', [Validators.required, Validators.email]],
+      idRol: ['', Validators.required],
+      idCargo: ['', Validators.required],
+      idUni: ['', Validators.required],
     });
     this.rootNavigateService = rootNavigateService;
 
@@ -109,17 +108,20 @@ export class NuevoUsuarioComponent {
   botonRegistrarUsuario(): void {
     const usuarioNuevoRequest: UsuarioUnidadEditRequest = {
       id: this.nuevoUsuario.get('idUser')?.value,
-      nombres: this.nuevoUsuario.get('nombres')?.value,
-      materno: this.nuevoUsuario.get('materno')?.value,
-      paterno: this.nuevoUsuario.get('paterno')?.value,
-      correo: this.nuevoUsuario.get('correo')?.value,
-      ci: this.nuevoUsuario.get('ci')?.value,
+
+      ci: this.nuevoUsuario.get('ci')?.value.trim(),
+      nombres: this.nuevoUsuario.get('nombres')?.value.trim(),
+      paterno: this.nuevoUsuario.get('paterno')?.value.trim(),
+      materno: this.nuevoUsuario.get('materno')?.value.trim(),
+      correo: this.nuevoUsuario.get('correo')?.value.trim(),
 
       idRol: this.nuevoUsuario.get('idRol')?.value,
       idUni: this.nuevoUsuario.get('idUni')?.value,
       idCargo: this.nuevoUsuario.get('idCargo')?.value,
 
       idDirector: this.localStorage.getItem('userData').id,
+
+      //TODO, averiguar que hace esta variable
       idResponsable: 2
     };
 
