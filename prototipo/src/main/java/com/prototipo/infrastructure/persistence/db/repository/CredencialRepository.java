@@ -8,10 +8,6 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CredencialRepository extends JpaRepository<CredencialEntity, Long> {
-/*
-//    @Query(value = "SELECT * FROM credencial c WHERE c.correo = :correo AND c.pass = :password", nativeQuery = true)
-    Optional<CredencialEntity> findByUsernameAndPassword(@Param("correo") String correo,
-                                                         @Param("password") String password);*/
 
     @Query(value =
             """

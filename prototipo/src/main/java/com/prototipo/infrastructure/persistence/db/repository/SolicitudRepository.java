@@ -31,7 +31,7 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
                 WHERE fk_responsable_id = :idResponsable
             )
             AND autori_flag = 0
-            AND is_active = 1;
+            AND is_active = 1
             """, nativeQuery = true)
     Page<SolicitudEntity> findAllSoliByIdResponsable(@Param("idResponsable") Long idResponsable, Pageable pageable);
 
@@ -47,7 +47,7 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
                 AND s.is_active = 1
                 AND s.autori_flag = 1
                 AND a.finali_flag = 0
-            );
+            )
             """, nativeQuery = true)
     Page<SolicitudEntity> findAllAutoriByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad, Pageable pageable);
 
@@ -63,7 +63,7 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
                 AND s.is_active = 1
                 AND s.autori_flag = 1
                 AND a.finali_flag = 1
-            );
+            )
             """, nativeQuery = true)
     Page<SolicitudEntity> findAllFinaliByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad, Pageable pageable);
 }
