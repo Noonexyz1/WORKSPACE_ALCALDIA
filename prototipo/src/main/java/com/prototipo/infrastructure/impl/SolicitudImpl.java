@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -64,9 +65,15 @@ public class SolicitudImpl implements SolicitudAbstract {
 
     @Override
     public PaginableOut<SolicitudDto> getListaSolicitudesAutoriAbstract(PaginableIn paginableIn) {
+        Sort sort = Sort.by(
+                Sort.Direction.fromString(paginableIn.getDirection()),
+                paginableIn.getSortBy()
+        );
+
         Pageable pageable = PageRequest.of(
                 paginableIn.getPage().intValue(),
-                paginableIn.getSize().intValue()
+                paginableIn.getSize().intValue(),
+                sort
         );
 
         Page<SolicitudEntity> pageResponse = solicitudRepository
@@ -88,9 +95,15 @@ public class SolicitudImpl implements SolicitudAbstract {
 
     @Override
     public PaginableOut<SolicitudDto> getListaSolicitudesFinaliAbstract(PaginableIn paginableIn) {
+        Sort sort = Sort.by(
+                Sort.Direction.fromString(paginableIn.getDirection()),
+                paginableIn.getSortBy()
+        );
+
         Pageable pageable = PageRequest.of(
                 paginableIn.getPage().intValue(),
-                paginableIn.getSize().intValue()
+                paginableIn.getSize().intValue(),
+                sort
         );
 
         Page<SolicitudEntity> pageResponse = solicitudRepository
@@ -112,9 +125,15 @@ public class SolicitudImpl implements SolicitudAbstract {
 
     @Override
     public PaginableOut<SolicitudDto> getListaSolicitudesAbstract(PaginableIn paginableIn) {
+        Sort sort = Sort.by(
+                Sort.Direction.fromString(paginableIn.getDirection()),
+                paginableIn.getSortBy()
+        );
+
         Pageable pageable = PageRequest.of(
                 paginableIn.getPage().intValue(),
-                paginableIn.getSize().intValue()
+                paginableIn.getSize().intValue(),
+                sort
         );
 
         Page<SolicitudEntity> pageResponse = solicitudRepository

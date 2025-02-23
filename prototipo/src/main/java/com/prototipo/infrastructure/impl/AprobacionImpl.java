@@ -38,9 +38,15 @@ public class AprobacionImpl implements AprobacionAbstract {
 
     @Override
     public PaginableOut<AutorizacionDto> listaDeSoliAutorizadasAbstractPage(PaginableIn paginableIn) {
+        Sort sort = Sort.by(
+                Sort.Direction.fromString(paginableIn.getDirection()),
+                paginableIn.getSortBy()
+        );
+
         Pageable pageable = PageRequest.of(
                 paginableIn.getPage().intValue(),
-                paginableIn.getSize().intValue()
+                paginableIn.getSize().intValue(),
+                sort
         );
 
         Page<AutorizacionEntity> autorizacionList = autorizacionRepository
@@ -62,9 +68,15 @@ public class AprobacionImpl implements AprobacionAbstract {
 
     @Override
     public PaginableOut<SolicitudDto> listaDeSolicitudesPendientesAbstractPage(PaginableIn paginableIn) {
+        Sort sort = Sort.by(
+                Sort.Direction.fromString(paginableIn.getDirection()),
+                paginableIn.getSortBy()
+        );
+
         Pageable pageable = PageRequest.of(
                 paginableIn.getPage().intValue(),
-                paginableIn.getSize().intValue()
+                paginableIn.getSize().intValue(),
+                sort
         );
 
         Page<SolicitudEntity> pageResponse = solicitudRepository

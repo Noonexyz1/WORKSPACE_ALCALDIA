@@ -3,7 +3,6 @@ package com.prototipo.application.useCase;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.domain.model.*;
-import com.prototipo.infrastructure.rest.request.PageRequest;
 
 import java.util.List;
 
