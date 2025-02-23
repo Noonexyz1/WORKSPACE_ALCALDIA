@@ -10,9 +10,6 @@ import com.prototipo.application.useCase.AprobacionService;
 import com.prototipo.domain.model.Autorizacion;
 import com.prototipo.domain.model.Finalizacion;
 import com.prototipo.domain.model.Solicitud;
-import com.prototipo.domain.model.UsuarioUnidad;
-
-import java.util.List;
 
 public class AprobacionAdapter implements AprobacionService {
 
