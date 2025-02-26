@@ -7,11 +7,9 @@ import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.rest.report.ComunicacionReport;
 import com.prototipo.infrastructure.rest.report.SolicitudReport;
 import com.prototipo.infrastructure.rest.request.PageRequest;
-import com.prototipo.infrastructure.rest.request.PaginacionSoliRequest;
 import com.prototipo.infrastructure.rest.request.SolicitudRequest;
 import com.prototipo.infrastructure.rest.response.PageResponse;
 import com.prototipo.infrastructure.rest.response.SolicitudSoliciResponse;
-import com.prototipo.infrastructure.rest.response.UsuarioUnidadResponse;
 import com.prototipo.infrastructure.service.ComunicacionInternaServiceReport;
 import com.prototipo.infrastructure.service.OrdenFotoServiceReport;
 import com.prototipo.infrastructure.service.SolicitudServiceReport;
@@ -43,6 +41,7 @@ public class SolicitanteController {
     private ComunicacionInternaServiceReport comunicacionInternaServiceReport;
     @Autowired
     private OrdenFotoServiceReport ordenFotoServiceReport;
+
 
 
     @PostMapping(path = {"/solicitarFotocopiar"},
@@ -84,6 +83,13 @@ public class SolicitanteController {
 
         solicitudService.solicitarFotocopiarService(solicitud, listFotocopias);
     }
+
+    @GetMapping("/eliminarSolicitudById/{idSolicitud}")
+    public void eliminarSolicitudById(@PathVariable Long idSolicitud){
+        solicitudService.eliminarSolicitudById(idSolicitud);
+    }
+
+
 
     @PostMapping(path = {"/verSolicitudesPendientes"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -178,10 +184,7 @@ public class SolicitanteController {
         return solicitudSoliciResponse;
     }
 
-    @GetMapping("/eliminarSolicitudById/{idSolicitud}")
-    public void eliminarSolicitudById(@PathVariable Long idSolicitud){
-        solicitudService.eliminarSolicitudById(idSolicitud);
-    }
+
 
     @GetMapping("/listarTamano")
     public ResponseEntity<List<String>> listarTamano(){
@@ -200,6 +203,7 @@ public class SolicitanteController {
         List<String> listColor = solicitudService.listarColor();
         return new ResponseEntity<>(listColor, HttpStatus.OK);
     }
+
 
 
     @Async

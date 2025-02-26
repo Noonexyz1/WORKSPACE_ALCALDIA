@@ -4,12 +4,13 @@ import { catchError, map, of } from 'rxjs';
 import { UsuarioResponse } from '../../../models/UsuarioResponse';
 import { SolicitudResponResponse } from '../../../models/SolicitudResponResponse';
 import { LocalStorageService } from '../../../services/local-storage/local-storage.service';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
 import {PageProperties} from "../../../models/PageProperties";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {PageRequest} from "../../../models/PageRequest";
 import {PageResponse} from "../../../models/PageResponse";
+import {numeroMayorACeroValidator} from "../../../validation/Validation";
 
 @Component({
   selector: 'app-lista-soli-responsable-autorizada',
@@ -20,33 +21,28 @@ import {PageResponse} from "../../../models/PageResponse";
 })
 export class ListaSoliAutorizadaResponsableComponent {
 
-  private http: HttpClient;
-  private localStorage: LocalStorageService;
-
   listSolicitud: SolicitudResponResponse[] = [];
+
+  idSolicitudForm: FormGroup;
 
   usuario: UsuarioResponse = new UsuarioResponse();
 
-  constructor(http: HttpClient,
-              rootNavigateService: RootNavigateService,
-              formBuilder: FormBuilder,
-              localStorage: LocalStorageService){
+  constructor(
+    private http: HttpClient,
+    private rootNavigateService: RootNavigateService,
+    private localStorage: LocalStorageService,
+    private formBuilder: FormBuilder){
 
     this.http = http;
     this.localStorage = localStorage;
     this.rootNavigateService = rootNavigateService;
     this.formBuilder = formBuilder;
-    this.formGroup = this.formBuilder.group({
-      totalEjecutado: [],
-      totalEjecutadoBs: [],
+    this.idSolicitudForm = this.formBuilder.group({
+      id: ['', [Validators.required, numeroMayorACeroValidator]]
     });
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
   }
-
-  formGroup: FormGroup;
-  private formBuilder: FormBuilder;
-  private rootNavigateService: RootNavigateService;
 
   isActiveBtnFinalizar: boolean = false;
   botonFinalizarSolicitud(solicitud: SolicitudResponResponse): void {
@@ -140,6 +136,42 @@ export class ListaSoliAutorizadaResponsableComponent {
     .subscribe();
   }
 
+  botonBuscarSolicitudById(): void {
+    const body: PageRequest = {
+      id: this.idSolicitudForm.get('id')?.value,
+      page: this.pageProperties.currentPage,
+      size: this.pageProperties.pageSize,
+      sortBy: this.pageProperties.sortBy,
+      direction: this.pageProperties.direction
+    }
+
+    this.http.post<PageResponse<SolicitudResponResponse>>(
+      UrlsProperties.PATH_SOLI_AUTORIBYID,
+      body
+    ).pipe(
+      map((response: PageResponse<SolicitudResponResponse>) => {
+        this.pageProperties.currentPage = response.page;
+        this.pageProperties.pageSize = response.size;
+        this.pageProperties.sortBy = response.sortBy;
+        this.pageProperties.direction = response.direction;
+
+        this.listSolicitud = response.content;
+        this.pageProperties.totalPages = response.totalPages;
+        this.pageProperties.totalElements = response.totalElements;
+
+        this.listaConsecutiva = Array.from(
+          {length: this.pageProperties.totalPages},
+          (_, index) => index
+        );
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al listar las solicitudes pendientes para el responsable');
+        return of(null); // Retornar un observable vacío en caso de error
+      })
+    ).subscribe();
+
+  }
 
 
   goToPage(page: number): void {

@@ -66,4 +66,14 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
             )
             """, nativeQuery = true)
     Page<SolicitudEntity> findAllFinaliByIdUserUnidad(@Param("idUsuarioUnidad") Long idUsuarioUnidad, Pageable pageable);
+
+    @Query(value =
+            """
+            SELECT *
+            FROM solicitud s
+            WHERE autori_flag = 0
+            AND is_active = 1
+            AND id = :id
+            """, nativeQuery = true)
+    Page<SolicitudEntity> findAllSoliByIdResponsableByIdSoli(@Param("id") Long id, Pageable pageable);
 }

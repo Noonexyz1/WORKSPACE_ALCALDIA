@@ -46,6 +46,95 @@ public class ResponsableController {
 
 
     @PostMapping(
+            path = {"/verSolicitudesPendientesByIdSolicitud"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PageResponse<SolicitudResponResponse>> verSolicitudesPendientesByIdSolicitud(
+            @RequestBody PageRequest pageReq) {
+
+        PaginableOut<Solicitud> paginableOut = aprobacionService
+                .listaDeSolicitudesPendientesServiceByIdSoli(modelMapper.map(pageReq, PaginableIn.class));
+
+        List<SolicitudResponResponse> listSolicitud = paginableOut.getContent()
+                .stream()
+                .map(this::funcion)
+                .toList();
+
+        PageResponse<SolicitudResponResponse> pageResponse = PageResponse
+                .<SolicitudResponResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(listSolicitud)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(
+            path = {"/verSolicitudesAutoriByIdSolicitud"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PageResponse<SolicitudResponResponse>> verSolicitudesAutoriByIdSolicitud(
+            @RequestBody PageRequest pageReq) {
+
+        PaginableOut<Autorizacion> paginableOut = aprobacionService
+                .listaDeSolicitudesAutoriServiceByIdSoli(modelMapper.map(pageReq, PaginableIn.class));
+
+        List<SolicitudResponResponse> listSolicitud = paginableOut.getContent()
+                .stream()
+                .map(this::funcion)
+                .toList();
+
+        PageResponse<SolicitudResponResponse> pageResponse = PageResponse
+                .<SolicitudResponResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(listSolicitud)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(
+            path = {"/verSolicitudesFinaliByIdSolicitud"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PageResponse<SolicitudResponResponse>> verSolicitudesFinaliByIdSolicitud(
+            @RequestBody PageRequest pageReq) {
+
+        PaginableOut<Finalizacion> paginableOut = aprobacionService
+                .listaDeSolicitudesFinalizadasServiceByIdSoli(modelMapper.map(pageReq, PaginableIn.class));
+
+        List<SolicitudResponResponse> listSolicitud = paginableOut.getContent()
+                .stream()
+                .map(this::funcion)
+                .toList();
+
+        PageResponse<SolicitudResponResponse> pageResponse = PageResponse
+                .<SolicitudResponResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(listSolicitud)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
+    }
+
+
+
+    @PostMapping(
             path = {"/autorizarSolicitud"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public void autorizarSolicitud(@RequestBody AprobacionSoliRequest aprobacionSoliRequest) {
@@ -68,6 +157,20 @@ public class ResponsableController {
         Long idResponsable = aprobacionSoliRequest.getIdResponsable();
         responsableService.rechazarSolicitudService(idSolicitud, idResponsable);
     }
+
+    @PostMapping(
+            path = {"/finalizarSolicitud"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void finalizarSolicitud(@RequestBody Long idAutorizacion) {
+        Finalizacion finalizacion = Finalizacion.builder()
+                .fkAutorizacion(
+                        Autorizacion.builder().id(idAutorizacion).build()
+                )
+                .build();
+        solicitudService.guardarFinalizacion(finalizacion);
+    }
+
+
 
     @PostMapping(
             path = {"/verSolicitudesPendientes"},
@@ -189,8 +292,8 @@ public class ResponsableController {
 
     private SolicitudResponResponse funcion(Finalizacion x){
         return SolicitudResponResponse.builder()
-                .idAutorizacion(x.getId())
-                .idSolicitud(x.getFkAutorizacion().getId())
+                .idAutorizacion(x.getFkAutorizacion().getId())
+                .idSolicitud(x.getFkAutorizacion().getFkSolicitud().getId())
                 .cite(x.getFkAutorizacion().getFkSolicitud().getCite())
                 .fecha(x.getFecha())
                 .nomCompleto(
@@ -203,17 +306,7 @@ public class ResponsableController {
                 .build();
     }
 
-    @PostMapping(
-            path = {"/finalizarSolicitud"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void finalizarSolicitud(@RequestBody Long idAutorizacion) {
-        Finalizacion finalizacion = Finalizacion.builder()
-                .fkAutorizacion(
-                        Autorizacion.builder().id(idAutorizacion).build()
-                )
-                .build();
-        solicitudService.guardarFinalizacion(finalizacion);
-    }
+
 
     @GetMapping(
             path = {"/verDetalleDeSolicitud/{idSolicitud}"},
@@ -287,6 +380,7 @@ public class ResponsableController {
 
         return new ResponseEntity<>(autorizacionResponse, HttpStatus.OK);
     }
+
 
 
     @Async  // La anotación para indicar que este méttodo es asincrónico
