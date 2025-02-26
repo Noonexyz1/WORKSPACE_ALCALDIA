@@ -43,6 +43,7 @@ public class SolicitanteController {
     private OrdenFotoServiceReport ordenFotoServiceReport;
 
 
+
     @PostMapping(path = {"/solicitarFotocopiar"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public void solicitarFotocopiarV2(@RequestBody SolicitudRequest solicitudRequest) {
@@ -82,6 +83,13 @@ public class SolicitanteController {
 
         solicitudService.solicitarFotocopiarService(solicitud, listFotocopias);
     }
+
+    @GetMapping("/eliminarSolicitudById/{idSolicitud}")
+    public void eliminarSolicitudById(@PathVariable Long idSolicitud){
+        solicitudService.eliminarSolicitudById(idSolicitud);
+    }
+
+
 
     @PostMapping(path = {"/verSolicitudesPendientes"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
@@ -176,10 +184,7 @@ public class SolicitanteController {
         return solicitudSoliciResponse;
     }
 
-    @GetMapping("/eliminarSolicitudById/{idSolicitud}")
-    public void eliminarSolicitudById(@PathVariable Long idSolicitud){
-        solicitudService.eliminarSolicitudById(idSolicitud);
-    }
+
 
     @GetMapping("/listarTamano")
     public ResponseEntity<List<String>> listarTamano(){
@@ -198,6 +203,7 @@ public class SolicitanteController {
         List<String> listColor = solicitudService.listarColor();
         return new ResponseEntity<>(listColor, HttpStatus.OK);
     }
+
 
 
     @Async

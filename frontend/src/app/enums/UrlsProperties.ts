@@ -30,6 +30,10 @@ export enum UrlsProperties {
   PATH_LIST_SOLIFINALI = 'http://localhost:8081/responsable/verSolicitudesFinalizadas',
 
   PATH_LIST_SOLIPENDIENTE = 'http://localhost:8081/responsable/verSolicitudesPendientes',
+  PATH_SOLI_BYID = 'http://localhost:8081/responsable/verSolicitudesPendientesByIdSolicitud',
+  PATH_SOLI_AUTORIBYID = 'http://localhost:8081/responsable/verSolicitudesAutoriByIdSolicitud',
+  PATH_SOLI_FINALIBYID = 'http://localhost:8081/responsable/verSolicitudesFinaliByIdSolicitud',
+
   PATH_DETALLE_SOLI = 'http://localhost:8081/responsable/verDetalleDeSolicitud/',
   PATH_AUTORIZAR_SOLI = 'http://localhost:8081/responsable/autorizarSolicitud',
   PATH_RECHAZAR_SOLI = 'http://localhost:8081/responsable/rechazarSolicitud',

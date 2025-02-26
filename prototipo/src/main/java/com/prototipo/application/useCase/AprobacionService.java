@@ -11,4 +11,9 @@ public interface AprobacionService {
     PaginableOut<Finalizacion> listaDeSolicitudesFinalizadasService(PaginableIn paginableIn);
     PaginableOut<Autorizacion> listaDeSolicitudesAutorizadasService(PaginableIn paginableIn);
     Autorizacion findAutorizacionByIdSoliService(Long idSolicitud);
+    PaginableOut<Solicitud> listaDeSolicitudesPendientesServiceByIdSoli(PaginableIn map);
+
+    PaginableOut<Autorizacion> listaDeSolicitudesAutoriServiceByIdSoli(PaginableIn map);
+
+    PaginableOut<Finalizacion> listaDeSolicitudesFinalizadasServiceByIdSoli(PaginableIn paginableIn);
 }

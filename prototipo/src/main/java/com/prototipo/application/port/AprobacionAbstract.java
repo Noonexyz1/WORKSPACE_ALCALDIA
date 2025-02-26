@@ -10,4 +10,9 @@ public interface AprobacionAbstract {
     PaginableOut<SolicitudDto> listaDeSolicitudesPendientesAbstractPage(PaginableIn paginableIn);
     PaginableOut<FinalizacionDto> listaDeAprobacionesFinalizadasAbstractPage(PaginableIn paginableIn);
     PaginableOut<AutorizacionDto> listaDeSoliAutorizadasAbstractPage(PaginableIn paginableIn);
+    PaginableOut<SolicitudDto> listaDeSolicitudesPendientesAbstractPageByIdSoli(PaginableIn paginableIn);
+
+    PaginableOut<AutorizacionDto> listaDeSoliAutorizadasAbstractPageByIdSoli(PaginableIn paginableIn);
+
+    PaginableOut<FinalizacionDto> listaDeAprobacionesFinalizadasAbstractPageByIdSoli(PaginableIn paginableIn);
 }

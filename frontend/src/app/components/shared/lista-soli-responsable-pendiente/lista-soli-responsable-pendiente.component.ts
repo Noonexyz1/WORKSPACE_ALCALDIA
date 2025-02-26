@@ -1,35 +1,32 @@
 import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map, of} from 'rxjs';
-import {PageRequestID} from '../../../models/PageRequestID';
 import {UsuarioResponse} from '../../../models/UsuarioResponse';
 import {SolicitudResponResponse} from '../../../models/SolicitudResponResponse';
 import {LocalStorageService} from '../../../services/local-storage/local-storage.service';
-import {FormsModule} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {RowSolicitudExtendComponent} from "./row-table-responsable-pendiente/row-solicitud-extend/row-solicitud-extend.component";
 import {PageProperties} from "../../../models/PageProperties";
 import {DetalleSolicitudExtendidoResponse} from "../../../models/DetalleSolicitudExtendidoResponse";
-import {DetalleSolicitudCotizadoResponse} from "../../../models/DetalleSolicitudCotizadoResponse";
 import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {AprobacionSoliRequest} from "../../../models/AutorizacionRequest";
 import {PageRequest} from "../../../models/PageRequest";
 import {PageResponse} from "../../../models/PageResponse";
+import {numeroMayorACeroValidator} from "../../../validation/Validation";
 
 @Component({
   selector: 'app-lista-soli-responsable-pendiente',
   standalone: true,
-  imports: [FormsModule, RowSolicitudExtendComponent],
+  imports: [FormsModule, RowSolicitudExtendComponent, ReactiveFormsModule],
   templateUrl: './lista-soli-responsable-pendiente.component.html',
   styleUrl: './lista-soli-responsable-pendiente.component.css'
 })
 export class ListaSoliPendienteResponsableComponent{
 
-  private http: HttpClient;
-  private localStorage: LocalStorageService;
-  private rootNavigateService: RootNavigateService;
-
   listSolicitud: SolicitudResponResponse[] = [];
+
+  idSolicitudForm: FormGroup;
 
   pageProperties: PageProperties = new PageProperties();
   listaConsecutiva: number[] = Array.from(
@@ -39,14 +36,19 @@ export class ListaSoliPendienteResponsableComponent{
 
   usuario: UsuarioResponse = new UsuarioResponse();
 
-  constructor(http: HttpClient,
-              rootNavigateService: RootNavigateService,
-              localStorage: LocalStorageService) {
+  constructor(
+    private http: HttpClient,
+    private rootNavigateService: RootNavigateService,
+    private localStorage: LocalStorageService,
+    private formBuilder: FormBuilder) {
 
     this.http = http;
     this.localStorage = localStorage;
     this.rootNavigateService = rootNavigateService;
     this.usuario = this.localStorage.getItem('userData');
+    this.idSolicitudForm = this.formBuilder.group({
+      id: ['', [Validators.required, numeroMayorACeroValidator]]
+    });
     this.listarSolicitudes();
   }
 
@@ -84,6 +86,43 @@ export class ListaSoliPendienteResponsableComponent{
         return of(null); // Retornar un observable vacío en caso de error
       })
     ).subscribe();
+  }
+
+  botonBuscarSolicitudById(): void {
+    const body: PageRequest = {
+      id: this.idSolicitudForm.get('id')?.value,
+      page: this.pageProperties.currentPage,
+      size: this.pageProperties.pageSize,
+      sortBy: this.pageProperties.sortBy,
+      direction: this.pageProperties.direction
+    }
+
+    this.http.post<PageResponse<SolicitudResponResponse>>(
+      UrlsProperties.PATH_SOLI_BYID,
+      body
+    ).pipe(
+      map((response: PageResponse<SolicitudResponResponse>) => {
+        this.pageProperties.currentPage = response.page;
+        this.pageProperties.pageSize = response.size;
+        this.pageProperties.sortBy = response.sortBy;
+        this.pageProperties.direction = response.direction;
+
+        this.listSolicitud = response.content;
+        this.pageProperties.totalPages = response.totalPages;
+        this.pageProperties.totalElements = response.totalElements;
+
+        this.listaConsecutiva = Array.from(
+          {length: this.pageProperties.totalPages},
+          (_, index) => index
+        );
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al listar las solicitudes pendientes para el responsable');
+        return of(null); // Retornar un observable vacío en caso de error
+      })
+    ).subscribe();
+
   }
 
   estadoModal: boolean = false;
