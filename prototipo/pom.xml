@@ -82,6 +82,13 @@
 			<version>2.6.0</version>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-webflux -->
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-webflux</artifactId>
+			<version>6.2.0</version>
+		</dependency>
+
 	</dependencies>
 
 	<build>

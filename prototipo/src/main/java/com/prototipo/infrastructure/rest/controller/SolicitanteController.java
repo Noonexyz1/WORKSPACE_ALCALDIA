@@ -11,6 +11,7 @@ import com.prototipo.infrastructure.rest.request.SolicitudRequest;
 import com.prototipo.infrastructure.rest.response.PageResponse;
 import com.prototipo.infrastructure.rest.response.SolicitudSoliciResponse;
 import com.prototipo.infrastructure.service.ComunicacionInternaServiceReport;
+import com.prototipo.infrastructure.service.Observable;
 import com.prototipo.infrastructure.service.OrdenFotoServiceReport;
 import com.prototipo.infrastructure.service.SolicitudServiceReport;
 import net.sf.jasperreports.engine.JRException;
@@ -42,6 +43,8 @@ public class SolicitanteController {
     @Autowired
     private OrdenFotoServiceReport ordenFotoServiceReport;
 
+    @Autowired
+    private Observable observable;
 
 
     @PostMapping(path = {"/solicitarFotocopiar"},
@@ -82,6 +85,7 @@ public class SolicitanteController {
                 .build();
 
         solicitudService.solicitarFotocopiarService(solicitud, listFotocopias);
+        observable.publicarValor(1);
     }
 
     @GetMapping("/eliminarSolicitudById/{idSolicitud}")

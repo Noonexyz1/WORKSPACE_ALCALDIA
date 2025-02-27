@@ -9,6 +9,7 @@ import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.rest.request.*;
 import com.prototipo.infrastructure.rest.response.*;
 import com.prototipo.infrastructure.service.NotaPedidoServiceReport;
+import com.prototipo.infrastructure.service.Observable;
 import com.prototipo.infrastructure.service.ReporteServiceReport;
 import net.sf.jasperreports.engine.JRException;
 import org.modelmapper.ModelMapper;
@@ -19,6 +20,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Flux;
 
 import java.io.IOException;
 import java.math.BigDecimal;
@@ -43,6 +45,16 @@ public class ResponsableController {
     private SolicitudService solicitudService;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private Observable observable;
+
+
+    @GetMapping(value = "/notificacion", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<Integer> obtenerActualizacion() {
+        return observable.obtenerFlux();
+    }
+
 
 
     @PostMapping(

@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
+import {ChangeDetectorRef, Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
-import {catchError, map, of} from 'rxjs';
+import {catchError, map, of, Subscription} from 'rxjs';
 import {UsuarioResponse} from '../../../models/UsuarioResponse';
 import {SolicitudResponResponse} from '../../../models/SolicitudResponResponse';
 import {LocalStorageService} from '../../../services/local-storage/local-storage.service';
@@ -14,6 +14,7 @@ import {AprobacionSoliRequest} from "../../../models/AutorizacionRequest";
 import {PageRequest} from "../../../models/PageRequest";
 import {PageResponse} from "../../../models/PageResponse";
 import {numeroMayorACeroValidator} from "../../../validation/Validation";
+import {ObservableNotifyService} from "../../../services/subject-notify/observable-notify.service";
 
 @Component({
   selector: 'app-lista-soli-responsable-pendiente',
@@ -22,7 +23,7 @@ import {numeroMayorACeroValidator} from "../../../validation/Validation";
   templateUrl: './lista-soli-responsable-pendiente.component.html',
   styleUrl: './lista-soli-responsable-pendiente.component.css'
 })
-export class ListaSoliPendienteResponsableComponent{
+export class ListaSoliPendienteResponsableComponent implements OnInit, OnDestroy{
 
   listSolicitud: SolicitudResponResponse[] = [];
 
@@ -40,7 +41,9 @@ export class ListaSoliPendienteResponsableComponent{
     private http: HttpClient,
     private rootNavigateService: RootNavigateService,
     private localStorage: LocalStorageService,
-    private formBuilder: FormBuilder) {
+    private formBuilder: FormBuilder,
+    private observableNotify: ObservableNotifyService,
+    private cdr: ChangeDetectorRef) {
 
     this.http = http;
     this.localStorage = localStorage;
@@ -51,6 +54,32 @@ export class ListaSoliPendienteResponsableComponent{
     });
     this.listarSolicitudes();
   }
+
+  private subscription: Subscription | undefined;
+
+  ngOnInit(): void {
+    this.subscription = this.observableNotify.obtenerActualizacion()
+      .subscribe({
+        next: (valor: number) => {
+          if (valor === 1) {
+            this.listarSolicitudes();
+          }
+        },
+        error: (error) => {
+          console.error('Error en SSE:', error);
+        }
+      });
+  }
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    this.observableNotify.cerrarConexion();
+  }
+
+
+
 
   listarSolicitudes(): void {
     const body: PageRequest = {
@@ -79,6 +108,7 @@ export class ListaSoliPendienteResponsableComponent{
           {length: this.pageProperties.totalPages},
           (_, index) => index
         );
+        this.cdr.detectChanges(); // FORZAR detección de cambios
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
