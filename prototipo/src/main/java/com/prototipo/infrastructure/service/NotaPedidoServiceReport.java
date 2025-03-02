@@ -8,12 +8,16 @@ import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
@@ -24,31 +28,41 @@ import java.util.Map;
 @Service
 public class NotaPedidoServiceReport {
 
-    @Autowired
-    private ResourceLoader resourceLoader;
+    @Value("${pdf.output.directory}")
+    private String pdfOutputDirectory;
+
     @Autowired
     private ModelMapper modelMapper;
+
     @Autowired
     private SolicitudService solicitudService;
 
-    public byte[] exportToPdf(Long idSolicitud, List<NotaDePedido> notaDePedidoList)
-            throws JRException {
-
+    public byte[] exportToPdf(Long idSolicitud, List<NotaDePedido> notaDePedidoList) throws JRException, IOException {
         JasperPrint jasperPrint = getReport(idSolicitud, notaDePedidoList);
-        return JasperExportManager.exportReportToPdf(jasperPrint);
+
+        // Crear el directorio si no existe
+        File outputDir = new File(pdfOutputDirectory);
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        }
+
+        // Ruta del archivo PDF
+        String outputFilePath = pdfOutputDirectory + "/notaPedido_" + idSolicitud + ".pdf";
+
+        // Exportar el PDF a un archivo
+        JasperExportManager.exportReportToPdfFile(jasperPrint, outputFilePath);
+
+        // Devolver el contenido del PDF como un arreglo de bytes
+        return Files.readAllBytes(Paths.get(outputFilePath));
     }
 
-    private JasperPrint getReport(Long idSolicitud, List<NotaDePedido> notaDePedidoList)
-            throws JRException {
-        //Ruta Relativa, porque es relativo al sistema de archivos del Sistema Operativo
-        String filePath = "src" + File.separator +
-                "main" + File.separator +
-                "resources" + File.separator +
-                "templates" + File.separator +
-                "report" + File.separator +
-                "notaPedido.jrxml";
+    private JasperPrint getReport(Long idSolicitud, List<NotaDePedido> notaDePedidoList) throws JRException {
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("templates/report/notaPedido.jrxml");
 
-        // Formato con nombre del mes completo
+        if (inputStream == null) {
+            throw new RuntimeException("No se pudo encontrar el archivo notaPedido.jrxml en el classpath.");
+        }
+
         LocalDate fechaActual = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter
                 .ofPattern("dd 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
@@ -60,14 +74,13 @@ public class NotaPedidoServiceReport {
                 .toList();
 
         Map<String, Object> params = new HashMap<>();
-        // Asigna los campos de SolicitudReport a los parámetros del reporte
         params.put("fecha", fechaActual.format(formato));
         params.put("imageDir", "classpath:/static/images/");
         params.put("nombreServicio", solicitud.getNombreServicio());
         params.put("precioTotal", BigDecimal.valueOf(solicitud.getPrecioTotal()).setScale(2, RoundingMode.HALF_UP).doubleValue());
         params.put("ds", new JRBeanCollectionDataSource(listNotaPedidoPDF));
 
-        JasperReport jasperReport = JasperCompileManager.compileReport(filePath);
+        JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
 
         return JasperFillManager.fillReport(jasperReport, params, new JREmptyDataSource());
     }

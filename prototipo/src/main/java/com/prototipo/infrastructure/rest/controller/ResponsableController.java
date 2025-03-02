@@ -398,7 +398,7 @@ public class ResponsableController {
     @Async  // La anotación para indicar que este méttodo es asincrónico
     @GetMapping("/exportNotaPedidoDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportNotaPedidoDPF(
-            @PathVariable Long idSolicitud) throws JRException {
+            @PathVariable Long idSolicitud) throws JRException, IOException {
 
         // Llamar al servicio de manera sincrónica en este caso
         List<NotaDePedido> notaDePedidoList = responsableService.generarNotaDePedidoPDF(idSolicitud);
