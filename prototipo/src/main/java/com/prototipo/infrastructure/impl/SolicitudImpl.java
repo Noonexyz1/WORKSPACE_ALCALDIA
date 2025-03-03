@@ -104,18 +104,6 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
-    public ServicioFotocopiaDto findServicioFotocopia(ServicioFotocopiaDto fkServicioFotocopia) {
-        ServicioFotocopiaEntity serFotoEntity = servicioFotocopiaRepository
-                .findByAnverColorTam(
-                    fkServicioFotocopia.getAnverRever(),
-                    fkServicioFotocopia.getColor(),
-                    fkServicioFotocopia.getTamano()
-                );
-
-        return modelMapper.map(serFotoEntity, ServicioFotocopiaDto.class);
-    }
-
-    @Override
     public PaginableOut<SolicitudDto> getListaSolicitudesAutoriAbstract(PaginableIn paginableIn) {
         Sort sort = Sort.by(
                 Sort.Direction.fromString(paginableIn.getDirection()),

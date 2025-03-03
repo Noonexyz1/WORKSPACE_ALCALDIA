@@ -5,6 +5,7 @@ import com.prototipo.application.modelDto.*;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.port.FotocopiaAbstract;
+import com.prototipo.application.port.ServicioFotocopiaAbstract;
 import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.application.useCase.SolicitanteService;
 
@@ -40,15 +41,18 @@ public class SolicitanteAdapter implements SolicitanteService {
     private SolicitudAbstract solicitudAbstract;
     private MapperApplicationAbstract mapperApplicationAbstract;
     private FotocopiaAbstract fotocopiaAbstract;
+    private ServicioFotocopiaAbstract findServicioFotocopia;
 
     public SolicitanteAdapter(
             SolicitudAbstract solicitudAbstract,
             MapperApplicationAbstract mapperApplicationAbstract,
-            FotocopiaAbstract fotocopiaAbstract) {
+            FotocopiaAbstract fotocopiaAbstract,
+            ServicioFotocopiaAbstract findServicioFotocopia) {
 
         this.solicitudAbstract = solicitudAbstract;
         this.mapperApplicationAbstract = mapperApplicationAbstract;
         this.fotocopiaAbstract = fotocopiaAbstract;
+        this.findServicioFotocopia = findServicioFotocopia;
     }
 
     @Override
@@ -94,7 +98,7 @@ public class SolicitanteAdapter implements SolicitanteService {
         FotocopiaDto fotocopiaDto = mapperApplicationAbstract
                 .mapearAbstract(fotocopia, FotocopiaDto.class);
 
-        ServicioFotocopiaDto solicitudFotocopiaDto = solicitudAbstract
+        ServicioFotocopiaDto solicitudFotocopiaDto = findServicioFotocopia
                 .findServicioFotocopia(fotocopiaDto.getFkServicioFotocopia());
 
         double precioDocu = fotocopia.getNroCopias() *
