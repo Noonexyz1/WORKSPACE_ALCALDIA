@@ -41,7 +41,7 @@ public class AdministradorAdapter implements AdministradorService {
 
     @Override
     public PaginableOut<UsuarioUnidad> listaDeUsuarios(PaginableIn paginableIn) {
-        PaginableOut<UsuarioUnidadDto> paginableOut = usuarioAbastract
+        PaginableOut<UsuarioUnidadDto> paginableOut = usuarioUnidadAbstract
                 .listaDeUsuariosAbsDef(paginableIn);
 
         PaginableOut<UsuarioUnidad> paginableResponse = PaginableOut

@@ -15,15 +15,15 @@ public class AutenticacionConfig {
     public AutenticacionService autenticacionServiceBean(
             @Qualifier("credencialImpl")
             CredencialAbstract credencialAbstract,
-            @Qualifier("inicioSesionImpl")
-            InicioSesionAbstract inicioSesionAbstract,
             @Qualifier("mapperApplicationImpl")
-            MapperApplicationAbstract mapperApplicationAbstract){
+            MapperApplicationAbstract mapperApplicationAbstract,
+            @Qualifier("usuarioImpl")
+            UsuarioAbastract usuarioAbastract){
 
         //En los constructores, EL ORDEN IMPORTA
         return new AutenticacionAdapter(
                 credencialAbstract,
-                inicioSesionAbstract,
-                mapperApplicationAbstract);
+                mapperApplicationAbstract,
+                usuarioAbastract);
     }
 }
