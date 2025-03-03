@@ -88,7 +88,7 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public PaginableOut<Solicitud> listaDeSolicitudesPendientesByIdResponsable(PaginableIn paginableIn) {
-        PaginableOut<SolicitudDto> solicitudDtos = aprobacionAbstract
+        PaginableOut<SolicitudDto> solicitudDtos = solicitudAbstract
                 .listaDeSolicitudesPendientesByIdResponsable(paginableIn);
 
         PaginableOut<Solicitud> paginableResponse = PaginableOut
@@ -107,7 +107,7 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public PaginableOut<Solicitud> listaDeSolicitudesPendientesByIdSolicitud(PaginableIn paginableIn) {
-        PaginableOut<SolicitudDto> solicitudDtos = aprobacionAbstract
+        PaginableOut<SolicitudDto> solicitudDtos = solicitudAbstract
                 .listaDeSolicitudesPendientesAbstractPageByIdSoli(paginableIn);
 
         PaginableOut<Solicitud> paginableResponse = PaginableOut

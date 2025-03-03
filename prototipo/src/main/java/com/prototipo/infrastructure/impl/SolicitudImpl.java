@@ -34,6 +34,69 @@ public class SolicitudImpl implements SolicitudAbstract {
     @Autowired
     private ServicioFotocopiaRepository servicioFotocopiaRepository;
 
+
+    @Override
+    public PaginableOut<SolicitudDto> listaDeSolicitudesPendientesAbstractPageByIdSoli(PaginableIn paginableIn) {
+        Sort sort = Sort.by(
+                Sort.Direction.fromString(paginableIn.getDirection()),
+                paginableIn.getSortBy()
+        );
+
+        Pageable pageable = PageRequest.of(
+                paginableIn.getPage().intValue(),
+                paginableIn.getSize().intValue(),
+                sort
+        );
+
+        Page<SolicitudEntity> pageResponse = solicitudRepository
+                .findAllSoliByIdResponsableByIdSoli(paginableIn.getId(), pageable);
+
+        List<SolicitudDto> listResponse = pageResponse.getContent().stream()
+                .map(x -> modelMapper.map(x, SolicitudDto.class))
+                .toList();
+
+        PaginableOut<SolicitudDto> paginableOut = PaginableOut
+                .<SolicitudDto>builder()
+                .content(listResponse)
+                .totalPages(pageResponse.getTotalPages())
+                .totalElements(pageResponse.getTotalElements())
+                .build();
+
+        return paginableOut;
+    }
+
+    @Override
+    public PaginableOut<SolicitudDto> listaDeSolicitudesPendientesByIdResponsable(PaginableIn paginableIn) {
+        Sort sort = Sort.by(
+                Sort.Direction.fromString(paginableIn.getDirection()),
+                paginableIn.getSortBy()
+        );
+
+        Pageable pageable = PageRequest.of(
+                paginableIn.getPage().intValue(),
+                paginableIn.getSize().intValue(),
+                sort
+        );
+
+        Page<SolicitudEntity> pageResponse = solicitudRepository
+                .findAllSoliByIdResponsable(paginableIn.getId(), pageable);
+
+        List<SolicitudDto> listResponse = pageResponse.getContent().stream()
+                .map(x -> modelMapper.map(x, SolicitudDto.class))
+                .toList();
+
+        PaginableOut<SolicitudDto> paginableOut = PaginableOut
+                .<SolicitudDto>builder()
+                .content(listResponse)
+                .totalPages(pageResponse.getTotalPages())
+                .totalElements(pageResponse.getTotalElements())
+                .build();
+
+        return paginableOut;
+    }
+
+
+
     //Tu unicamente deberias traerla Solicitud
     @Override
     public SolicitudDto solicitarFotocopiarAbstract(SolicitudDto solicitudDto) {

@@ -13,8 +13,8 @@ public interface SolicitudAbstract {
     PaginableOut<SolicitudDto> getListaSolicitudesAbstract(PaginableIn paginableIn);
     PaginableOut<SolicitudDto> getListaSolicitudesAutoriAbstract(PaginableIn paginableIn);
     PaginableOut<SolicitudDto> getListaSolicitudesFinaliAbstract(PaginableIn paginableIn);
-
-
+    PaginableOut<SolicitudDto> listaDeSolicitudesPendientesAbstractPageByIdSoli(PaginableIn paginableIn);
+    PaginableOut<SolicitudDto> listaDeSolicitudesPendientesByIdResponsable(PaginableIn paginableIn);
 
 
     //TODO, estos metodos no tienen relacion con esta interfaz
