@@ -17,8 +17,6 @@ public class ResponsableConfig {
             SolicitudAbstract solicitudAbstract,
             @Qualifier("reportesPDFImpl")
             ReportesPDFAbstract reportesPDFAbstract,
-            @Qualifier("aprobacionImpl")
-            AprobacionAbstract aprobacionAbstract,
             @Qualifier("mapperApplicationImpl")
             MapperApplicationAbstract mapperApplicationAbstract,
             @Qualifier("autorizacionImpl")
@@ -31,7 +29,6 @@ public class ResponsableConfig {
         return new ResponsableAdapter(
                 solicitudAbstract,
                 reportesPDFAbstract,
-                aprobacionAbstract,
                 mapperApplicationAbstract,
                 autorizacionAbstract,
                 fotocopiaAbstract,

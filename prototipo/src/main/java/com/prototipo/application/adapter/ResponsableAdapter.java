@@ -33,7 +33,6 @@ public class ResponsableAdapter implements ResponsableService {
     private SolicitudAbstract solicitudAbstract;
     private ReportesPDFAbstract reportesPDFAbstract;
 
-    private AprobacionAbstract aprobacionAbstract;
     private MapperApplicationAbstract mapperApplicationAbstract;
     private AutorizacionAbstract autorizacionAbstract;
     private FotocopiaAbstract fotocopiaAbstract;
@@ -42,7 +41,6 @@ public class ResponsableAdapter implements ResponsableService {
     public ResponsableAdapter(
             SolicitudAbstract solicitudAbstract,
             ReportesPDFAbstract reportesPDFAbstract,
-            AprobacionAbstract aprobacionAbstract,
             MapperApplicationAbstract mapperApplicationAbstract,
             AutorizacionAbstract autorizacionAbstract,
             FotocopiaAbstract fotocopiaAbstract,
@@ -50,7 +48,6 @@ public class ResponsableAdapter implements ResponsableService {
 
         this.solicitudAbstract = solicitudAbstract;
         this.reportesPDFAbstract = reportesPDFAbstract;
-        this.aprobacionAbstract = aprobacionAbstract;
         this.mapperApplicationAbstract = mapperApplicationAbstract;
         this.autorizacionAbstract = autorizacionAbstract;
         this.fotocopiaAbstract = fotocopiaAbstract;
@@ -132,7 +129,7 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public PaginableOut<Autorizacion> listaDeSolicitudesAutorizadasByIdResponsable(PaginableIn paginableIn) {
-        PaginableOut<AutorizacionDto> soliAutorizadas = aprobacionAbstract
+        PaginableOut<AutorizacionDto> soliAutorizadas = autorizacionAbstract
                 .listaDeSoliAutorizadasAbstractPageByIdResponsable(paginableIn);
 
         PaginableOut<Autorizacion> paginableResponse = PaginableOut
@@ -152,7 +149,7 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public PaginableOut<Finalizacion> listaDeSolicitudesFinalizadasByIdResponsable(PaginableIn paginableIn) {
-        PaginableOut<FinalizacionDto> finalizacionDtoList = aprobacionAbstract
+        PaginableOut<FinalizacionDto> finalizacionDtoList = finalizacionAbstract
                 .listaDeFinalizacionesAbstractPageByIdResponsable(paginableIn);
 
         PaginableOut<Finalizacion> paginableResponse = PaginableOut
@@ -172,7 +169,7 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public PaginableOut<Autorizacion> listaDeSolicitudesAutorizadasByIdSolicitud(PaginableIn paginableIn) {
-        PaginableOut<AutorizacionDto> soliAutorizadas = aprobacionAbstract
+        PaginableOut<AutorizacionDto> soliAutorizadas = autorizacionAbstract
                 .listaDeSoliAutorizadasAbstractPageByIdSoli(paginableIn);
 
         PaginableOut<Autorizacion> paginableResponse = PaginableOut
@@ -192,7 +189,7 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public PaginableOut<Finalizacion> listaDeSolicitudesFinalizadasByIdSolicitud(PaginableIn paginableIn) {
-        PaginableOut<FinalizacionDto> finalizacionDtoList = aprobacionAbstract
+        PaginableOut<FinalizacionDto> finalizacionDtoList = finalizacionAbstract
                 .listaDeFinalizacionesAbstractPageByIdSoli(paginableIn);
 
         PaginableOut<Finalizacion> paginableResponse = PaginableOut
