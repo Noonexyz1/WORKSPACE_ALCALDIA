@@ -124,6 +124,13 @@ public class ResponsableAdapter implements ResponsableService {
         return paginableResponse;
     }
 
+
+
+
+
+
+
+
     @Override
     public PaginableOut<Autorizacion> listaDeSolicitudesAutorizadasByIdResponsable(PaginableIn paginableIn) {
         PaginableOut<AutorizacionDto> soliAutorizadas = aprobacionAbstract
