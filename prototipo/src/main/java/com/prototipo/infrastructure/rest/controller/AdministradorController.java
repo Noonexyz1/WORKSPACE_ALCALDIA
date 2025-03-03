@@ -2,8 +2,7 @@ package com.prototipo.infrastructure.rest.controller;
 
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
-import com.prototipo.application.useCase.FotocopiaService;
-import com.prototipo.application.useCase.UsuarioService;
+import com.prototipo.application.useCase.AdministradorService;
 import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.rest.request.*;
 import com.prototipo.infrastructure.rest.response.*;
@@ -22,11 +21,10 @@ import java.util.List;
 public class AdministradorController {
 
     @Autowired
-    private UsuarioService usuarioService;
-    @Autowired
-    private FotocopiaService fotocopiaService;
+    private AdministradorService administradorService;
     @Autowired
     private ModelMapper modelMapper;
+
 
     @PostMapping(
             path = {"/listaDeUsuarios"},
@@ -34,8 +32,8 @@ public class AdministradorController {
     public ResponseEntity<PageResponse<UsuarioUnidadResponse>> listaDeUsuarios(
             @RequestBody PageRequest pageReq) {
 
-        PaginableOut<UsuarioUnidad> paginableOut = usuarioService
-                .listaDeUsuariosServiceDef(modelMapper.map(pageReq, PaginableIn.class));
+        PaginableOut<UsuarioUnidad> paginableOut = administradorService
+                .listaDeUsuarios(modelMapper.map(pageReq, PaginableIn.class));
 
         List<UsuarioUnidadResponse> listResponse = paginableOut.getContent()
                 .stream()
@@ -87,7 +85,7 @@ public class AdministradorController {
     public void crearUsuario(@RequestBody UsuarioUnidadEditRequest newUser){
         Usuario usuario = modelMapper.map(newUser, Usuario.class);
         UsuarioUnidad usuarioUnidad = usuarioUnidadBuilder(newUser);
-        fotocopiaService.creaUsuario(usuario, usuarioUnidad);
+        administradorService.crearUsuarioUnidad(usuario, usuarioUnidad);
     }
 
     @PostMapping(
@@ -96,7 +94,7 @@ public class AdministradorController {
     public void editarUsuario(@RequestBody UsuarioUnidadEditRequest editUser) {
         Usuario usuario = modelMapper.map(editUser, Usuario.class);
         UsuarioUnidad usuarioUnidad = usuarioUnidadBuilder(editUser);
-        fotocopiaService.creaUsuario(usuario, usuarioUnidad);
+        administradorService.crearUsuarioUnidad(usuario, usuarioUnidad);
     }
 
     private UsuarioUnidad usuarioUnidadBuilder(UsuarioUnidadEditRequest user){
@@ -113,45 +111,42 @@ public class AdministradorController {
             path = {"/eliminarFuncionario/{idUsuarioUnidad}"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public void eliminarUsuario(@PathVariable Long idUsuarioUnidad){
-        fotocopiaService.eliminarUsuario(idUsuarioUnidad);
+        administradorService.eliminarUsuarioUnidad(idUsuarioUnidad);
     }
 
-    @GetMapping(path = {"/listarRoles"})
+    @GetMapping(
+            path = {"/listarRoles"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<RolResponse>> listarRoles(){
-        List<RolResponse> listaRoles = fotocopiaService
-                .listarRolesService()
+        List<RolResponse> listaRoles = administradorService
+                .listaDeRoles()
                 .stream()
                 .map(x -> modelMapper.map(x, RolResponse.class))
                 .toList();
         return new ResponseEntity<>(listaRoles, HttpStatus.OK);
     }
 
-    @GetMapping(path = {"/listarUnidades"})
+    @GetMapping(
+            path = {"/listarUnidades"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<UnidadResponse>> listarUnidades(){
-        List<UnidadResponse> listaUnidades = fotocopiaService
-                .listarUnidadesService()
+        List<UnidadResponse> listaUnidades = administradorService
+                .listaDeUnidades()
                 .stream()
                 .map(x -> modelMapper.map(x, UnidadResponse.class))
                 .toList();
         return new ResponseEntity<>(listaUnidades, HttpStatus.OK);
     }
 
-    @GetMapping(path = {"/listarCargos"})
+    @GetMapping(
+            path = {"/listarCargos"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<CargoResponse>> listarCargos() {
-        List<Cargo> listaCargos = fotocopiaService
-                .listarCargosService();
+        List<Cargo> listaCargos = administradorService
+                .listaDeCargos();
         List<CargoResponse> listaCargosResp = listaCargos.stream()
                 .map(x -> modelMapper.map(x, CargoResponse.class))
                 .toList();
         return new ResponseEntity<>(listaCargosResp, HttpStatus.OK);
-    }
-
-    @PostMapping(path = {"/cambiarPass"})
-    public void cambiarPass(@RequestBody NuevoPassRequest request){
-        Credencial credencial = Credencial.builder()
-                .ci(request.getCi())
-                .pass(request.getPass())
-                .build();
-        fotocopiaService.cambiarPass(credencial, request.getNuevoPass());
     }
 }

@@ -30,8 +30,6 @@ public class SolicitudImpl implements SolicitudAbstract {
     @Autowired
     private AutorizacionRepository autorizacionRepository;
     @Autowired
-    private UsuarioUnidadRepository usuarioUnidadRepository;
-    @Autowired
     private FotocopiaRepository fotocopiaRepository;
     @Autowired
     private ServicioFotocopiaRepository servicioFotocopiaRepository;
@@ -172,15 +170,6 @@ public class SolicitudImpl implements SolicitudAbstract {
         List<FotocopiaEntity> list = detalleSolicitudRepository
                 .findAllFotocopiaByIdSoli(idSolicitud);
         return list.stream()
-                .map(x -> modelMapper.map(x, FotocopiaDto.class))
-                .toList();
-    }
-
-    @Override
-    public List<FotocopiaDto> findListDetalleSoliBySolicitudIdAbs(Long idSolicitud) {
-        List<FotocopiaEntity> allBySolicitudId = detalleSolicitudRepository
-                .findAllFotocopiaByIdSoli(idSolicitud);
-        return allBySolicitudId.stream()
                 .map(x -> modelMapper.map(x, FotocopiaDto.class))
                 .toList();
     }

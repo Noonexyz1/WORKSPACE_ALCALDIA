@@ -1,12 +1,9 @@
 package com.prototipo.infrastructure.config;
 
-import com.prototipo.application.adapter.SolicitudAdapter;
-import com.prototipo.application.adapter.UsuarioAdapter;
+import com.prototipo.application.adapter.SolicitanteAdapter;
 import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.port.SolicitudAbstract;
-import com.prototipo.application.port.UsuarioAbastract;
-import com.prototipo.application.useCase.SolicitudService;
-import com.prototipo.application.useCase.UsuarioService;
+import com.prototipo.application.useCase.SolicitanteService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,25 +12,15 @@ import org.springframework.context.annotation.Configuration;
 public class SolicitudConfig {
 
     @Bean
-    public SolicitudService solicitudServiceBean(
+    public SolicitanteService solicitudServiceBean(
             @Qualifier("solicitudImpl")
             SolicitudAbstract solicitudAbstract,
             @Qualifier("mapperApplicationAbstractBean")
             MapperApplicationAbstract mapperApplicationAbstract){
 
         //Se necesita una dependencia
-        return new SolicitudAdapter(
+        return new SolicitanteAdapter(
                 solicitudAbstract,
                 mapperApplicationAbstract);
-    }
-
-    @Bean
-    public UsuarioService usuarioServiceBean(
-            @Qualifier("usuarioImpl")
-            UsuarioAbastract usuarioAbastract,
-            @Qualifier("mapperApplicationAbstractBean")
-            MapperApplicationAbstract mapperApplicationAbstract) {
-
-        return new UsuarioAdapter(usuarioAbastract, mapperApplicationAbstract);
     }
 }

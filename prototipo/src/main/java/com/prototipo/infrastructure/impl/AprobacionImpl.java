@@ -36,36 +36,6 @@ public class AprobacionImpl implements AprobacionAbstract {
 
 
     @Override
-    public PaginableOut<AutorizacionDto> listaDeSoliAutorizadasAbstractPage(PaginableIn paginableIn) {
-        Sort sort = Sort.by(
-                Sort.Direction.fromString(paginableIn.getDirection()),
-                paginableIn.getSortBy()
-        );
-
-        Pageable pageable = PageRequest.of(
-                paginableIn.getPage().intValue(),
-                paginableIn.getSize().intValue(),
-                sort
-        );
-
-        Page<AutorizacionEntity> autorizacionList = autorizacionRepository
-                .buscarAutorizacionByIdResponsable(paginableIn.getId(), pageable);
-
-        List<AutorizacionDto> list = autorizacionList.getContent().stream()
-                .map(x -> modelMapper.map(x, AutorizacionDto.class))
-                .toList();
-
-        PaginableOut<AutorizacionDto> paginableOut = PaginableOut
-                .<AutorizacionDto>builder()
-                .content(list)
-                .totalPages(autorizacionList.getTotalPages())
-                .totalElements(autorizacionList.getTotalElements())
-                .build();
-
-        return paginableOut;
-    }
-
-    @Override
     public PaginableOut<SolicitudDto> listaDeSolicitudesPendientesAbstractPageByIdSoli(PaginableIn paginableIn) {
         Sort sort = Sort.by(
                 Sort.Direction.fromString(paginableIn.getDirection()),
@@ -126,7 +96,7 @@ public class AprobacionImpl implements AprobacionAbstract {
     }
 
     @Override
-    public PaginableOut<FinalizacionDto> listaDeAprobacionesFinalizadasAbstractPageByIdSoli(PaginableIn paginableIn) {
+    public PaginableOut<FinalizacionDto> listaDeFinalizacionesAbstractPageByIdSoli(PaginableIn paginableIn) {
         Sort sort = Sort.by(
                 Sort.Direction.fromString(paginableIn.getDirection()),
                 paginableIn.getSortBy()
@@ -139,7 +109,7 @@ public class AprobacionImpl implements AprobacionAbstract {
         );
 
         Page<FinalizacionEntity> finalizacionList = finalizacionRepository
-                .findFinalizacionSoliById(paginableIn.getId(), pageable);
+                .findFinalizacionSoliByIdSoli(paginableIn.getId(), pageable);
 
         List<FinalizacionDto> list = finalizacionList.getContent().stream()
                 .map(x -> modelMapper.map(x, FinalizacionDto.class))
@@ -156,7 +126,7 @@ public class AprobacionImpl implements AprobacionAbstract {
     }
 
     @Override
-    public PaginableOut<SolicitudDto> listaDeSolicitudesPendientesAbstractPage(PaginableIn paginableIn) {
+    public PaginableOut<SolicitudDto> listaDeSolicitudesPendientesByIdResponsable(PaginableIn paginableIn) {
         Sort sort = Sort.by(
                 Sort.Direction.fromString(paginableIn.getDirection()),
                 paginableIn.getSortBy()
@@ -186,7 +156,37 @@ public class AprobacionImpl implements AprobacionAbstract {
     }
 
     @Override
-    public PaginableOut<FinalizacionDto> listaDeAprobacionesFinalizadasAbstractPage(PaginableIn paginableIn) {
+    public PaginableOut<AutorizacionDto> listaDeSoliAutorizadasAbstractPageByIdResponsable(PaginableIn paginableIn) {
+        Sort sort = Sort.by(
+                Sort.Direction.fromString(paginableIn.getDirection()),
+                paginableIn.getSortBy()
+        );
+
+        Pageable pageable = PageRequest.of(
+                paginableIn.getPage().intValue(),
+                paginableIn.getSize().intValue(),
+                sort
+        );
+
+        Page<AutorizacionEntity> autorizacionList = autorizacionRepository
+                .buscarAutorizacionByIdResponsable(paginableIn.getId(), pageable);
+
+        List<AutorizacionDto> list = autorizacionList.getContent().stream()
+                .map(x -> modelMapper.map(x, AutorizacionDto.class))
+                .toList();
+
+        PaginableOut<AutorizacionDto> paginableOut = PaginableOut
+                .<AutorizacionDto>builder()
+                .content(list)
+                .totalPages(autorizacionList.getTotalPages())
+                .totalElements(autorizacionList.getTotalElements())
+                .build();
+
+        return paginableOut;
+    }
+
+    @Override
+    public PaginableOut<FinalizacionDto> listaDeFinalizacionesAbstractPageByIdResponsable(PaginableIn paginableIn) {
         Sort sort = Sort.by(
                 Sort.Direction.fromString(paginableIn.getDirection()),
                 paginableIn.getSortBy()

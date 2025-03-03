@@ -2,15 +2,11 @@ package com.prototipo.infrastructure.rest.controller;
 
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
-import com.prototipo.application.useCase.AprobacionService;
 import com.prototipo.application.useCase.ResponsableService;
-import com.prototipo.application.useCase.SolicitudService;
 import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.rest.request.*;
 import com.prototipo.infrastructure.rest.response.*;
-import com.prototipo.infrastructure.service.NotaPedidoServiceReport;
 import com.prototipo.infrastructure.service.Observable;
-import com.prototipo.infrastructure.service.ReporteServiceReport;
 import net.sf.jasperreports.engine.JRException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,23 +30,17 @@ import java.util.concurrent.CompletableFuture;
 public class ResponsableController {
 
     @Autowired
-    private AprobacionService aprobacionService;
-    @Autowired
     private ResponsableService responsableService;
     @Autowired
-    private NotaPedidoServiceReport notaPedidoServiceReport;
-    @Autowired
-    private ReporteServiceReport reporteServiceReport;
-    @Autowired
-    private SolicitudService solicitudService;
-    @Autowired
     private ModelMapper modelMapper;
-
     @Autowired
     private Observable observable;
 
 
-    @GetMapping(value = "/notificacion", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+
+    @GetMapping(
+            value = "/notificacion",
+            produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public Flux<Integer> obtenerActualizacion() {
         return observable.obtenerFlux();
     }
@@ -58,140 +48,42 @@ public class ResponsableController {
 
 
     @PostMapping(
+            path = {"/verSolicitudesPendientes"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PageResponse<SolicitudResponResponse>> verSolicitudesPendientes(
+            @RequestBody PageRequest pageReq) {
+
+        PaginableOut<Solicitud> paginableOut = responsableService
+                .listaDeSolicitudesPendientesByIdResponsable(modelMapper.map(pageReq, PaginableIn.class));
+
+        List<SolicitudResponResponse> listSolicitud = paginableOut.getContent()
+                .stream()
+                .map(this::funcion)
+                .toList();
+
+        PageResponse<SolicitudResponResponse> pageResponse = PageResponse
+                .<SolicitudResponResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(listSolicitud)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(
             path = {"/verSolicitudesPendientesByIdSolicitud"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PageResponse<SolicitudResponResponse>> verSolicitudesPendientesByIdSolicitud(
             @RequestBody PageRequest pageReq) {
 
-        PaginableOut<Solicitud> paginableOut = aprobacionService
-                .listaDeSolicitudesPendientesServiceByIdSoli(modelMapper.map(pageReq, PaginableIn.class));
-
-        List<SolicitudResponResponse> listSolicitud = paginableOut.getContent()
-                .stream()
-                .map(this::funcion)
-                .toList();
-
-        PageResponse<SolicitudResponResponse> pageResponse = PageResponse
-                .<SolicitudResponResponse>builder()
-                .page(pageReq.getPage().intValue())
-                .size(pageReq.getSize().intValue())
-                .sortBy(pageReq.getSortBy())
-                .direction(pageReq.getDirection())
-
-                .content(listSolicitud)
-                .totalPages(paginableOut.getTotalPages())
-                .totalElements(paginableOut.getTotalElements())
-                .build();
-
-        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
-    }
-
-    @PostMapping(
-            path = {"/verSolicitudesAutoriByIdSolicitud"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PageResponse<SolicitudResponResponse>> verSolicitudesAutoriByIdSolicitud(
-            @RequestBody PageRequest pageReq) {
-
-        PaginableOut<Autorizacion> paginableOut = aprobacionService
-                .listaDeSolicitudesAutoriServiceByIdSoli(modelMapper.map(pageReq, PaginableIn.class));
-
-        List<SolicitudResponResponse> listSolicitud = paginableOut.getContent()
-                .stream()
-                .map(this::funcion)
-                .toList();
-
-        PageResponse<SolicitudResponResponse> pageResponse = PageResponse
-                .<SolicitudResponResponse>builder()
-                .page(pageReq.getPage().intValue())
-                .size(pageReq.getSize().intValue())
-                .sortBy(pageReq.getSortBy())
-                .direction(pageReq.getDirection())
-
-                .content(listSolicitud)
-                .totalPages(paginableOut.getTotalPages())
-                .totalElements(paginableOut.getTotalElements())
-                .build();
-
-        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
-    }
-
-    @PostMapping(
-            path = {"/verSolicitudesFinaliByIdSolicitud"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PageResponse<SolicitudResponResponse>> verSolicitudesFinaliByIdSolicitud(
-            @RequestBody PageRequest pageReq) {
-
-        PaginableOut<Finalizacion> paginableOut = aprobacionService
-                .listaDeSolicitudesFinalizadasServiceByIdSoli(modelMapper.map(pageReq, PaginableIn.class));
-
-        List<SolicitudResponResponse> listSolicitud = paginableOut.getContent()
-                .stream()
-                .map(this::funcion)
-                .toList();
-
-        PageResponse<SolicitudResponResponse> pageResponse = PageResponse
-                .<SolicitudResponResponse>builder()
-                .page(pageReq.getPage().intValue())
-                .size(pageReq.getSize().intValue())
-                .sortBy(pageReq.getSortBy())
-                .direction(pageReq.getDirection())
-
-                .content(listSolicitud)
-                .totalPages(paginableOut.getTotalPages())
-                .totalElements(paginableOut.getTotalElements())
-                .build();
-
-        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
-    }
-
-
-
-    @PostMapping(
-            path = {"/autorizarSolicitud"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void autorizarSolicitud(@RequestBody AprobacionSoliRequest aprobacionSoliRequest) {
-        //Para persistir en la BD SECUENCIA BIEN HECHA
-        Long idSolicitud = aprobacionSoliRequest.getIdSolicitud();
-        Long idResponsable = aprobacionSoliRequest.getIdResponsable();
-
-        Autorizacion autorizacion = Autorizacion.builder()
-                .fkSolicitud(Solicitud.builder().id(idSolicitud).build())
-                .fkUsuarioResponsable(UsuarioUnidad.builder().id(idResponsable).build())
-                .build();
-        solicitudService.guardarAutorizacion(autorizacion);
-    }
-
-    @PostMapping(
-            path = {"/rechazarSolicitud"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void rechazarSolicitud(@RequestBody AprobacionSoliRequest aprobacionSoliRequest) {
-        Long idSolicitud = aprobacionSoliRequest.getIdSolicitud();
-        Long idResponsable = aprobacionSoliRequest.getIdResponsable();
-        responsableService.rechazarSolicitudService(idSolicitud, idResponsable);
-    }
-
-    @PostMapping(
-            path = {"/finalizarSolicitud"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void finalizarSolicitud(@RequestBody Long idAutorizacion) {
-        Finalizacion finalizacion = Finalizacion.builder()
-                .fkAutorizacion(
-                        Autorizacion.builder().id(idAutorizacion).build()
-                )
-                .build();
-        solicitudService.guardarFinalizacion(finalizacion);
-    }
-
-
-
-    @PostMapping(
-            path = {"/verSolicitudesPendientes"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PageResponse<SolicitudResponResponse>> verListaSolicitudesPendientes(
-            @RequestBody PageRequest pageReq) {
-
-        PaginableOut<Solicitud> paginableOut = aprobacionService
-                .listaDeSolicitudesPendientesService(modelMapper.map(pageReq, PaginableIn.class));
+        PaginableOut<Solicitud> paginableOut = responsableService
+                .listaDeSolicitudesPendientesByIdSolicitud(modelMapper.map(pageReq, PaginableIn.class));
 
         List<SolicitudResponResponse> listSolicitud = paginableOut.getContent()
                 .stream()
@@ -220,22 +112,53 @@ public class ResponsableController {
                 .fecha(x.getFecha())
                 .nomCompleto(
                         x.getFkUsuarioSolicitante().getFkUsuario().getNombres() + " " +
-                        x.getFkUsuarioSolicitante().getFkUsuario().getPaterno() + " " +
-                        x.getFkUsuarioSolicitante().getFkUsuario().getMaterno()
+                                x.getFkUsuarioSolicitante().getFkUsuario().getPaterno() + " " +
+                                x.getFkUsuarioSolicitante().getFkUsuario().getMaterno()
                 )
                 .nomCargo(x.getFkUsuarioSolicitante().getFkCargo().getNombreCargo())
                 .nombreUnidad(x.getFkUsuarioSolicitante().getFkUnidad().getNombre())
                 .build();
     }
 
+
+
     @PostMapping(
             path = {"/verSolicitudesAprobadas"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<PageResponse<SolicitudResponResponse>> verListaSolicitudesAprobadas(
+    public ResponseEntity<PageResponse<SolicitudResponResponse>> verSolicitudesAprobadas(
             @RequestBody PageRequest pageReq) {
 
-        PaginableOut<Autorizacion> paginableOut = aprobacionService
-                .listaDeSolicitudesAutorizadasService(modelMapper.map(pageReq, PaginableIn.class));
+        PaginableOut<Autorizacion> paginableOut = responsableService
+                .listaDeSolicitudesAutorizadasByIdResponsable(modelMapper.map(pageReq, PaginableIn.class));
+
+        List<SolicitudResponResponse> listSolicitud = paginableOut.getContent()
+                .stream()
+                .map(this::funcion)
+                .toList();
+
+        PageResponse<SolicitudResponResponse> pageResponse = PageResponse
+                .<SolicitudResponResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(listSolicitud)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(
+            path = {"/verSolicitudesAutoriByIdSolicitud"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PageResponse<SolicitudResponResponse>> verSolicitudesAutoriByIdSolicitud(
+            @RequestBody PageRequest pageReq) {
+
+        PaginableOut<Autorizacion> paginableOut = responsableService
+                .listaDeSolicitudesAutorizadasByIdSolicitud(modelMapper.map(pageReq, PaginableIn.class));
 
         List<SolicitudResponResponse> listSolicitud = paginableOut.getContent()
                 .stream()
@@ -265,13 +188,16 @@ public class ResponsableController {
                 .fecha(x.getFecha())
                 .nomCompleto(
                         x.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getNombres() + " " +
-                        x.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getPaterno() + " " +
-                        x.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getMaterno()
+                                x.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getPaterno() + " " +
+                                x.getFkSolicitud().getFkUsuarioSolicitante().getFkUsuario().getMaterno()
                 )
                 .nomCargo(x.getFkSolicitud().getFkUsuarioSolicitante().getFkCargo().getNombreCargo())
                 .nombreUnidad(x.getFkSolicitud().getFkUsuarioSolicitante().getFkUnidad().getNombre())
                 .build();
     }
+
+
+
 
     @PostMapping(
             path = {"/verSolicitudesFinalizadas"},
@@ -279,8 +205,37 @@ public class ResponsableController {
     public ResponseEntity<PageResponse<SolicitudResponResponse>> verSolicitudesFinalizadas(
             @RequestBody PageRequest pageReq) {
 
-        PaginableOut<Finalizacion> paginableOut = aprobacionService
-                .listaDeSolicitudesFinalizadasService(modelMapper.map(pageReq, PaginableIn.class));
+        PaginableOut<Finalizacion> paginableOut = responsableService
+                .listaDeSolicitudesFinalizadasByIdResponsable(modelMapper.map(pageReq, PaginableIn.class));
+
+        List<SolicitudResponResponse> listSolicitud = paginableOut.getContent()
+                .stream()
+                .map(this::funcion)
+                .toList();
+
+        PageResponse<SolicitudResponResponse> pageResponse = PageResponse
+                .<SolicitudResponResponse>builder()
+                .page(pageReq.getPage().intValue())
+                .size(pageReq.getSize().intValue())
+                .sortBy(pageReq.getSortBy())
+                .direction(pageReq.getDirection())
+
+                .content(listSolicitud)
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return new ResponseEntity<>(pageResponse, HttpStatus.OK);
+    }
+
+    @PostMapping(
+            path = {"/verSolicitudesFinaliByIdSolicitud"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<PageResponse<SolicitudResponResponse>> verSolicitudesFinaliByIdSolicitud(
+            @RequestBody PageRequest pageReq) {
+
+        PaginableOut<Finalizacion> paginableOut = responsableService
+                .listaDeSolicitudesFinalizadasByIdSolicitud(modelMapper.map(pageReq, PaginableIn.class));
 
         List<SolicitudResponResponse> listSolicitud = paginableOut.getContent()
                 .stream()
@@ -320,14 +275,54 @@ public class ResponsableController {
 
 
 
+    @PostMapping(
+            path = {"/autorizarSolicitud"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void autorizarSolicitud(@RequestBody AprobacionSoliRequest aprobacionSoliRequest) {
+        //Para persistir en la BD SECUENCIA BIEN HECHA
+        Long idSolicitud = aprobacionSoliRequest.getIdSolicitud();
+        Long idResponsable = aprobacionSoliRequest.getIdResponsable();
+
+        Autorizacion autorizacion = Autorizacion.builder()
+                .fkSolicitud(Solicitud.builder().id(idSolicitud).build())
+                .fkUsuarioResponsable(UsuarioUnidad.builder().id(idResponsable).build())
+                .build();
+        responsableService.guardarAutorizacion(autorizacion);
+    }
+
+    @PostMapping(
+            path = {"/rechazarSolicitud"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void rechazarSolicitud(@RequestBody AprobacionSoliRequest aprobacionSoliRequest) {
+        Long idSolicitud = aprobacionSoliRequest.getIdSolicitud();
+        Long idResponsable = aprobacionSoliRequest.getIdResponsable();
+        responsableService.rechazarSolicitud(idSolicitud, idResponsable);
+    }
+
+    @PostMapping(
+            path = {"/finalizarSolicitud"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void finalizarSolicitud(@RequestBody Long idAutorizacion) {
+        Finalizacion finalizacion = Finalizacion.builder()
+                .fkAutorizacion(
+                        Autorizacion.builder().id(idAutorizacion).build()
+                )
+                .build();
+        responsableService.guardarFinalizacion(finalizacion);
+    }
+
+
+
+
+
     @GetMapping(
             path = {"/verDetalleDeSolicitud/{idSolicitud}"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<DetalleSolicitudExtendidoResponse> verDetalleDeSolicitud(
             @PathVariable Long idSolicitud) {
 
-        List<Fotocopia> listDetSoli = solicitudService
-                .findListDetalleSoliBySolicitudId(idSolicitud);
+        List<Fotocopia> listDetSoli = responsableService
+                .listaDeFotocopias(idSolicitud);
 
         List<DetalleSolicitudResponse> listDetSoliRespone = listDetSoli.stream()
                 .map(this::funcion)
@@ -367,7 +362,7 @@ public class ResponsableController {
     public ResponseEntity<AutorizacionResponse> verAutorizacionSolicitud(
             @PathVariable Long idSolicitud) {
 
-        Autorizacion autorizacion = aprobacionService.findAutorizacionByIdSoliService(idSolicitud);
+        Autorizacion autorizacion = responsableService.obtenerAutorizacion(idSolicitud);
         AutorizacionResponse autorizacionResponse = null;
 
         if (autorizacion != null) {
@@ -400,16 +395,14 @@ public class ResponsableController {
     public CompletableFuture<ResponseEntity<byte[]>> exportNotaPedidoDPF(
             @PathVariable Long idSolicitud) throws JRException, IOException {
 
-        // Llamar al servicio de manera sincrónica en este caso
-        List<NotaDePedido> notaDePedidoList = responsableService.generarNotaDePedidoPDF(idSolicitud);
-        byte[] exportToPdf = notaPedidoServiceReport.exportToPdf(idSolicitud, notaDePedidoList);
+        responsableService.generarNotaPedidoPDF(idSolicitud);
 
         // Procesar el archivo PDF y devolver el resultado asincrónicamente
         return CompletableFuture.supplyAsync(() -> {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_PDF);
                 headers.setContentDispositionFormData("notaPedidoPDF", "notaPedidoPDF.pdf");
-                return ResponseEntity.ok().headers(headers).body(exportToPdf);
+                return ResponseEntity.ok().headers(headers).body(null);
         });
     }
 
@@ -420,14 +413,12 @@ public class ResponsableController {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
+                responsableService.generarReportePDF(idSolicitud);
+
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_PDF);
                 headers.setContentDispositionFormData("reportePDF", "reportePDF.pdf");
-
-                List<Reporte> listReport = responsableService.generarReportePDF(idSolicitud);
-                byte[] bytes = reporteServiceReport.exportToPdf(idSolicitud, listReport);
-
-                return ResponseEntity.ok().headers(headers).body(bytes);
+                return ResponseEntity.ok().headers(headers).body(null);
             } catch (IOException | JRException e) {
                 throw new RuntimeException("Error al generar el PDF", e);
             }

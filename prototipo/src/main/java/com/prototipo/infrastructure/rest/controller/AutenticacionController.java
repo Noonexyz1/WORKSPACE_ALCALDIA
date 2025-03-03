@@ -1,8 +1,10 @@
 package com.prototipo.infrastructure.rest.controller;
 
-import com.prototipo.application.useCase.InicioSesionService;
+import com.prototipo.application.useCase.AutenticacionService;
+import com.prototipo.domain.model.Credencial;
 import com.prototipo.domain.model.Usuario;
 import com.prototipo.infrastructure.rest.request.CredencialRequest;
+import com.prototipo.infrastructure.rest.request.NuevoPassRequest;
 import com.prototipo.infrastructure.rest.response.UsuarioResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -12,18 +14,21 @@ import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin(origins = "*", maxAge = 86400)
 @RestController
-@RequestMapping(path = "/login")
-public class LoginController {
+@RequestMapping(path = "/autenticacion")
+public class AutenticacionController {
 
     @Autowired
-    private InicioSesionService inicioSesionService;
+    private AutenticacionService autenticacionService;
 
-    @PostMapping(produces = {MediaType.APPLICATION_JSON_VALUE})
+
+    @PostMapping(
+            path = {"/iniciarSesion"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<UsuarioResponse> iniciarSesion(
             @RequestBody CredencialRequest request){
 
-        Usuario usuario = inicioSesionService
-                .iniciarSesionService(
+        Usuario usuario = autenticacionService
+                .iniciarSesion(
                         request.getCi(),
                         request.getPass()
                 );
@@ -42,5 +47,27 @@ public class LoginController {
                 .build();
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping(
+            path = {"/cambiarPass"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void cambiarPass(@RequestBody NuevoPassRequest request){
+        Credencial credencial = Credencial.builder()
+                .ci(request.getCi())
+                .pass(request.getPass())
+                .build();
+
+        autenticacionService.cambiarPass(
+                credencial,
+                request.getNuevoPass()
+        );
+    }
+
+    @PostMapping(
+            path = {"/cerrarSesion"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void cerrarSesion(@RequestBody NuevoPassRequest request){
+        autenticacionService.cerrarSesion();
     }
 }

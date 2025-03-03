@@ -15,14 +15,20 @@ public class ResponsableConfig {
     public ResponsableService responsableServiceBean(
             @Qualifier("solicitudImpl")
             SolicitudAbstract solicitudAbstract,
+            @Qualifier("reportesPDFImpl")
+            ReportesPDFAbstract reportesPDFAbstract,
+            @Qualifier("aprobacionImpl")
+            AprobacionAbstract aprobacionAbstract,
             @Qualifier("mapperApplicationImpl")
             MapperApplicationAbstract mapperApplicationAbstract,
-            @Qualifier("reportesPDFImpl")
-            ReportesPDFAbstract reportesPDFAbstract) {
+            @Qualifier("autorizacionImpl")
+            AutorizacionAbstract autorizacionAbstract) {
 
         return new ResponsableAdapter(
                 solicitudAbstract,
+                reportesPDFAbstract,
+                aprobacionAbstract,
                 mapperApplicationAbstract,
-                reportesPDFAbstract);
+                autorizacionAbstract);
     }
 }

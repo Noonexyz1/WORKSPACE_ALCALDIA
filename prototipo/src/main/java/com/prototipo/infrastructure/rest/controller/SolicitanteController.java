@@ -4,16 +4,11 @@ import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.useCase.*;
 import com.prototipo.domain.model.*;
-import com.prototipo.infrastructure.rest.report.ComunicacionReport;
-import com.prototipo.infrastructure.rest.report.SolicitudReport;
 import com.prototipo.infrastructure.rest.request.PageRequest;
 import com.prototipo.infrastructure.rest.request.SolicitudRequest;
 import com.prototipo.infrastructure.rest.response.PageResponse;
 import com.prototipo.infrastructure.rest.response.SolicitudSoliciResponse;
-import com.prototipo.infrastructure.service.ComunicacionInternaServiceReport;
 import com.prototipo.infrastructure.service.Observable;
-import com.prototipo.infrastructure.service.OrdenFotoServiceReport;
-import com.prototipo.infrastructure.service.SolicitudServiceReport;
 import net.sf.jasperreports.engine.JRException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +16,6 @@ import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -33,21 +27,15 @@ import java.util.concurrent.CompletableFuture;
 public class SolicitanteController {
 
     @Autowired
-    private SolicitudService solicitudService;
+    private SolicitanteService solicitanteService;
     @Autowired
     private ModelMapper modelMapper;
-    @Autowired
-    private SolicitudServiceReport solicitudServiceReport;
-    @Autowired
-    private ComunicacionInternaServiceReport comunicacionInternaServiceReport;
-    @Autowired
-    private OrdenFotoServiceReport ordenFotoServiceReport;
-
     @Autowired
     private Observable observable;
 
 
-    @PostMapping(path = {"/solicitarFotocopiar"},
+    @PostMapping(
+            path = {"/solicitarFotocopiar"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public void solicitarFotocopiarV2(@RequestBody SolicitudRequest solicitudRequest) {
         List<Fotocopia> listFotocopias = solicitudRequest
@@ -84,24 +72,25 @@ public class SolicitanteController {
                 .isActive(true)
                 .build();
 
-        solicitudService.solicitarFotocopiarService(solicitud, listFotocopias);
+        solicitanteService.solicitarFotocopia(solicitud, listFotocopias);
         observable.publicarValor(1);
     }
 
     @GetMapping("/eliminarSolicitudById/{idSolicitud}")
     public void eliminarSolicitudById(@PathVariable Long idSolicitud){
-        solicitudService.eliminarSolicitudById(idSolicitud);
+        solicitanteService.eliminarSolicitud(idSolicitud);
     }
 
 
 
-    @PostMapping(path = {"/verSolicitudesPendientes"},
+    @PostMapping(
+            path = {"/verSolicitudesPendientes"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PageResponse<SolicitudSoliciResponse>> verSolicitudesPendientes(
             @RequestBody PageRequest pageReq) {
 
-        PaginableOut<Solicitud> paginableOut = solicitudService
-                .getListaSolicitudesService(modelMapper.map(pageReq, PaginableIn.class));
+        PaginableOut<Solicitud> paginableOut = solicitanteService
+                .listaDeSolicitudes(modelMapper.map(pageReq, PaginableIn.class));
 
         List<SolicitudSoliciResponse> list = paginableOut.getContent()
                 .stream()
@@ -123,13 +112,14 @@ public class SolicitanteController {
         return new ResponseEntity<>(pageResponse, HttpStatus.OK);
     }
 
-    @PostMapping(path = {"/verSolicitudesAutorizadas"},
+    @PostMapping(
+            path = {"/verSolicitudesAutorizadas"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PageResponse<SolicitudSoliciResponse>> verSolicitudesAutorizadas(
             @RequestBody PageRequest pageReq) {
 
-        PaginableOut<Solicitud> paginableOut = solicitudService
-                .getListaSolicitudesAutoriService(modelMapper.map(pageReq, PaginableIn.class));
+        PaginableOut<Solicitud> paginableOut = solicitanteService
+                .listaDeAutorizaciones(modelMapper.map(pageReq, PaginableIn.class));
 
         List<SolicitudSoliciResponse> list = paginableOut.getContent()
                 .stream()
@@ -151,13 +141,14 @@ public class SolicitanteController {
         return new ResponseEntity<>(pageResponse, HttpStatus.OK);
     }
 
-    @PostMapping(path = {"/verSolicitudesFinalizadas"},
+    @PostMapping(
+            path = {"/verSolicitudesFinalizadas"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<PageResponse<SolicitudSoliciResponse>> verSolicitudesFinalizadas(
             @RequestBody PageRequest pageReq) {
 
-        PaginableOut<Solicitud> paginableOut = solicitudService
-                .getListaSolicitudesFinaliService(modelMapper.map(pageReq, PaginableIn.class));
+        PaginableOut<Solicitud> paginableOut = solicitanteService
+                .listaDeFinalizaciones(modelMapper.map(pageReq, PaginableIn.class));
 
 
         List<SolicitudSoliciResponse> list = paginableOut.getContent().stream()
@@ -190,21 +181,27 @@ public class SolicitanteController {
 
 
 
-    @GetMapping("/listarTamano")
+    @GetMapping(
+            path = {"/listarTamano"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<String>> listarTamano(){
-        List<String> listTam = solicitudService.listarTamano();
+        List<String> listTam = solicitanteService.listaDeTamanoPagina();
         return new ResponseEntity<>(listTam, HttpStatus.OK);
     }
 
-    @GetMapping("/listarAnversoReverso")
+    @GetMapping(
+            path = {"/listarAnversoReverso"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<String>> listarAnversoReverso(){
-        List<String> listAnRev = solicitudService.listarAnversoReverso();
+        List<String> listAnRev = solicitanteService.listaDeAnverReverPagina();
         return new ResponseEntity<>(listAnRev, HttpStatus.OK);
     }
 
-    @GetMapping("/listarColor")
+    @GetMapping(
+            path = {"/listarColor"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<List<String>> listarColor(){
-        List<String> listColor = solicitudService.listarColor();
+        List<String> listColor = solicitanteService.listaDeColorPagina();
         return new ResponseEntity<>(listColor, HttpStatus.OK);
     }
 
@@ -218,17 +215,14 @@ public class SolicitanteController {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
-                SolicitudReport solicitudReport = solicitudServiceReport.getObtenerDatosForReport(idSolicitud);
-
-                // PDF generado
-                byte[] pdfData = solicitudServiceReport.exportToPdf(solicitudReport);
+                solicitanteService.generarSolicitudDeFotocopiaPDF(idSolicitud);
 
                 // Los heades para el reponse
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_PDF);
                 headers.setContentDispositionFormData("solicitudPDF", "solicitudPDF.pdf");
 
-                return ResponseEntity.ok().headers(headers).body(pdfData);
+                return ResponseEntity.ok().headers(headers).body(null);
 
             } catch (Exception e) {
                 throw new RuntimeException("Error al generar el PDF", e);
@@ -243,12 +237,7 @@ public class SolicitanteController {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
-                // Recuperar datos necesarios
-                List<Fotocopia> listFotocopia = solicitudService
-                        .listFotocopiaSolicitud(idSolicitud);
-
-                // Generar el PDF
-                byte[] pdfData = ordenFotoServiceReport.exportToPdf(listFotocopia);
+                solicitanteService.generarOrdenDeFotocopiaPDF(idSolicitud);
 
                 // Configurar encabezados de la respuesta
                 HttpHeaders headers = new HttpHeaders();
@@ -259,11 +248,9 @@ public class SolicitanteController {
                 );
 
                 // Crear y devolver la respuesta
-                return ResponseEntity.ok()
-                        .headers(headers)
-                        .body(pdfData);
+                return ResponseEntity.ok().headers(headers).body(null);
 
-            } catch (IOException | JRException e) {
+            } catch (JRException e) {
                 throw new RuntimeException("Error al generar el PDF", e);
             }
         });
@@ -276,42 +263,7 @@ public class SolicitanteController {
 
         return CompletableFuture.supplyAsync(() -> {
             try {
-                // Recuperar datos necesarios
-                Solicitud solicitudResp = solicitudService.buscarSolicitudService(idSolicitud);
-
-                List<Fotocopia> listFotocopiaSolicitudResp = solicitudService
-                        .listFotocopiaSolicitud(idSolicitud);
-
-                String documentos = formatListaDocumentos(listFotocopiaSolicitudResp);
-                long totalCopias = listFotocopiaSolicitudResp.stream()
-                        .mapToLong(Fotocopia::getNroCopias)
-                        .sum();
-
-                UsuarioUnidad usuarioSolicitante = solicitudResp.getFkUsuarioSolicitante();
-                UsuarioUnidad usuarioResponsable = solicitudResp.getFkUsuarioSolicitante().getFkResponsable();
-
-                // Crear objeto de reporte
-                ComunicacionReport comunicacionReport = ComunicacionReport.builder()
-                        .funcionarioTo(
-                                usuarioResponsable.getFkUsuario().getNombres() + " " +
-                                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
-                                        usuarioResponsable.getFkUsuario().getMaterno())
-                        .funcionarioToCargo(
-                                usuarioResponsable.getFkCargo().getNombreCargo())
-                        .funcionarioFrom(
-                                usuarioSolicitante.getFkUsuario().getNombres() + " " +
-                                        usuarioSolicitante.getFkUsuario().getPaterno() + " " +
-                                        usuarioSolicitante.getFkUsuario().getMaterno())
-                        .funcionarioFromCargo(
-                                usuarioSolicitante.getFkCargo().getNombreCargo())
-                        .cite(solicitudResp.getCite())
-                        .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
-                        .documentos(documentos)
-                        .totalCopias((int) totalCopias)
-                        .build();
-
-                // Generar el PDF
-                byte[] pdfBytes = comunicacionInternaServiceReport.exportToPdf(comunicacionReport);
+                solicitanteService.generarComunicacionInternaPDF(idSolicitud);
 
                 // Configurar encabezados de la respuesta
                 HttpHeaders headers = new HttpHeaders();
@@ -322,11 +274,9 @@ public class SolicitanteController {
                 );
 
                 // Crear y devolver la respuesta
-                return ResponseEntity.ok()
-                        .headers(headers)
-                        .body(pdfBytes);
+                return ResponseEntity.ok().headers(headers).body(null);
 
-            } catch (IOException | JRException e) {
+            } catch (JRException e) {
                 throw new RuntimeException("Error al generar el PDF", e);
             }
         });

@@ -1,0 +1,29 @@
+package com.prototipo.infrastructure.config;
+
+import com.prototipo.application.adapter.AutenticacionAdapter;
+import com.prototipo.application.mapper.MapperApplicationAbstract;
+import com.prototipo.application.port.*;
+import com.prototipo.application.useCase.AutenticacionService;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
+@Configuration
+public class AutenticacionConfig {
+
+    @Bean
+    public AutenticacionService autenticacionServiceBean(
+            @Qualifier("credencialImpl")
+            CredencialAbstract credencialAbstract,
+            @Qualifier("inicioSesionImpl")
+            InicioSesionAbstract inicioSesionAbstract,
+            @Qualifier("mapperApplicationImpl")
+            MapperApplicationAbstract mapperApplicationAbstract){
+
+        //En los constructores, EL ORDEN IMPORTA
+        return new AutenticacionAdapter(
+                credencialAbstract,
+                inicioSesionAbstract,
+                mapperApplicationAbstract);
+    }
+}

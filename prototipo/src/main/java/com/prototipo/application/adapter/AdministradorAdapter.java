@@ -2,13 +2,15 @@ package com.prototipo.application.adapter;
 
 import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.*;
+import com.prototipo.application.pager.PaginableIn;
+import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.port.*;
-import com.prototipo.application.useCase.FotocopiaService;
+import com.prototipo.application.useCase.AdministradorService;
 import com.prototipo.domain.model.*;
 
 import java.util.List;
 
-public class FotocopiaAdapter implements FotocopiaService {
+public class AdministradorAdapter implements AdministradorService {
 
     private UsuarioAbastract usuarioAbastract;
     private RolAbstract rolAbstract;
@@ -18,7 +20,7 @@ public class FotocopiaAdapter implements FotocopiaService {
     private UsuarioUnidadAbstract usuarioUnidadAbstract;
     private CargoAbstract cargoAbstract;
 
-    public FotocopiaAdapter(
+    public AdministradorAdapter(
             UsuarioAbastract usuarioAbastract,
             RolAbstract rolAbstract,
             MapperApplicationAbstract mapperApplicationAbstract,
@@ -36,8 +38,31 @@ public class FotocopiaAdapter implements FotocopiaService {
         this.cargoAbstract = cargoAbstract;
     }
 
+
     @Override
-    public void creaUsuario(Usuario user, UsuarioUnidad userUnidad){
+    public PaginableOut<UsuarioUnidad> listaDeUsuarios(PaginableIn paginableIn) {
+        PaginableOut<UsuarioUnidadDto> paginableOut = usuarioAbastract
+                .listaDeUsuariosAbsDef(paginableIn);
+
+        PaginableOut<UsuarioUnidad> paginableResponse = PaginableOut
+                .<UsuarioUnidad>builder()
+                .content(
+                        paginableOut.getContent()
+                                .stream()
+                                .map(x -> mapperApplicationAbstract
+                                        .mapearAbstract(x, UsuarioUnidad.class)
+                                )
+                                .toList()
+                )
+                .totalPages(paginableOut.getTotalPages())
+                .totalElements(paginableOut.getTotalElements())
+                .build();
+
+        return paginableResponse;
+    }
+
+    @Override
+    public void crearUsuarioUnidad(Usuario user, UsuarioUnidad userUnidad){
         //Verificar primero si ya existe el usuario registrado
         UsuarioDto usuarioDtoResp = crearUsuario(user);
 
@@ -132,7 +157,7 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     @Override
-    public void eliminarUsuario(Long idUsuarioUnidad) {
+    public void eliminarUsuarioUnidad(Long idUsuarioUnidad) {
         UsuarioUnidadDto usuarioUnidadDto = usuarioUnidadAbstract
                 .encontarUsuarioUnidadId(idUsuarioUnidad);
         usuarioUnidadDto.setIsActive(false);
@@ -140,7 +165,7 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     @Override
-    public List<Rol> listarRolesService() {
+    public List<Rol> listaDeRoles() {
         List<RolDto> listaRolesDto = rolAbstract.listarRoles();
         return listaRolesDto.stream()
                 .map(x -> mapperApplicationAbstract
@@ -149,7 +174,7 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     @Override
-    public List<Unidad> listarUnidadesService() {
+    public List<Unidad> listaDeUnidades() {
         List<UnidadDto> listaUnidades = unidadAbstract.listaDeUnidadesAbstract();
         return listaUnidades.stream()
                 .map(x -> mapperApplicationAbstract
@@ -158,19 +183,10 @@ public class FotocopiaAdapter implements FotocopiaService {
     }
 
     @Override
-    public List<Cargo> listarCargosService() {
+    public List<Cargo> listaDeCargos() {
         List<CargoDto> listCargos = cargoAbstract.findAllCargos();
         return listCargos.stream()
                 .map(x -> mapperApplicationAbstract.mapearAbstract(x, Cargo.class))
                 .toList();
-    }
-
-    @Override
-    public void cambiarPass(Credencial credencial, String newPass) {
-        String ci = credencial.getCi();
-        String pass = credencial.getPass();
-        CredencialDto credencialDto = credencialAbstract.encontrarCredencial(ci, pass);
-        credencialDto.setPass(newPass);
-        credencialAbstract.guardarCredencialAbstract(credencialDto);
     }
 }

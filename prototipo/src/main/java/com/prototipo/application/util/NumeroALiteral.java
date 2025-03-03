@@ -1,15 +1,13 @@
-package com.prototipo.infrastructure.service;
+package com.prototipo.application.util;
 
-import org.springframework.stereotype.Service;
-
-@Service
 public class NumeroALiteral {
-    private final String[] UNIDADES = {"", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"};
-    private final String[] DECENAS = {"", "diez", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa"};
-    private final String[] ESPECIALES = {"diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve"};
-    private final String[] CENTENAS = {"", "ciento", "doscientos", "trescientos", "cuatrocientos", "quinientos", "seiscientos", "setecientos", "ochocientos", "novecientos"};
 
-    public String convertirNumeroALiteral(int numero) {
+    private static final String[] UNIDADES = {"", "uno", "dos", "tres", "cuatro", "cinco", "seis", "siete", "ocho", "nueve"};
+    private static final String[] DECENAS = {"", "diez", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa"};
+    private static final String[] ESPECIALES = {"diez", "once", "doce", "trece", "catorce", "quince", "dieciséis", "diecisiete", "dieciocho", "diecinueve"};
+    private static final String[] CENTENAS = {"", "ciento", "doscientos", "trescientos", "cuatrocientos", "quinientos", "seiscientos", "setecientos", "ochocientos", "novecientos"};
+
+    public static String convertirNumeroALiteral(int numero) {
         if (numero == 0) {
             return "cero";
         }
@@ -37,7 +35,7 @@ public class NumeroALiteral {
         return literal.trim();
     }
 
-    private String convertirCentenas(int numero) {
+    private static String convertirCentenas(int numero) {
         String resultado = "";
 
         // Centenas
@@ -55,7 +53,7 @@ public class NumeroALiteral {
         return resultado.trim();
     }
 
-    private String convertirDecenas(int numero) {
+    private static String convertirDecenas(int numero) {
         String resultado = "";
 
         if (numero < 10) {

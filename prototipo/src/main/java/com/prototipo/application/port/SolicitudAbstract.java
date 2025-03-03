@@ -12,7 +12,6 @@ public interface SolicitudAbstract {
     void guardarSolicitudAbstract(SolicitudDto solicitudDto);
     SolicitudDto buscarSolicitudByIdAbstract(Long id);
     List<FotocopiaDto> getFotocopiasSolicitudAbstract(Long idSolicitud);
-    List<FotocopiaDto> findListDetalleSoliBySolicitudIdAbs(Long idSolicitud);
     void guardarAutorizacionAbs(AutorizacionDto autorizacionDto);
     AutorizacionDto buscarAutorizacionByIdAbs(Long idAutorizacion);
     void guardarFinalizacionAbs(FinalizacionDto finalizacionDto);

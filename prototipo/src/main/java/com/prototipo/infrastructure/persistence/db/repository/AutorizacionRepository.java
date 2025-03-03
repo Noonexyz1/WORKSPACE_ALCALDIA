@@ -23,7 +23,12 @@ public interface AutorizacionRepository extends JpaRepository<AutorizacionEntity
             """
             SELECT *
             FROM autorizacion a
-            WHERE fk_usuario_responsable_id = :idResponsable
+            WHERE fk_usuario_responsable_id IN (
+                SELECT id
+                FROM usuario_unidad uu
+                WHERE fk_usuario_id = :idResponsable
+                AND is_active = TRUE
+            )
             AND finali_flag = 0
             """, nativeQuery = true)
     Page<AutorizacionEntity> buscarAutorizacionByIdResponsable(@Param("idResponsable") Long idResponsable, Pageable pageable);
