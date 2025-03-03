@@ -16,12 +16,12 @@ public interface SolicitudAbstract {
     PaginableOut<SolicitudDto> listaDeSolicitudesPendientesAbstractPageByIdSoli(PaginableIn paginableIn);
     PaginableOut<SolicitudDto> listaDeSolicitudesPendientesByIdResponsable(PaginableIn paginableIn);
 
-
-    //TODO, estos metodos no tienen relacion con esta interfaz
+    //TODO, estos no tiene interfaz
     List<FotocopiaDto> getFotocopiasSolicitudAbstract(Long idSolicitud);
-    void guardarAutorizacionAbs(AutorizacionDto autorizacionDto);
-    AutorizacionDto buscarAutorizacionByIdAbs(Long idAutorizacion);
-    void guardarFinalizacionAbs(FinalizacionDto finalizacionDto);
     void guardarRegistroFotocopia(FotocopiaDto fotocopiaDto);
+
+
+    void guardarFinalizacionAbs(FinalizacionDto finalizacionDto);
+
     ServicioFotocopiaDto findServicioFotocopia(ServicioFotocopiaDto fkServicioFotocopia);
 }

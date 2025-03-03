@@ -124,13 +124,6 @@ public class ResponsableAdapter implements ResponsableService {
         return paginableResponse;
     }
 
-
-
-
-
-
-
-
     @Override
     public PaginableOut<Autorizacion> listaDeSolicitudesAutorizadasByIdResponsable(PaginableIn paginableIn) {
         PaginableOut<AutorizacionDto> soliAutorizadas = aprobacionAbstract
@@ -222,7 +215,7 @@ public class ResponsableAdapter implements ResponsableService {
 
         AutorizacionDto autorizacionDto = mapperApplicationAbstract
                 .mapearAbstract(autorizacion, AutorizacionDto.class);
-        solicitudAbstract.guardarAutorizacionAbs(autorizacionDto);
+        autorizacionAbstract.guardarAutorizacionAbs(autorizacionDto);
 
         SolicitudDto solicitudDto = solicitudAbstract
                 .buscarSolicitudByIdAbstract(autorizacion.getFkSolicitud().getId());
@@ -241,11 +234,11 @@ public class ResponsableAdapter implements ResponsableService {
         finalizacionDto.setFecha(fechaActual.format(formato));
         solicitudAbstract.guardarFinalizacionAbs(finalizacionDto);
 
-        AutorizacionDto autorizacionDto = solicitudAbstract
+        AutorizacionDto autorizacionDto = autorizacionAbstract
                 .buscarAutorizacionByIdAbs(finalizacion.getFkAutorizacion().getId());
 
         autorizacionDto.setFinaliFlag(1L);
-        solicitudAbstract.guardarAutorizacionAbs(autorizacionDto);
+        autorizacionAbstract.guardarAutorizacionAbs(autorizacionDto);
     }
 
     @Override

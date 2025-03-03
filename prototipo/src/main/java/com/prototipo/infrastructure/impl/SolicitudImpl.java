@@ -95,8 +95,6 @@ public class SolicitudImpl implements SolicitudAbstract {
         return paginableOut;
     }
 
-
-
     //Tu unicamente deberias traerla Solicitud
     @Override
     public SolicitudDto solicitarFotocopiarAbstract(SolicitudDto solicitudDto) {
@@ -235,34 +233,6 @@ public class SolicitudImpl implements SolicitudAbstract {
         return list.stream()
                 .map(x -> modelMapper.map(x, FotocopiaDto.class))
                 .toList();
-    }
-
-    @Override
-    public void guardarAutorizacionAbs(AutorizacionDto autorizacionDto) {
-        UsuarioUnidadEntity usuarioResponsable = UsuarioUnidadEntity.builder()
-                .id(autorizacionDto.getFkUsuarioResponsable().getId())
-                .build();
-
-        SolicitudEntity solicitudEntity = SolicitudEntity.builder()
-                .id(autorizacionDto.getFkSolicitud().getId())
-                .build();
-
-        AutorizacionEntity autorizacion = AutorizacionEntity.builder()
-                .id(autorizacionDto.getId())
-                .fecha(autorizacionDto.getFecha())
-                .finaliFlag(autorizacionDto.getFinaliFlag())
-                .fkUsuarioResponsable(usuarioResponsable)
-                .fkSolicitud(solicitudEntity)
-                .build();
-
-        autorizacionRepository.save(autorizacion);
-    }
-
-    @Override
-    public AutorizacionDto buscarAutorizacionByIdAbs(Long idAutorizacion) {
-        AutorizacionEntity autorizacion = autorizacionRepository
-                .findById(idAutorizacion).get();
-        return modelMapper.map(autorizacion, AutorizacionDto.class);
     }
 
     @Override
