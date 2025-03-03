@@ -22,13 +22,16 @@ public class ResponsableConfig {
             @Qualifier("mapperApplicationImpl")
             MapperApplicationAbstract mapperApplicationAbstract,
             @Qualifier("autorizacionImpl")
-            AutorizacionAbstract autorizacionAbstract) {
+            AutorizacionAbstract autorizacionAbstract,
+            @Qualifier("fotocopiaImpl")
+            FotocopiaAbstract fotocopiaAbstract) {
 
         return new ResponsableAdapter(
                 solicitudAbstract,
                 reportesPDFAbstract,
                 aprobacionAbstract,
                 mapperApplicationAbstract,
-                autorizacionAbstract);
+                autorizacionAbstract,
+                fotocopiaAbstract);
     }
 }

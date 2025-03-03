@@ -36,19 +36,22 @@ public class ResponsableAdapter implements ResponsableService {
     private AprobacionAbstract aprobacionAbstract;
     private MapperApplicationAbstract mapperApplicationAbstract;
     private AutorizacionAbstract autorizacionAbstract;
+    private FotocopiaAbstract fotocopiaAbstract;
 
     public ResponsableAdapter(
             SolicitudAbstract solicitudAbstract,
             ReportesPDFAbstract reportesPDFAbstract,
             AprobacionAbstract aprobacionAbstract,
             MapperApplicationAbstract mapperApplicationAbstract,
-            AutorizacionAbstract autorizacionAbstract) {
+            AutorizacionAbstract autorizacionAbstract,
+            FotocopiaAbstract fotocopiaAbstract) {
 
         this.solicitudAbstract = solicitudAbstract;
         this.reportesPDFAbstract = reportesPDFAbstract;
         this.aprobacionAbstract = aprobacionAbstract;
         this.mapperApplicationAbstract = mapperApplicationAbstract;
         this.autorizacionAbstract = autorizacionAbstract;
+        this.fotocopiaAbstract = fotocopiaAbstract;
     }
 
     @Override
@@ -243,14 +246,13 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public List<Fotocopia> listaDeFotocopias(Long idSolicitud) {
-        List<FotocopiaDto> list = solicitudAbstract.
+        List<FotocopiaDto> list = fotocopiaAbstract.
                 getFotocopiasSolicitudAbstract(idSolicitud);
         return list.stream()
                 .map(x ->
                         mapperApplicationAbstract.mapearAbstract(x, Fotocopia.class))
                 .toList();
     }
-
 
 
     @Override

@@ -4,6 +4,7 @@ import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.*;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
+import com.prototipo.application.port.FotocopiaAbstract;
 import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.application.useCase.SolicitanteService;
 
@@ -38,13 +39,16 @@ public class SolicitanteAdapter implements SolicitanteService {
 
     private SolicitudAbstract solicitudAbstract;
     private MapperApplicationAbstract mapperApplicationAbstract;
+    private FotocopiaAbstract fotocopiaAbstract;
 
     public SolicitanteAdapter(
             SolicitudAbstract solicitudAbstract,
-            MapperApplicationAbstract mapperApplicationAbstract) {
+            MapperApplicationAbstract mapperApplicationAbstract,
+            FotocopiaAbstract fotocopiaAbstract) {
 
         this.solicitudAbstract = solicitudAbstract;
         this.mapperApplicationAbstract = mapperApplicationAbstract;
+        this.fotocopiaAbstract = fotocopiaAbstract;
     }
 
     @Override
@@ -67,7 +71,7 @@ public class SolicitanteAdapter implements SolicitanteService {
                 })
                 .reduce(0.0, Double::sum);
 
-        List<FotocopiaDto> fotocopiaSoliReso = solicitudAbstract
+        List<FotocopiaDto> fotocopiaSoliReso = fotocopiaAbstract
                 .getFotocopiasSolicitudAbstract(solicitudDtoResp.getId());
 
         Long paginaTotal = fotocopiaSoliReso.stream()
@@ -100,7 +104,7 @@ public class SolicitanteAdapter implements SolicitanteService {
         fotocopiaDto.setFkServicioFotocopia(solicitudFotocopiaDto);
         fotocopiaDto.setPrecioDocu(precioDocu);
 
-        solicitudAbstract.guardarRegistroFotocopia(fotocopiaDto);
+        fotocopiaAbstract.guardarRegistroFotocopia(fotocopiaDto);
 
         return precioDocu;
     }
@@ -212,17 +216,13 @@ public class SolicitanteAdapter implements SolicitanteService {
 
     @Override
     public List<Fotocopia> listaDeFotocopias(Long idSolicitud) {
-        List<FotocopiaDto> list = solicitudAbstract.
+        List<FotocopiaDto> list = fotocopiaAbstract.
                 getFotocopiasSolicitudAbstract(idSolicitud);
         return list.stream()
                 .map(x ->
                         mapperApplicationAbstract.mapearAbstract(x, Fotocopia.class))
                 .toList();
     }
-
-
-
-
 
     @Override
     public void generarOrdenDeFotocopiaPDF(Long idSolicitud) throws JRException {
@@ -335,8 +335,6 @@ public class SolicitanteAdapter implements SolicitanteService {
         return baos.toByteArray();
     }
 
-
-
     @Override
     public void generarComunicacionInternaPDF(Long idSolicitud) throws JRException {
         // Recuperar datos necesarios
@@ -427,8 +425,6 @@ public class SolicitanteAdapter implements SolicitanteService {
         return report;
     }
 
-
-
     @Override
     public void generarSolicitudDeFotocopiaPDF(Long idSolicitud) throws JRException {
         // Traemos los datos necesarios para el reporte
@@ -495,5 +491,4 @@ public class SolicitanteAdapter implements SolicitanteService {
                 "report" + File.separator +
                 "solicitud.jrxml";
     }
-
 }

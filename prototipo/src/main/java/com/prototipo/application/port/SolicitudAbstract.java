@@ -4,8 +4,6 @@ import com.prototipo.application.modelDto.*;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
 
-import java.util.List;
-
 public interface SolicitudAbstract {
     SolicitudDto solicitarFotocopiarAbstract(SolicitudDto solicitudDto);
     SolicitudDto buscarSolicitudByIdAbstract(Long id);
@@ -15,10 +13,6 @@ public interface SolicitudAbstract {
     PaginableOut<SolicitudDto> getListaSolicitudesFinaliAbstract(PaginableIn paginableIn);
     PaginableOut<SolicitudDto> listaDeSolicitudesPendientesAbstractPageByIdSoli(PaginableIn paginableIn);
     PaginableOut<SolicitudDto> listaDeSolicitudesPendientesByIdResponsable(PaginableIn paginableIn);
-
-    //TODO, estos no tiene interfaz
-    List<FotocopiaDto> getFotocopiasSolicitudAbstract(Long idSolicitud);
-    void guardarRegistroFotocopia(FotocopiaDto fotocopiaDto);
 
 
     void guardarFinalizacionAbs(FinalizacionDto finalizacionDto);

@@ -104,13 +104,6 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
-    public void guardarRegistroFotocopia(FotocopiaDto fotocopiaDto) {
-        FotocopiaEntity fotocopiaEntity = modelMapper
-                .map(fotocopiaDto, FotocopiaEntity.class);
-        fotocopiaRepository.save(fotocopiaEntity);
-    }
-
-    @Override
     public ServicioFotocopiaDto findServicioFotocopia(ServicioFotocopiaDto fkServicioFotocopia) {
         ServicioFotocopiaEntity serFotoEntity = servicioFotocopiaRepository
                 .findByAnverColorTam(
@@ -224,15 +217,6 @@ public class SolicitudImpl implements SolicitudAbstract {
         SolicitudEntity solicitudEntity = solicitudRepository
                 .findById(id).orElseThrow();
         return modelMapper.map(solicitudEntity, SolicitudDto.class);
-    }
-
-    @Override
-    public List<FotocopiaDto> getFotocopiasSolicitudAbstract(Long idSolicitud) {
-        List<FotocopiaEntity> list = detalleSolicitudRepository
-                .findAllFotocopiaByIdSoli(idSolicitud);
-        return list.stream()
-                .map(x -> modelMapper.map(x, FotocopiaDto.class))
-                .toList();
     }
 
     @Override

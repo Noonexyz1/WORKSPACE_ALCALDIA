@@ -2,6 +2,7 @@ package com.prototipo.infrastructure.config;
 
 import com.prototipo.application.adapter.SolicitanteAdapter;
 import com.prototipo.application.mapper.MapperApplicationAbstract;
+import com.prototipo.application.port.FotocopiaAbstract;
 import com.prototipo.application.port.SolicitudAbstract;
 import com.prototipo.application.useCase.SolicitanteService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -16,11 +17,14 @@ public class SolicitudConfig {
             @Qualifier("solicitudImpl")
             SolicitudAbstract solicitudAbstract,
             @Qualifier("mapperApplicationAbstractBean")
-            MapperApplicationAbstract mapperApplicationAbstract){
+            MapperApplicationAbstract mapperApplicationAbstract,
+            @Qualifier("fotocopiaImpl")
+            FotocopiaAbstract fotocopiaAbstract){
 
         //Se necesita una dependencia
         return new SolicitanteAdapter(
                 solicitudAbstract,
-                mapperApplicationAbstract);
+                mapperApplicationAbstract,
+                fotocopiaAbstract);
     }
 }
