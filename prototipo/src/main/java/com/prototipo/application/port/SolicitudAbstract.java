@@ -14,8 +14,6 @@ public interface SolicitudAbstract {
     PaginableOut<SolicitudDto> listaDeSolicitudesPendientesAbstractPageByIdSoli(PaginableIn paginableIn);
     PaginableOut<SolicitudDto> listaDeSolicitudesPendientesByIdResponsable(PaginableIn paginableIn);
 
-
-    void guardarFinalizacionAbs(FinalizacionDto finalizacionDto);
-
+    //TODO, que es esto?
     ServicioFotocopiaDto findServicioFotocopia(ServicioFotocopiaDto fkServicioFotocopia);
 }

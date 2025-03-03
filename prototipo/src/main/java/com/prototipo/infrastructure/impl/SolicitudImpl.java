@@ -219,16 +219,5 @@ public class SolicitudImpl implements SolicitudAbstract {
         return modelMapper.map(solicitudEntity, SolicitudDto.class);
     }
 
-    @Override
-    public void guardarFinalizacionAbs(FinalizacionDto finalizacionDto) {
-        AutorizacionEntity autorizacion = AutorizacionEntity.builder()
-                .id(finalizacionDto.getFkAutorizacion().getId())
-                .build();
 
-        FinalizacionEntity finalizacionEntity = FinalizacionEntity.builder()
-                .fecha(finalizacionDto.getFecha())
-                .fkAutorizacion(autorizacion)
-                .build();
-        finalizacionRepository.save(finalizacionEntity);
-    }
 }

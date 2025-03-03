@@ -37,6 +37,7 @@ public class ResponsableAdapter implements ResponsableService {
     private MapperApplicationAbstract mapperApplicationAbstract;
     private AutorizacionAbstract autorizacionAbstract;
     private FotocopiaAbstract fotocopiaAbstract;
+    private FinalizacionAbstract finalizacionAbstract;
 
     public ResponsableAdapter(
             SolicitudAbstract solicitudAbstract,
@@ -44,7 +45,8 @@ public class ResponsableAdapter implements ResponsableService {
             AprobacionAbstract aprobacionAbstract,
             MapperApplicationAbstract mapperApplicationAbstract,
             AutorizacionAbstract autorizacionAbstract,
-            FotocopiaAbstract fotocopiaAbstract) {
+            FotocopiaAbstract fotocopiaAbstract,
+            FinalizacionAbstract finalizacionAbstract) {
 
         this.solicitudAbstract = solicitudAbstract;
         this.reportesPDFAbstract = reportesPDFAbstract;
@@ -52,6 +54,7 @@ public class ResponsableAdapter implements ResponsableService {
         this.mapperApplicationAbstract = mapperApplicationAbstract;
         this.autorizacionAbstract = autorizacionAbstract;
         this.fotocopiaAbstract = fotocopiaAbstract;
+        this.finalizacionAbstract = finalizacionAbstract;
     }
 
     @Override
@@ -235,7 +238,7 @@ public class ResponsableAdapter implements ResponsableService {
         LocalDate fechaActual = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
         finalizacionDto.setFecha(fechaActual.format(formato));
-        solicitudAbstract.guardarFinalizacionAbs(finalizacionDto);
+        finalizacionAbstract.guardarFinalizacionAbs(finalizacionDto);
 
         AutorizacionDto autorizacionDto = autorizacionAbstract
                 .buscarAutorizacionByIdAbs(finalizacion.getFkAutorizacion().getId());
