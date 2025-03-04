@@ -24,7 +24,9 @@ public class ResponsableConfig {
             @Qualifier("fotocopiaImpl")
             FotocopiaAbstract fotocopiaAbstract,
             @Qualifier("finalizacionImpl")
-            FinalizacionAbstract finalizacionAbstract) {
+            FinalizacionAbstract finalizacionAbstract,
+            @Qualifier("responsablePDFImpl")
+            ResponsablePDFAbstract responsablePDFAbstract) {
 
         return new ResponsableAdapter(
                 solicitudAbstract,
@@ -32,6 +34,7 @@ public class ResponsableConfig {
                 mapperApplicationAbstract,
                 autorizacionAbstract,
                 fotocopiaAbstract,
-                finalizacionAbstract);
+                finalizacionAbstract,
+                responsablePDFAbstract);
     }
 }

@@ -3,9 +3,7 @@ package com.prototipo.application.useCase;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.domain.model.*;
-import net.sf.jasperreports.engine.JRException;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface ResponsableService {
@@ -22,6 +20,8 @@ public interface ResponsableService {
     PaginableOut<Solicitud> listaDeSolicitudesPendientesByIdResponsable(PaginableIn paginableIn);
     PaginableOut<Autorizacion> listaDeSolicitudesAutorizadasByIdResponsable(PaginableIn paginableIn);
     PaginableOut<Finalizacion> listaDeSolicitudesFinalizadasByIdResponsable(PaginableIn paginableIn);
-    void generarNotaPedidoPDF(Long idSolicitud) throws JRException, IOException;
-    void generarReportePDF(Long idSolicitud) throws JRException, IOException;
+
+
+    void generarNotaPedidoPDF(Long idSolicitud);
+    void generarReportePDF(Long idSolicitud);
 }

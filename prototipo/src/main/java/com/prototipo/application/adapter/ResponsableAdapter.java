@@ -9,34 +9,32 @@ import com.prototipo.application.useCase.ResponsableService;
 import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.rest.report.NotaDePedidoReport;
 import com.prototipo.infrastructure.rest.report.ReporteReport;
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
+
+import lombok.SneakyThrows;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 
 public class ResponsableAdapter implements ResponsableService {
 
     //Para que haria otro ResponsableAbstract para esta clase???
     //Si unicamente puedo ADAPTAR una implementacion existente para esta!! ;D
     private SolicitudAbstract solicitudAbstract;
+
+    //Nose que hace esto
     private ReportesPDFAbstract reportesPDFAbstract;
 
     private MapperApplicationAbstract mapperApplicationAbstract;
     private AutorizacionAbstract autorizacionAbstract;
     private FotocopiaAbstract fotocopiaAbstract;
     private FinalizacionAbstract finalizacionAbstract;
+    private ResponsablePDFAbstract responsablePDFAbstract;
 
     public ResponsableAdapter(
             SolicitudAbstract solicitudAbstract,
@@ -44,7 +42,8 @@ public class ResponsableAdapter implements ResponsableService {
             MapperApplicationAbstract mapperApplicationAbstract,
             AutorizacionAbstract autorizacionAbstract,
             FotocopiaAbstract fotocopiaAbstract,
-            FinalizacionAbstract finalizacionAbstract) {
+            FinalizacionAbstract finalizacionAbstract,
+            ResponsablePDFAbstract responsablePDFAbstract) {
 
         this.solicitudAbstract = solicitudAbstract;
         this.reportesPDFAbstract = reportesPDFAbstract;
@@ -52,6 +51,7 @@ public class ResponsableAdapter implements ResponsableService {
         this.autorizacionAbstract = autorizacionAbstract;
         this.fotocopiaAbstract = fotocopiaAbstract;
         this.finalizacionAbstract = finalizacionAbstract;
+        this.responsablePDFAbstract = responsablePDFAbstract;
     }
 
     @Override
@@ -255,16 +255,13 @@ public class ResponsableAdapter implements ResponsableService {
     }
 
 
-    @Override
-    public void generarNotaPedidoPDF(Long idSolicitud) throws JRException, IOException {
-        // Llamar al servicio de manera sincrónica en este caso
-        List<NotaDePedido> notaDePedidoList = listaDeNotasDePedido(idSolicitud);
-        exportToPdf(idSolicitud, notaDePedidoList);
-    }
 
-    private byte[] exportToPdf(Long idSolicitud, List<NotaDePedido> notaDePedidoList) throws JRException, IOException {
-        String pdfOutputDirectory = "/home/kali/Downloads/pdfs";
-        JasperPrint jasperPrint = getReport(idSolicitud, notaDePedidoList);
+
+
+    @Override
+    public void generarNotaPedidoPDF(Long idSolicitud) {
+
+        String pdfOutputDirectory = "/home/kali/Downloads/notaPedidoPDF";
 
         // Crear el directorio si no existe
         File outputDir = new File(pdfOutputDirectory);
@@ -272,97 +269,105 @@ public class ResponsableAdapter implements ResponsableService {
             outputDir.mkdirs();
         }
 
-        // Ruta del archivo PDF
-        String outputFilePath = pdfOutputDirectory + "/notaPedido_" + idSolicitud + ".pdf";
-
-        // Exportar el PDF a un archivo
-        JasperExportManager.exportReportToPdfFile(jasperPrint, outputFilePath);
-
-        // Devolver el contenido del PDF como un arreglo de bytes
-        return Files.readAllBytes(Paths.get(outputFilePath));
-    }
-
-    private JasperPrint getReport(Long idSolicitud, List<NotaDePedido> notaDePedidoList) throws JRException {
         InputStream inputStream = getClass().getClassLoader().getResourceAsStream("templates/report/notaPedido.jrxml");
-
         if (inputStream == null) {
             throw new RuntimeException("No se pudo encontrar el archivo notaPedido.jrxml en el classpath.");
         }
 
+        String recursoImagen = "classpath:/static/images/";
+
+
+
+
         LocalDate fechaActual = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter
                 .ofPattern("dd 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
+        String fechaFormateada = fechaActual.format(formato);
+
 
 
         SolicitudDto solicitudDto = solicitudAbstract.buscarSolicitudByIdAbstract(idSolicitud);
         Solicitud solicitud = mapperApplicationAbstract.mapearAbstract(solicitudDto, Solicitud.class);
+        String nombreServicio = solicitud.getNombreServicio();
+        Double precioTotalRedondeado = BigDecimal.valueOf(solicitud.getPrecioTotal()).setScale(2, RoundingMode.HALF_UP).doubleValue();
 
-        List<NotaDePedidoReport> listNotaPedidoPDF = notaDePedidoList.stream()
+
+        List<NotaDePedidoReport> listNotaPedidoPDF = listaDeNotasDePedido(idSolicitud)
+                .stream()
                 .map(x -> mapperApplicationAbstract.mapearAbstract(x, NotaDePedidoReport.class))
                 .toList();
 
-        Map<String, Object> params = new HashMap<>();
-        params.put("fecha", fechaActual.format(formato));
-        params.put("imageDir", "classpath:/static/images/");
-        params.put("nombreServicio", solicitud.getNombreServicio());
-        params.put("precioTotal", BigDecimal.valueOf(solicitud.getPrecioTotal()).setScale(2, RoundingMode.HALF_UP).doubleValue());
-        params.put("ds", new JRBeanCollectionDataSource(listNotaPedidoPDF));
 
-        JasperReport jasperReport = JasperCompileManager.compileReport(inputStream);
+        responsablePDFAbstract.generarNotaPedidoPDFAbs(
+                idSolicitud,
+                fechaFormateada,
+                recursoImagen,
+                nombreServicio,
+                precioTotalRedondeado,
+                listNotaPedidoPDF,
+                inputStream,
+                pdfOutputDirectory
+        );
 
-        return JasperFillManager.fillReport(jasperReport, params, new JREmptyDataSource());
     }
-
 
     @Override
-    public void generarReportePDF(Long idSolicitud) throws JRException {
-        List<Reporte> listReport = listaDeReportes(idSolicitud);
-        exportToPdf2(idSolicitud, listReport);
-    }
+    public void generarReportePDF(Long idSolicitud) {
 
-    private byte[] exportToPdf2(Long idSolicitud, List<Reporte> listReport)
-            throws JRException {
+        String pdfOutputDirectory = "/home/kali/Downloads/reportePDF";
 
-        JasperPrint jasperPrint = getReport2(idSolicitud, listReport);
-        return JasperExportManager.exportReportToPdf(jasperPrint);
-    }
+        // Crear el directorio si no existe
+        File outputDir = new File(pdfOutputDirectory);
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        }
 
-    private JasperPrint getReport2(Long idSolicitud, List<Reporte> listReport)
-            throws JRException {
-        //Ruta total
-        String filePath = "src" + File.separator +
-                "main" + File.separator +
-                "resources" + File.separator +
-                "templates" + File.separator +
-                "report" + File.separator +
-                "reporte.jrxml";
+        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("templates/report/reporte.jrxml");
+        if (inputStream == null) {
+            throw new RuntimeException("No se pudo encontrar el archivo reporte.jrxml en el classpath.");
+        }
+
+        String recursoImagen = "classpath:/static/images/";
+
+
+
 
         // Formato con nombre del mes completo
         LocalDate fechaActual = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter
                 .ofPattern("dd 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
+        String fechaActualString = fechaActual.format(formato);
+
+
+
 
         SolicitudDto solicitudDto = solicitudAbstract.buscarSolicitudByIdAbstract(idSolicitud);
         Solicitud solicitud = mapperApplicationAbstract.mapearAbstract(solicitudDto, Solicitud.class);
 
-        List<ReporteReport> listReporte = listReport.stream()
+
+        String nombreServicio = solicitud.getNombreServicio();
+        Double precioTotal = BigDecimal.valueOf(solicitud.getPrecioTotal()).setScale(2, RoundingMode.HALF_UP).doubleValue();
+        Long paginaTotal = solicitud.getPaginaTotal();
+        Long copiaTotal = solicitud.getCopiaTotal();
+
+
+        List<ReporteReport> listReporte = listaDeReportes(idSolicitud)
+                .stream()
                 .map(x -> mapperApplicationAbstract.mapearAbstract(x, ReporteReport.class))
                 .toList();
 
-        Map<String, Object> params = new HashMap<>();
-        // Asigna los campos de SolicitudReport a los parámetros del reporte
-        params.put("fecha", fechaActual.format(formato));
-        params.put("imageDir", "classpath:/static/images/");
-        params.put("nombreServicio", solicitud.getNombreServicio());
-        params.put("precioTotal", BigDecimal.valueOf(solicitud.getPrecioTotal()).setScale(2, RoundingMode.HALF_UP).doubleValue());
-
-        params.put("paginaTotal", solicitud.getPaginaTotal());
-        params.put("copiaTotal", solicitud.getCopiaTotal());
-
-        params.put("ds", new JRBeanCollectionDataSource(listReporte));
-
-        JasperReport jasperReport = JasperCompileManager.compileReport(filePath);
-
-        return JasperFillManager.fillReport(jasperReport, params, new JREmptyDataSource());
+        responsablePDFAbstract.generarReportePDFAbs(
+                idSolicitud,
+                fechaActualString,
+                recursoImagen,
+                nombreServicio,
+                precioTotal,
+                paginaTotal,
+                copiaTotal,
+                listReporte,
+                inputStream,
+                pdfOutputDirectory
+        );
     }
+
 }
