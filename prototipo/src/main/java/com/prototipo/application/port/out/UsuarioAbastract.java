@@ -1,8 +1,8 @@
 package com.prototipo.application.port.out;
 
-import com.prototipo.application.modelDto.UsuarioDto;
+import com.prototipo.domain.model.Usuario;
 
 public interface UsuarioAbastract {
-    UsuarioDto guardarUsuarioAbastract(UsuarioDto usuarioDto);
-    UsuarioDto iniciarSesionAbstract(String correo, String pass);
+    Usuario guardarUsuarioAbastract(Usuario usuario);
+    Usuario iniciarSesionAbstract(String correo, String pass);
 }

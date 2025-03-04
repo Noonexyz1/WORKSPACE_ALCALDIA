@@ -1,9 +1,9 @@
 package com.prototipo.infrastructure.impl;
 
-import com.prototipo.application.modelDto.FinalizacionDto;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.port.out.FinalizacionAbstract;
+import com.prototipo.domain.model.Finalizacion;
 import com.prototipo.infrastructure.persistence.db.entity.AutorizacionEntity;
 import com.prototipo.infrastructure.persistence.db.entity.FinalizacionEntity;
 import com.prototipo.infrastructure.persistence.db.repository.FinalizacionRepository;
@@ -26,7 +26,7 @@ public class FinalizacionImpl implements FinalizacionAbstract {
     private ModelMapper modelMapper;
 
     @Override
-    public PaginableOut<FinalizacionDto> listaDeFinalizacionesAbstractPageByIdSoli(PaginableIn paginableIn) {
+    public PaginableOut<Finalizacion> listaDeFinalizacionesAbstractPageByIdSoli(PaginableIn paginableIn) {
         Sort sort = Sort.by(
                 Sort.Direction.fromString(paginableIn.getDirection()),
                 paginableIn.getSortBy()
@@ -41,12 +41,12 @@ public class FinalizacionImpl implements FinalizacionAbstract {
         Page<FinalizacionEntity> finalizacionList = finalizacionRepository
                 .findFinalizacionSoliByIdSoli(paginableIn.getId(), pageable);
 
-        List<FinalizacionDto> list = finalizacionList.getContent().stream()
-                .map(x -> modelMapper.map(x, FinalizacionDto.class))
+        List<Finalizacion> list = finalizacionList.getContent().stream()
+                .map(x -> modelMapper.map(x, Finalizacion.class))
                 .toList();
 
-        PaginableOut<FinalizacionDto> paginableOut = PaginableOut
-                .<FinalizacionDto>builder()
+        PaginableOut<Finalizacion> paginableOut = PaginableOut
+                .<Finalizacion>builder()
                 .content(list)
                 .totalPages(finalizacionList.getTotalPages())
                 .totalElements(finalizacionList.getTotalElements())
@@ -56,7 +56,7 @@ public class FinalizacionImpl implements FinalizacionAbstract {
     }
 
     @Override
-    public PaginableOut<FinalizacionDto> listaDeFinalizacionesAbstractPageByIdResponsable(PaginableIn paginableIn) {
+    public PaginableOut<Finalizacion> listaDeFinalizacionesAbstractPageByIdResponsable(PaginableIn paginableIn) {
         Sort sort = Sort.by(
                 Sort.Direction.fromString(paginableIn.getDirection()),
                 paginableIn.getSortBy()
@@ -70,12 +70,12 @@ public class FinalizacionImpl implements FinalizacionAbstract {
 
         Page<FinalizacionEntity> finalizacionList = finalizacionRepository.findAll(pageable);
 
-        List<FinalizacionDto> list = finalizacionList.getContent().stream()
-                .map(x -> modelMapper.map(x, FinalizacionDto.class))
+        List<Finalizacion> list = finalizacionList.getContent().stream()
+                .map(x -> modelMapper.map(x, Finalizacion.class))
                 .toList();
 
-        PaginableOut<FinalizacionDto> paginableOut = PaginableOut
-                .<FinalizacionDto>builder()
+        PaginableOut<Finalizacion> paginableOut = PaginableOut
+                .<Finalizacion>builder()
                 .content(list)
                 .totalPages(finalizacionList.getTotalPages())
                 .totalElements(finalizacionList.getTotalElements())
@@ -85,13 +85,13 @@ public class FinalizacionImpl implements FinalizacionAbstract {
     }
 
     @Override
-    public void guardarFinalizacionAbs(FinalizacionDto finalizacionDto) {
+    public void guardarFinalizacionAbs(Finalizacion finalizacion) {
         AutorizacionEntity autorizacion = AutorizacionEntity.builder()
-                .id(finalizacionDto.getFkAutorizacion().getId())
+                .id(finalizacion.getFkAutorizacion().getId())
                 .build();
 
         FinalizacionEntity finalizacionEntity = FinalizacionEntity.builder()
-                .fecha(finalizacionDto.getFecha())
+                .fecha(finalizacion.getFecha())
                 .fkAutorizacion(autorizacion)
                 .build();
         finalizacionRepository.save(finalizacionEntity);

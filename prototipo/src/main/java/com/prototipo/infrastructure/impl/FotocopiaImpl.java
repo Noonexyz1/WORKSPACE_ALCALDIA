@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.impl;
 
-import com.prototipo.application.modelDto.FotocopiaDto;
 import com.prototipo.application.port.out.FotocopiaAbstract;
+import com.prototipo.domain.model.Fotocopia;
 import com.prototipo.infrastructure.persistence.db.entity.FotocopiaEntity;
 import com.prototipo.infrastructure.persistence.db.repository.DetalleSolicitudRepository;
 import com.prototipo.infrastructure.persistence.db.repository.FotocopiaRepository;
@@ -22,17 +22,17 @@ public class FotocopiaImpl implements FotocopiaAbstract {
     private FotocopiaRepository fotocopiaRepository;
 
     @Override
-    public List<FotocopiaDto> getFotocopiasSolicitudAbstract(Long idSolicitud) {
+    public List<Fotocopia> getFotocopiasSolicitudAbstract(Long idSolicitud) {
         List<FotocopiaEntity> list = detalleSolicitudRepository
                 .findAllFotocopiaByIdSoli(idSolicitud);
         return list.stream()
-                .map(x -> modelMapper.map(x, FotocopiaDto.class))
+                .map(x -> modelMapper.map(x, Fotocopia.class))
                 .toList();
     }
     @Override
-    public void guardarRegistroFotocopia(FotocopiaDto fotocopiaDto) {
+    public void guardarRegistroFotocopia(Fotocopia fotocopia) {
         FotocopiaEntity fotocopiaEntity = modelMapper
-                .map(fotocopiaDto, FotocopiaEntity.class);
+                .map(fotocopia, FotocopiaEntity.class);
         fotocopiaRepository.save(fotocopiaEntity);
     }
 }

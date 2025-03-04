@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.impl;
 
-import com.prototipo.application.modelDto.UsuarioDto;
 import com.prototipo.application.port.out.UsuarioAbastract;
+import com.prototipo.domain.model.Usuario;
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioEntity;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioRepository;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioUnidadRepository;
@@ -21,11 +21,11 @@ public class UsuarioImpl implements UsuarioAbastract {
 
 
     @Override
-    public UsuarioDto iniciarSesionAbstract(String correo, String pass) {
+    public Usuario iniciarSesionAbstract(String correo, String pass) {
         Object[] usuarioDto = (Object[]) usuarioUnidadRepository
                 .findUsuarioByCredencial(correo, pass)[0];
 
-        UsuarioDto usuario = UsuarioDto.builder()
+        Usuario usuario = Usuario.builder()
                 .id((Long)usuarioDto[0])
                 .nombres((String)usuarioDto[1])
                 .paterno((String)usuarioDto[2])
@@ -40,11 +40,11 @@ public class UsuarioImpl implements UsuarioAbastract {
     }
 
     @Override
-    public UsuarioDto guardarUsuarioAbastract(UsuarioDto usuarioDto) {
+    public Usuario guardarUsuarioAbastract(Usuario usuario) {
         UsuarioEntity usuarioEntity = modelMapper
-                .map(usuarioDto, UsuarioEntity.class);
+                .map(usuario, UsuarioEntity.class);
         UsuarioEntity userRespo = usuarioRepository
                 .save(usuarioEntity);
-        return modelMapper.map(userRespo, UsuarioDto.class);
+        return modelMapper.map(userRespo, Usuario.class);
     }
 }

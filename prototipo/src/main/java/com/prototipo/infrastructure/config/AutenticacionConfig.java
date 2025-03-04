@@ -1,7 +1,6 @@
 package com.prototipo.infrastructure.config;
 
 import com.prototipo.application.adapter.AutenticacionAdapter;
-import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.port.out.CredencialAbstract;
 import com.prototipo.application.port.out.UsuarioAbastract;
 import com.prototipo.application.port.in.AutenticacionService;
@@ -16,15 +15,12 @@ public class AutenticacionConfig {
     public AutenticacionService autenticacionServiceBean(
             @Qualifier("credencialImpl")
             CredencialAbstract credencialAbstract,
-            @Qualifier("mapperApplicationImpl")
-            MapperApplicationAbstract mapperApplicationAbstract,
             @Qualifier("usuarioImpl")
             UsuarioAbastract usuarioAbastract){
 
         //En los constructores, EL ORDEN IMPORTA
         return new AutenticacionAdapter(
                 credencialAbstract,
-                mapperApplicationAbstract,
                 usuarioAbastract);
     }
 }

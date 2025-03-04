@@ -1,7 +1,7 @@
 package com.prototipo.application.port.out;
 
-import com.prototipo.application.modelDto.ServicioFotocopiaDto;
+import com.prototipo.domain.model.ServicioFotocopia;
 
 public interface ServicioFotocopiaAbstract {
-    ServicioFotocopiaDto findServicioFotocopia(ServicioFotocopiaDto fkServicioFotocopia);
+    ServicioFotocopia findServicioFotocopia(ServicioFotocopia fkServicioFotocopia);
 }

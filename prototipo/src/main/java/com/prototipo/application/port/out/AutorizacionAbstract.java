@@ -1,13 +1,13 @@
 package com.prototipo.application.port.out;
 
-import com.prototipo.application.modelDto.AutorizacionDto;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
+import com.prototipo.domain.model.Autorizacion;
 
 public interface AutorizacionAbstract {
-    AutorizacionDto findAutorizacionByIdSoli(Long idSolicitud);
-    AutorizacionDto buscarAutorizacionByIdAbs(Long idAutorizacion);
-    PaginableOut<AutorizacionDto> listaDeSoliAutorizadasAbstractPageByIdSoli(PaginableIn paginableIn);
-    PaginableOut<AutorizacionDto> listaDeSoliAutorizadasAbstractPageByIdResponsable(PaginableIn paginableIn);
-    void guardarAutorizacionAbs(AutorizacionDto autorizacionDto);
+    Autorizacion findAutorizacionByIdSoli(Long idSolicitud);
+    Autorizacion buscarAutorizacionByIdAbs(Long idAutorizacion);
+    void guardarAutorizacionAbs(Autorizacion autorizacion);
+    PaginableOut<Autorizacion> listaDeSoliAutorizadasAbstractPageByIdSoli(PaginableIn paginableIn);
+    PaginableOut<Autorizacion> listaDeSoliAutorizadasAbstractPageByIdResponsable(PaginableIn paginableIn);
 }

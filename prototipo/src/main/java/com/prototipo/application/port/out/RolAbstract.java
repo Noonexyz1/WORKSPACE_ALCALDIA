@@ -1,9 +1,9 @@
 package com.prototipo.application.port.out;
 
-import com.prototipo.application.modelDto.RolDto;
+import com.prototipo.domain.model.Rol;
 
 import java.util.List;
 
 public interface RolAbstract {
-    List<RolDto> listarRoles();
+    List<Rol> listarRoles();
 }

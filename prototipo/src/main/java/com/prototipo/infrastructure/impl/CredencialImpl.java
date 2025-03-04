@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.impl;
 
-import com.prototipo.application.modelDto.CredencialDto;
 import com.prototipo.application.port.out.CredencialAbstract;
+import com.prototipo.domain.model.Credencial;
 import com.prototipo.infrastructure.persistence.db.entity.CredencialEntity;
 import com.prototipo.infrastructure.persistence.db.repository.CredencialRepository;
 import org.modelmapper.ModelMapper;
@@ -17,24 +17,24 @@ public class CredencialImpl implements CredencialAbstract {
     private ModelMapper modelMapper;
 
     @Override
-    public CredencialDto guardarCredencialAbstract(CredencialDto nuevaCred) {
+    public Credencial guardarCredencialAbstract(Credencial nuevaCred) {
         CredencialEntity credencialEntity = modelMapper.map(nuevaCred, CredencialEntity.class);
         CredencialEntity credencialEntityResp = credencialRepository.save(credencialEntity);
-        return modelMapper.map(credencialEntityResp, CredencialDto.class);
+        return modelMapper.map(credencialEntityResp, Credencial.class);
     }
 
     @Override
-    public CredencialDto encontrarCredencial(String ci, String pass) {
+    public Credencial encontrarCredencial(String ci, String pass) {
         CredencialEntity credEnty = credencialRepository.encontrarCredencial(ci, pass);
-        return modelMapper.map(credEnty, CredencialDto.class);
+        return modelMapper.map(credEnty, Credencial.class);
     }
 
     @Override
-    public CredencialDto encontrarCredencialPorUsuarioId(Long idUsuario) {
+    public Credencial encontrarCredencialPorUsuarioId(Long idUsuario) {
         CredencialEntity credencialEntity = credencialRepository
                 .encontrarCredencialPorUsuarioId(idUsuario);
         return (credencialEntity != null)?
-                modelMapper.map(credencialEntity, CredencialDto.class):
+                modelMapper.map(credencialEntity, Credencial.class):
                 null;
     }
 }

@@ -1,8 +1,8 @@
 package com.prototipo.infrastructure.impl;
 
-import com.prototipo.application.port.out.ResponsablePDFAbstract;
-import com.prototipo.infrastructure.rest.report.NotaDePedidoReport;
-import com.prototipo.infrastructure.rest.report.ReporteReport;
+import com.prototipo.application.port.out.GeneracionPDFArchivoAbstract;
+import com.prototipo.domain.model.NotaDePedido;
+import com.prototipo.domain.model.Reporte;
 import lombok.SneakyThrows;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 
 @Component
-public class ResponsablePDFImpl implements ResponsablePDFAbstract {
+public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
 
     @Override
     @SneakyThrows
@@ -24,7 +24,7 @@ public class ResponsablePDFImpl implements ResponsablePDFAbstract {
             String recursoImagen,
             String nombreServicio,
             Double precioTotalRedondeado,
-            List<NotaDePedidoReport> listNotaPedidoPDF,
+            List<NotaDePedido> listNotaPedidoPDF,
             InputStream inputStream,
             String pdfOutputDirectory) {
 
@@ -61,7 +61,7 @@ public class ResponsablePDFImpl implements ResponsablePDFAbstract {
             Double precioTotal,
             Long paginaTotal,
             Long copiaTotal,
-            List<ReporteReport> listReporte,
+            List<Reporte> listReporte,
             InputStream inputStream,
             String pdfOutputDirectory) {
 

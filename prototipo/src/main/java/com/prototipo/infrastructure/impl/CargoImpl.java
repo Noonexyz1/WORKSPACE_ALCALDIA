@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.impl;
 
-import com.prototipo.application.modelDto.CargoDto;
 import com.prototipo.application.port.out.CargoAbstract;
+import com.prototipo.domain.model.Cargo;
 import com.prototipo.infrastructure.persistence.db.entity.CargoEntity;
 import com.prototipo.infrastructure.persistence.db.repository.CargoRepository;
 import org.modelmapper.ModelMapper;
@@ -19,10 +19,10 @@ public class CargoImpl implements CargoAbstract {
     private ModelMapper modelMapper;
 
     @Override
-    public List<CargoDto> findAllCargos() {
+    public List<Cargo> findAllCargos() {
         List<CargoEntity> list = cargoRepository.findAll();
         return list.stream()
-                .map(x -> modelMapper.map(x, CargoDto.class))
+                .map(x -> modelMapper.map(x, Cargo.class))
                 .toList();
     }
 }

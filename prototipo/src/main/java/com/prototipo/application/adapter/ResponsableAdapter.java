@@ -1,14 +1,10 @@
 package com.prototipo.application.adapter;
 
-import com.prototipo.application.mapper.MapperApplicationAbstract;
-import com.prototipo.application.modelDto.*;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.port.out.*;
 import com.prototipo.application.port.in.ResponsableService;
 import com.prototipo.domain.model.*;
-import com.prototipo.infrastructure.rest.report.NotaDePedidoReport;
-import com.prototipo.infrastructure.rest.report.ReporteReport;
 
 import java.io.File;
 import java.io.InputStream;
@@ -24,81 +20,59 @@ public class ResponsableAdapter implements ResponsableService {
     //Para que haria otro ResponsableAbstract para esta clase???
     //Si unicamente puedo ADAPTAR una implementacion existente para esta!! ;D
     private SolicitudAbstract solicitudAbstract;
-
-    //Nose que hace esto
-    private ReportesPDFAbstract reportesPDFAbstract;
-
-    private MapperApplicationAbstract mapperApplicationAbstract;
+    private GeneracionPDFDataAbstract generacionPDFDataAbstract;
     private AutorizacionAbstract autorizacionAbstract;
     private FotocopiaAbstract fotocopiaAbstract;
     private FinalizacionAbstract finalizacionAbstract;
-    private ResponsablePDFAbstract responsablePDFAbstract;
+    private GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract;
 
     public ResponsableAdapter(
             SolicitudAbstract solicitudAbstract,
-            ReportesPDFAbstract reportesPDFAbstract,
-            MapperApplicationAbstract mapperApplicationAbstract,
+            GeneracionPDFDataAbstract generacionPDFDataAbstract,
             AutorizacionAbstract autorizacionAbstract,
             FotocopiaAbstract fotocopiaAbstract,
             FinalizacionAbstract finalizacionAbstract,
-            ResponsablePDFAbstract responsablePDFAbstract) {
+            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract) {
 
         this.solicitudAbstract = solicitudAbstract;
-        this.reportesPDFAbstract = reportesPDFAbstract;
-        this.mapperApplicationAbstract = mapperApplicationAbstract;
+        this.generacionPDFDataAbstract = generacionPDFDataAbstract;
         this.autorizacionAbstract = autorizacionAbstract;
         this.fotocopiaAbstract = fotocopiaAbstract;
         this.finalizacionAbstract = finalizacionAbstract;
-        this.responsablePDFAbstract = responsablePDFAbstract;
+        this.generacionPDFArchivoAbstract = generacionPDFArchivoAbstract;
     }
 
     @Override
     public void rechazarSolicitud(Long idSolicitud, Long idResponsable) {
-        SolicitudDto solicitudDto = solicitudAbstract
+        Solicitud solicitud = solicitudAbstract
                 .buscarSolicitudByIdAbstract(idSolicitud);
-        solicitudDto.setIsActive(false);
-        solicitudAbstract.guardarSolicitudAbstract(solicitudDto);
+        solicitud.setIsActive(false);
+        solicitudAbstract.guardarSolicitudAbstract(solicitud);
     }
 
     @Override
     public List<NotaDePedido> listaDeNotasDePedido(Long idSolicitud) {
-        List<NotaDePedidoDto> notaDePedidoDtoList = reportesPDFAbstract
-                .getNotaDePedidoAbstract(idSolicitud);
-
-        return notaDePedidoDtoList.stream()
-                .map(x ->
-                        mapperApplicationAbstract.mapearAbstract(x, NotaDePedido.class))
-                .toList();
+        return generacionPDFDataAbstract.getNotaDePedidoAbstract(idSolicitud);
     }
 
     @Override
     public List<Reporte> listaDeReportes(Long idSolicitud) {
-        return reportesPDFAbstract.generarReportePDFAbstract(idSolicitud)
-                .stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Reporte.class))
-                .toList();
+        return generacionPDFDataAbstract.generarReportePDFAbstract(idSolicitud);
     }
 
     @Override
     public Autorizacion obtenerAutorizacion(Long idSolicitud) {
-        AutorizacionDto autorizacionDto = autorizacionAbstract
-                .findAutorizacionByIdSoli(idSolicitud);
-        return mapperApplicationAbstract
-                .mapearAbstract(autorizacionDto, Autorizacion.class);
+        return autorizacionAbstract.findAutorizacionByIdSoli(idSolicitud);
     }
 
     @Override
     public PaginableOut<Solicitud> listaDeSolicitudesPendientesByIdResponsable(PaginableIn paginableIn) {
-        PaginableOut<SolicitudDto> solicitudDtos = solicitudAbstract
+        PaginableOut<Solicitud> solicitudDtos = solicitudAbstract
                 .listaDeSolicitudesPendientesByIdResponsable(paginableIn);
 
         PaginableOut<Solicitud> paginableResponse = PaginableOut
                 .<Solicitud>builder()
-                .content(
-                        solicitudDtos.getContent().stream()
-                                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
-                                .toList()
-                )
+                .content(solicitudDtos.getContent())
                 .totalPages(solicitudDtos.getTotalPages())
                 .totalElements(solicitudDtos.getTotalElements())
                 .build();
@@ -108,16 +82,12 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public PaginableOut<Solicitud> listaDeSolicitudesPendientesByIdSolicitud(PaginableIn paginableIn) {
-        PaginableOut<SolicitudDto> solicitudDtos = solicitudAbstract
+        PaginableOut<Solicitud> solicitudDtos = solicitudAbstract
                 .listaDeSolicitudesPendientesAbstractPageByIdSoli(paginableIn);
 
         PaginableOut<Solicitud> paginableResponse = PaginableOut
                 .<Solicitud>builder()
-                .content(
-                        solicitudDtos.getContent().stream()
-                                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
-                                .toList()
-                )
+                .content(solicitudDtos.getContent())
                 .totalPages(solicitudDtos.getTotalPages())
                 .totalElements(solicitudDtos.getTotalElements())
                 .build();
@@ -127,17 +97,12 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public PaginableOut<Autorizacion> listaDeSolicitudesAutorizadasByIdResponsable(PaginableIn paginableIn) {
-        PaginableOut<AutorizacionDto> soliAutorizadas = autorizacionAbstract
+        PaginableOut<Autorizacion> soliAutorizadas = autorizacionAbstract
                 .listaDeSoliAutorizadasAbstractPageByIdResponsable(paginableIn);
 
         PaginableOut<Autorizacion> paginableResponse = PaginableOut
                 .<Autorizacion>builder()
-                .content(
-                        soliAutorizadas.getContent().stream()
-                                .map(x -> mapperApplicationAbstract
-                                        .mapearAbstract(x, Autorizacion.class))
-                                .toList()
-                )
+                .content(soliAutorizadas.getContent())
                 .totalPages(soliAutorizadas.getTotalPages())
                 .totalElements(soliAutorizadas.getTotalElements())
                 .build();
@@ -147,17 +112,12 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public PaginableOut<Finalizacion> listaDeSolicitudesFinalizadasByIdResponsable(PaginableIn paginableIn) {
-        PaginableOut<FinalizacionDto> finalizacionDtoList = finalizacionAbstract
+        PaginableOut<Finalizacion> finalizacionDtoList = finalizacionAbstract
                 .listaDeFinalizacionesAbstractPageByIdResponsable(paginableIn);
 
         PaginableOut<Finalizacion> paginableResponse = PaginableOut
                 .<Finalizacion>builder()
-                .content(
-                        finalizacionDtoList.getContent().stream()
-                                .map(x -> mapperApplicationAbstract
-                                        .mapearAbstract(x, Finalizacion.class))
-                                .toList()
-                )
+                .content(finalizacionDtoList.getContent())
                 .totalPages(finalizacionDtoList.getTotalPages())
                 .totalElements(finalizacionDtoList.getTotalElements())
                 .build();
@@ -167,17 +127,12 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public PaginableOut<Autorizacion> listaDeSolicitudesAutorizadasByIdSolicitud(PaginableIn paginableIn) {
-        PaginableOut<AutorizacionDto> soliAutorizadas = autorizacionAbstract
+        PaginableOut<Autorizacion> soliAutorizadas = autorizacionAbstract
                 .listaDeSoliAutorizadasAbstractPageByIdSoli(paginableIn);
 
         PaginableOut<Autorizacion> paginableResponse = PaginableOut
                 .<Autorizacion>builder()
-                .content(
-                        soliAutorizadas.getContent().stream()
-                                .map(x -> mapperApplicationAbstract
-                                        .mapearAbstract(x, Autorizacion.class))
-                                .toList()
-                )
+                .content(soliAutorizadas.getContent())
                 .totalPages(soliAutorizadas.getTotalPages())
                 .totalElements(soliAutorizadas.getTotalElements())
                 .build();
@@ -187,17 +142,12 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public PaginableOut<Finalizacion> listaDeSolicitudesFinalizadasByIdSolicitud(PaginableIn paginableIn) {
-        PaginableOut<FinalizacionDto> finalizacionDtoList = finalizacionAbstract
+        PaginableOut<Finalizacion> finalizacionDtoList = finalizacionAbstract
                 .listaDeFinalizacionesAbstractPageByIdSoli(paginableIn);
 
         PaginableOut<Finalizacion> paginableResponse = PaginableOut
                 .<Finalizacion>builder()
-                .content(
-                        finalizacionDtoList.getContent().stream()
-                                .map(x -> mapperApplicationAbstract
-                                        .mapearAbstract(x, Finalizacion.class))
-                                .toList()
-                )
+                .content(finalizacionDtoList.getContent())
                 .totalPages(finalizacionDtoList.getTotalPages())
                 .totalElements(finalizacionDtoList.getTotalElements())
                 .build();
@@ -214,42 +164,31 @@ public class ResponsableAdapter implements ResponsableService {
         autorizacion.setFecha(fechaActual.format(formato));
         autorizacion.setFinaliFlag(0L);
 
-        AutorizacionDto autorizacionDto = mapperApplicationAbstract
-                .mapearAbstract(autorizacion, AutorizacionDto.class);
-        autorizacionAbstract.guardarAutorizacionAbs(autorizacionDto);
+        autorizacionAbstract.guardarAutorizacionAbs(autorizacion);
 
-        SolicitudDto solicitudDto = solicitudAbstract
+        Solicitud solicitud = solicitudAbstract
                 .buscarSolicitudByIdAbstract(autorizacion.getFkSolicitud().getId());
-        solicitudDto.setAutoriFlag(1L);
-        solicitudAbstract.guardarSolicitudAbstract(solicitudDto);
+        solicitud.setAutoriFlag(1L);
+        solicitudAbstract.guardarSolicitudAbstract(solicitud);
     }
 
     @Override
     public void guardarFinalizacion(Finalizacion finalizacion) {
-        //Aqui tiene que ir la logica
-        FinalizacionDto finalizacionDto = mapperApplicationAbstract
-                .mapearAbstract(finalizacion, FinalizacionDto.class);
-
         LocalDate fechaActual = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-        finalizacionDto.setFecha(fechaActual.format(formato));
-        finalizacionAbstract.guardarFinalizacionAbs(finalizacionDto);
+        finalizacion.setFecha(fechaActual.format(formato));
+        finalizacionAbstract.guardarFinalizacionAbs(finalizacion);
 
-        AutorizacionDto autorizacionDto = autorizacionAbstract
+        Autorizacion autorizacion = autorizacionAbstract
                 .buscarAutorizacionByIdAbs(finalizacion.getFkAutorizacion().getId());
 
-        autorizacionDto.setFinaliFlag(1L);
-        autorizacionAbstract.guardarAutorizacionAbs(autorizacionDto);
+        autorizacion.setFinaliFlag(1L);
+        autorizacionAbstract.guardarAutorizacionAbs(autorizacion);
     }
 
     @Override
     public List<Fotocopia> listaDeFotocopias(Long idSolicitud) {
-        List<FotocopiaDto> list = fotocopiaAbstract.
-                getFotocopiasSolicitudAbstract(idSolicitud);
-        return list.stream()
-                .map(x ->
-                        mapperApplicationAbstract.mapearAbstract(x, Fotocopia.class))
-                .toList();
+        return fotocopiaAbstract.getFotocopiasSolicitudAbstract(idSolicitud);
     }
 
 
@@ -284,19 +223,15 @@ public class ResponsableAdapter implements ResponsableService {
 
 
 
-        SolicitudDto solicitudDto = solicitudAbstract.buscarSolicitudByIdAbstract(idSolicitud);
-        Solicitud solicitud = mapperApplicationAbstract.mapearAbstract(solicitudDto, Solicitud.class);
+        Solicitud solicitud = solicitudAbstract.buscarSolicitudByIdAbstract(idSolicitud);
         String nombreServicio = solicitud.getNombreServicio();
         Double precioTotalRedondeado = BigDecimal.valueOf(solicitud.getPrecioTotal()).setScale(2, RoundingMode.HALF_UP).doubleValue();
 
 
-        List<NotaDePedidoReport> listNotaPedidoPDF = listaDeNotasDePedido(idSolicitud)
-                .stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, NotaDePedidoReport.class))
-                .toList();
+        List<NotaDePedido> listNotaPedidoPDF = listaDeNotasDePedido(idSolicitud);
 
 
-        responsablePDFAbstract.generarNotaPedidoPDFAbs(
+        generacionPDFArchivoAbstract.generarNotaPedidoPDFAbs(
                 idSolicitud,
                 fechaFormateada,
                 recursoImagen,
@@ -337,10 +272,7 @@ public class ResponsableAdapter implements ResponsableService {
         String fechaActualString = fechaActual.format(formato);
 
 
-
-
-        SolicitudDto solicitudDto = solicitudAbstract.buscarSolicitudByIdAbstract(idSolicitud);
-        Solicitud solicitud = mapperApplicationAbstract.mapearAbstract(solicitudDto, Solicitud.class);
+        Solicitud solicitud = solicitudAbstract.buscarSolicitudByIdAbstract(idSolicitud);
 
 
         String nombreServicio = solicitud.getNombreServicio();
@@ -349,12 +281,9 @@ public class ResponsableAdapter implements ResponsableService {
         Long copiaTotal = solicitud.getCopiaTotal();
 
 
-        List<ReporteReport> listReporte = listaDeReportes(idSolicitud)
-                .stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, ReporteReport.class))
-                .toList();
+        List<Reporte> listReporte = listaDeReportes(idSolicitud);
 
-        responsablePDFAbstract.generarReportePDFAbs(
+        generacionPDFArchivoAbstract.generarReportePDFAbs(
                 idSolicitud,
                 fechaActualString,
                 recursoImagen,

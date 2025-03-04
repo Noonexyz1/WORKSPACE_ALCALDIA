@@ -1,7 +1,5 @@
 package com.prototipo.application.adapter;
 
-import com.prototipo.application.mapper.MapperApplicationAbstract;
-import com.prototipo.application.modelDto.*;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.port.out.*;
@@ -12,9 +10,11 @@ import java.util.List;
 
 public class AdministradorAdapter implements AdministradorService {
 
+    // IMPORTANTE: Si es arquitectura hexagonal, no deberias tener mapeadores ya que para este
+    // packete application y packete dominio pues se entiende que unicamente se necesita el model del dominio
+    // ya que asi le pedimos a las otras capas que nos envien datos mediante la interfaz port out o abstractas
     private UsuarioAbastract usuarioAbastract;
     private RolAbstract rolAbstract;
-    private MapperApplicationAbstract mapperApplicationAbstract;
     private CredencialAbstract credencialAbstract;
     private UnidadAbstract unidadAbstract;
     private UsuarioUnidadAbstract usuarioUnidadAbstract;
@@ -23,7 +23,6 @@ public class AdministradorAdapter implements AdministradorService {
     public AdministradorAdapter(
             UsuarioAbastract usuarioAbastract,
             RolAbstract rolAbstract,
-            MapperApplicationAbstract mapperApplicationAbstract,
             CredencialAbstract credencialAbstract,
             UnidadAbstract unidadAbstract,
             UsuarioUnidadAbstract usuarioUnidadAbstract,
@@ -31,7 +30,6 @@ public class AdministradorAdapter implements AdministradorService {
 
         this.usuarioAbastract = usuarioAbastract;
         this.rolAbstract = rolAbstract;
-        this.mapperApplicationAbstract = mapperApplicationAbstract;
         this.credencialAbstract = credencialAbstract;
         this.unidadAbstract = unidadAbstract;
         this.usuarioUnidadAbstract = usuarioUnidadAbstract;
@@ -41,19 +39,12 @@ public class AdministradorAdapter implements AdministradorService {
 
     @Override
     public PaginableOut<UsuarioUnidad> listaDeUsuarios(PaginableIn paginableIn) {
-        PaginableOut<UsuarioUnidadDto> paginableOut = usuarioUnidadAbstract
+        PaginableOut<UsuarioUnidad> paginableOut = usuarioUnidadAbstract
                 .listaDeUsuariosAbsDef(paginableIn);
 
         PaginableOut<UsuarioUnidad> paginableResponse = PaginableOut
                 .<UsuarioUnidad>builder()
-                .content(
-                        paginableOut.getContent()
-                                .stream()
-                                .map(x -> mapperApplicationAbstract
-                                        .mapearAbstract(x, UsuarioUnidad.class)
-                                )
-                                .toList()
-                )
+                .content(paginableOut.getContent())
                 .totalPages(paginableOut.getTotalPages())
                 .totalElements(paginableOut.getTotalElements())
                 .build();
@@ -64,35 +55,31 @@ public class AdministradorAdapter implements AdministradorService {
     @Override
     public void crearUsuarioUnidad(Usuario user, UsuarioUnidad userUnidad){
         //Verificar primero si ya existe el usuario registrado
-        UsuarioDto usuarioDtoResp = crearUsuario(user);
+        Usuario usuarioResp = crearUsuario(user);
 
         // insertamos las credenciales a la BD correspondientes para el nuevo usuario
-        crearCredencial(usuarioDtoResp);
+        crearCredencial(usuarioResp);
 
-        //El trucaso de los IDs
-        UsuarioUnidadDto userUniNew = mapperApplicationAbstract
-                .mapearAbstract(userUnidad, UsuarioUnidadDto.class);
-
-        userUniNew.setId(null);
-        userUniNew.setIsActive(true);
-        userUniNew.setFkUsuario(usuarioDtoResp);
+        userUnidad.setId(null);
+        userUnidad.setIsActive(true);
+        userUnidad.setFkUsuario(usuarioResp);
 
         //Este metodo unicamente evalua si existe el usuario nuevo en unidadUsuario o no
-        UsuarioUnidadDto userRespon = existeUsuarioUnidad(usuarioDtoResp);
+        UsuarioUnidad userRespon = existeUsuarioUnidad(usuarioResp);
 
         if (userRespon == null) {
-            usuarioUnidadAbstract.guardarUsuarioUnidad(userUniNew);
+            usuarioUnidadAbstract.guardarUsuarioUnidad(userUnidad);
         } else {
-            if (!hayCambioUserUni(userUniNew, userRespon)) {
+            if (!hayCambioUserUni(userUnidad, userRespon)) {
                 userRespon.setIsActive(false);
                 usuarioUnidadAbstract.guardarUsuarioUnidad(userRespon);
-                usuarioUnidadAbstract.guardarUsuarioUnidad(userUniNew);
+                usuarioUnidadAbstract.guardarUsuarioUnidad(userUnidad);
             }
         }
 
     }
 
-    private boolean hayCambioUserUni(UsuarioUnidadDto userUniNew, UsuarioUnidadDto userRespon){
+    private boolean hayCambioUserUni(UsuarioUnidad userUniNew, UsuarioUnidad userRespon){
         if (userRespon.getFkResponsable() == null &&
                 userRespon.getFkDirector() == null) {
             return userRespon.getFkUsuario().getId() == userUniNew.getFkUsuario().getId() &&
@@ -117,76 +104,66 @@ public class AdministradorAdapter implements AdministradorService {
 
     }
 
-    private void crearCredencial(UsuarioDto usuarioDtoResp) {
-        CredencialDto credencialDtoResp = credencialAbstract
-                .encontrarCredencialPorUsuarioId(usuarioDtoResp.getId());
-        if (credencialDtoResp == null) {
-            CredencialDto newCredencialDto = CredencialDto.builder()
-                    .ci(usuarioDtoResp.getCi())
-                    .pass("funcionario" + usuarioDtoResp.getCi())
-                    .fkUsuario(usuarioDtoResp)
+    private void crearCredencial(Usuario usuarioResp) {
+        Credencial credencialResp = credencialAbstract
+                .encontrarCredencialPorUsuarioId(usuarioResp.getId());
+        if (credencialResp == null) {
+            Credencial newCredencial = Credencial.builder()
+                    .ci(usuarioResp.getCi())
+                    .pass("funcionario" + usuarioResp.getCi())
+                    .fkUsuario(usuarioResp)
                     .build();
-            credencialAbstract.guardarCredencialAbstract(newCredencialDto);
+            credencialAbstract.guardarCredencialAbstract(newCredencial);
         } else {
-            credencialDtoResp.setPass("funcionario" + usuarioDtoResp.getCi());
-            credencialAbstract.guardarCredencialAbstract(credencialDtoResp);
+            credencialResp.setPass("funcionario" + usuarioResp.getCi());
+            credencialAbstract.guardarCredencialAbstract(credencialResp);
         }
     }
 
-    private UsuarioDto crearUsuario(Usuario user) {
+    private Usuario crearUsuario(Usuario user) {
         // Por que tendria que buscar por id o ci?, si tiene ID entonces lo actualiza,
         // si no tiene id, entonces lo crea, NO NECESITAS UN IF(){}
-        UsuarioDto usuarioDto = mapperApplicationAbstract
-                .mapearAbstract(user, UsuarioDto.class);
 
-        UsuarioUnidadDto siExisteUsuario = existeUsuarioUnidadByCi(usuarioDto.getCi());
+        UsuarioUnidad siExisteUsuario = existeUsuarioUnidadByCi(user.getCi());
         if (siExisteUsuario != null) {
             return siExisteUsuario.getFkUsuario();
         }
-        return usuarioAbastract.guardarUsuarioAbastract(usuarioDto);
+        return usuarioAbastract.guardarUsuarioAbastract(user);
     }
 
-    private UsuarioUnidadDto existeUsuarioUnidadByCi(String ciUser) {
+    private UsuarioUnidad existeUsuarioUnidadByCi(String ciUser) {
         return usuarioUnidadAbstract
                 .encontrarUsuarioUnidadByCi(ciUser);
     }
 
-    private UsuarioUnidadDto existeUsuarioUnidad(UsuarioDto usuarioDto) {
+    private UsuarioUnidad existeUsuarioUnidad(Usuario usuario) {
         return usuarioUnidadAbstract
-                .encontrarUsuarioUnidadByUsuarioId(usuarioDto.getId());
+                .encontrarUsuarioUnidadByUsuarioId(usuario.getId());
     }
 
     @Override
     public void eliminarUsuarioUnidad(Long idUsuarioUnidad) {
-        UsuarioUnidadDto usuarioUnidadDto = usuarioUnidadAbstract
+        UsuarioUnidad usuarioUnidad = usuarioUnidadAbstract
                 .encontarUsuarioUnidadId(idUsuarioUnidad);
-        usuarioUnidadDto.setIsActive(false);
-        usuarioUnidadAbstract.guardarUsuarioUnidad(usuarioUnidadDto);
+        usuarioUnidad.setIsActive(false);
+        usuarioUnidadAbstract.guardarUsuarioUnidad(usuarioUnidad);
     }
 
     @Override
     public List<Rol> listaDeRoles() {
-        List<RolDto> listaRolesDto = rolAbstract.listarRoles();
-        return listaRolesDto.stream()
-                .map(x -> mapperApplicationAbstract
-                        .mapearAbstract(x, Rol.class))
-                .toList();
+        List<Rol> listaRolesDto = rolAbstract.listarRoles();
+        return listaRolesDto;
     }
 
     @Override
     public List<Unidad> listaDeUnidades() {
-        List<UnidadDto> listaUnidades = unidadAbstract.listaDeUnidadesAbstract();
-        return listaUnidades.stream()
-                .map(x -> mapperApplicationAbstract
-                        .mapearAbstract(x, Unidad.class))
-                .toList();
+        List<Unidad> listaUnidades = unidadAbstract.listaDeUnidadesAbstract();
+        return listaUnidades;
     }
 
     @Override
     public List<Cargo> listaDeCargos() {
-        List<CargoDto> listCargos = cargoAbstract.findAllCargos();
-        return listCargos.stream()
-                .map(x -> mapperApplicationAbstract.mapearAbstract(x, Cargo.class))
-                .toList();
+        List<Cargo> listCargos = cargoAbstract.findAllCargos();
+        return listCargos;
     }
 }

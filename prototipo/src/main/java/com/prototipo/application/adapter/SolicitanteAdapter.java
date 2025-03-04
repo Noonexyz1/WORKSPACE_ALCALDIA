@@ -1,7 +1,5 @@
 package com.prototipo.application.adapter;
 
-import com.prototipo.application.mapper.MapperApplicationAbstract;
-import com.prototipo.application.modelDto.*;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.port.out.FotocopiaAbstract;
@@ -18,6 +16,7 @@ import com.prototipo.infrastructure.rest.report.TablaSolicitudReport;
 import com.prototipo.application.util.DoublesALiteral;
 import com.prototipo.application.util.NumeroALiteral;
 
+//TODO, migrar a otra capa
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.export.SimpleExporterInput;
@@ -39,43 +38,35 @@ import java.util.Map;
 public class SolicitanteAdapter implements SolicitanteService {
 
     private SolicitudAbstract solicitudAbstract;
-    private MapperApplicationAbstract mapperApplicationAbstract;
     private FotocopiaAbstract fotocopiaAbstract;
     private ServicioFotocopiaAbstract findServicioFotocopia;
 
     public SolicitanteAdapter(
             SolicitudAbstract solicitudAbstract,
-            MapperApplicationAbstract mapperApplicationAbstract,
             FotocopiaAbstract fotocopiaAbstract,
             ServicioFotocopiaAbstract findServicioFotocopia) {
 
         this.solicitudAbstract = solicitudAbstract;
-        this.mapperApplicationAbstract = mapperApplicationAbstract;
         this.fotocopiaAbstract = fotocopiaAbstract;
         this.findServicioFotocopia = findServicioFotocopia;
     }
 
     @Override
-    public void solicitarFotocopia(Solicitud solicitud, List<Fotocopia> listFotocopia) {
-        SolicitudDto solicitudDto = mapperApplicationAbstract
-                .mapearAbstract(solicitud, SolicitudDto.class);
+    public void solicitarFotocopia(Solicitud solicitudDto, List<Fotocopia> listFotocopia) {
         solicitudDto.setNombreServicio(TipoServicioEnum.FOTOCOPIA.getNombre());
 
         //Primero guardamos en la tabla Solitcitud
-        SolicitudDto solicitudDtoResp = solicitudAbstract
+        Solicitud solicitudDtoResp = solicitudAbstract
                 .solicitarFotocopiarAbstract(solicitudDto);
-
-        Solicitud solicitudResp = mapperApplicationAbstract
-                .mapearAbstract(solicitudDtoResp, Solicitud.class);
 
         Double precioTotalSoli = listFotocopia.stream()
                 .map(x -> {
-                    x.setFkSolicitud(solicitudResp);
+                    x.setFkSolicitud(solicitudDtoResp);
                     return guardadFotocopiaAbstrac(x);
                 })
                 .reduce(0.0, Double::sum);
 
-        List<FotocopiaDto> fotocopiaSoliReso = fotocopiaAbstract
+        List<Fotocopia> fotocopiaSoliReso = fotocopiaAbstract
                 .getFotocopiasSolicitudAbstract(solicitudDtoResp.getId());
 
         Long paginaTotal = fotocopiaSoliReso.stream()
@@ -95,60 +86,48 @@ public class SolicitanteAdapter implements SolicitanteService {
     }
 
     private double guardadFotocopiaAbstrac(Fotocopia fotocopia){
-        FotocopiaDto fotocopiaDto = mapperApplicationAbstract
-                .mapearAbstract(fotocopia, FotocopiaDto.class);
-
-        ServicioFotocopiaDto solicitudFotocopiaDto = findServicioFotocopia
-                .findServicioFotocopia(fotocopiaDto.getFkServicioFotocopia());
+        ServicioFotocopia solicitudFotocopiaDto = findServicioFotocopia
+                .findServicioFotocopia(fotocopia.getFkServicioFotocopia());
 
         double precioDocu = fotocopia.getNroCopias() *
                 fotocopia.getNroPaginas() *
                 solicitudFotocopiaDto.getPrecioRef();
 
-        fotocopiaDto.setFkServicioFotocopia(solicitudFotocopiaDto);
-        fotocopiaDto.setPrecioDocu(precioDocu);
+        fotocopia.setFkServicioFotocopia(solicitudFotocopiaDto);
+        fotocopia.setPrecioDocu(precioDocu);
 
-        fotocopiaAbstract.guardarRegistroFotocopia(fotocopiaDto);
+        fotocopiaAbstract.guardarRegistroFotocopia(fotocopia);
 
         return precioDocu;
     }
 
     @Override
     public PaginableOut<Solicitud> listaDeSolicitudes(PaginableIn paginableIn) {
-        PaginableOut<SolicitudDto> paginableOut = solicitudAbstract
+        PaginableOut<Solicitud> paginableOut = solicitudAbstract
                 .getListaSolicitudesAbstract(paginableIn);
 
         PaginableOut<Solicitud> paginableResponse = PaginableOut
                 .<Solicitud>builder()
-                .content(
-                        paginableOut.getContent().stream()
-                                .map(x -> mapperApplicationAbstract
-                                        .mapearAbstract(x, Solicitud.class)
-                                )
-                                .toList()
-                )
+                .content(paginableOut.getContent())
                 .totalPages(paginableOut.getTotalPages())
                 .totalElements(paginableOut.getTotalElements())
                 .build();
 
-        //Quiero filtar las solicitudes segun el Usuario que lo esta pidiendo
+        //Quiero filtar las solicitudes segun el Usuarioo que lo esta pidiendo
         return paginableResponse;
     }
 
     @Override
     public Solicitud buscarSolicitud(Long idSolicitud) {
-        SolicitudDto solicitudDto = solicitudAbstract
-                .buscarSolicitudByIdAbstract(idSolicitud);
-        return mapperApplicationAbstract
-                .mapearAbstract(solicitudDto, Solicitud.class);
+        return solicitudAbstract.buscarSolicitudByIdAbstract(idSolicitud);
     }
 
     @Override
     public void eliminarSolicitud(Long idSolicitud) {
-        SolicitudDto solicitudDto = solicitudAbstract
+        Solicitud solicitud = solicitudAbstract
                 .buscarSolicitudByIdAbstract(idSolicitud);
-        solicitudDto.setIsActive(false);
-        solicitudAbstract.guardarSolicitudAbstract(solicitudDto);
+        solicitud.setIsActive(false);
+        solicitudAbstract.guardarSolicitudAbstract(solicitud);
     }
 
     @Override
@@ -177,18 +156,12 @@ public class SolicitanteAdapter implements SolicitanteService {
 
     @Override
     public PaginableOut<Solicitud> listaDeAutorizaciones(PaginableIn paginableIn) {
-        PaginableOut<SolicitudDto> paginableOut = solicitudAbstract
+        PaginableOut<Solicitud> paginableOut = solicitudAbstract
                 .getListaSolicitudesAutoriAbstract(paginableIn);
 
         PaginableOut<Solicitud> paginableResponse = PaginableOut
                 .<Solicitud>builder()
-                .content(
-                        paginableOut.getContent()
-                                .stream()
-                                .map(x ->
-                                        mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
-                                .toList()
-                )
+                .content(paginableOut.getContent())
                 .totalPages(paginableOut.getTotalPages())
                 .totalElements(paginableOut.getTotalElements())
                 .build();
@@ -198,18 +171,12 @@ public class SolicitanteAdapter implements SolicitanteService {
 
     @Override
     public PaginableOut<Solicitud> listaDeFinalizaciones(PaginableIn paginableIn) {
-        PaginableOut<SolicitudDto> paginableOut = solicitudAbstract
+        PaginableOut<Solicitud> paginableOut = solicitudAbstract
                 .getListaSolicitudesFinaliAbstract(paginableIn);
 
         PaginableOut<Solicitud> paginableResponse = PaginableOut
                 .<Solicitud>builder()
-                .content(
-                        paginableOut.getContent()
-                                .stream()
-                                .map(x ->
-                                        mapperApplicationAbstract.mapearAbstract(x, Solicitud.class))
-                                .toList()
-                )
+                .content(paginableOut.getContent())
                 .totalPages(paginableOut.getTotalPages())
                 .totalElements(paginableOut.getTotalElements())
                 .build();
@@ -220,12 +187,7 @@ public class SolicitanteAdapter implements SolicitanteService {
 
     @Override
     public List<Fotocopia> listaDeFotocopias(Long idSolicitud) {
-        List<FotocopiaDto> list = fotocopiaAbstract.
-                getFotocopiasSolicitudAbstract(idSolicitud);
-        return list.stream()
-                .map(x ->
-                        mapperApplicationAbstract.mapearAbstract(x, Fotocopia.class))
-                .toList();
+        return fotocopiaAbstract.getFotocopiasSolicitudAbstract(idSolicitud);
     }
 
     @Override

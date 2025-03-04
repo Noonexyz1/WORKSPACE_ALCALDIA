@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.impl;
 
-import com.prototipo.application.modelDto.UnidadDto;
 import com.prototipo.application.port.out.UnidadAbstract;
+import com.prototipo.domain.model.Unidad;
 import com.prototipo.infrastructure.persistence.db.repository.UnidadRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,10 +18,10 @@ public class UnidadImpl implements UnidadAbstract {
     private ModelMapper modelMapper;
 
     @Override
-    public List<UnidadDto> listaDeUnidadesAbstract() {
+    public List<Unidad> listaDeUnidadesAbstract() {
         return unidadRepository.findAll()
                 .stream()
-                .map(x -> modelMapper.map(x, UnidadDto.class))
+                .map(x -> modelMapper.map(x, Unidad.class))
                 .toList();
     }
 }

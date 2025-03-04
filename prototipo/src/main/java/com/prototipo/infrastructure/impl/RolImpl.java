@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.impl;
 
-import com.prototipo.application.modelDto.RolDto;
 import com.prototipo.application.port.out.RolAbstract;
+import com.prototipo.domain.model.Rol;
 import com.prototipo.infrastructure.persistence.db.entity.RolEntity;
 import com.prototipo.infrastructure.persistence.db.repository.RolRepository;
 import org.modelmapper.ModelMapper;
@@ -19,10 +19,10 @@ public class RolImpl implements RolAbstract {
     private ModelMapper modelMapper;
 
     @Override
-    public List<RolDto> listarRoles() {
+    public List<Rol> listarRoles() {
         List<RolEntity> listRoles = rolRepository.findAll();
         return listRoles.stream()
-                .map(x -> modelMapper.map(x, RolDto.class))
+                .map(x -> modelMapper.map(x, Rol.class))
                 .toList();
     }
 }

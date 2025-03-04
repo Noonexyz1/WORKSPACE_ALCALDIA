@@ -1,12 +1,12 @@
 package com.prototipo.application.port.out;
 
-import com.prototipo.infrastructure.rest.report.NotaDePedidoReport;
-import com.prototipo.infrastructure.rest.report.ReporteReport;
+import com.prototipo.domain.model.NotaDePedido;
+import com.prototipo.domain.model.Reporte;
 
 import java.io.InputStream;
 import java.util.List;
 
-public interface ResponsablePDFAbstract {
+public interface GeneracionPDFArchivoAbstract {
 
     void generarNotaPedidoPDFAbs(
             Long idSolicitud,
@@ -14,7 +14,7 @@ public interface ResponsablePDFAbstract {
             String recursoImagen,
             String nombreServicio,
             Double precioTotalRedondeado,
-            List<NotaDePedidoReport> listNotaPedidoPDF,
+            List<NotaDePedido> listNotaPedidoPDF,
             InputStream inputStream,
             String pdfOutputDirectory);
 
@@ -26,7 +26,7 @@ public interface ResponsablePDFAbstract {
             Double precioTotal,
             Long paginaTotal,
             Long copiaTotal,
-            List<ReporteReport> listReporte,
+            List<Reporte> listReporte,
             InputStream inputStream,
             String pdfOutputDirectory);
 }

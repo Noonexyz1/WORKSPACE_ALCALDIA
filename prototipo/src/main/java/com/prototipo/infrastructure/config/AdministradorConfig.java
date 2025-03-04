@@ -1,7 +1,6 @@
 package com.prototipo.infrastructure.config;
 
 import com.prototipo.application.adapter.AdministradorAdapter;
-import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.port.out.*;
 import com.prototipo.application.port.in.AdministradorService;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,8 +14,6 @@ public class AdministradorConfig {
     public AdministradorService administradorServiceBean(
             @Qualifier("usuarioImpl")
             UsuarioAbastract usuarioAbastract,
-            @Qualifier("mapperApplicationImpl")
-            MapperApplicationAbstract mapperApplicationAbstract,
             @Qualifier("rolImpl")
             RolAbstract rolAbstract,
             @Qualifier("credencialImpl")
@@ -33,7 +30,6 @@ public class AdministradorConfig {
         return new AdministradorAdapter(
                 usuarioAbastract,
                 rolAbstract,
-                mapperApplicationAbstract,
                 credencialAbstract,
                 unidadAbstract,
                 usuarioUnidadAbstract,

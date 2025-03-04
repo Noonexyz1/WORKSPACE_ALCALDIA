@@ -1,9 +1,9 @@
 package com.prototipo.infrastructure.impl;
 
-import com.prototipo.application.modelDto.*;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.port.out.SolicitudAbstract;
+import com.prototipo.domain.model.Solicitud;
 import com.prototipo.infrastructure.persistence.db.entity.*;
 import com.prototipo.infrastructure.persistence.db.repository.*;
 import org.modelmapper.ModelMapper;
@@ -36,7 +36,7 @@ public class SolicitudImpl implements SolicitudAbstract {
 
 
     @Override
-    public PaginableOut<SolicitudDto> listaDeSolicitudesPendientesAbstractPageByIdSoli(PaginableIn paginableIn) {
+    public PaginableOut<Solicitud> listaDeSolicitudesPendientesAbstractPageByIdSoli(PaginableIn paginableIn) {
         Sort sort = Sort.by(
                 Sort.Direction.fromString(paginableIn.getDirection()),
                 paginableIn.getSortBy()
@@ -51,12 +51,12 @@ public class SolicitudImpl implements SolicitudAbstract {
         Page<SolicitudEntity> pageResponse = solicitudRepository
                 .findAllSoliByIdResponsableByIdSoli(paginableIn.getId(), pageable);
 
-        List<SolicitudDto> listResponse = pageResponse.getContent().stream()
-                .map(x -> modelMapper.map(x, SolicitudDto.class))
+        List<Solicitud> listResponse = pageResponse.getContent().stream()
+                .map(x -> modelMapper.map(x, Solicitud.class))
                 .toList();
 
-        PaginableOut<SolicitudDto> paginableOut = PaginableOut
-                .<SolicitudDto>builder()
+        PaginableOut<Solicitud> paginableOut = PaginableOut
+                .<Solicitud>builder()
                 .content(listResponse)
                 .totalPages(pageResponse.getTotalPages())
                 .totalElements(pageResponse.getTotalElements())
@@ -66,7 +66,7 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
-    public PaginableOut<SolicitudDto> listaDeSolicitudesPendientesByIdResponsable(PaginableIn paginableIn) {
+    public PaginableOut<Solicitud> listaDeSolicitudesPendientesByIdResponsable(PaginableIn paginableIn) {
         Sort sort = Sort.by(
                 Sort.Direction.fromString(paginableIn.getDirection()),
                 paginableIn.getSortBy()
@@ -81,12 +81,12 @@ public class SolicitudImpl implements SolicitudAbstract {
         Page<SolicitudEntity> pageResponse = solicitudRepository
                 .findAllSoliByIdResponsable(paginableIn.getId(), pageable);
 
-        List<SolicitudDto> listResponse = pageResponse.getContent().stream()
-                .map(x -> modelMapper.map(x, SolicitudDto.class))
+        List<Solicitud> listResponse = pageResponse.getContent().stream()
+                .map(x -> modelMapper.map(x, Solicitud.class))
                 .toList();
 
-        PaginableOut<SolicitudDto> paginableOut = PaginableOut
-                .<SolicitudDto>builder()
+        PaginableOut<Solicitud> paginableOut = PaginableOut
+                .<Solicitud>builder()
                 .content(listResponse)
                 .totalPages(pageResponse.getTotalPages())
                 .totalElements(pageResponse.getTotalElements())
@@ -97,14 +97,14 @@ public class SolicitudImpl implements SolicitudAbstract {
 
     //Tu unicamente deberias traerla Solicitud
     @Override
-    public SolicitudDto solicitarFotocopiarAbstract(SolicitudDto solicitudDto) {
-        SolicitudEntity solicitudEntity = modelMapper.map(solicitudDto, SolicitudEntity.class);
+    public Solicitud solicitarFotocopiarAbstract(Solicitud solicitud) {
+        SolicitudEntity solicitudEntity = modelMapper.map(solicitud, SolicitudEntity.class);
         SolicitudEntity solicitudEntityResp = solicitudRepository.save(solicitudEntity);
-        return modelMapper.map(solicitudEntityResp, SolicitudDto.class);
+        return modelMapper.map(solicitudEntityResp, Solicitud.class);
     }
 
     @Override
-    public PaginableOut<SolicitudDto> getListaSolicitudesAutoriAbstract(PaginableIn paginableIn) {
+    public PaginableOut<Solicitud> getListaSolicitudesAutoriAbstract(PaginableIn paginableIn) {
         Sort sort = Sort.by(
                 Sort.Direction.fromString(paginableIn.getDirection()),
                 paginableIn.getSortBy()
@@ -119,12 +119,12 @@ public class SolicitudImpl implements SolicitudAbstract {
         Page<SolicitudEntity> pageResponse = solicitudRepository
                 .findAllAutoriByIdUserUnidad(paginableIn.getId(), pageable);
 
-        List<SolicitudDto> list = pageResponse.getContent().stream()
-                .map(x -> modelMapper.map(x, SolicitudDto.class))
+        List<Solicitud> list = pageResponse.getContent().stream()
+                .map(x -> modelMapper.map(x, Solicitud.class))
                 .toList();
 
-        PaginableOut<SolicitudDto> build = PaginableOut
-                .<SolicitudDto>builder()
+        PaginableOut<Solicitud> build = PaginableOut
+                .<Solicitud>builder()
                 .content(list)
                 .totalPages(pageResponse.getTotalPages())
                 .totalElements(pageResponse.getTotalElements())
@@ -134,7 +134,7 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
-    public PaginableOut<SolicitudDto> getListaSolicitudesFinaliAbstract(PaginableIn paginableIn) {
+    public PaginableOut<Solicitud> getListaSolicitudesFinaliAbstract(PaginableIn paginableIn) {
         Sort sort = Sort.by(
                 Sort.Direction.fromString(paginableIn.getDirection()),
                 paginableIn.getSortBy()
@@ -149,12 +149,12 @@ public class SolicitudImpl implements SolicitudAbstract {
         Page<SolicitudEntity> pageResponse = solicitudRepository
                 .findAllFinaliByIdUserUnidad(paginableIn.getId(), pageable);
 
-        List<SolicitudDto> list = pageResponse.getContent().stream()
-                .map(x -> modelMapper.map(x, SolicitudDto.class))
+        List<Solicitud> list = pageResponse.getContent().stream()
+                .map(x -> modelMapper.map(x, Solicitud.class))
                 .toList();
 
-        PaginableOut<SolicitudDto> build = PaginableOut
-                .<SolicitudDto>builder()
+        PaginableOut<Solicitud> build = PaginableOut
+                .<Solicitud>builder()
                 .content(list)
                 .totalPages(pageResponse.getTotalPages())
                 .totalElements(pageResponse.getTotalElements())
@@ -164,7 +164,7 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
-    public PaginableOut<SolicitudDto> getListaSolicitudesAbstract(PaginableIn paginableIn) {
+    public PaginableOut<Solicitud> getListaSolicitudesAbstract(PaginableIn paginableIn) {
         Sort sort = Sort.by(
                 Sort.Direction.fromString(paginableIn.getDirection()),
                 paginableIn.getSortBy()
@@ -179,13 +179,13 @@ public class SolicitudImpl implements SolicitudAbstract {
         Page<SolicitudEntity> pageResponse = solicitudRepository
                 .findAllByIdUserUnidad(paginableIn.getId(), pageable);
 
-        List<SolicitudDto> list = pageResponse.getContent().stream()
+        List<Solicitud> list = pageResponse.getContent().stream()
                 .map(x -> modelMapper
-                        .map(x, SolicitudDto.class))
+                        .map(x, Solicitud.class))
                 .toList();
 
-        PaginableOut<SolicitudDto> build = PaginableOut
-                .<SolicitudDto>builder()
+        PaginableOut<Solicitud> build = PaginableOut
+                .<Solicitud>builder()
                 .content(list)
                 .totalPages(pageResponse.getTotalPages())
                 .totalElements(pageResponse.getTotalElements())
@@ -195,16 +195,16 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
-    public void guardarSolicitudAbstract(SolicitudDto solicitudDto) {
-        SolicitudEntity solicitudEntity = modelMapper.map(solicitudDto, SolicitudEntity.class);
+    public void guardarSolicitudAbstract(Solicitud solicitud) {
+        SolicitudEntity solicitudEntity = modelMapper.map(solicitud, SolicitudEntity.class);
         solicitudRepository.save(solicitudEntity);
     }
 
     @Override
-    public SolicitudDto buscarSolicitudByIdAbstract(Long id) {
+    public Solicitud buscarSolicitudByIdAbstract(Long id) {
         SolicitudEntity solicitudEntity = solicitudRepository
                 .findById(id).orElseThrow();
-        return modelMapper.map(solicitudEntity, SolicitudDto.class);
+        return modelMapper.map(solicitudEntity, Solicitud.class);
     }
 
 

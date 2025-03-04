@@ -1,7 +1,6 @@
 package com.prototipo.infrastructure.config;
 
 import com.prototipo.application.adapter.SolicitanteAdapter;
-import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.port.out.FotocopiaAbstract;
 import com.prototipo.application.port.out.ServicioFotocopiaAbstract;
 import com.prototipo.application.port.out.SolicitudAbstract;
@@ -17,8 +16,6 @@ public class SolicitudConfig {
     public SolicitanteService solicitudServiceBean(
             @Qualifier("solicitudImpl")
             SolicitudAbstract solicitudAbstract,
-            @Qualifier("mapperApplicationAbstractBean")
-            MapperApplicationAbstract mapperApplicationAbstract,
             @Qualifier("fotocopiaImpl")
             FotocopiaAbstract fotocopiaAbstract,
             @Qualifier("servicioFotocopiaImpl")
@@ -27,7 +24,6 @@ public class SolicitudConfig {
         //Se necesita una dependencia
         return new SolicitanteAdapter(
                 solicitudAbstract,
-                mapperApplicationAbstract,
                 fotocopiaAbstract,
                 servicioFotocopiaAbstract);
     }

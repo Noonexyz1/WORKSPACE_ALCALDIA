@@ -1,13 +1,13 @@
 package com.prototipo.application.port.out;
 
-import com.prototipo.application.modelDto.UsuarioUnidadDto;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
+import com.prototipo.domain.model.UsuarioUnidad;
 
 public interface UsuarioUnidadAbstract {
-    UsuarioUnidadDto guardarUsuarioUnidad(UsuarioUnidadDto usuarioUnidadDto);
-    UsuarioUnidadDto encontrarUsuarioUnidadByUsuarioId(Long idUsuario);
-    UsuarioUnidadDto encontarUsuarioUnidadId(Long idUsuarioUnidad);
-    UsuarioUnidadDto encontrarUsuarioUnidadByCi(String ci);
-    PaginableOut<UsuarioUnidadDto> listaDeUsuariosAbsDef(PaginableIn paginableIn);
+    UsuarioUnidad guardarUsuarioUnidad(UsuarioUnidad usuarioUnidad);
+    UsuarioUnidad encontrarUsuarioUnidadByUsuarioId(Long idUsuario);
+    UsuarioUnidad encontarUsuarioUnidadId(Long idUsuarioUnidad);
+    UsuarioUnidad encontrarUsuarioUnidadByCi(String ci);
+    PaginableOut<UsuarioUnidad> listaDeUsuariosAbsDef(PaginableIn paginableIn);
 }

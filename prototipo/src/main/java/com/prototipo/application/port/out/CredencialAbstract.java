@@ -1,9 +1,9 @@
 package com.prototipo.application.port.out;
 
-import com.prototipo.application.modelDto.CredencialDto;
+import com.prototipo.domain.model.Credencial;
 
 public interface CredencialAbstract {
-    CredencialDto guardarCredencialAbstract(CredencialDto nuevaCred);
-    CredencialDto encontrarCredencial(String correo, String pass);
-    CredencialDto encontrarCredencialPorUsuarioId(Long idUsuario);
+    Credencial guardarCredencialAbstract(Credencial nuevaCred);
+    Credencial encontrarCredencial(String correo, String pass);
+    Credencial encontrarCredencialPorUsuarioId(Long idUsuario);
 }

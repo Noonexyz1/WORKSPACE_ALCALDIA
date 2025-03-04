@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.impl;
 
-import com.prototipo.application.modelDto.ServicioFotocopiaDto;
 import com.prototipo.application.port.out.ServicioFotocopiaAbstract;
+import com.prototipo.domain.model.ServicioFotocopia;
 import com.prototipo.infrastructure.persistence.db.entity.ServicioFotocopiaEntity;
 import com.prototipo.infrastructure.persistence.db.repository.ServicioFotocopiaRepository;
 import org.modelmapper.ModelMapper;
@@ -17,7 +17,7 @@ public class ServicioFotocopiaImpl implements ServicioFotocopiaAbstract {
     private ServicioFotocopiaRepository servicioFotocopiaRepository;
 
     @Override
-    public ServicioFotocopiaDto findServicioFotocopia(ServicioFotocopiaDto fkServicioFotocopia) {
+    public ServicioFotocopia findServicioFotocopia(ServicioFotocopia fkServicioFotocopia) {
         ServicioFotocopiaEntity serFotoEntity = servicioFotocopiaRepository
                 .findByAnverColorTam(
                         fkServicioFotocopia.getAnverRever(),
@@ -25,6 +25,6 @@ public class ServicioFotocopiaImpl implements ServicioFotocopiaAbstract {
                         fkServicioFotocopia.getTamano()
                 );
 
-        return modelMapper.map(serFotoEntity, ServicioFotocopiaDto.class);
+        return modelMapper.map(serFotoEntity, ServicioFotocopia.class);
     }
 }

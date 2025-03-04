@@ -1,9 +1,9 @@
 package com.prototipo.infrastructure.impl;
 
-import com.prototipo.application.modelDto.AutorizacionDto;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
 import com.prototipo.application.port.out.AutorizacionAbstract;
+import com.prototipo.domain.model.Autorizacion;
 import com.prototipo.infrastructure.persistence.db.entity.AutorizacionEntity;
 import com.prototipo.infrastructure.persistence.db.entity.SolicitudEntity;
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioUnidadEntity;
@@ -28,7 +28,7 @@ public class AutorizacionImpl implements AutorizacionAbstract {
 
 
     @Override
-    public PaginableOut<AutorizacionDto> listaDeSoliAutorizadasAbstractPageByIdSoli(PaginableIn paginableIn) {
+    public PaginableOut<Autorizacion> listaDeSoliAutorizadasAbstractPageByIdSoli(PaginableIn paginableIn) {
         Sort sort = Sort.by(
                 Sort.Direction.fromString(paginableIn.getDirection()),
                 paginableIn.getSortBy()
@@ -43,12 +43,12 @@ public class AutorizacionImpl implements AutorizacionAbstract {
         Page<AutorizacionEntity> autorizacionList = autorizacionRepository
                 .buscarAutorizacionByIdResponsableByIdSoli(paginableIn.getId(), pageable);
 
-        List<AutorizacionDto> list = autorizacionList.getContent().stream()
-                .map(x -> modelMapper.map(x, AutorizacionDto.class))
+        List<Autorizacion> list = autorizacionList.getContent().stream()
+                .map(x -> modelMapper.map(x, Autorizacion.class))
                 .toList();
 
-        PaginableOut<AutorizacionDto> paginableOut = PaginableOut
-                .<AutorizacionDto>builder()
+        PaginableOut<Autorizacion> paginableOut = PaginableOut
+                .<Autorizacion>builder()
                 .content(list)
                 .totalPages(autorizacionList.getTotalPages())
                 .totalElements(autorizacionList.getTotalElements())
@@ -58,7 +58,7 @@ public class AutorizacionImpl implements AutorizacionAbstract {
     }
 
     @Override
-    public PaginableOut<AutorizacionDto> listaDeSoliAutorizadasAbstractPageByIdResponsable(PaginableIn paginableIn) {
+    public PaginableOut<Autorizacion> listaDeSoliAutorizadasAbstractPageByIdResponsable(PaginableIn paginableIn) {
         Sort sort = Sort.by(
                 Sort.Direction.fromString(paginableIn.getDirection()),
                 paginableIn.getSortBy()
@@ -73,12 +73,12 @@ public class AutorizacionImpl implements AutorizacionAbstract {
         Page<AutorizacionEntity> autorizacionList = autorizacionRepository
                 .buscarAutorizacionByIdResponsable(paginableIn.getId(), pageable);
 
-        List<AutorizacionDto> list = autorizacionList.getContent().stream()
-                .map(x -> modelMapper.map(x, AutorizacionDto.class))
+        List<Autorizacion> list = autorizacionList.getContent().stream()
+                .map(x -> modelMapper.map(x, Autorizacion.class))
                 .toList();
 
-        PaginableOut<AutorizacionDto> paginableOut = PaginableOut
-                .<AutorizacionDto>builder()
+        PaginableOut<Autorizacion> paginableOut = PaginableOut
+                .<Autorizacion>builder()
                 .content(list)
                 .totalPages(autorizacionList.getTotalPages())
                 .totalElements(autorizacionList.getTotalElements())
@@ -88,7 +88,7 @@ public class AutorizacionImpl implements AutorizacionAbstract {
     }
 
     @Override
-    public void guardarAutorizacionAbs(AutorizacionDto autorizacionDto) {
+    public void guardarAutorizacionAbs(Autorizacion autorizacionDto) {
         UsuarioUnidadEntity usuarioResponsable = UsuarioUnidadEntity.builder()
                 .id(autorizacionDto.getFkUsuarioResponsable().getId())
                 .build();
@@ -109,16 +109,16 @@ public class AutorizacionImpl implements AutorizacionAbstract {
     }
 
     @Override
-    public AutorizacionDto buscarAutorizacionByIdAbs(Long idAutorizacion) {
+    public Autorizacion buscarAutorizacionByIdAbs(Long idAutorizacion) {
         AutorizacionEntity autorizacion = autorizacionRepository
                 .findById(idAutorizacion).get();
-        return modelMapper.map(autorizacion, AutorizacionDto.class);
+        return modelMapper.map(autorizacion, Autorizacion.class);
     }
 
     @Override
-    public AutorizacionDto findAutorizacionByIdSoli(Long idSolicitud) {
+    public Autorizacion findAutorizacionByIdSoli(Long idSolicitud) {
         AutorizacionEntity autorizacionEntity = autorizacionRepository
                 .buscarAutorizacionByIdSoli(idSolicitud);
-        return modelMapper.map(autorizacionEntity, AutorizacionDto.class);
+        return modelMapper.map(autorizacionEntity, Autorizacion.class);
     }
 }
