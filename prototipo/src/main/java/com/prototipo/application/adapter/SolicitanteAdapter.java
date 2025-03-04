@@ -4,10 +4,10 @@ import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.*;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
-import com.prototipo.application.port.FotocopiaAbstract;
-import com.prototipo.application.port.ServicioFotocopiaAbstract;
-import com.prototipo.application.port.SolicitudAbstract;
-import com.prototipo.application.useCase.SolicitanteService;
+import com.prototipo.application.port.out.FotocopiaAbstract;
+import com.prototipo.application.port.out.ServicioFotocopiaAbstract;
+import com.prototipo.application.port.out.SolicitudAbstract;
+import com.prototipo.application.port.in.SolicitanteService;
 
 import com.prototipo.domain.enums.*;
 import com.prototipo.domain.model.*;

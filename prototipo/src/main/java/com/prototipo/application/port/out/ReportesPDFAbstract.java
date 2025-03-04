@@ -1,4 +1,4 @@
-package com.prototipo.application.port;
+package com.prototipo.application.port.out;
 
 import com.prototipo.application.modelDto.NotaDePedidoDto;
 import com.prototipo.application.modelDto.ReporteDto;

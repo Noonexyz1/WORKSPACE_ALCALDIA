@@ -1,4 +1,4 @@
-package com.prototipo.application.port;
+package com.prototipo.application.port.out;
 
 import com.prototipo.application.modelDto.AutorizacionDto;
 import com.prototipo.application.pager.PaginableIn;

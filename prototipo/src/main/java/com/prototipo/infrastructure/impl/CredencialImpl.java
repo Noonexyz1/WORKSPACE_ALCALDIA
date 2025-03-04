@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.CredencialDto;
-import com.prototipo.application.port.CredencialAbstract;
+import com.prototipo.application.port.out.CredencialAbstract;
 import com.prototipo.infrastructure.persistence.db.entity.CredencialEntity;
 import com.prototipo.infrastructure.persistence.db.repository.CredencialRepository;
 import org.modelmapper.ModelMapper;

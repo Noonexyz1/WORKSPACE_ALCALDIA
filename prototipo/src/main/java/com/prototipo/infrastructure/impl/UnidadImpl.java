@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.UnidadDto;
-import com.prototipo.application.port.UnidadAbstract;
+import com.prototipo.application.port.out.UnidadAbstract;
 import com.prototipo.infrastructure.persistence.db.repository.UnidadRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;

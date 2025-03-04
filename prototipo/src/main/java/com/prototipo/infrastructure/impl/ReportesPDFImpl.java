@@ -2,7 +2,7 @@ package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.NotaDePedidoDto;
 import com.prototipo.application.modelDto.ReporteDto;
-import com.prototipo.application.port.ReportesPDFAbstract;
+import com.prototipo.application.port.out.ReportesPDFAbstract;
 import com.prototipo.infrastructure.persistence.db.repository.ReportesPDFRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

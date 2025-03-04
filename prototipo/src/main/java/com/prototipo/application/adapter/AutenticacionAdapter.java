@@ -3,9 +3,9 @@ package com.prototipo.application.adapter;
 import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.CredencialDto;
 import com.prototipo.application.modelDto.UsuarioDto;
-import com.prototipo.application.port.CredencialAbstract;
-import com.prototipo.application.port.UsuarioAbastract;
-import com.prototipo.application.useCase.AutenticacionService;
+import com.prototipo.application.port.out.CredencialAbstract;
+import com.prototipo.application.port.out.UsuarioAbastract;
+import com.prototipo.application.port.in.AutenticacionService;
 import com.prototipo.domain.model.Credencial;
 import com.prototipo.domain.model.Usuario;
 

@@ -1,6 +1,6 @@
 package com.prototipo.infrastructure.impl;
 
-import com.prototipo.application.port.ResponsablePDFAbstract;
+import com.prototipo.application.port.out.ResponsablePDFAbstract;
 import com.prototipo.infrastructure.rest.report.NotaDePedidoReport;
 import com.prototipo.infrastructure.rest.report.ReporteReport;
 import lombok.SneakyThrows;

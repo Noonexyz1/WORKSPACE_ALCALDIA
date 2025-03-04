@@ -3,7 +3,7 @@ package com.prototipo.infrastructure.impl;
 import com.prototipo.application.modelDto.*;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
-import com.prototipo.application.port.SolicitudAbstract;
+import com.prototipo.application.port.out.SolicitudAbstract;
 import com.prototipo.infrastructure.persistence.db.entity.*;
 import com.prototipo.infrastructure.persistence.db.repository.*;
 import org.modelmapper.ModelMapper;

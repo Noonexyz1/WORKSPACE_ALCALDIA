@@ -4,8 +4,8 @@ import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.*;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
-import com.prototipo.application.port.*;
-import com.prototipo.application.useCase.AdministradorService;
+import com.prototipo.application.port.out.*;
+import com.prototipo.application.port.in.AdministradorService;
 import com.prototipo.domain.model.*;
 
 import java.util.List;

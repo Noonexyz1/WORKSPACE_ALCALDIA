@@ -2,8 +2,9 @@ package com.prototipo.infrastructure.config;
 
 import com.prototipo.application.adapter.AutenticacionAdapter;
 import com.prototipo.application.mapper.MapperApplicationAbstract;
-import com.prototipo.application.port.*;
-import com.prototipo.application.useCase.AutenticacionService;
+import com.prototipo.application.port.out.CredencialAbstract;
+import com.prototipo.application.port.out.UsuarioAbastract;
+import com.prototipo.application.port.in.AutenticacionService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

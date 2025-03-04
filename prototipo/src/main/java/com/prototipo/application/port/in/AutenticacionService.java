@@ -1,4 +1,4 @@
-package com.prototipo.application.useCase;
+package com.prototipo.application.port.in;
 
 import com.prototipo.domain.model.Credencial;
 import com.prototipo.domain.model.Usuario;

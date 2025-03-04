@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.CargoDto;
-import com.prototipo.application.port.CargoAbstract;
+import com.prototipo.application.port.out.CargoAbstract;
 import com.prototipo.infrastructure.persistence.db.entity.CargoEntity;
 import com.prototipo.infrastructure.persistence.db.repository.CargoRepository;
 import org.modelmapper.ModelMapper;

@@ -3,7 +3,7 @@ package com.prototipo.infrastructure.impl;
 import com.prototipo.application.modelDto.AutorizacionDto;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
-import com.prototipo.application.port.AutorizacionAbstract;
+import com.prototipo.application.port.out.AutorizacionAbstract;
 import com.prototipo.infrastructure.persistence.db.entity.AutorizacionEntity;
 import com.prototipo.infrastructure.persistence.db.entity.SolicitudEntity;
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioUnidadEntity;

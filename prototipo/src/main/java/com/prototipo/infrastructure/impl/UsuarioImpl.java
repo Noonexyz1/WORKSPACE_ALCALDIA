@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.UsuarioDto;
-import com.prototipo.application.port.UsuarioAbastract;
+import com.prototipo.application.port.out.UsuarioAbastract;
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioEntity;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioRepository;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioUnidadRepository;

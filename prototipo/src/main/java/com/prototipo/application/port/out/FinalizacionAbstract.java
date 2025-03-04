@@ -1,4 +1,4 @@
-package com.prototipo.application.port;
+package com.prototipo.application.port.out;
 
 import com.prototipo.application.modelDto.FinalizacionDto;
 import com.prototipo.application.pager.PaginableIn;

@@ -2,8 +2,8 @@ package com.prototipo.infrastructure.config;
 
 import com.prototipo.application.adapter.ResponsableAdapter;
 import com.prototipo.application.mapper.MapperApplicationAbstract;
-import com.prototipo.application.port.*;
-import com.prototipo.application.useCase.ResponsableService;
+import com.prototipo.application.port.out.*;
+import com.prototipo.application.port.in.ResponsableService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -4,13 +4,11 @@ import com.prototipo.application.mapper.MapperApplicationAbstract;
 import com.prototipo.application.modelDto.*;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
-import com.prototipo.application.port.*;
-import com.prototipo.application.useCase.ResponsableService;
+import com.prototipo.application.port.out.*;
+import com.prototipo.application.port.in.ResponsableService;
 import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.rest.report.NotaDePedidoReport;
 import com.prototipo.infrastructure.rest.report.ReporteReport;
-
-import lombok.SneakyThrows;
 
 import java.io.File;
 import java.io.InputStream;

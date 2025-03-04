@@ -1,6 +1,6 @@
 package com.prototipo.infrastructure.rest.controller;
 
-import com.prototipo.application.useCase.AutenticacionService;
+import com.prototipo.application.port.in.AutenticacionService;
 import com.prototipo.domain.model.Credencial;
 import com.prototipo.domain.model.Usuario;
 import com.prototipo.infrastructure.rest.request.CredencialRequest;

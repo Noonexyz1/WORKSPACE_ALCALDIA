@@ -1,4 +1,4 @@
-package com.prototipo.application.port;
+package com.prototipo.application.port.out;
 
 import com.prototipo.infrastructure.rest.report.NotaDePedidoReport;
 import com.prototipo.infrastructure.rest.report.ReporteReport;

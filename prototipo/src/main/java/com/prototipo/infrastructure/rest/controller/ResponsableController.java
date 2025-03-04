@@ -2,7 +2,7 @@ package com.prototipo.infrastructure.rest.controller;
 
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
-import com.prototipo.application.useCase.ResponsableService;
+import com.prototipo.application.port.in.ResponsableService;
 import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.rest.request.*;
 import com.prototipo.infrastructure.rest.response.*;

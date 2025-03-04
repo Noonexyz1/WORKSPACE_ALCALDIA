@@ -3,7 +3,7 @@ package com.prototipo.infrastructure.impl;
 import com.prototipo.application.modelDto.UsuarioUnidadDto;
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
-import com.prototipo.application.port.UsuarioUnidadAbstract;
+import com.prototipo.application.port.out.UsuarioUnidadAbstract;
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioUnidadEntity;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioUnidadRepository;
 import org.modelmapper.ModelMapper;

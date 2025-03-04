@@ -2,8 +2,8 @@ package com.prototipo.infrastructure.config;
 
 import com.prototipo.application.adapter.AdministradorAdapter;
 import com.prototipo.application.mapper.MapperApplicationAbstract;
-import com.prototipo.application.port.*;
-import com.prototipo.application.useCase.AdministradorService;
+import com.prototipo.application.port.out.*;
+import com.prototipo.application.port.in.AdministradorService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

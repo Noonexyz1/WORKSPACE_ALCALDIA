@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.ServicioFotocopiaDto;
-import com.prototipo.application.port.ServicioFotocopiaAbstract;
+import com.prototipo.application.port.out.ServicioFotocopiaAbstract;
 import com.prototipo.infrastructure.persistence.db.entity.ServicioFotocopiaEntity;
 import com.prototipo.infrastructure.persistence.db.repository.ServicioFotocopiaRepository;
 import org.modelmapper.ModelMapper;

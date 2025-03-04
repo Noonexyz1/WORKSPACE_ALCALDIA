@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.impl;
 
 import com.prototipo.application.modelDto.FotocopiaDto;
-import com.prototipo.application.port.FotocopiaAbstract;
+import com.prototipo.application.port.out.FotocopiaAbstract;
 import com.prototipo.infrastructure.persistence.db.entity.FotocopiaEntity;
 import com.prototipo.infrastructure.persistence.db.repository.DetalleSolicitudRepository;
 import com.prototipo.infrastructure.persistence.db.repository.FotocopiaRepository;

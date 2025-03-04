@@ -1,4 +1,4 @@
-package com.prototipo.application.useCase;
+package com.prototipo.application.port.in;
 
 import com.prototipo.application.pager.PaginableIn;
 import com.prototipo.application.pager.PaginableOut;
