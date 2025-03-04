@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.impl;
 
-import com.prototipo.application.pager.PaginableIn;
-import com.prototipo.application.pager.PaginableOut;
+import com.prototipo.application.model.PaginableIn;
+import com.prototipo.application.model.PaginableOut;
 import com.prototipo.application.port.out.AutorizacionAbstract;
 import com.prototipo.domain.model.Autorizacion;
 import com.prototipo.infrastructure.persistence.db.entity.AutorizacionEntity;

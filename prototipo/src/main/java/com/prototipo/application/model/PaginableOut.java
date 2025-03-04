@@ -1,4 +1,4 @@
-package com.prototipo.application.pager;
+package com.prototipo.application.model;
 
 import lombok.*;
 

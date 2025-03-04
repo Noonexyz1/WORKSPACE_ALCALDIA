@@ -1,7 +1,7 @@
 package com.prototipo.infrastructure.rest.controller;
 
-import com.prototipo.application.pager.PaginableIn;
-import com.prototipo.application.pager.PaginableOut;
+import com.prototipo.application.model.PaginableIn;
+import com.prototipo.application.model.PaginableOut;
 import com.prototipo.application.port.in.SolicitanteService;
 import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.rest.request.PageRequest;

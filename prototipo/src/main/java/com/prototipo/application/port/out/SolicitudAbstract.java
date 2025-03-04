@@ -1,7 +1,7 @@
 package com.prototipo.application.port.out;
 
-import com.prototipo.application.pager.PaginableIn;
-import com.prototipo.application.pager.PaginableOut;
+import com.prototipo.application.model.PaginableIn;
+import com.prototipo.application.model.PaginableOut;
 import com.prototipo.domain.model.Solicitud;
 
 public interface SolicitudAbstract {
