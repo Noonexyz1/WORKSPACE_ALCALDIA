@@ -11,10 +11,6 @@ import com.prototipo.application.port.in.SolicitanteService;
 import com.prototipo.domain.enums.*;
 import com.prototipo.domain.model.*;
 
-import com.prototipo.infrastructure.files.pdf.model.ComunicacionReport;
-import com.prototipo.infrastructure.files.pdf.model.SolicitudReport;
-import com.prototipo.infrastructure.files.pdf.model.TablaSolicitudReport;
-
 import java.io.File;
 import java.util.List;
 
@@ -294,8 +290,8 @@ public class SolicitanteAdapter implements SolicitanteService {
         List<Fotocopia> listFotocopias = listaDeFotocopias(idSolicitud);
 
         // Mapeamos con los datos obtenidos para exportar el PDF
-        List<TablaSolicitudReport> listReportFotocopias = listFotocopias.stream()
-                .map(x -> TablaSolicitudReport.builder()
+        List<SolicitudTablaReport> listReportFotocopias = listFotocopias.stream()
+                .map(x -> SolicitudTablaReport.builder()
                         .documento(x.getNombreDocumento())
                         .cantidad(x.getNroCopias().intValue())
                         .build())

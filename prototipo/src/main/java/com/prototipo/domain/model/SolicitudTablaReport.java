@@ -1,4 +1,4 @@
-package com.prototipo.infrastructure.files.pdf.model;
+package com.prototipo.domain.model;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class TablaSolicitudReport {
+public class SolicitudTablaReport {
     private String documento;
     private Integer cantidad;
 }

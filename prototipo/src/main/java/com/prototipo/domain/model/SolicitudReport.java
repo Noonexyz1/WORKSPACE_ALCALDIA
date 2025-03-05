@@ -1,4 +1,4 @@
-package com.prototipo.infrastructure.files.pdf.model;
+package com.prototipo.domain.model;
 
 import lombok.*;
 
@@ -18,5 +18,5 @@ public class SolicitudReport {
     private String fecha;
     private String nombreOrganizacion;
     private String cantidadSumado;
-    private List<TablaSolicitudReport> listReportFotocopias;
+    private List<SolicitudTablaReport> listReportFotocopias;
 }
