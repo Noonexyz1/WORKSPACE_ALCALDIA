@@ -11,9 +11,9 @@ import com.prototipo.application.port.in.SolicitanteService;
 import com.prototipo.domain.enums.*;
 import com.prototipo.domain.model.*;
 
-import com.prototipo.infrastructure.rest.report.ComunicacionReport;
-import com.prototipo.infrastructure.rest.report.SolicitudReport;
-import com.prototipo.infrastructure.rest.report.TablaSolicitudReport;
+import com.prototipo.infrastructure.files.pdf.model.ComunicacionReport;
+import com.prototipo.infrastructure.files.pdf.model.SolicitudReport;
+import com.prototipo.infrastructure.files.pdf.model.TablaSolicitudReport;
 
 import java.io.File;
 import java.util.List;

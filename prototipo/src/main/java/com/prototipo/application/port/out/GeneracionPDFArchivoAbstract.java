@@ -3,8 +3,8 @@ package com.prototipo.application.port.out;
 import com.prototipo.domain.model.Fotocopia;
 import com.prototipo.domain.model.NotaDePedido;
 import com.prototipo.domain.model.Reporte;
-import com.prototipo.infrastructure.rest.report.ComunicacionReport;
-import com.prototipo.infrastructure.rest.report.SolicitudReport;
+import com.prototipo.infrastructure.files.pdf.model.ComunicacionReport;
+import com.prototipo.infrastructure.files.pdf.model.SolicitudReport;
 
 import java.io.InputStream;
 import java.util.List;
