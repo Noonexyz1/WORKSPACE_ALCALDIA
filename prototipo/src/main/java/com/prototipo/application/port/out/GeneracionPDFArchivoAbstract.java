@@ -1,7 +1,10 @@
 package com.prototipo.application.port.out;
 
+import com.prototipo.domain.model.Fotocopia;
 import com.prototipo.domain.model.NotaDePedido;
 import com.prototipo.domain.model.Reporte;
+import com.prototipo.infrastructure.rest.report.ComunicacionReport;
+import com.prototipo.infrastructure.rest.report.SolicitudReport;
 
 import java.io.InputStream;
 import java.util.List;
@@ -29,4 +32,19 @@ public interface GeneracionPDFArchivoAbstract {
             List<Reporte> listReporte,
             InputStream inputStream,
             String pdfOutputDirectory);
+
+    void generarOrdenDeFotocopiaPDFAbs(
+            List<Fotocopia> listFotocopia,
+            String recursoImagen,
+            String filePath);
+
+    void generarComunicacionInternaPDFAbs(
+            ComunicacionReport comunicacionReport,
+            String filePath,
+            String recursoString);
+
+    void generarSolicitudDeFotocopiaPDFAbs(
+            SolicitudReport solicitudReport,
+            String recursoImagen,
+            String rutaPlantillaSoliPDF);
 }

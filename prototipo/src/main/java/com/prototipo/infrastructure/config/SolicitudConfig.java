@@ -2,6 +2,7 @@ package com.prototipo.infrastructure.config;
 
 import com.prototipo.application.adapter.SolicitanteAdapter;
 import com.prototipo.application.port.out.FotocopiaAbstract;
+import com.prototipo.application.port.out.GeneracionPDFArchivoAbstract;
 import com.prototipo.application.port.out.ServicioFotocopiaAbstract;
 import com.prototipo.application.port.out.SolicitudAbstract;
 import com.prototipo.application.port.in.SolicitanteService;
@@ -19,12 +20,15 @@ public class SolicitudConfig {
             @Qualifier("fotocopiaImpl")
             FotocopiaAbstract fotocopiaAbstract,
             @Qualifier("servicioFotocopiaImpl")
-            ServicioFotocopiaAbstract servicioFotocopiaAbstract){
+            ServicioFotocopiaAbstract servicioFotocopiaAbstract,
+            @Qualifier("generacionPDFArchivoImpl")
+            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract){
 
         //Se necesita una dependencia
         return new SolicitanteAdapter(
                 solicitudAbstract,
                 fotocopiaAbstract,
-                servicioFotocopiaAbstract);
+                servicioFotocopiaAbstract,
+                generacionPDFArchivoAbstract);
     }
 }

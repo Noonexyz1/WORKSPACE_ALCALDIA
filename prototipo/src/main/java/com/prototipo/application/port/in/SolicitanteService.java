@@ -4,9 +4,6 @@ import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
 import com.prototipo.domain.model.*;
 
-//TODO, quitar esta importacion
-import net.sf.jasperreports.engine.JRException;
-
 import java.util.List;
 
 public interface SolicitanteService {
@@ -21,7 +18,7 @@ public interface SolicitanteService {
     PaginableOut<Solicitud> listaDeAutorizaciones(PaginableIn paginableIn);
     PaginableOut<Solicitud> listaDeFinalizaciones(PaginableIn paginableIn);
 
-    void generarOrdenDeFotocopiaPDF(Long idSolicitud) throws JRException;
-    void generarComunicacionInternaPDF(Long idSolicitud) throws JRException;
-    void generarSolicitudDeFotocopiaPDF(Long idSolicitud) throws JRException;
+    void generarOrdenDeFotocopiaPDF(Long idSolicitud);
+    void generarComunicacionInternaPDF(Long idSolicitud);
+    void generarSolicitudDeFotocopiaPDF(Long idSolicitud);
 }

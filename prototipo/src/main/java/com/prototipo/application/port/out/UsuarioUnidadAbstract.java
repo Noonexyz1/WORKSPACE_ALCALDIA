@@ -2,6 +2,7 @@ package com.prototipo.application.port.out;
 
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
+
 import com.prototipo.domain.model.UsuarioUnidad;
 
 public interface UsuarioUnidadAbstract {

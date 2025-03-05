@@ -3,6 +3,7 @@ package com.prototipo.application.adapter;
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
 import com.prototipo.application.port.out.FotocopiaAbstract;
+import com.prototipo.application.port.out.GeneracionPDFArchivoAbstract;
 import com.prototipo.application.port.out.ServicioFotocopiaAbstract;
 import com.prototipo.application.port.out.SolicitudAbstract;
 import com.prototipo.application.port.in.SolicitanteService;
@@ -13,42 +14,47 @@ import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.rest.report.ComunicacionReport;
 import com.prototipo.infrastructure.rest.report.SolicitudReport;
 import com.prototipo.infrastructure.rest.report.TablaSolicitudReport;
-import com.prototipo.application.util.DoublesALiteral;
-import com.prototipo.application.util.NumeroALiteral;
 
-//TODO, migrar a otra capa
-import net.sf.jasperreports.engine.*;
-import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import net.sf.jasperreports.export.SimpleExporterInput;
-import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
-import net.sf.jasperreports.pdf.JRPdfExporter;
-import net.sf.jasperreports.pdf.SimplePdfExporterConfiguration;
-import net.sf.jasperreports.pdf.SimplePdfReportConfiguration;
-import net.sf.jasperreports.pdf.type.PdfVersionEnum;
-
-import java.io.ByteArrayOutputStream;
 import java.io.File;
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
+// IMPORTANTE: En la Arquitectura Hexagonal, el núcleo de la aplicación (dominio)
+// no conoce los detalles de implementación de las capas externas (infraestructura).
+// En su lugar, define interfaces (puertos) que las capas externas deben implementar.
+//
+// Estas interfaces usan modelos del dominio en sus métodos, lo que permite
+// que la lógica de negocio funcione sin depender de detalles técnicos externos, no es su preocupacion
+// lo que le preocupa es cumplir con los casos de uso.
+//
+// Los modelos del dominio son simples estructuras de datos que representan
+// la información necesaria para la lógica de negocio. Pueden ser usados en
+// varias capas de la arquitectura, pero siempre deben ser manejados, modificados por la capa
+// appilcation o dominio.
+//
+// La infraestructura solo los usa para cumplir con los contratos definidos por los puertos.
+//
+// Tiene que ser asi, es inevitable
+//
+// Un modelo es un simple modelo de datos, no tiene logica de prgramacion o implementacion de logica,
+// mas bien siempre se piensa en el comportamiento de las dependencias por capas, no en el modelo de datos
+// a eso nos referimos con conocer los detalles de una capa, o mejor dicho, los detalles de una implementacion
 public class SolicitanteAdapter implements SolicitanteService {
 
     private SolicitudAbstract solicitudAbstract;
     private FotocopiaAbstract fotocopiaAbstract;
     private ServicioFotocopiaAbstract findServicioFotocopia;
+    private GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract;
 
     public SolicitanteAdapter(
             SolicitudAbstract solicitudAbstract,
             FotocopiaAbstract fotocopiaAbstract,
-            ServicioFotocopiaAbstract findServicioFotocopia) {
+            ServicioFotocopiaAbstract findServicioFotocopia,
+            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract) {
 
         this.solicitudAbstract = solicitudAbstract;
         this.fotocopiaAbstract = fotocopiaAbstract;
         this.findServicioFotocopia = findServicioFotocopia;
+        this.generacionPDFArchivoAbstract = generacionPDFArchivoAbstract;
     }
 
     @Override
@@ -190,119 +196,31 @@ public class SolicitanteAdapter implements SolicitanteService {
         return fotocopiaAbstract.getFotocopiasSolicitudAbstract(idSolicitud);
     }
 
+
+
     @Override
-    public void generarOrdenDeFotocopiaPDF(Long idSolicitud) throws JRException {
+    public void generarOrdenDeFotocopiaPDF(Long idSolicitud) {
+        // IMPORTANTE: Tu como capa application debes de construir los datos para luego pasarlos
+        // a la interfaz Abs (ya que esta se encarga de realizar logica de prog) y esta
+        // preocuparse por cumplirla ya sea con otra libreria.
+        // Osea construimos el modelo de dato para que la otra capa simplemente genere el PDF con este modelo.
+        // Este modelo seria por ejemplo un OrdenFotocopia
         List<Fotocopia> listFotocopia = listaDeFotocopias(idSolicitud);
-        List<JasperPrint> jasperPrintList = getReportByList(listFotocopia);
-        exportToPdfByListByJRPdfExporter(jasperPrintList);
-    }
 
-    private List<JasperPrint> getReportByList(List<Fotocopia> listFotocopiaSolicitud)
-            throws JRException {
+        String filePath = "src" + File.separator +
+                "main" + File.separator +
+                "resources" + File.separator +
+                "templates" + File.separator +
+                "report" + File.separator +
+                "orden.jrxml";
 
-        List<JasperPrint> paginasJasperPrints = new ArrayList<>();
+        String recursoImagen = "classpath:/static/images/";
 
-        Fotocopia[] detalleFotoVect = listFotocopiaSolicitud
-                .toArray(new Fotocopia[0]);
-
-        int marcador = 0;
-
-        //1. Determinar cuantas paginas son necesarias para poder imprimir los datos
-        //digamos que son 7 y necesito 2 paginas
-        int nroPaginas = (int) Math.ceil(
-                (double) listFotocopiaSolicitud.size() / 4
-        );
-
-        //para dos paginas en total, solo debo recorrer 2 paginas
-        for (int i = 1; i <= nroPaginas; i++) {
-            //para la pagina 1
-            //para la primera pagina se va ha mandar estos datos
-            String filePath = "src" + File.separator +
-                    "main" + File.separator +
-                    "resources" + File.separator +
-                    "templates" + File.separator +
-                    "report" + File.separator +
-                    "orden.jrxml";
-
-            //sabes que, con esta primera pagina, quiero que lo pobles con datos
-            Map<String, Object> params = new HashMap<>();
-            int j = marcador;
-            for (int k = 1; k <= 4 && j < detalleFotoVect.length; k++) {
-                // Verificar que j no esté fuera del rango
-                if (j < detalleFotoVect.length) {
-                    // Asigna los parámetros relacionados con la fotocopia
-                    params.put("nroCantidadFotocopia" + k, detalleFotoVect[j].getNroCopias().intValue());
-                    params.put("litCantidadFotocopia" + k, NumeroALiteral
-                            .convertirNumeroALiteral(detalleFotoVect[j].getNroCopias().intValue()));
-
-                    params.put("precio" + k, BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu()).setScale(2, RoundingMode.HALF_UP).doubleValue());
-
-                    params.put("literalPrecio" + k, DoublesALiteral
-                            .convertir(BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu())));
-
-                    params.put("detalle" + k, detalleFotoVect[j].getNombreDocumento());
-                    j++; // Avanzar al siguiente elemento
-                } else {
-                    // Si no hay más elementos, puedes asignar valores predeterminados
-                    params.put("nroCantidadFotocopia" + k, 0);
-                    params.put("precio" + k, new BigDecimal("0.00"));
-                    params.put("litCantidadFotocopia" + k, "N/A");
-                    params.put("literalPrecio" + k, "N/A");
-                    params.put("detalle" + k, "Sin detalle");
-                }
-            }
-
-            params.put("imageDir", "classpath:/static/images/");
-
-            //ESTE FILE PATH esta guardando con el PATH CORRESPONDIENTE??s?
-            JasperReport jasperReport = JasperCompileManager.compileReport(filePath);
-            //TRAS HABER CRFEADO EL jaspertReport, pues no inserta de forma correcta el orden2.jrxml
-
-            JasperPrint report = JasperFillManager.fillReport(//DEBO VISUALIZAR ESTA VARIABLE EN LA SIGUIENTE PRUEBA
-                    jasperReport,
-                    params,
-                    new JREmptyDataSource()
-            );
-
-            paginasJasperPrints.add(report);//AL ANADIR A LA LISTA, NO PONE EL ORDEN2 COMO JRXML EN LA LISTA
-            marcador = j;
-        }
-
-        return paginasJasperPrints;
-    }
-
-    private byte[] exportToPdfByListByJRPdfExporter(List<JasperPrint> jasperPrintList)
-            throws JRException {
-
-        // 1. Crea un flujo de salida en memoria
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-
-        // 2. Configura el exportador PDF
-        JRPdfExporter exporter = new JRPdfExporter();
-        exporter.setExporterInput(SimpleExporterInput.getInstance(jasperPrintList)); // Agrega todos los JasperPrint
-        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(baos)); // Define el flujo de salida
-
-        // Opcional: Configuración adicional para el PDF
-        SimplePdfReportConfiguration reportConfig = new SimplePdfReportConfiguration();
-        reportConfig.setSizePageToContent(true);
-        reportConfig.setForceLineBreakPolicy(false);
-
-        SimplePdfExporterConfiguration exportConfig = new SimplePdfExporterConfiguration();
-        exportConfig.setMetadataAuthor("TuNombre");
-        exportConfig.setPdfVersion(PdfVersionEnum.VERSION_1_7);
-
-        exporter.setConfiguration(reportConfig);
-        exporter.setConfiguration(exportConfig);
-
-        // 3. Exporta todos los JasperPrint en un único PDF
-        exporter.exportReport();
-
-        // 4. Convierte el contenido del flujo de salida a un arreglo de bytes
-        return baos.toByteArray();
+        generacionPDFArchivoAbstract.generarOrdenDeFotocopiaPDFAbs(listFotocopia, recursoImagen, filePath);
     }
 
     @Override
-    public void generarComunicacionInternaPDF(Long idSolicitud) throws JRException {
+    public void generarComunicacionInternaPDF(Long idSolicitud) {
         // Recuperar datos necesarios
         Solicitud solicitudResp = buscarSolicitud(idSolicitud);
 
@@ -336,8 +254,18 @@ public class SolicitanteAdapter implements SolicitanteService {
                 .totalCopias((int) totalCopias)
                 .build();
 
-        JasperPrint jasperPrint = getReport(comunicacionReport);
-        JasperExportManager.exportReportToPdf(jasperPrint);
+
+        //Ruta total
+        String filePath = "src" + File.separator +
+                "main" + File.separator +
+                "resources" + File.separator +
+                "templates" + File.separator +
+                "report" + File.separator +
+                "comunicacion.jrxml";
+
+        String recursoString = "classpath:/static/images/";
+
+        generacionPDFArchivoAbstract.generarComunicacionInternaPDFAbs(comunicacionReport, filePath, recursoString);
     }
 
     private String formatListaDocumentos(List<Fotocopia> listFotocopiaSolicitudResp) {
@@ -357,42 +285,8 @@ public class SolicitanteAdapter implements SolicitanteService {
         }
     }
 
-    private JasperPrint getReport(ComunicacionReport parametros)
-            throws JRException {
-
-        //Ruta total
-        String filePath = "src" + File.separator +
-                "main" + File.separator +
-                "resources" + File.separator +
-                "templates" + File.separator +
-                "report" + File.separator +
-                "comunicacion.jrxml";
-
-        Map<String, Object> params = new HashMap<>();
-        // Asigna los campos de ComunicacionReport a los parámetros del reporte
-        params.put("funcionarioTo", parametros.getFuncionarioTo());
-        params.put("funcionarioFrom", parametros.getFuncionarioFrom());
-        params.put("funcionarioToCargo", parametros.getFuncionarioToCargo());
-        params.put("funcionarioFromCargo", parametros.getFuncionarioFromCargo());
-        params.put("cite", parametros.getCite());
-        params.put("nombreOrganizacion", parametros.getNombreOrganizacion());
-        params.put("documentos", parametros.getDocumentos());
-        params.put("totalCopias", parametros.getTotalCopias());
-        params.put("imageDir", "classpath:/static/images/");
-
-        JasperReport jasperReport = JasperCompileManager.compileReport(filePath);
-
-        JasperPrint report = JasperFillManager.fillReport(
-                jasperReport,
-                params,
-                new JREmptyDataSource()
-        );
-
-        return report;
-    }
-
     @Override
-    public void generarSolicitudDeFotocopiaPDF(Long idSolicitud) throws JRException {
+    public void generarSolicitudDeFotocopiaPDF(Long idSolicitud) {
         // Traemos los datos necesarios para el reporte
         Solicitud solicitudResp = buscarSolicitud(idSolicitud);
         UsuarioUnidad usuarioResponsable = solicitudResp.getFkUsuarioSolicitante().getFkResponsable();
@@ -423,38 +317,19 @@ public class SolicitanteAdapter implements SolicitanteService {
                 .listReportFotocopias(listReportFotocopias)
                 .build();
 
-        JasperPrint jasperPrint = getReport(solicitudReport);
-        JasperExportManager.exportReportToPdf(jasperPrint);
-    }
-    //Deberias enviar el Mapa por parametro para reutilizar codigo
-    private JasperPrint getReport(SolicitudReport solicitudReport)
-            throws JRException {
-
-        // Asigna los campos de SolicitudReport a los parámetros del reporte plantilla
-        Map<String, Object> parameter = new HashMap<>();
-        parameter.put("funcionarioTo", solicitudReport.getFuncionarioTo());
-        parameter.put("funcionarioFrom", solicitudReport.getFuncionarioFrom());
-        parameter.put("funcionarioToCargo", solicitudReport.getFuncionarioToCargo());
-        parameter.put("funcionarioFromCargo", solicitudReport.getFuncionarioFromCargo());
-        parameter.put("cite", solicitudReport.getCite());
-        parameter.put("fecha", solicitudReport.getFecha());
-        parameter.put("nombreOrganizacion", solicitudReport.getNombreOrganizacion());
-        parameter.put("cantidadSumado", solicitudReport.getCantidadSumado());
-        parameter.put("ds", new JRBeanCollectionDataSource(solicitudReport.getListReportFotocopias()));
-        parameter.put("imageDir", "classpath:/static/images/");
 
         //Ruta total para traer la plantilla PDF de Solicitud
-        String rutaPlantillaSoliPDF = getRutaPlantillaSolicitudDPF();
-        JasperReport jasperReport = JasperCompileManager.compileReport(rutaPlantillaSoliPDF);
-        return JasperFillManager.fillReport(jasperReport, parameter, new JREmptyDataSource());
-    }
-
-    private String getRutaPlantillaSolicitudDPF(){
-        return "src" + File.separator +
+        String rutaPlantillaSoliPDF = "src" + File.separator +
                 "main" + File.separator +
                 "resources" + File.separator +
                 "templates" + File.separator +
                 "report" + File.separator +
                 "solicitud.jrxml";
+
+
+        String recursoImagen = "classpath:/static/images/";
+
+
+        generacionPDFArchivoAbstract.generarSolicitudDeFotocopiaPDFAbs(solicitudReport, recursoImagen, rutaPlantillaSoliPDF);
     }
 }
