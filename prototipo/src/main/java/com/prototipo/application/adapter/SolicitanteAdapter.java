@@ -205,7 +205,6 @@ public class SolicitanteAdapter implements SolicitanteService {
         List<Fotocopia> listFotocopia = listaDeFotocopias(idSolicitud);
 
 
-
         String salidaPdfPsth = "/home/kali/Downloads/ordenPDF";
 
         // Crear el directorio si no existe

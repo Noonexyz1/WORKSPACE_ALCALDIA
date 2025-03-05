@@ -13,6 +13,7 @@ import net.sf.jasperreports.pdf.JRPdfExporter;
 import org.springframework.stereotype.Component;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
@@ -91,18 +92,20 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
 
         // Este metodo me trae todas las paginas de la OrdenDeFotocopiaReport
         // 1. Crea un flujo de salida en memoria
-        ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
         // 2. Configura el exportador PDF
         JRPdfExporter exporter = new JRPdfExporter();
         exporter.setExporterInput(SimpleExporterInput.getInstance(paginasJasperPrints)); // Agrega todos los JasperPrint
-        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(baos)); // Define el flujo de salida
 
-        // 3. Exporta todos los JasperPrint en un único PDF
+        // 3. Define el flujo de salida hacia el archivo en la ruta especificada
+        FileOutputStream fos = new FileOutputStream(generacionPdfPath);
+        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(fos)); // Define el flujo de salida
+
+        // 4. Exporta todos los JasperPrint en un único PDF
         exporter.exportReport();
 
-        // 4. Convierte el contenido del flujo de salida a un arreglo de bytes
-        baos.toByteArray(); // esto me trae los bytes, el pdf en si
+        // 4. Cierra el flujo de salida
+        fos.close(); // esto me trae los bytes, el pdf en si
 
     }
 
