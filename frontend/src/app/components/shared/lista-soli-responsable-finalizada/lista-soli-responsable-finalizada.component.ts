@@ -120,9 +120,9 @@ export class ListaSoliFinalizadaResponsableComponent{
 
   }
 
-  botonDescargoSolicitudPDF(solicitudFinalizada: number): void {
+  botonDescargoSolicitudPDF(idSolicitud: number): void {
     this.http.get(
-      UrlsProperties.PATH_REPORTE_PDF + solicitudFinalizada,
+      UrlsProperties.PATH_REPORTE_PDF + idSolicitud,
       { responseType: 'blob' }
     ).pipe( // Cambiar el tipo de respuesta
       map((response: Blob) => {
