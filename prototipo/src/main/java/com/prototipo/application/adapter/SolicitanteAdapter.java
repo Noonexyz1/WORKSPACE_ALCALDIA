@@ -319,7 +319,10 @@ public class SolicitanteAdapter implements SolicitanteService {
     public void generarSolicitudDeFotocopiaPDF(Long idSolicitud) {
         // Traemos los datos necesarios para el reporte
         Solicitud solicitudResp = buscarSolicitud(idSolicitud);
+
+        //Esto me sale null
         UsuarioUnidad usuarioResponsable = solicitudResp.getFkUsuarioSolicitante().getFkResponsable();
+
         UsuarioUnidad usuarioSolicitante = solicitudResp.getFkUsuarioSolicitante();
         List<Fotocopia> listFotocopias = listaDeFotocopias(idSolicitud);
 
@@ -336,6 +339,7 @@ public class SolicitanteAdapter implements SolicitanteService {
                         usuarioResponsable.getFkUsuario().getPaterno() + " " +
                         usuarioResponsable.getFkUsuario().getMaterno())
                 .funcionarioToCargo(usuarioResponsable.getFkCargo().getNombreCargo())
+
                 .funcionarioFrom(usuarioSolicitante.getFkUsuario().getNombres() + " " +
                         usuarioSolicitante.getFkUsuario().getPaterno() + " " +
                         usuarioSolicitante.getFkUsuario().getMaterno())
@@ -366,7 +370,7 @@ public class SolicitanteAdapter implements SolicitanteService {
         String recursoImagenPath = "classpath:/static/images/";
 
         // Ruta del archivo PDF
-        String generacionPdfPath = salidaPdfPsth + "/ordenDeFotocopia_" + idSolicitud + ".pdf";
+        String generacionPdfPath = salidaPdfPsth + "/solicitud_" + idSolicitud + ".pdf";
 
         generacionPDFArchivoAbstract.generarSolicitudDeFotocopiaPDFAbs(
                 solicitudReport,

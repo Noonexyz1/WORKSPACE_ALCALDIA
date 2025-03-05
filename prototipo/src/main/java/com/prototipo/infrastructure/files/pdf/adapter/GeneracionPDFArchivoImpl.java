@@ -162,7 +162,7 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
                 new JREmptyDataSource()
         );
 
-        JasperExportManager.exportReportToPdf(jasperPrint);
+        JasperExportManager.exportReportToPdfFile(jasperPrint, generacionPdfPath);
 
     }
 

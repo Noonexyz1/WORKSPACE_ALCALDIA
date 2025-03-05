@@ -207,6 +207,16 @@ public class SolicitudImpl implements SolicitudAbstract {
 
         //Los mapero a mano porque ModelMapper no sabe mapear relaciones REFLEXIVAS
         UsuarioUnidadEntity usrSoliEnty = solicitudEntity.getFkUsuarioSolicitante();
+        UsuarioUnidadEntity usrResponsableEnty = solicitudEntity.getFkUsuarioSolicitante().getFkResponsable();
+
+        UsuarioUnidad usuarioResponsable = UsuarioUnidad.builder()
+                .id(usrResponsableEnty.getId())
+                .isActive(usrResponsableEnty.getIsActive())
+                .fkUsuario(modelMapper.map(usrResponsableEnty.getFkUsuario(), Usuario.class))
+                .fkUnidad(modelMapper.map(usrResponsableEnty.getFkUnidad(), Unidad.class))
+                .fkRol(modelMapper.map(usrResponsableEnty.getFkRol(), Rol.class))
+                .fkCargo(modelMapper.map(usrResponsableEnty.getFkCargo(), Cargo.class))
+                .build();
 
         UsuarioUnidad usuarioSolicitante = UsuarioUnidad.builder()
                 .id(usrSoliEnty.getId())
@@ -215,6 +225,7 @@ public class SolicitudImpl implements SolicitudAbstract {
                 .fkUnidad(modelMapper.map(usrSoliEnty.getFkUnidad(), Unidad.class))
                 .fkRol(modelMapper.map(usrSoliEnty.getFkRol(), Rol.class))
                 .fkCargo(modelMapper.map(usrSoliEnty.getFkCargo(), Cargo.class))
+                .fkResponsable(usuarioResponsable)
                 .build();
 
 
