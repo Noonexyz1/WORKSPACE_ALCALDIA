@@ -3,7 +3,7 @@ package com.prototipo.infrastructure.persistence.db.adapter;
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
 import com.prototipo.application.port.out.SolicitudAbstract;
-import com.prototipo.domain.model.Solicitud;
+import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.persistence.db.entity.*;
 import com.prototipo.infrastructure.persistence.db.repository.*;
 import org.modelmapper.ModelMapper;
@@ -204,8 +204,34 @@ public class SolicitudImpl implements SolicitudAbstract {
     public Solicitud buscarSolicitudByIdAbstract(Long id) {
         SolicitudEntity solicitudEntity = solicitudRepository
                 .findById(id).orElseThrow();
-        return modelMapper.map(solicitudEntity, Solicitud.class);
+
+        //Los mapero a mano porque ModelMapper no sabe mapear relaciones REFLEXIVAS
+        UsuarioUnidadEntity usrSoliEnty = solicitudEntity.getFkUsuarioSolicitante();
+
+        UsuarioUnidad usuarioSolicitante = UsuarioUnidad.builder()
+                .id(usrSoliEnty.getId())
+                .isActive(usrSoliEnty.getIsActive())
+                .fkUsuario(modelMapper.map(usrSoliEnty.getFkUsuario(), Usuario.class))
+                .fkUnidad(modelMapper.map(usrSoliEnty.getFkUnidad(), Unidad.class))
+                .fkRol(modelMapper.map(usrSoliEnty.getFkRol(), Rol.class))
+                .fkCargo(modelMapper.map(usrSoliEnty.getFkCargo(), Cargo.class))
+                .build();
+
+
+        Solicitud solicitud = Solicitud.builder()
+                .id(solicitudEntity.getId())
+                .cite(solicitudEntity.getCite())
+                .descripcion(solicitudEntity.getDescripcion())
+                .fecha(solicitudEntity.getFecha())
+                .autoriFlag(solicitudEntity.getAutoriFlag())
+                .isActive(solicitudEntity.getIsActive())
+                .precioTotal(solicitudEntity.getPrecioTotal())
+                .nombreServicio(solicitudEntity.getNombreServicio())
+                .paginaTotal(solicitudEntity.getPaginaTotal())
+                .copiaTotal(solicitudEntity.getCopiaTotal())
+                .fkUsuarioSolicitante(usuarioSolicitante)
+                .build();
+
+        return solicitud;
     }
-
-
 }

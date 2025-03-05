@@ -14,5 +14,7 @@ public class Cargo {
     private String nombreCargo;
 
     //Esto lo estoy dejando a pesar de que esta es una tabla fuerte
-    private List<UsuarioUnidad> listUsuarioUnidad;
+    //private List<UsuarioUnidad> listUsuarioUnidad;
+
+    //Al final esto me dio error al mapear porque esta al final es uno de tipo LAZY jajaj
 }

@@ -8,7 +8,6 @@ import com.prototipo.infrastructure.http.rest.model.request.AprobacionSoliReques
 import com.prototipo.infrastructure.http.rest.model.request.PageRequest;
 import com.prototipo.infrastructure.http.rest.model.response.*;
 import com.prototipo.infrastructure.service.Observable;
-import net.sf.jasperreports.engine.JRException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -19,7 +18,6 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -394,7 +392,7 @@ public class ResponsableController {
     @Async  // La anotación para indicar que este mettodo es asincronico
     @GetMapping("/exportNotaPedidoDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportNotaPedidoDPF(
-            @PathVariable Long idSolicitud) throws JRException, IOException {
+            @PathVariable Long idSolicitud) {
 
         responsableService.generarNotaPedidoPDF(idSolicitud);
 
@@ -409,7 +407,7 @@ public class ResponsableController {
     @Async
     @GetMapping("/exportReporteDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportReporteDPF(
-            @PathVariable Long idSolicitud) throws JRException, IOException {
+            @PathVariable Long idSolicitud) {
 
         responsableService.generarReportePDF(idSolicitud);
 
