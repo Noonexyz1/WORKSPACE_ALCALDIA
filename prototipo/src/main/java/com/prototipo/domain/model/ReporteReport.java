@@ -1,4 +1,4 @@
-package com.prototipo.infrastructure.files.pdf.model;
+package com.prototipo.domain.model;
 
 import lombok.*;
 

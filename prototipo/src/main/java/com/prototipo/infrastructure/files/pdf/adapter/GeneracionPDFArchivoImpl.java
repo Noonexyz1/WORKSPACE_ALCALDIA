@@ -3,11 +3,7 @@ package com.prototipo.infrastructure.files.pdf.adapter;
 import com.prototipo.application.port.out.GeneracionPDFArchivoAbstract;
 import com.prototipo.application.util.DoublesALiteral;
 import com.prototipo.application.util.NumeroALiteral;
-import com.prototipo.domain.model.Fotocopia;
-import com.prototipo.domain.model.NotaDePedido;
-import com.prototipo.domain.model.Reporte;
-import com.prototipo.domain.model.ComunicacionReport;
-import com.prototipo.domain.model.SolicitudReport;
+import com.prototipo.domain.model.*;
 import lombok.SneakyThrows;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
@@ -61,6 +57,34 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
 
         // Exportar el PDF a un archivo
         JasperExportManager.exportReportToPdfFile(jasperPrint, outputFilePath);
+
+        // Devolver el contenido del PDF como un arreglo de bytes
+        //return Files.readAllBytes(Paths.get(outputFilePath));
+    }
+
+    @Override
+    @SneakyThrows
+    public void generarNotaPedidoPDFAbs2(
+            NotaDePedidoReport notaDePedidoReport,
+            InputStream recursoJrxmlPath,
+            String recursoImagenPath,
+            String generacionPdfPath) {
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("fecha", notaDePedidoReport.getFecha());
+        params.put("nombreServicio", notaDePedidoReport.getNombreServicio());
+        params.put("precioTotal", notaDePedidoReport.getPrecioTotal());
+        params.put("ds", new JRBeanCollectionDataSource(notaDePedidoReport.getListNotaPedido()));
+        params.put("imageDir", recursoImagenPath);
+
+        JasperPrint jasperPrint = JasperFillManager.fillReport(
+                JasperCompileManager.compileReport(recursoJrxmlPath),
+                params,
+                new JREmptyDataSource()
+        );
+
+        // Exportar el PDF a un archivo
+        JasperExportManager.exportReportToPdfFile(jasperPrint, generacionPdfPath);
 
         // Devolver el contenido del PDF como un arreglo de bytes
         //return Files.readAllBytes(Paths.get(outputFilePath));

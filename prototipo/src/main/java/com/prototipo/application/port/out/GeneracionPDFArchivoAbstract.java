@@ -1,10 +1,6 @@
 package com.prototipo.application.port.out;
 
-import com.prototipo.domain.model.Fotocopia;
-import com.prototipo.domain.model.NotaDePedido;
-import com.prototipo.domain.model.Reporte;
-import com.prototipo.domain.model.ComunicacionReport;
-import com.prototipo.domain.model.SolicitudReport;
+import com.prototipo.domain.model.*;
 
 import java.io.InputStream;
 import java.util.List;
@@ -47,4 +43,10 @@ public interface GeneracionPDFArchivoAbstract {
             SolicitudReport solicitudReport,
             String recursoImagen,
             String rutaPlantillaSoliPDF);
+
+    void generarNotaPedidoPDFAbs2(
+            NotaDePedidoReport notaDePedidoReport,
+            InputStream recursoJrxmlPath,
+            String recursoImagenPath,
+            String generacionPdfPath);
 }

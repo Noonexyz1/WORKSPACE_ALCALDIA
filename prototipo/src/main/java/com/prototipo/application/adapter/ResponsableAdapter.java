@@ -198,29 +198,10 @@ public class ResponsableAdapter implements ResponsableService {
     @Override
     public void generarNotaPedidoPDF(Long idSolicitud) {
 
-        String pdfOutputDirectory = "/home/kali/Downloads/notaPedidoPDF";
-
-        // Crear el directorio si no existe
-        File outputDir = new File(pdfOutputDirectory);
-        if (!outputDir.exists()) {
-            outputDir.mkdirs();
-        }
-
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("templates/report/notaPedido.jrxml");
-        if (inputStream == null) {
-            throw new RuntimeException("No se pudo encontrar el archivo notaPedido.jrxml en el classpath.");
-        }
-
-        String recursoImagen = "classpath:/static/images/";
-
-
-
-
         LocalDate fechaActual = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter
                 .ofPattern("dd 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
         String fechaFormateada = fechaActual.format(formato);
-
 
 
         Solicitud solicitud = solicitudAbstract.buscarSolicitudByIdAbstract(idSolicitud);
@@ -231,17 +212,39 @@ public class ResponsableAdapter implements ResponsableService {
         List<NotaDePedido> listNotaPedidoPDF = listaDeNotasDePedido(idSolicitud);
 
 
-        generacionPDFArchivoAbstract.generarNotaPedidoPDFAbs(
-                idSolicitud,
-                fechaFormateada,
-                recursoImagen,
-                nombreServicio,
-                precioTotalRedondeado,
-                listNotaPedidoPDF,
-                inputStream,
-                pdfOutputDirectory
-        );
+        NotaDePedidoReport notaDePedidoReport = NotaDePedidoReport.builder()
+                .idSolicitud(idSolicitud)
+                .fecha(fechaFormateada)
+                .nombreServicio(nombreServicio)
+                .precioTotal(precioTotalRedondeado)
+                .listNotaPedido(listNotaPedidoPDF)
+                .build();
 
+        String salidaPdfPsth = "/home/kali/Downloads/notaPedidoPDF";
+
+        // Crear el directorio si no existe
+        File outputDir = new File(salidaPdfPsth);
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        }
+
+        InputStream recursoJrxmlPath = getClass().getClassLoader().getResourceAsStream("templates/report/notaPedido.jrxml");
+        if (recursoJrxmlPath == null) {
+            throw new RuntimeException("No se pudo encontrar el archivo notaPedido.jrxml en el classpath.");
+        }
+
+        String recursoImagenPath = "classpath:/static/images/";
+
+
+        // Ruta del archivo PDF
+        String generacionPdfPath = salidaPdfPsth + "/notaPedido_" + idSolicitud + ".pdf";
+
+        generacionPDFArchivoAbstract.generarNotaPedidoPDFAbs2(
+                notaDePedidoReport,
+                recursoJrxmlPath,
+                recursoImagenPath,
+                generacionPdfPath
+        );
     }
 
     @Override
