@@ -285,7 +285,7 @@ public class SolicitanteAdapter implements SolicitanteService {
         String recursoImagenPath = "classpath:/static/images/";
 
         // Ruta del archivo PDF
-        String generacionPdfPath = salidaPdfPsth + "/ordenDeFotocopia_" + idSolicitud + ".pdf";
+        String generacionPdfPath = salidaPdfPsth + "/comunicacion_" + idSolicitud + ".pdf";
 
 
 

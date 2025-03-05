@@ -12,7 +12,6 @@ import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.pdf.JRPdfExporter;
 import org.springframework.stereotype.Component;
 
-import java.io.ByteArrayOutputStream;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.math.BigDecimal;
@@ -135,7 +134,7 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
                 new JREmptyDataSource()
         );
 
-        JasperExportManager.exportReportToPdf(report);
+        JasperExportManager.exportReportToPdfFile(report, generacionPdfPath);
     }
 
     @Override
