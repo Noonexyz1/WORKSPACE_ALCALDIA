@@ -7,45 +7,36 @@ import java.util.List;
 
 public interface GeneracionPDFArchivoAbstract {
 
-    void generarNotaPedidoPDFAbs(
-            Long idSolicitud,
-            String fechaFormateada,
-            String recursoImagen,
-            String nombreServicio,
-            Double precioTotalRedondeado,
-            List<NotaDePedido> listNotaPedidoPDF,
-            InputStream inputStream,
-            String pdfOutputDirectory);
-
-    void generarReportePDFAbs(
-            Long idSolicitud,
-            String fechaActualString,
-            String recursoImagen,
-            String nombreServicio,
-            Double precioTotal,
-            Long paginaTotal,
-            Long copiaTotal,
-            List<Reporte> listReporte,
-            InputStream inputStream,
-            String pdfOutputDirectory);
-
     void generarOrdenDeFotocopiaPDFAbs(
             List<Fotocopia> listFotocopia,
-            String recursoImagen,
-            String filePath);
+            InputStream recursoJrxmlPath,
+            String recursoImagenPath,
+            String generacionPdfPath);
 
     void generarComunicacionInternaPDFAbs(
             ComunicacionReport comunicacionReport,
-            String filePath,
-            String recursoString);
+            InputStream recursoJrxmlPath,
+            String recursoImagenPath,
+            String generacionPdfPath);
 
     void generarSolicitudDeFotocopiaPDFAbs(
             SolicitudReport solicitudReport,
-            String recursoImagen,
-            String rutaPlantillaSoliPDF);
+            InputStream recursoJrxmlPath,
+            String recursoImagenPath,
+            String generacionPdfPath);
 
-    void generarNotaPedidoPDFAbs2(
+
+
+
+
+    void generarNotaPedidoPDFAbs(
             NotaDePedidoReport notaDePedidoReport,
+            InputStream recursoJrxmlPath,
+            String recursoImagenPath,
+            String generacionPdfPath);
+
+    void generarReportePDFAbs(
+            ReporteReport reporteReport,
             InputStream recursoJrxmlPath,
             String recursoImagenPath,
             String generacionPdfPath);

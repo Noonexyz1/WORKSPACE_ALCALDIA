@@ -193,8 +193,6 @@ public class ResponsableAdapter implements ResponsableService {
 
 
 
-
-
     @Override
     public void generarNotaPedidoPDF(Long idSolicitud) {
 
@@ -220,6 +218,7 @@ public class ResponsableAdapter implements ResponsableService {
                 .listNotaPedido(listNotaPedidoPDF)
                 .build();
 
+
         String salidaPdfPsth = "/home/kali/Downloads/notaPedidoPDF";
 
         // Crear el directorio si no existe
@@ -235,11 +234,11 @@ public class ResponsableAdapter implements ResponsableService {
 
         String recursoImagenPath = "classpath:/static/images/";
 
-
         // Ruta del archivo PDF
         String generacionPdfPath = salidaPdfPsth + "/notaPedido_" + idSolicitud + ".pdf";
 
-        generacionPDFArchivoAbstract.generarNotaPedidoPDFAbs2(
+
+        generacionPDFArchivoAbstract.generarNotaPedidoPDFAbs(
                 notaDePedidoReport,
                 recursoJrxmlPath,
                 recursoImagenPath,
@@ -250,53 +249,56 @@ public class ResponsableAdapter implements ResponsableService {
     @Override
     public void generarReportePDF(Long idSolicitud) {
 
-        String pdfOutputDirectory = "/home/kali/Downloads/reportePDF";
-
-        // Crear el directorio si no existe
-        File outputDir = new File(pdfOutputDirectory);
-        if (!outputDir.exists()) {
-            outputDir.mkdirs();
-        }
-
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("templates/report/reporte.jrxml");
-        if (inputStream == null) {
-            throw new RuntimeException("No se pudo encontrar el archivo reporte.jrxml en el classpath.");
-        }
-
-        String recursoImagen = "classpath:/static/images/";
-
-
-
-
         // Formato con nombre del mes completo
         LocalDate fechaActual = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter
                 .ofPattern("dd 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
         String fechaActualString = fechaActual.format(formato);
 
-
         Solicitud solicitud = solicitudAbstract.buscarSolicitudByIdAbstract(idSolicitud);
-
 
         String nombreServicio = solicitud.getNombreServicio();
         Double precioTotal = BigDecimal.valueOf(solicitud.getPrecioTotal()).setScale(2, RoundingMode.HALF_UP).doubleValue();
         Long paginaTotal = solicitud.getPaginaTotal();
         Long copiaTotal = solicitud.getCopiaTotal();
-
-
         List<Reporte> listReporte = listaDeReportes(idSolicitud);
 
+        ReporteReport reporteReport = ReporteReport.builder()
+                .idSolicitud(idSolicitud)
+                .fecha(fechaActualString)
+                .nombreServicio(nombreServicio)
+                .precioTotal(precioTotal)
+                .paginaTotal(paginaTotal)
+                .copiaTotal(copiaTotal)
+                .listReporte(listReporte)
+                .build();
+
+
+
+        String salidaPdfPsth = "/home/kali/Downloads/reportePDF";
+
+        // Crear el directorio si no existe
+        File outputDir = new File(salidaPdfPsth);
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        }
+
+        InputStream recursoJrxmlPath = getClass().getClassLoader().getResourceAsStream("templates/report/reporte.jrxml");
+        if (recursoJrxmlPath == null) {
+            throw new RuntimeException("No se pudo encontrar el archivo reporte.jrxml en el classpath.");
+        }
+
+        String recursoImagenPath = "classpath:/static/images/";
+
+        // Ruta del archivo PDF
+        String generacionPdfPath = salidaPdfPsth + "/reporte_" + idSolicitud + ".pdf";
+
+
         generacionPDFArchivoAbstract.generarReportePDFAbs(
-                idSolicitud,
-                fechaActualString,
-                recursoImagen,
-                nombreServicio,
-                precioTotal,
-                paginaTotal,
-                copiaTotal,
-                listReporte,
-                inputStream,
-                pdfOutputDirectory
+                reporteReport,
+                recursoJrxmlPath,
+                recursoImagenPath,
+                generacionPdfPath
         );
     }
 
