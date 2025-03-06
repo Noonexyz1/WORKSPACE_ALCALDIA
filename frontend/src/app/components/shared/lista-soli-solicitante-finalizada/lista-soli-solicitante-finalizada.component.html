@@ -1,13 +1,11 @@
 <section class="dark:bg-gray-900">
   <div class="mx-auto px-4 2xl:px-0">
-
+    <div class="gap-4 sm:flex sm:items-center sm:justify-between pb-4">
+      <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+        Lista de solicitudes finalizadas
+      </h2>
+    </div>
     @if (listSolicitud != null && listSolicitud.length > 0) {
-      <div class="gap-4 sm:flex sm:items-center sm:justify-between pb-4">
-        <h2 class="text-xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
-          Lista de solicitudes finalizadas
-        </h2>
-      </div>
-
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
 
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
@@ -95,6 +93,17 @@
         </ul>
       </nav>
 
+    } @else {
+      <section class="bg-white dark:bg-gray-900">
+        <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+          <div class="mx-auto max-w-screen-sm text-center">
+            <p class="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">No hay
+              solicitudes finalizadas.</p>
+            <p class="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">Las solicitudes se van a mostrar de
+              forma automatica o actualize la pagina.</p>
+          </div>
+        </div>
+      </section>
     }
 
   </div>
