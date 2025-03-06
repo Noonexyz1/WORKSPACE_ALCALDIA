@@ -1,6 +1,5 @@
 package com.prototipo;
 
-import com.prototipo.infrastructure.persistence.db.entity.CredencialEntity;
 import com.prototipo.infrastructure.persistence.db.repository.CredencialRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -23,12 +22,11 @@ public class PrototipoApplication {
 			PasswordEncoder passwordEncoder) {
 
 		return args -> {
-			var credencialEntity = credencialRepository
-					.encontrarCredencial("1234567", "123");
-			credencialEntity.setPass(
-					passwordEncoder.encode(credencialEntity.getPass())
-			);
-			credencialRepository.save(credencialEntity);
+			credencialRepository.findAll()
+					.forEach(x -> {
+						x.setPass(passwordEncoder.encode(x.getPass()));
+						credencialRepository.save(x);
+                    });
 		};
 	}*/
 
