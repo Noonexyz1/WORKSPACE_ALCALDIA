@@ -14,6 +14,7 @@ import com.prototipo.domain.model.*;
 import java.io.File;
 import java.io.InputStream;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 // IMPORTANTE: En la Arquitectura Hexagonal, el núcleo de la aplicación (dominio)
 // no conoce los detalles de implementación de las capas externas (infraestructura).
@@ -54,6 +55,7 @@ public class SolicitanteAdapter implements SolicitanteService {
         this.generacionPDFArchivoAbstract = generacionPDFArchivoAbstract;
     }
 
+
     @Override
     public void solicitarFotocopia(Solicitud solicitudDto, List<Fotocopia> listFotocopia) {
         solicitudDto.setNombreServicio(TipoServicioEnum.FOTOCOPIA.getNombre());
@@ -85,7 +87,15 @@ public class SolicitanteAdapter implements SolicitanteService {
         solicitudDtoResp.setPaginaTotal(paginaTotal);
         solicitudDtoResp.setCopiaTotal(copiaTotal);
 
-        solicitudAbstract.solicitarFotocopiarAbstract(solicitudDtoResp);
+        Solicitud solicitudSaved = solicitudAbstract.solicitarFotocopiarAbstract(solicitudDtoResp);
+
+        // Estoy usando CompletableFuture para las tareas asincronas para estos tres procesos
+        // estoy conciente que estoy usando Java21 y que hay VirtualThreas pero... naaaaa. solo son tres tareas ;D
+        CompletableFuture.allOf(
+                CompletableFuture.runAsync(() -> generarOrdenDeFotocopiaPDF(solicitudSaved.getId())),
+                CompletableFuture.runAsync(() -> generarComunicacionInternaPDF(solicitudSaved.getId())),
+                CompletableFuture.runAsync(() -> generarSolicitudDeFotocopiaPDF(solicitudSaved.getId()))
+        ).join();
     }
 
     private double guardadFotocopiaAbstrac(Fotocopia fotocopia){

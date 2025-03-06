@@ -36,7 +36,7 @@ public class SolicitanteController {
     @PostMapping(
             path = {"/solicitarFotocopiar"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void solicitarFotocopiarV2(@RequestBody SolicitudRequest solicitudRequest) {
+    public void solicitarFotocopiar(@RequestBody SolicitudRequest solicitudRequest) {
         List<Fotocopia> listFotocopias = solicitudRequest
                 .getListDetalleSolicitud()
                 .stream()

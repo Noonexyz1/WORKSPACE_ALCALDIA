@@ -95,7 +95,7 @@ public class SolicitudImpl implements SolicitudAbstract {
         return paginableOut;
     }
 
-    //Tu unicamente deberias traerla Solicitud
+    //Tu unicamente deberias traer la Solicitud
     @Override
     public Solicitud solicitarFotocopiarAbstract(Solicitud solicitud) {
         SolicitudEntity solicitudEntity = modelMapper.map(solicitud, SolicitudEntity.class);

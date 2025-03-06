@@ -157,8 +157,8 @@ export class NuevaSolicitudComponent implements OnInit {
     this.http.post<SolicitudRequest>(
       UrlsProperties.PATH_CREATE_SOLICITUD,
       solicitudRequest
-    ).pipe(
-      map(() => {
+    ).subscribe({
+      next: () => {
         // Reiniciar el estado del componente
         this.solicitudForm.reset();
         documentosArray.clear(); // Limpiar el FormArray
@@ -166,14 +166,14 @@ export class NuevaSolicitudComponent implements OnInit {
         this.nroDeDocumentos = 0;
 
         // Redirigir al usuario
-        this.rootNavigateService.valorParaNavegar('SolicitantePendientes');
-      }),
-      catchError(error => {
+        this.rootNavigateService.valorParaNavegar('SolicitantePendientes')
+      },
+      error: (error) => {
+        // Manejo de errores (opcional)
         console.error('Error en la petición:', error);
         alert('Hubo un error al enviar la solicitud');
-        return of(null);
-      })
-    ).subscribe();
+      }
+    });
   }
 
   botonSetNumeroDeCopias(): void {
