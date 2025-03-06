@@ -15,6 +15,7 @@ import org.springframework.http.*;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -210,25 +211,27 @@ public class SolicitanteController {
     @GetMapping("/exportSolicitudDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportSolicitudDPF(
             // Unicamente con el Id de Solicitud puedes traer toda la informacion debido a sus relaciones
-            @PathVariable Long idSolicitud) {
+            @PathVariable Long idSolicitud) throws IOException {
 
-        solicitanteService.generarSolicitudDeFotocopiaPDF(idSolicitud);
+        byte[] solicitudDeFotocopia = solicitanteService.descargaSolicitudDeFotocopiaPDF(idSolicitud);
 
         return CompletableFuture.supplyAsync(() -> {
                 // Los heades para el reponse
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_PDF);
-                headers.setContentDispositionFormData("solicitudPDF", "solicitudPDF.pdf");
-                return ResponseEntity.ok().headers(headers).body(null);
+                headers.setContentDispositionFormData(
+                        "solicitudPDF",
+                        "solicitud_" + idSolicitud + ".pdf");
+                return ResponseEntity.ok().headers(headers).body(solicitudDeFotocopia);
         });
     }
 
     @Async
     @GetMapping("/exportOrdenDeSolicitudDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportOrdenDeSolicitudDPF(
-            @PathVariable Long idSolicitud) {
+            @PathVariable Long idSolicitud) throws IOException {
 
-        solicitanteService.generarOrdenDeFotocopiaPDF(idSolicitud);
+        byte[] ordenDeFotocopia = solicitanteService.descargarOrdenDeFotocopiaPDF(idSolicitud);
 
         return CompletableFuture.supplyAsync(() -> {
                 // Configurar encabezados de la respuesta
@@ -236,18 +239,18 @@ public class SolicitanteController {
                 headers.setContentType(MediaType.APPLICATION_PDF);
                 headers.setContentDispositionFormData(
                         "ordenParaFotocopiaPDF",
-                        "ordenParaFotocopia.pdf"
+                        "ordenDeFotocopia_" + idSolicitud + ".pdf"
                 );
-                return ResponseEntity.ok().headers(headers).body(null);
+                return ResponseEntity.ok().headers(headers).body(ordenDeFotocopia);
         });
     }
 
     @Async
     @GetMapping("/exportComunicacionInternaDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportComunicacionInternaDPF(
-            @PathVariable Long idSolicitud) {
+            @PathVariable Long idSolicitud) throws IOException {
 
-        solicitanteService.generarComunicacionInternaPDF(idSolicitud);
+        byte[] comunicacionInterna = solicitanteService.descargarComunicacionInternaPDF(idSolicitud);
 
         return CompletableFuture.supplyAsync(() -> {
                 // Configurar encabezados de la respuesta
@@ -255,9 +258,9 @@ public class SolicitanteController {
                 headers.setContentType(MediaType.APPLICATION_PDF);
                 headers.setContentDispositionFormData(
                         "comunicacionInternaPDF",
-                        "comunicacionInterna.pdf"
+                        "comunicacion_" + idSolicitud + ".pdf"
                 );
-                return ResponseEntity.ok().headers(headers).body(null);
+                return ResponseEntity.ok().headers(headers).body(comunicacionInterna);
         });
     }
 }

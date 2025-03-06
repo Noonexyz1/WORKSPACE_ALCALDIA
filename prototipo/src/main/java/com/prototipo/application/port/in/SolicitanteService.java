@@ -4,6 +4,7 @@ import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
 import com.prototipo.domain.model.*;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface SolicitanteService {
@@ -21,4 +22,8 @@ public interface SolicitanteService {
     void generarOrdenDeFotocopiaPDF(Long idSolicitud);
     void generarComunicacionInternaPDF(Long idSolicitud);
     void generarSolicitudDeFotocopiaPDF(Long idSolicitud);
+
+    byte[] descargaSolicitudDeFotocopiaPDF(Long idSolicitud) throws IOException;
+    byte[] descargarOrdenDeFotocopiaPDF(Long idSolicitud) throws IOException;
+    byte[] descargarComunicacionInternaPDF(Long idSolicitud) throws IOException;
 }

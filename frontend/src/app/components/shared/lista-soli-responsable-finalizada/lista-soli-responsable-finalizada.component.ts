@@ -120,16 +120,16 @@ export class ListaSoliFinalizadaResponsableComponent{
 
   }
 
-  botonDescargoSolicitudPDF(idSolicitud: number): void {
+  botonReporteSolicitudPDF(idSolicitud: number): void {
     this.http.get(
       UrlsProperties.PATH_REPORTE_PDF + idSolicitud,
       { responseType: 'blob' }
     ).pipe( // Cambiar el tipo de respuesta
       map((response: Blob) => {
-        this.descargarPDF('reportePDF.pdf', response);
+        this.descargarPDF("reporte_" + idSolicitud + ".pdf", response);
       }),
       catchError(error => {
-        this.errorDescargaPDF('reportePDF.pdf', error);
+        this.errorDescargaPDF("reporte_" + idSolicitud + ".pdf", error);
         return of(null);
       })
     ).subscribe();

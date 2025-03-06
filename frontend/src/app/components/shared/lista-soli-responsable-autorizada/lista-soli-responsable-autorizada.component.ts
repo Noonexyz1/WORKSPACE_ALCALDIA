@@ -69,11 +69,11 @@ export class ListaSoliAutorizadaResponsableComponent {
       { responseType: 'blob' }
     ).pipe( // Cambiar el tipo de respuesta
       map((response: Blob) => {
-        this.descargarPDF("notaPedidoPDF.pdf", response);
+        this.descargarPDF("notaPedido_" + idSolicitud + ".pdf", response);
         this.isActiveBtnFinalizar = true;
       }),
       catchError(error => {
-        this.errorDescargaPDF("notaPedidoPDF.pdf", error)
+        this.errorDescargaPDF("notaPedido_" + idSolicitud + ".pdf", error)
         return of(null);
       })
     ).subscribe();

@@ -2,12 +2,10 @@ import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {SolicitudResponse} from '../../../models/SolicitudResponse';
 import {BehaviorSubject, catchError, map, of} from 'rxjs';
-import {PageRequestID} from '../../../models/PageRequestID';
 import {UsuarioResponse} from '../../../models/UsuarioResponse';
 import {LocalStorageService} from '../../../services/local-storage/local-storage.service';
 import {PageProperties} from "../../../models/PageProperties";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
-import {UsuarioUnidadEditRequest} from "../../../models/UsuarioUnidadEditRequest";
 import {PageRequest} from "../../../models/PageRequest";
 import {PageResponse} from "../../../models/PageResponse";
 
@@ -20,17 +18,12 @@ import {PageResponse} from "../../../models/PageResponse";
 })
 export class ListaSoliSolicitantePendienteComponent {
 
-  private http: HttpClient;
-  private localStorage: LocalStorageService;
-
   usuario: UsuarioResponse = new UsuarioResponse();
 
   constructor(
-    http: HttpClient,
-    localStorage: LocalStorageService) {
+    private http: HttpClient,
+    private localStorage: LocalStorageService) {
 
-    this.http = http;
-    this.localStorage = localStorage;
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
   }
@@ -116,10 +109,10 @@ export class ListaSoliSolicitantePendienteComponent {
       { responseType: 'blob' }
     ).pipe( // Cambiar el tipo de respuesta
       map((response: Blob) => {
-        this.descargarPDF('solicitudPDF.pdf', response);
+        this.descargarPDF("solicitud_" + idSolicitud + ".pdf", response);
       }),
       catchError(error => {
-        this.errorDescargaPDF('solicitudPDF.pdf', error);
+        this.errorDescargaPDF("solicitud_" + idSolicitud + ".pdf", error);
         return of(null);
       })
     ).subscribe();
@@ -138,10 +131,10 @@ export class ListaSoliSolicitantePendienteComponent {
       { responseType: 'blob' }
     ).pipe( // Cambiar el tipo de respuesta
       map((response: Blob) => {
-        this.descargarPDF('ordenParaFotocopia.pdf', response);
+        this.descargarPDF("ordenDeFotocopia_" + idSolicitud + ".pdf", response);
       }),
       catchError(error => {
-        this.errorDescargaPDF('ordenParaFotocopia.pdf', error);
+        this.errorDescargaPDF("ordenDeFotocopia_" + idSolicitud + ".pdf", error);
         return of(null);
       })
     ).subscribe();
@@ -160,10 +153,10 @@ export class ListaSoliSolicitantePendienteComponent {
       { responseType: 'blob' }
     ).pipe( // Cambiar el tipo de respuesta
       map((response: Blob) => {
-        this.descargarPDF('comunicacionInterna.pdf', response);
+        this.descargarPDF("comunicacion_" + idSolicitud + ".pdf", response);
       }),
       catchError(error => {
-        this.errorDescargaPDF('comunicacionInterna.pdf', error)
+        this.errorDescargaPDF("comunicacion_" + idSolicitud + ".pdf", error)
         return of(null);
       })
     ).subscribe();
@@ -183,8 +176,6 @@ export class ListaSoliSolicitantePendienteComponent {
     console.error('Error en la petición:', error);
     alert('Hubo un ERROR al generar ' + nombrePdf);
   }
-
-
 
 
 

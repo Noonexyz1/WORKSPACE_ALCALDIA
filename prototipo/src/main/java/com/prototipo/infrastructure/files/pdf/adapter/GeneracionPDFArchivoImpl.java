@@ -10,6 +10,9 @@ import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.export.SimpleExporterInput;
 import net.sf.jasperreports.export.SimpleOutputStreamExporterOutput;
 import net.sf.jasperreports.pdf.JRPdfExporter;
+import net.sf.jasperreports.pdf.SimplePdfExporterConfiguration;
+import net.sf.jasperreports.pdf.SimplePdfReportConfiguration;
+import net.sf.jasperreports.pdf.type.PdfVersionEnum;
 import org.springframework.stereotype.Component;
 
 import java.io.FileOutputStream;
@@ -32,36 +35,37 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
             String recursoImagenPath,
             String generacionPdfPath) {
 
+        // Convertir la lista a un array para facilitar el acceso por índice
         Fotocopia[] detalleFotoVect = listFotocopia.toArray(new Fotocopia[0]);
 
+        // Lista para almacenar todas las páginas del PDF
         List<JasperPrint> paginasJasperPrints = new ArrayList<>();
 
         int marcador = 0;
 
-        //1. Determinar cuantas paginas son necesarias para poder imprimir los datos
-        //digamos que son 7 y necesito 2 paginas
+        // 1. Determinar cuántas páginas son necesarias para poder imprimir los datos
         int nroPaginas = (int) Math.ceil((double) listFotocopia.size() / 4);
 
-        //para dos paginas en total, solo debo recorrer 2 paginas
-        for (int i = 1; i <= nroPaginas; i++) {
+        // Compilar el reporte una sola vez (fuera del bucle)
+        JasperReport jasperReport = JasperCompileManager.compileReport(recursoJrxmlPath);
 
-            //sabes que, con esta primera pagina, quiero que lo pobles con datos
+        // 2. Generar cada página
+        for (int i = 1; i <= nroPaginas; i++) {
+            // Parámetros para la página actual
             Map<String, Object> params = new HashMap<>();
             int j = marcador;
 
+            // Llenar los parámetros con los datos de la página actual
             for (int k = 1; k <= 4 && j < detalleFotoVect.length; k++) {
-
                 // Verificar que j no esté fuera del rango
                 if (j < detalleFotoVect.length) {
                     // Asigna los parámetros relacionados con la fotocopia
                     params.put("nroCantidadFotocopia" + k, detalleFotoVect[j].getNroCopias().intValue());
-                    params.put("litCantidadFotocopia" + k, NumeroALiteral
-                            .convertirNumeroALiteral(detalleFotoVect[j].getNroCopias().intValue()));
+                    params.put("litCantidadFotocopia" + k, NumeroALiteral.convertirNumeroALiteral(detalleFotoVect[j].getNroCopias().intValue()));
 
                     params.put("precio" + k, BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu()).setScale(2, RoundingMode.HALF_UP).doubleValue());
 
-                    params.put("literalPrecio" + k, DoublesALiteral
-                            .convertir(BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu())));
+                    params.put("literalPrecio" + k, DoublesALiteral.convertir(BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu())));
 
                     params.put("detalle" + k, detalleFotoVect[j].getNombreDocumento());
                     j++; // Avanzar al siguiente elemento
@@ -75,37 +79,42 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
                 }
             }
 
+            // Agregar la ruta de la imagen a los parámetros
             params.put("imageDir", recursoImagenPath);
 
-            //ESTE FILE PATH esta guardando con el PATH CORRESPONDIENTE??s?
-            //TRAS HABER CRFEADO EL jaspertReport, pues no inserta de forma correcta el orden2.jrxml
-            JasperPrint report = JasperFillManager.fillReport(//DEBO VISUALIZAR ESTA VARIABLE EN LA SIGUIENTE PRUEBA
-                    JasperCompileManager.compileReport(recursoJrxmlPath),
+            // Generar la página actual
+            JasperPrint report = JasperFillManager.fillReport(
+                    jasperReport, // Usar el reporte compilado
                     params,
                     new JREmptyDataSource()
             );
 
-            paginasJasperPrints.add(report);//AL ANADIR A LA LISTA, NO PONE EL ORDEN2 COMO JRXML EN LA LISTA
+            // Agregar la página a la lista
+            paginasJasperPrints.add(report);
             marcador = j;
         }
 
-        // Este metodo me trae todas las paginas de la OrdenDeFotocopiaReport
-        // 1. Crea un flujo de salida en memoria
+        // 3. Exportar todas las páginas a un solo PDF
+        try (FileOutputStream fos = new FileOutputStream(generacionPdfPath)) {
+            JRPdfExporter exporter = new JRPdfExporter();
+            exporter.setExporterInput(SimpleExporterInput.getInstance(paginasJasperPrints)); // Agregar todas las páginas
+            exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(fos)); // Definir el flujo de salida
 
-        // 2. Configura el exportador PDF
-        JRPdfExporter exporter = new JRPdfExporter();
-        exporter.setExporterInput(SimpleExporterInput.getInstance(paginasJasperPrints)); // Agrega todos los JasperPrint
+            // Opcional: Configuración adicional para el PDF
+            SimplePdfReportConfiguration reportConfig = new SimplePdfReportConfiguration();
+            reportConfig.setSizePageToContent(true);
+            reportConfig.setForceLineBreakPolicy(false);
 
-        // 3. Define el flujo de salida hacia el archivo en la ruta especificada
-        FileOutputStream fos = new FileOutputStream(generacionPdfPath);
-        exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(fos)); // Define el flujo de salida
+            SimplePdfExporterConfiguration exportConfig = new SimplePdfExporterConfiguration();
+            exportConfig.setMetadataAuthor("TuNombre");
+            exportConfig.setPdfVersion(PdfVersionEnum.VERSION_1_7);
 
-        // 4. Exporta todos los JasperPrint en un único PDF
-        exporter.exportReport();
+            exporter.setConfiguration(reportConfig);
+            exporter.setConfiguration(exportConfig);
 
-        // 4. Cierra el flujo de salida
-        fos.close(); // esto me trae los bytes, el pdf en si
-
+            // Exportar el PDF
+            exporter.exportReport();
+        }
     }
 
     @Override

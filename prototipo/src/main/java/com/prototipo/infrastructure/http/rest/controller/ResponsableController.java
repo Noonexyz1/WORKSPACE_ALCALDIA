@@ -18,6 +18,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Flux;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -392,30 +393,36 @@ public class ResponsableController {
     @Async  // La anotación para indicar que este mettodo es asincronico
     @GetMapping("/exportNotaPedidoDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportNotaPedidoDPF(
-            @PathVariable Long idSolicitud) {
+            @PathVariable Long idSolicitud) throws IOException {
 
-        responsableService.generarNotaPedidoPDF(idSolicitud);
+        byte[] notaDePedido = responsableService.descargarNotaPedidoPDF(idSolicitud);
 
         return CompletableFuture.supplyAsync(() -> {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_PDF);
-                headers.setContentDispositionFormData("notaPedidoPDF", "notaPedidoPDF.pdf");
-                return ResponseEntity.ok().headers(headers).body(null);
+                headers.setContentDispositionFormData(
+                        "notaPedidoPDF",
+                        "notaPedido_" + idSolicitud + ".pdf"
+                );
+                return ResponseEntity.ok().headers(headers).body(notaDePedido);
         });
     }
 
     @Async
     @GetMapping("/exportReporteDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportReporteDPF(
-            @PathVariable Long idSolicitud) {
+            @PathVariable Long idSolicitud) throws IOException {
 
-        responsableService.generarReportePDF(idSolicitud);
+        byte[] reporte = responsableService.descargarReportePDF(idSolicitud);
 
         return CompletableFuture.supplyAsync(() -> {
                 HttpHeaders headers = new HttpHeaders();
                 headers.setContentType(MediaType.APPLICATION_PDF);
-                headers.setContentDispositionFormData("reportePDF", "reportePDF.pdf");
-                return ResponseEntity.ok().headers(headers).body(null);
+                headers.setContentDispositionFormData(
+                        "reportePDF",
+                        "reporte_" + idSolicitud + ".pdf"
+                );
+                return ResponseEntity.ok().headers(headers).body(reporte);
         });
     }
 }

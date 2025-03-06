@@ -12,7 +12,10 @@ import com.prototipo.domain.enums.*;
 import com.prototipo.domain.model.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -206,6 +209,70 @@ public class SolicitanteAdapter implements SolicitanteService {
 
 
     @Override
+    public void generarSolicitudDeFotocopiaPDF(Long idSolicitud) {
+        // Traemos los datos necesarios para el reporte
+        Solicitud solicitudResp = buscarSolicitud(idSolicitud);
+
+        //Esto me sale null
+        UsuarioUnidad usuarioResponsable = solicitudResp.getFkUsuarioSolicitante().getFkResponsable();
+
+        UsuarioUnidad usuarioSolicitante = solicitudResp.getFkUsuarioSolicitante();
+        List<Fotocopia> listFotocopias = listaDeFotocopias(idSolicitud);
+
+        // Mapeamos con los datos obtenidos para exportar el PDF
+        List<SolicitudTablaReport> listReportFotocopias = listFotocopias.stream()
+                .map(x -> SolicitudTablaReport.builder()
+                        .documento(x.getNombreDocumento())
+                        .cantidad(x.getNroCopias().intValue())
+                        .build())
+                .toList();
+
+        SolicitudReport solicitudReport = SolicitudReport.builder()
+                .funcionarioTo(usuarioResponsable.getFkUsuario().getNombres() + " " +
+                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
+                        usuarioResponsable.getFkUsuario().getMaterno())
+                .funcionarioToCargo(usuarioResponsable.getFkCargo().getNombreCargo())
+
+                .funcionarioFrom(usuarioSolicitante.getFkUsuario().getNombres() + " " +
+                        usuarioSolicitante.getFkUsuario().getPaterno() + " " +
+                        usuarioSolicitante.getFkUsuario().getMaterno())
+                .funcionarioFromCargo(usuarioSolicitante.getFkCargo().getNombreCargo())
+                .cite(solicitudResp.getCite())
+                .fecha(solicitudResp.getFecha())
+                .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
+                .cantidadSumado(solicitudResp.getCopiaTotal() + "")
+                .listReportFotocopias(listReportFotocopias)
+                .build();
+
+
+
+        String salidaPdfPsth = "/home/kali/Downloads/solicitudPDF";
+
+        // Crear el directorio si no existe
+        File outputDir = new File(salidaPdfPsth);
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        }
+
+        InputStream recursoJrxmlPath = getClass().getClassLoader().getResourceAsStream("templates/report/solicitud.jrxml");
+        if (recursoJrxmlPath == null) {
+            throw new RuntimeException("No se pudo encontrar el archivo reporte.jrxml en el classpath.");
+        }
+
+
+        String recursoImagenPath = "classpath:/static/images/";
+
+        // Ruta del archivo PDF
+        String generacionPdfPath = salidaPdfPsth + "/solicitud_" + idSolicitud + ".pdf";
+
+        generacionPDFArchivoAbstract.generarSolicitudDeFotocopiaPDFAbs(
+                solicitudReport,
+                recursoJrxmlPath,
+                recursoImagenPath,
+                generacionPdfPath);
+    }
+
+    @Override
     public void generarOrdenDeFotocopiaPDF(Long idSolicitud) {
         // IMPORTANTE: Tu como capa application debes de construir los datos para luego pasarlos
         // a la interfaz Abs (ya que esta se encarga de realizar logica de prog) y esta
@@ -324,67 +391,30 @@ public class SolicitanteAdapter implements SolicitanteService {
         }
     }
 
+
+
     @Override
-    public void generarSolicitudDeFotocopiaPDF(Long idSolicitud) {
-        // Traemos los datos necesarios para el reporte
-        Solicitud solicitudResp = buscarSolicitud(idSolicitud);
-
-        //Esto me sale null
-        UsuarioUnidad usuarioResponsable = solicitudResp.getFkUsuarioSolicitante().getFkResponsable();
-
-        UsuarioUnidad usuarioSolicitante = solicitudResp.getFkUsuarioSolicitante();
-        List<Fotocopia> listFotocopias = listaDeFotocopias(idSolicitud);
-
-        // Mapeamos con los datos obtenidos para exportar el PDF
-        List<SolicitudTablaReport> listReportFotocopias = listFotocopias.stream()
-                .map(x -> SolicitudTablaReport.builder()
-                        .documento(x.getNombreDocumento())
-                        .cantidad(x.getNroCopias().intValue())
-                        .build())
-                .toList();
-
-        SolicitudReport solicitudReport = SolicitudReport.builder()
-                .funcionarioTo(usuarioResponsable.getFkUsuario().getNombres() + " " +
-                        usuarioResponsable.getFkUsuario().getPaterno() + " " +
-                        usuarioResponsable.getFkUsuario().getMaterno())
-                .funcionarioToCargo(usuarioResponsable.getFkCargo().getNombreCargo())
-
-                .funcionarioFrom(usuarioSolicitante.getFkUsuario().getNombres() + " " +
-                        usuarioSolicitante.getFkUsuario().getPaterno() + " " +
-                        usuarioSolicitante.getFkUsuario().getMaterno())
-                .funcionarioFromCargo(usuarioSolicitante.getFkCargo().getNombreCargo())
-                .cite(solicitudResp.getCite())
-                .fecha(solicitudResp.getFecha())
-                .nombreOrganizacion(usuarioSolicitante.getFkUnidad().getNombre())
-                .cantidadSumado(solicitudResp.getCopiaTotal() + "")
-                .listReportFotocopias(listReportFotocopias)
-                .build();
-
-
-
+    public byte[] descargaSolicitudDeFotocopiaPDF(Long idSolicitud) throws IOException {
         String salidaPdfPsth = "/home/kali/Downloads/solicitudPDF";
-
-        // Crear el directorio si no existe
-        File outputDir = new File(salidaPdfPsth);
-        if (!outputDir.exists()) {
-            outputDir.mkdirs();
-        }
-
-        InputStream recursoJrxmlPath = getClass().getClassLoader().getResourceAsStream("templates/report/solicitud.jrxml");
-        if (recursoJrxmlPath == null) {
-            throw new RuntimeException("No se pudo encontrar el archivo reporte.jrxml en el classpath.");
-        }
-
-
-        String recursoImagenPath = "classpath:/static/images/";
-
         // Ruta del archivo PDF
         String generacionPdfPath = salidaPdfPsth + "/solicitud_" + idSolicitud + ".pdf";
+        // Devolver el contenido del PDF como un arreglo de bytes
+        return Files.readAllBytes(Paths.get(generacionPdfPath));
+    }
 
-        generacionPDFArchivoAbstract.generarSolicitudDeFotocopiaPDFAbs(
-                solicitudReport,
-                recursoJrxmlPath,
-                recursoImagenPath,
-                generacionPdfPath);
+    @Override
+    public byte[] descargarOrdenDeFotocopiaPDF(Long idSolicitud) throws IOException {
+        String salidaPdfPsth = "/home/kali/Downloads/ordenPDF";
+        String generacionPdfPath = salidaPdfPsth + "/ordenDeFotocopia_" + idSolicitud + ".pdf";
+        // Devolver el contenido del PDF como un arreglo de bytes
+        return Files.readAllBytes(Paths.get(generacionPdfPath));
+    }
+
+    @Override
+    public byte[] descargarComunicacionInternaPDF(Long idSolicitud) throws IOException {
+        String salidaPdfPsth = "/home/kali/Downloads/comunicacionPDF";
+        // Ruta del archivo PDF
+        String generacionPdfPath = salidaPdfPsth + "/comunicacion_" + idSolicitud + ".pdf";
+        return Files.readAllBytes(Paths.get(generacionPdfPath));
     }
 }

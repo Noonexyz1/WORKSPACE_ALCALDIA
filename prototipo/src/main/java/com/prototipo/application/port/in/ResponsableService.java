@@ -4,6 +4,7 @@ import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
 import com.prototipo.domain.model.*;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface ResponsableService {
@@ -21,7 +22,9 @@ public interface ResponsableService {
     PaginableOut<Autorizacion> listaDeSolicitudesAutorizadasByIdResponsable(PaginableIn paginableIn);
     PaginableOut<Finalizacion> listaDeSolicitudesFinalizadasByIdResponsable(PaginableIn paginableIn);
 
-
     void generarNotaPedidoPDF(Long idSolicitud);
     void generarReportePDF(Long idSolicitud);
+
+    byte[] descargarNotaPedidoPDF(Long idSolicitud) throws IOException;
+    byte[] descargarReportePDF(Long idSolicitud) throws IOException;
 }

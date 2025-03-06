@@ -7,9 +7,13 @@ import com.prototipo.application.port.in.ResponsableService;
 import com.prototipo.domain.model.*;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
@@ -170,6 +174,7 @@ public class ResponsableAdapter implements ResponsableService {
                 .buscarSolicitudByIdAbstract(autorizacion.getFkSolicitud().getId());
         solicitud.setAutoriFlag(1L);
         solicitudAbstract.guardarSolicitudAbstract(solicitud);
+        generarNotaPedidoPDF(solicitud.getId());
     }
 
     @Override
@@ -184,6 +189,7 @@ public class ResponsableAdapter implements ResponsableService {
 
         autorizacion.setFinaliFlag(1L);
         autorizacionAbstract.guardarAutorizacionAbs(autorizacion);
+        generarReportePDF(autorizacion.getFkSolicitud().getId());
     }
 
     @Override
@@ -300,6 +306,25 @@ public class ResponsableAdapter implements ResponsableService {
                 recursoImagenPath,
                 generacionPdfPath
         );
+    }
+
+
+
+    @Override
+    public byte[] descargarNotaPedidoPDF(Long idSolicitud) throws IOException {
+        String salidaPdfPsth = "/home/kali/Downloads/notaPedidoPDF";
+        // Ruta del archivo PDF
+        String generacionPdfPath = salidaPdfPsth + "/notaPedido_" + idSolicitud + ".pdf";
+        // Devolver el contenido del PDF como un arreglo de bytes
+        return Files.readAllBytes(Paths.get(generacionPdfPath));
+    }
+
+    @Override
+    public byte[] descargarReportePDF(Long idSolicitud) throws IOException {
+        String salidaPdfPsth = "/home/kali/Downloads/reportePDF";
+        // Ruta del archivo PDF
+        String generacionPdfPath = salidaPdfPsth + "/reporte_" + idSolicitud + ".pdf";
+        return Files.readAllBytes(Paths.get(generacionPdfPath));
     }
 
 }
