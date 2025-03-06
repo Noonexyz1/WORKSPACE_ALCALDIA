@@ -22,4 +22,8 @@ export class NavBarComponent {
     this.usuarioResponse = this.localStorageService
       .getItem('userData');
   }
+
+  botonCerrarSesion() {
+    localStorage.removeItem('userData')
+  }
 }
