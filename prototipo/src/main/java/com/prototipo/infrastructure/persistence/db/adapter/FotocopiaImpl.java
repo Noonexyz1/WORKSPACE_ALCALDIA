@@ -8,6 +8,7 @@ import com.prototipo.infrastructure.persistence.db.repository.FotocopiaRepositor
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -29,7 +30,9 @@ public class FotocopiaImpl implements FotocopiaAbstract {
                 .map(x -> modelMapper.map(x, Fotocopia.class))
                 .toList();
     }
+
     @Override
+    @Transactional
     public void guardarRegistroFotocopia(Fotocopia fotocopia) {
         FotocopiaEntity fotocopiaEntity = modelMapper
                 .map(fotocopia, FotocopiaEntity.class);

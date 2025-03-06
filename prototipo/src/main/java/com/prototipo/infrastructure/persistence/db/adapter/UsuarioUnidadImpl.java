@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -59,6 +60,7 @@ public class UsuarioUnidadImpl implements UsuarioUnidadAbstract {
 
 
     @Override
+    @Transactional
     public UsuarioUnidad guardarUsuarioUnidad(UsuarioUnidad usuarioUnidad) {
         UsuarioUnidadEntity userUni = mapper
                 .map(usuarioUnidad, UsuarioUnidadEntity.class);

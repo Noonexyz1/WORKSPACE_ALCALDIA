@@ -15,6 +15,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -88,6 +89,7 @@ public class AutorizacionImpl implements AutorizacionAbstract {
     }
 
     @Override
+    @Transactional
     public void guardarAutorizacionAbs(Autorizacion autorizacionDto) {
         UsuarioUnidadEntity usuarioResponsable = UsuarioUnidadEntity.builder()
                 .id(autorizacionDto.getFkUsuarioResponsable().getId())

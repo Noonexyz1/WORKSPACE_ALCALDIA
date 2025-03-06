@@ -12,6 +12,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class CredencialImpl implements CredencialAbstract, UserDetailsService {
@@ -24,6 +25,7 @@ public class CredencialImpl implements CredencialAbstract, UserDetailsService {
     private PasswordEncoder passwordEncoder;
 
     @Override
+    @Transactional
     public Credencial guardarCredencialAbstract(Credencial nuevaCred) {
         nuevaCred.setPass(passwordEncoder.encode(nuevaCred.getPass()));
         CredencialEntity credencialEntity = modelMapper.map(nuevaCred, CredencialEntity.class);

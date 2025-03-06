@@ -13,6 +13,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -97,6 +98,7 @@ public class SolicitudImpl implements SolicitudAbstract {
 
     //Tu unicamente deberias traer la Solicitud
     @Override
+    @Transactional
     public Solicitud solicitarFotocopiarAbstract(Solicitud solicitud) {
         SolicitudEntity solicitudEntity = modelMapper.map(solicitud, SolicitudEntity.class);
         SolicitudEntity solicitudEntityResp = solicitudRepository.save(solicitudEntity);
@@ -195,6 +197,7 @@ public class SolicitudImpl implements SolicitudAbstract {
     }
 
     @Override
+    @Transactional
     public void guardarSolicitudAbstract(Solicitud solicitud) {
         SolicitudEntity solicitudEntity = modelMapper.map(solicitud, SolicitudEntity.class);
         solicitudRepository.save(solicitudEntity);

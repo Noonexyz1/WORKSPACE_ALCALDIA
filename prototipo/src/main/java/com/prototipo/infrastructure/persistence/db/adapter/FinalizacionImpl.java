@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -85,6 +86,7 @@ public class FinalizacionImpl implements FinalizacionAbstract {
     }
 
     @Override
+    @Transactional
     public void guardarFinalizacionAbs(Finalizacion finalizacion) {
         AutorizacionEntity autorizacion = AutorizacionEntity.builder()
                 .id(finalizacion.getFkAutorizacion().getId())

@@ -3,12 +3,12 @@ package com.prototipo.infrastructure.persistence.db.adapter;
 import com.prototipo.application.port.out.UsuarioAbastract;
 import com.prototipo.domain.model.Usuario;
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioEntity;
-import com.prototipo.infrastructure.persistence.db.repository.CredencialRepository;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioRepository;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioUnidadRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class UsuarioImpl implements UsuarioAbastract {
@@ -21,6 +21,7 @@ public class UsuarioImpl implements UsuarioAbastract {
     private ModelMapper modelMapper;
 
     @Override
+    @Transactional(readOnly = true) // Solo lectura, no necesita rollback
     public Usuario iniciarSesionAbstract(String ci) {
         Object[] usuarioDto = (Object[]) usuarioUnidadRepository
                 .findUsuarioByCredencial(ci)[0];
@@ -40,6 +41,7 @@ public class UsuarioImpl implements UsuarioAbastract {
     }
 
     @Override
+    @Transactional // Transacción con rollback en caso de error
     public Usuario guardarUsuarioAbastract(Usuario usuario) {
         UsuarioEntity usuarioEntity = modelMapper
                 .map(usuario, UsuarioEntity.class);
