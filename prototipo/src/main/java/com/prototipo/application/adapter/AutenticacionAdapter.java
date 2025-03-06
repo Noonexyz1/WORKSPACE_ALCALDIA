@@ -35,6 +35,6 @@ public class AutenticacionAdapter implements AutenticacionService {
 
     @Override
     public void cerrarSesion() {
-        //TODO cerrar sesion
+        //Cerramos sesion por infraestrucutura
     }
 }
