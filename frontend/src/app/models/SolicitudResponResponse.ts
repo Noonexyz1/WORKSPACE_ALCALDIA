@@ -1,10 +1,12 @@
-export interface SolicitudResponResponse {
-  "idAutorizacion": number,
+export class SolicitudResponResponse {
+  idAutorizacion: number | undefined;
 
-  "idSolicitud": number,
-  "cite": string,
-  "fecha": string,
-  "nomCompleto": string,
-  "nomCargo": string,
-  "nombreUnidad": string
+  idSolicitud: number| undefined;
+  cite: string| undefined;
+  fecha: string| undefined;
+  nomCompleto: string| undefined;
+  nomCargo: string| undefined;
+  nombreUnidad: string| undefined;
+
+  isActiveBtnFinalizar: boolean = false; // Nueva propiedad
 }

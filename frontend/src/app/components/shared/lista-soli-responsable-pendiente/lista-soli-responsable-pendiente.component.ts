@@ -167,7 +167,7 @@ export class ListaSoliPendienteResponsableComponent implements OnInit, OnDestroy
     detalleSolicitudResponses: [],
   };
 
-  botonTraerDatosModal(idSolicitud: number): void {
+  botonTraerDatosModal(idSolicitud: number | undefined): void {
     this.estadoModal = true;
     this.isModalVisible = !this.isModalVisible;
 
