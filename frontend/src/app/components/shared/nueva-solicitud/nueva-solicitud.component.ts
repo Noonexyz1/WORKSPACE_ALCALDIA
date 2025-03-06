@@ -139,7 +139,12 @@ export class NuevaSolicitudComponent implements OnInit {
     });
   }
 
+
+  isLoading: boolean = false;
+
   botonNuevaSolicitud(): void {
+    this.isLoading = !this.isLoading;
+
     this.usuario = this.localStorage.getItem('userData');
 
     // Obtener los documentos del FormArray
@@ -153,6 +158,8 @@ export class NuevaSolicitudComponent implements OnInit {
       listDetalleSolicitud: this.listSolicitud,
     };
 
+
+
     // Enviar la solicitud
     this.http.post<SolicitudRequest>(
       UrlsProperties.PATH_CREATE_SOLICITUD,
@@ -165,6 +172,7 @@ export class NuevaSolicitudComponent implements OnInit {
         this.estadoNroDocumentos = false;
         this.nroDeDocumentos = 0;
 
+        this.isLoading = !this.isLoading;
         // Redirigir al usuario
         this.rootNavigateService.valorParaNavegar('SolicitantePendientes')
       },
