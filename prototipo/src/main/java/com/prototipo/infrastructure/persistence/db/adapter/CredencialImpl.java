@@ -47,6 +47,12 @@ public class CredencialImpl implements CredencialAbstract, UserDetailsService {
     }
 
     @Override
+    public Credencial encontrarCredencialByCi(String ci) {
+        CredencialEntity credEnty = credencialRepository.encontrarCredPorCi(ci);
+        return modelMapper.map(credEnty, Credencial.class);
+    }
+
+    @Override
     public UserDetails loadUserByUsername(String username) {
         CredencialEntity credencialEntity = credencialRepository.encontrarCredPorCi(username);
         // Si no se encuentra el usuario, lanzar una excepción

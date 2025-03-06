@@ -3,6 +3,7 @@ package com.prototipo.infrastructure.persistence.db.adapter;
 import com.prototipo.application.port.out.UsuarioAbastract;
 import com.prototipo.domain.model.Usuario;
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioEntity;
+import com.prototipo.infrastructure.persistence.db.repository.CredencialRepository;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioRepository;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioUnidadRepository;
 import org.modelmapper.ModelMapper;
@@ -19,11 +20,10 @@ public class UsuarioImpl implements UsuarioAbastract {
     @Autowired
     private ModelMapper modelMapper;
 
-
     @Override
-    public Usuario iniciarSesionAbstract(String correo, String pass) {
+    public Usuario iniciarSesionAbstract(String ci) {
         Object[] usuarioDto = (Object[]) usuarioUnidadRepository
-                .findUsuarioByCredencial(correo, pass)[0];
+                .findUsuarioByCredencial(ci)[0];
 
         Usuario usuario = Usuario.builder()
                 .id((Long)usuarioDto[0])

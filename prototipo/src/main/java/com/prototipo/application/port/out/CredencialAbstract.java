@@ -6,4 +6,6 @@ public interface CredencialAbstract {
     Credencial guardarCredencialAbstract(Credencial nuevaCred);
     Credencial encontrarCredencial(String correo, String pass);
     Credencial encontrarCredencialPorUsuarioId(Long idUsuario);
+
+    Credencial encontrarCredencialByCi(String ci);
 }

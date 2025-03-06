@@ -20,16 +20,17 @@ public class AutenticacionAdapter implements AutenticacionService {
     }
 
     @Override
-    public Usuario iniciarSesion(String correo, String pass) {
-        return usuarioAbastract.iniciarSesionAbstract(correo, pass);
+    public Usuario iniciarSesion(String ci) {
+        return usuarioAbastract.iniciarSesionAbstract(ci);
     }
 
     @Override
     public void cambiarPass(Credencial credencial, String newPass) {
         String ci = credencial.getCi();
-        String pass = credencial.getPass();
-        Credencial credencialDto = credencialAbstract.encontrarCredencial(ci, pass);
+
+        Credencial credencialDto = credencialAbstract.encontrarCredencialByCi(ci);
         credencialDto.setPass(newPass);
+
         credencialAbstract.guardarCredencialAbstract(credencialDto);
     }
 

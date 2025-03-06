@@ -4,5 +4,5 @@ import com.prototipo.domain.model.Usuario;
 
 public interface UsuarioAbastract {
     Usuario guardarUsuarioAbastract(Usuario usuario);
-    Usuario iniciarSesionAbstract(String correo, String pass);
+    Usuario iniciarSesionAbstract(String ci);
 }

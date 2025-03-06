@@ -43,14 +43,8 @@ public class AutenticacionController {
 
         UserDetails userDetails = credencial.loadUserByUsername(credencialRequest.getCi());
 
-        Usuario usuario = autenticacionService
-                .iniciarSesion(
-                        credencialRequest.getCi(),
-                        credencialRequest.getPass()
-                );
-
-        //if (userDetails != null && passwordEncoder.matches(credencialRequest.getCi(), userDetails.getPassword())) {
-        if (userDetails != null) {
+        if (userDetails != null && passwordEncoder.matches(credencialRequest.getPass(), userDetails.getPassword())) {
+        //if (userDetails != null) {
             // Autenticar manualmente
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
@@ -61,6 +55,10 @@ public class AutenticacionController {
             // Asignar sesión a Spring Security
             HttpSession session = request.getSession(true);
             session.setAttribute("SPRING_SECURITY_CONTEXT", securityContext);
+
+
+            Usuario usuario = autenticacionService
+                    .iniciarSesion(credencialRequest.getCi());
 
             UsuarioResponse response = UsuarioResponse
                     .builder()
@@ -74,6 +72,7 @@ public class AutenticacionController {
                     .nombreUnidad(usuario.getNombreUnidad())
                     .nombreCargo(usuario.getNombreCargo())
                     .build();
+
             return new ResponseEntity<>(response, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
@@ -84,18 +83,20 @@ public class AutenticacionController {
             path = {"/cambiarPass"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public void cambiarPass(@RequestBody NuevoPassRequest request){
-        var authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
-            Credencial credencial = Credencial.builder()
-                    .ci(request.getCi())
-                    .pass(request.getPass())
-                    .build();
+        Credencial credencial = Credencial.builder()
+                .ci(request.getCi())
+                .pass(request.getPass())
+                .build();
 
-            autenticacionService.cambiarPass(
-                    credencial,
-                    request.getNuevoPass()
-            );
-        }
+        autenticacionService.cambiarPass(
+                credencial,
+                request.getNuevoPass()
+        );
+
+        /*var authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated() && !"anonymousUser".equals(authentication.getPrincipal())) {
+
+        }*/
     }
 
     @GetMapping(

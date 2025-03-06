@@ -21,12 +21,10 @@ public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEnti
             AND c.id = uu.fk_cargo_id
             AND u.id = c2.fk_usuario_id
             AND c2.ci = :ci
-            AND c2.pass = :pass
             LIMIT 1
             """, nativeQuery = true)
     Object[] findUsuarioByCredencial(
-            @Param("ci") String correo,
-            @Param("pass") String pass
+            @Param("ci") String correo
     );
 
     @Query(value =
