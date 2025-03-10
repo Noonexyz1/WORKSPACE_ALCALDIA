@@ -35,7 +35,7 @@ public class SecurityConfig {
                             "/", // bueno esto es para dejarle al spring le de el control al index de angular
                             "/favicon.ico", // Tooodos estos son archivos generados por angular, cada uno de estos de abajo
                             "/index.html",
-                            "main-QC5HBKA6.js",
+                            "/main-QC5HBKA6.js",
                             "/polyfills-FFHMD2TL.js",
                             "/styles-ZIUGYFFV.css"
                     ).permitAll();
