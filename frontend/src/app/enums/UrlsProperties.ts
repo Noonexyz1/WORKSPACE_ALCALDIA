@@ -1,5 +1,7 @@
 export enum UrlsProperties {
 
+  //BASE_URLS = 'http://172.16.120.250:8081',
+  //BASE_URLS = 'http://192.168.0.15:8081',
   BASE_URLS = 'http://localhost:8081',
 
   PATH_LOGIN = BASE_URLS + '/autenticacion/iniciarSesion',
