@@ -9,7 +9,7 @@ import {RowSolicitud} from '../../../models/RowSolicitud';
 import {SubjectDocumentoService} from "../../../services/subject-documento/subject-documento.service";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
-import {numeroMayorACeroValidator} from "../../../validation/Validation";
+import {numeroMayorACeroValidator} from "../../../util/Validation";
 
 @Component({
   selector: 'app-nueva-solicitud',

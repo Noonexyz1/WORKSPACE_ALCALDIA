@@ -1,4 +1,4 @@
-import { AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 export function numeroMayorACeroValidator(control: AbstractControl): ValidationErrors | null {
   const value = control.value;

@@ -13,7 +13,7 @@ import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {AprobacionSoliRequest} from "../../../models/AutorizacionRequest";
 import {PageRequest} from "../../../models/PageRequest";
 import {PageResponse} from "../../../models/PageResponse";
-import {numeroMayorACeroValidator} from "../../../validation/Validation";
+import {numeroMayorACeroValidator} from "../../../util/Validation";
 import {ObservableNotifyService} from "../../../services/subject-notify/observable-notify.service";
 
 @Component({
