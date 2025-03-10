@@ -99,25 +99,23 @@ public class AutenticacionController {
         }*/
     }
 
-    @GetMapping(
-            path = {"/cerrarSesion"},
-            produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void cerrarSesion(HttpServletRequest request, HttpServletResponse response){
+    @GetMapping("/cerrarSesion")
+    public ResponseEntity<Void> cerrarSesion(HttpServletRequest request, HttpServletResponse response) {
         HttpSession session = request.getSession(false);
         if (session != null) {
-            session.invalidate(); // Cierra la sesión
+            session.invalidate(); // Cierra la sesión en el servidor
         }
 
         SecurityContextHolder.clearContext(); // Borra la autenticación en memoria
 
-        // Invalida la cookie de sesión JSESSIONID
-        Cookie cookie = new Cookie("JSESSIONID", null);
+        // Invalida la cookie de sesión JSESSIONID en la respuesta
+        Cookie cookie = new Cookie("JSESSIONID", "");
         cookie.setHttpOnly(true);
         cookie.setSecure(false); // Pon `true` si usas HTTPS
         cookie.setPath("/");
         cookie.setMaxAge(0); // Expira inmediatamente
         response.addCookie(cookie);
 
-        autenticacionService.cerrarSesion();
+        return ResponseEntity.ok().build();
     }
 }

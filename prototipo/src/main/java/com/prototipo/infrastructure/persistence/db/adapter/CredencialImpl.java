@@ -3,7 +3,9 @@ package com.prototipo.infrastructure.persistence.db.adapter;
 import com.prototipo.application.port.out.CredencialAbstract;
 import com.prototipo.domain.model.Credencial;
 import com.prototipo.infrastructure.persistence.db.entity.CredencialEntity;
+import com.prototipo.infrastructure.persistence.db.entity.RolEntity;
 import com.prototipo.infrastructure.persistence.db.repository.CredencialRepository;
+import com.prototipo.infrastructure.persistence.db.repository.RolRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
@@ -23,6 +25,8 @@ public class CredencialImpl implements CredencialAbstract, UserDetailsService {
     private ModelMapper modelMapper;
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private RolRepository rolRepository;
 
     @Override
     @Transactional
@@ -57,6 +61,8 @@ public class CredencialImpl implements CredencialAbstract, UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         CredencialEntity credencialEntity = credencialRepository.encontrarCredPorCi(username);
+        RolEntity rolEntity = rolRepository.encontrarRolPorCi(username);
+
         // Si no se encuentra el usuario, lanzar una excepción
         if (credencialEntity == null) {
             throw new UsernameNotFoundException("Usuario con CI " + username + " no encontrado");
@@ -65,7 +71,7 @@ public class CredencialImpl implements CredencialAbstract, UserDetailsService {
         // Convertir tu UserEntity a UserDetails
         return User.withUsername(credencialEntity.getCi())
                 .password(credencialEntity.getPass())
-                //.roles("USER") // Puedes omitir los roles si no los necesitas
+                .authorities(rolEntity.getNombreRol()) // Aquí usamos authorities en lugar de roles
                 .build();
     }
 }
