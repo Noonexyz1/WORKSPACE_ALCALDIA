@@ -79,6 +79,7 @@ public class SolicitanteController {
     @GetMapping("/eliminarSolicitudById/{idSolicitud}")
     public void eliminarSolicitudById(@PathVariable Long idSolicitud){
         solicitanteService.eliminarSolicitud(idSolicitud);
+        observable.publicarValor(1);
     }
 
 
