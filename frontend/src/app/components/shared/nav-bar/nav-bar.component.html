@@ -1,6 +1,6 @@
 <nav
   class="bg-gray-300 border-b border-gray-200 px-4 py-2.5 dark:bg-gray-800 dark:border-gray-700 fixed left-0 right-0 top-0 z-50">
-  <div class="flex flex-wrap justify-between items-center">
+  <div class="flex flex-shrink justify-between items-center">
 
     <div class="flex justify-start items-center">
       <button data-drawer-target="drawer-navigation" data-drawer-toggle="drawer-navigation"
@@ -21,11 +21,11 @@
         <span class="sr-only">Toggle sidebar</span>
       </button>
       <div class="flex items-center justify-between mr-4">
-        <img src="{{PATH_IMAGE_LOGO}}" class="mr-3 h-10" alt="Flowbite Logo"/>
+        <img src="{{PATH_IMAGE_LOGO}}" class="mr-3 h-10" alt="logo alcaldia gamea El Alto gestion"/>
       </div>
     </div>
 
-    <div class="flex items-center lg:order-2">
+    <div class="flex items-center">
       <!-- Modo oscuro -->
       <button id="theme-toggle" type="button"
               class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 rounded-lg text-sm p-2.5">
@@ -87,11 +87,8 @@
 
         <ul class="py-1 text-gray-500 dark:text-gray-400" aria-labelledby="dropdown">
           <li>
-            <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
-              Cambiar contraseña</a>
-          </li>
-          <li>
-            <a href="#" class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
+            <a (click)="botonCerrarSesion()"
+              href="#" class="block py-2 px-4 text-sm hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">
               Cerrar sesión</a>
           </li>
         </ul>

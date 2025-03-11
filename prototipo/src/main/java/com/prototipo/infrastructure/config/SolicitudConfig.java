@@ -1,12 +1,11 @@
 package com.prototipo.infrastructure.config;
 
-import com.prototipo.application.adapter.SolicitudAdapter;
-import com.prototipo.application.adapter.UsuarioAdapter;
-import com.prototipo.application.mapper.MapperApplicationAbstract;
-import com.prototipo.application.port.SolicitudAbstract;
-import com.prototipo.application.port.UsuarioAbastract;
-import com.prototipo.application.useCase.SolicitudService;
-import com.prototipo.application.useCase.UsuarioService;
+import com.prototipo.application.adapter.SolicitanteAdapter;
+import com.prototipo.application.port.out.FotocopiaAbstract;
+import com.prototipo.application.port.out.GeneracionPDFArchivoAbstract;
+import com.prototipo.application.port.out.ServicioFotocopiaAbstract;
+import com.prototipo.application.port.out.SolicitudAbstract;
+import com.prototipo.application.port.in.SolicitanteService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,25 +14,21 @@ import org.springframework.context.annotation.Configuration;
 public class SolicitudConfig {
 
     @Bean
-    public SolicitudService solicitudServiceBean(
+    public SolicitanteService solicitudServiceBean(
             @Qualifier("solicitudImpl")
             SolicitudAbstract solicitudAbstract,
-            @Qualifier("mapperApplicationAbstractBean")
-            MapperApplicationAbstract mapperApplicationAbstract){
+            @Qualifier("fotocopiaImpl")
+            FotocopiaAbstract fotocopiaAbstract,
+            @Qualifier("servicioFotocopiaImpl")
+            ServicioFotocopiaAbstract servicioFotocopiaAbstract,
+            @Qualifier("generacionPDFArchivoImpl")
+            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract){
 
         //Se necesita una dependencia
-        return new SolicitudAdapter(
+        return new SolicitanteAdapter(
                 solicitudAbstract,
-                mapperApplicationAbstract);
-    }
-
-    @Bean
-    public UsuarioService usuarioServiceBean(
-            @Qualifier("usuarioImpl")
-            UsuarioAbastract usuarioAbastract,
-            @Qualifier("mapperApplicationAbstractBean")
-            MapperApplicationAbstract mapperApplicationAbstract) {
-
-        return new UsuarioAdapter(usuarioAbastract, mapperApplicationAbstract);
+                fotocopiaAbstract,
+                servicioFotocopiaAbstract,
+                generacionPDFArchivoAbstract);
     }
 }

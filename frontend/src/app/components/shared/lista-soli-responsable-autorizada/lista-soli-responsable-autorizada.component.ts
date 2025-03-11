@@ -10,7 +10,7 @@ import {PageProperties} from "../../../models/PageProperties";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {PageRequest} from "../../../models/PageRequest";
 import {PageResponse} from "../../../models/PageResponse";
-import {numeroMayorACeroValidator} from "../../../validation/Validation";
+import {numeroMayorACeroValidator} from "../../../util/Validation";
 
 @Component({
   selector: 'app-lista-soli-responsable-autorizada',
@@ -45,8 +45,9 @@ export class ListaSoliAutorizadaResponsableComponent {
   }
 
   isActiveBtnFinalizar: boolean = false;
+  // Métoodo para manejar el clic en "Finalizar"
   botonFinalizarSolicitud(solicitud: SolicitudResponResponse): void {
-    if (this.isActiveBtnFinalizar) {
+    if (solicitud.isActiveBtnFinalizar) {
       this.http.post<number>(
         UrlsProperties.PATH_FINALIZAR_SOLI,
         solicitud.idAutorizacion
@@ -56,24 +57,30 @@ export class ListaSoliAutorizadaResponsableComponent {
         }),
         catchError(error => {
           console.error('Error en la petición:', error);
-          alert('Hubo un error al guardar la Finalizacion');
+          alert('Hubo un error al guardar la Finalización');
           return of(null); // Retornar un observable vacío en caso de error
         })
       ).subscribe();
     }
   }
 
-  botonNotaDeSolicitud(idSolicitud: number): void {
+  // Métoodo para manejar el clic en "Nota de Pedido"
+  botonNotaDeSolicitud(idSolicitud: number | undefined): void {
     this.http.get(
       UrlsProperties.PATH_NOTA_PDF + idSolicitud,
       { responseType: 'blob' }
-    ).pipe( // Cambiar el tipo de respuesta
+    ).pipe(
       map((response: Blob) => {
-        this.descargarPDF("notaPedidoPDF.pdf", response);
-        this.isActiveBtnFinalizar = true;
+        this.descargarPDF("notaPedido_" + idSolicitud + ".pdf", response);
+
+        // Habilita el botón "Finalizar" solo para la fila correspondiente
+        const solicitud = this.listSolicitud.find(s => s.idSolicitud === idSolicitud);
+        if (solicitud) {
+          solicitud.isActiveBtnFinalizar = true;
+        }
       }),
       catchError(error => {
-        this.errorDescargaPDF("notaPedidoPDF.pdf", error)
+        this.errorDescargaPDF("notaPedido_" + idSolicitud + ".pdf", error);
         return of(null);
       })
     ).subscribe();
@@ -106,7 +113,7 @@ export class ListaSoliAutorizadaResponsableComponent {
       size: this.pageProperties.pageSize,
       sortBy: this.pageProperties.sortBy,
       direction: this.pageProperties.direction
-    }
+    };
 
     this.http.post<PageResponse<SolicitudResponResponse>>(
       UrlsProperties.PATH_LIST_SOLIAPRO,
@@ -118,12 +125,17 @@ export class ListaSoliAutorizadaResponsableComponent {
         this.pageProperties.sortBy = response.sortBy;
         this.pageProperties.direction = response.direction;
 
-        this.listSolicitud = response.content;
+        // Inicializa la propiedad isActiveBtnFinalizar para cada solicitud
+        this.listSolicitud = response.content.map(solicitud => ({
+          ...solicitud,
+          isActiveBtnFinalizar: false // Inicializa en false
+        }));
+
         this.pageProperties.totalPages = response.totalPages;
         this.pageProperties.totalElements = response.totalElements;
 
         this.listaConsecutiva = Array.from(
-          {length: this.pageProperties.totalPages},
+          { length: this.pageProperties.totalPages },
           (_, index) => index
         );
       }),
@@ -132,8 +144,7 @@ export class ListaSoliAutorizadaResponsableComponent {
         alert('Hubo un error al listar las solicitudes para el responsable');
         return of(null); // Retornar un observable vacío en caso de error
       })
-    )
-    .subscribe();
+    ).subscribe();
   }
 
   botonBuscarSolicitudById(): void {

@@ -29,6 +29,7 @@ public interface SolicitudRepository extends JpaRepository<SolicitudEntity, Long
                 SELECT id
                 FROM usuario_unidad uu
                 WHERE fk_responsable_id = :idResponsable
+                AND is_active = TRUE
             )
             AND autori_flag = 0
             AND is_active = 1

@@ -13,7 +13,7 @@ import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {AprobacionSoliRequest} from "../../../models/AutorizacionRequest";
 import {PageRequest} from "../../../models/PageRequest";
 import {PageResponse} from "../../../models/PageResponse";
-import {numeroMayorACeroValidator} from "../../../validation/Validation";
+import {numeroMayorACeroValidator} from "../../../util/Validation";
 import {ObservableNotifyService} from "../../../services/subject-notify/observable-notify.service";
 
 @Component({
@@ -167,7 +167,7 @@ export class ListaSoliPendienteResponsableComponent implements OnInit, OnDestroy
     detalleSolicitudResponses: [],
   };
 
-  botonTraerDatosModal(idSolicitud: number): void {
+  botonTraerDatosModal(idSolicitud: number | undefined): void {
     this.estadoModal = true;
     this.isModalVisible = !this.isModalVisible;
 

@@ -10,8 +10,8 @@ import lombok.*;
 public class Solicitud {
     private Long id;
     private String cite;
-    private String fecha;
     private String descripcion;
+    private String fecha;
     private Long autoriFlag;
     private Boolean isActive;
 

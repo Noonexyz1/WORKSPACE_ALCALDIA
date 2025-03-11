@@ -25,5 +25,5 @@ public interface FinalizacionRepository extends JpaRepository<FinalizacionEntity
                 AND s.id = :id
             )
             """, nativeQuery = true)
-    Page<FinalizacionEntity> findFinalizacionSoliById(@Param("id") Long id, Pageable pageable);
+    Page<FinalizacionEntity> findFinalizacionSoliByIdSoli(@Param("id") Long id, Pageable pageable);
 }

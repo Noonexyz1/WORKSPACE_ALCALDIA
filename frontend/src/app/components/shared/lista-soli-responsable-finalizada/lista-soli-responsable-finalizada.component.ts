@@ -10,7 +10,7 @@ import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {SolicitudResponResponse} from "../../../models/SolicitudResponResponse";
 import {PageRequest} from "../../../models/PageRequest";
 import {PageResponse} from "../../../models/PageResponse";
-import {numeroMayorACeroValidator} from "../../../validation/Validation";
+import {numeroMayorACeroValidator} from "../../../util/Validation";
 
 @Component({
   selector: 'app-lista-soli-responsable-finalizada',
@@ -120,16 +120,16 @@ export class ListaSoliFinalizadaResponsableComponent{
 
   }
 
-  botonDescargoSolicitudPDF(solicitudFinalizada: number): void {
+  botonReporteSolicitudPDF(idSolicitud: number | undefined): void {
     this.http.get(
-      UrlsProperties.PATH_REPORTE_PDF + solicitudFinalizada,
+      UrlsProperties.PATH_REPORTE_PDF + idSolicitud,
       { responseType: 'blob' }
     ).pipe( // Cambiar el tipo de respuesta
       map((response: Blob) => {
-        this.descargarPDF('reportePDF.pdf', response);
+        this.descargarPDF("reporte_" + idSolicitud + ".pdf", response);
       }),
       catchError(error => {
-        this.errorDescargaPDF('reportePDF.pdf', error);
+        this.errorDescargaPDF("reporte_" + idSolicitud + ".pdf", error);
         return of(null);
       })
     ).subscribe();

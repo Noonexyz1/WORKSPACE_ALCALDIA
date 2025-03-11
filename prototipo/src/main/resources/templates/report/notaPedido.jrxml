@@ -234,7 +234,7 @@
 Firma Vo.Bo.]]></text>
 		</element>
 		<element kind="staticText" uuid="1400715b-e92b-4be7-a065-26f2772c35f9" x="396" y="0" width="100" height="13" fontSize="8.0" hTextAlign="Center" vTextAlign="Middle">
-			<text><![CDATA[TOTAL: ]]></text>
+			<text><![CDATA[TOTAL Bs: ]]></text>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 			<property name="com.jaspersoft.studio.unit.width" value="px"/>
 			<box>

@@ -9,7 +9,7 @@ import {RowSolicitud} from '../../../models/RowSolicitud';
 import {SubjectDocumentoService} from "../../../services/subject-documento/subject-documento.service";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
-import {numeroMayorACeroValidator} from "../../../validation/Validation";
+import {numeroMayorACeroValidator} from "../../../util/Validation";
 
 @Component({
   selector: 'app-nueva-solicitud',
@@ -139,7 +139,12 @@ export class NuevaSolicitudComponent implements OnInit {
     });
   }
 
+
+  isLoading: boolean = false;
+
   botonNuevaSolicitud(): void {
+    this.isLoading = !this.isLoading;
+
     this.usuario = this.localStorage.getItem('userData');
 
     // Obtener los documentos del FormArray
@@ -153,27 +158,30 @@ export class NuevaSolicitudComponent implements OnInit {
       listDetalleSolicitud: this.listSolicitud,
     };
 
+
+
     // Enviar la solicitud
     this.http.post<SolicitudRequest>(
       UrlsProperties.PATH_CREATE_SOLICITUD,
       solicitudRequest
-    ).pipe(
-      map(() => {
+    ).subscribe({
+      next: () => {
         // Reiniciar el estado del componente
         this.solicitudForm.reset();
         documentosArray.clear(); // Limpiar el FormArray
         this.estadoNroDocumentos = false;
         this.nroDeDocumentos = 0;
 
+        this.isLoading = !this.isLoading;
         // Redirigir al usuario
-        this.rootNavigateService.valorParaNavegar('SolicitantePendientes');
-      }),
-      catchError(error => {
+        this.rootNavigateService.valorParaNavegar('SolicitantePendientes')
+      },
+      error: (error) => {
+        // Manejo de errores (opcional)
         console.error('Error en la petición:', error);
         alert('Hubo un error al enviar la solicitud');
-        return of(null);
-      })
-    ).subscribe();
+      }
+    });
   }
 
   botonSetNumeroDeCopias(): void {
