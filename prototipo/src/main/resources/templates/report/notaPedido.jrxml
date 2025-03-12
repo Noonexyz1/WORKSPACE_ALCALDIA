@@ -51,24 +51,21 @@
 	<parameter name="precioTotal" class="java.lang.Double"/>
 	<parameter name="ds" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<query language="sql"><![CDATA[]]></query>
-	<pageHeader height="99" splitType="Stretch">
-		<element kind="staticText" uuid="d8162a19-9a7c-47ee-9571-f84f3379ffa7" x="197" y="40" width="176" height="20" fontName="DejaVu Sans" fontSize="13.0" bold="true" hTextAlign="Center" vTextAlign="Middle" style="NEGRITA">
+	<pageHeader height="121" splitType="Stretch">
+		<element kind="staticText" uuid="d8162a19-9a7c-47ee-9571-f84f3379ffa7" x="201" y="85" width="176" height="17" fontName="DejaVu Sans" fontSize="13.0" bold="true" hTextAlign="Center" vTextAlign="Middle" style="NEGRITA">
 			<text><![CDATA[NOTA DE PEDIDO]]></text>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</element>
-		<element kind="staticText" uuid="c139a55c-161a-498e-8f92-2c213d13572d" x="324" y="10" width="240" height="30" fontSize="9.0" bold="true" hTextAlign="Center" style="NEGRITA">
-			<text><![CDATA[UNIDAD DE SERVICIOS GENERALES Y MANTENIMIENTO]]></text>
-		</element>
-		<element kind="textField" uuid="8a9ce920-24d5-40d1-87f6-b299231c1298" x="88" y="60" width="476" height="16" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle" style="NEGRITA">
+		<element kind="textField" uuid="8a9ce920-24d5-40d1-87f6-b299231c1298" x="88" y="102" width="402" height="13" fontSize="10.0" bold="true" hTextAlign="Center" vTextAlign="Middle" style="NEGRITA">
 			<expression><![CDATA["El Alto, " + $P{fecha}]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</element>
-		<element kind="image" uuid="90d0ddd3-b22c-4a3f-8668-7d68e955ee50" x="17" y="10" width="57" height="61">
-			<expression><![CDATA[$P{imageDir} + "escudo.jpg"]]></expression>
+		<element kind="image" uuid="f4035fa3-3054-42da-a5f1-3055689e2540" x="0" y="0" width="569" height="85">
+			<expression><![CDATA[$P{imageDir} + "membretado-head.jpeg"]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</element>
-		<element kind="staticText" uuid="ea8a9ec9-9bf2-4d2a-b005-9bf23e8aa0a1" x="76" y="10" width="130" height="30" fontSize="11.0" bold="false" hTextAlign="Center">
-			<text><![CDATA[GOBIERNO AUTÓNOMO MUNICIPAL DE EL ALTO]]></text>
-		</element>
-		<element kind="staticText" uuid="968266b7-a368-4f3f-baaa-f07cc422359a" x="19" y="79" width="538" height="11" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Top">
-			<text><![CDATA[_________________________________________________________________________________________________________________________________]]></text>
+		<element kind="staticText" uuid="c139a55c-161a-498e-8f92-2c213d13572d" x="469" y="65" width="102" height="25" fontSize="5.0" bold="true" hTextAlign="Center" vTextAlign="Middle" style="NEGRITA">
+			<text><![CDATA[UNIDAD DE SERVICIOS GENERALES Y MANTENIMIENTO]]></text>
 		</element>
 	</pageHeader>
 	<detail>
@@ -220,12 +217,9 @@
 			</element>
 		</band>
 	</detail>
-	<pageFooter height="40" splitType="Stretch">
-		<element kind="staticText" uuid="7cc69f3b-4c97-460d-8ac2-5c7bccf26283" x="21" y="2" width="538" height="21" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Top">
-			<text><![CDATA[_______________________________________________________________________________________________________________________]]></text>
-		</element>
-		<element kind="staticText" uuid="4fc1d1fe-7145-42c3-92e2-c5cba28007dc" x="43" y="21" width="476" height="19" fontSize="8.0" hTextAlign="Center">
-			<text><![CDATA[Avenida Costanera Nro. 5022, Urbanizacion Libertad entre calles JJ Torres y Hernan Siles Zuazo, Casa Municipal (Jach'a Uta), a media cuadra de la Estacion de Bomberos El Alto.]]></text>
+	<pageFooter height="45" splitType="Stretch">
+		<element kind="image" uuid="11c47de2-8df4-4e6c-a590-b183fd14be0c" x="2" y="6" width="569" height="27">
+			<expression><![CDATA[$P{imageDir} + "membretado-foot.jpeg"]]></expression>
 		</element>
 	</pageFooter>
 	<summary height="93">

@@ -54,24 +54,21 @@
 	<parameter name="ds" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
 	<query language="sql"><![CDATA[]]></query>
 	<background splitType="Stretch"/>
-	<pageHeader height="97" splitType="Stretch">
-		<element kind="staticText" uuid="ab386c4a-28cb-4686-9b5b-ccdd1f35f354" x="197" y="40" width="176" height="20" fontName="DejaVu Sans" fontSize="13.0" bold="true" hTextAlign="Center" vTextAlign="Middle" style="NEGRITA">
-			<text><![CDATA[REPORTE]]></text>
+	<pageHeader height="122" splitType="Stretch">
+		<element kind="image" uuid="d46e97e3-a8a2-40b1-a006-83065eca1ea9" x="0" y="0" width="569" height="85">
+			<expression><![CDATA[$P{imageDir} + "membretado-head.jpeg"]]></expression>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</element>
-		<element kind="staticText" uuid="e960bdf0-c033-4c1d-bf66-18e7e8a28e99" x="324" y="10" width="240" height="30" fontSize="9.0" bold="true" hTextAlign="Center" style="NEGRITA">
+		<element kind="staticText" uuid="01e22287-9575-482e-a06a-9a096e03dd1a" x="469" y="65" width="102" height="25" fontSize="5.0" bold="true" hTextAlign="Center" vTextAlign="Middle" style="NEGRITA">
 			<text><![CDATA[UNIDAD DE SERVICIOS GENERALES Y MANTENIMIENTO]]></text>
 		</element>
-		<element kind="textField" uuid="e11196e6-76bd-4903-9059-7432f09e1453" x="88" y="60" width="476" height="16" fontSize="10.0" bold="true" hTextAlign="Right" vTextAlign="Middle" style="NEGRITA">
+		<element kind="staticText" uuid="81cc6a8b-3ac1-487d-ba79-e88c24ed4a2a" x="201" y="85" width="176" height="17" fontName="DejaVu Sans" fontSize="13.0" bold="true" hTextAlign="Center" vTextAlign="Middle" style="NEGRITA">
+			<text><![CDATA[REPORTE]]></text>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
+		</element>
+		<element kind="textField" uuid="48e301e1-4fed-41f9-94f2-38152ae76b1d" x="88" y="102" width="402" height="13" fontSize="10.0" bold="true" hTextAlign="Center" vTextAlign="Middle" style="NEGRITA">
 			<expression><![CDATA["El Alto, " + $P{fecha}]]></expression>
-		</element>
-		<element kind="image" uuid="6c419689-ebde-4a43-94ee-0b21a5f75eac" x="17" y="10" width="57" height="61">
-			<expression><![CDATA[$P{imageDir} + "escudo.jpg"]]></expression>
-		</element>
-		<element kind="staticText" uuid="146c8069-1102-44c5-9f5c-d46233bb7b34" x="76" y="10" width="130" height="30" fontSize="11.0" bold="false" hTextAlign="Center">
-			<text><![CDATA[GOBIERNO AUTÓNOMO MUNICIPAL DE EL ALTO]]></text>
-		</element>
-		<element kind="staticText" uuid="8f03acf5-3fd0-44c5-9435-9b8d89bd74da" x="19" y="79" width="538" height="11" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Top">
-			<text><![CDATA[_________________________________________________________________________________________________________________________________]]></text>
+			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</element>
 	</pageHeader>
 	<detail>
@@ -218,20 +215,18 @@
 				<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
 				<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
 			</element>
-			<element kind="textField" uuid="98f19a25-d616-42d1-9386-eb2246f01628" x="51" y="1" width="476" height="16" fontSize="10.0" bold="true" hTextAlign="Center" vTextAlign="Middle" style="NEGRITA">
+			<element kind="textField" uuid="8040e59b-8e21-42bf-b29a-34ec1d034f02" x="51" y="1" width="476" height="16" fontSize="10.0" bold="true" hTextAlign="Center" vTextAlign="Middle" style="NEGRITA">
 				<expression><![CDATA["Tipo de servicio:  " + $P{nombreServicio}]]></expression>
 			</element>
 		</band>
 	</detail>
-	<pageFooter height="40" splitType="Stretch">
-		<element kind="staticText" uuid="9305516c-acfe-45d2-9c0d-e1ec5bc761db" x="43" y="21" width="476" height="19" fontSize="8.0" hTextAlign="Center">
-			<text><![CDATA[Avenida Costanera Nro. 5022, Urbanizacion Libertad entre calles JJ Torres y Hernan Siles Zuazo, Casa Municipal (Jach'a Uta), a media cuadra de la Estacion de Bomberos El Alto.]]></text>
+	<pageFooter height="45" splitType="Stretch">
+		<element kind="image" uuid="65bdef40-8166-4985-96c4-e8c4f543f1ea" x="2" y="6" width="569" height="27">
+			<expression><![CDATA[$P{imageDir} + "membretado-foot.jpeg"]]></expression>
 		</element>
-		<element kind="staticText" uuid="f6a07882-fc0a-4139-8f0e-158243f7adc0" x="21" y="2" width="538" height="19" fontSize="8.0" bold="true" hTextAlign="Center" vTextAlign="Top">
-			<text><![CDATA[_______________________________________________________________________________________________________________________]]></text>
-		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
 	</pageFooter>
-	<summary height="98">
+	<summary height="93">
 		<element kind="textField" uuid="ea15fc7b-f20f-44d2-88e1-450fbe1a00a2" x="496" y="0" width="69" height="13" fontSize="7.0" hTextAlign="Center" vTextAlign="Middle">
 			<expression><![CDATA[$P{precioTotal}]]></expression>
 			<box>
@@ -292,5 +287,6 @@
 			<text><![CDATA[..............................
 Firma Vo.Bo.]]></text>
 		</element>
+		<property name="com.jaspersoft.studio.unit.height" value="px"/>
 	</summary>
 </jasperReport>
