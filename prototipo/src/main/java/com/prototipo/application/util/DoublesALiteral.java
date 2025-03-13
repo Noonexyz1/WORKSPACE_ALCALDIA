@@ -15,8 +15,8 @@ public class DoublesALiteral {
         BigDecimal parteDecimal = numero.remainder(BigDecimal.ONE).multiply(BigDecimal.valueOf(100)).setScale(0, BigDecimal.ROUND_HALF_UP);
         //return convertirNumero(parteEntera) + " con " + (parteDecimal.equals(BigDecimal.ZERO) ? "00" : parteDecimal) + "/100";
         //return convertirNumero(parteEntera) + " con " + NumeroALiteral.convertirNumeroALiteral(parteDecimal.intValue());
-        String valorReturn = convertirNumero(parteEntera) + " " + (parteDecimal.equals(BigDecimal.ZERO) ? "00/" : parteDecimal + "/100");
-        return valorReturn.trim().toUpperCase() + " BOLIVIANOS";
+        String valorReturn = convertirNumero(parteEntera) + " " + (parteDecimal.equals(BigDecimal.ZERO) ? "00" : parteDecimal);
+        return valorReturn.trim().toUpperCase() + "/100 BOLIVIANOS";
     }
 
     private static String convertirNumero(BigInteger numero) {
