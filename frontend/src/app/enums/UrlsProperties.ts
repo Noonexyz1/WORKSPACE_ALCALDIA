@@ -27,6 +27,7 @@ export enum UrlsProperties {
   PATH_LIST_TAM = BASE_URLS + '/solicitante/listarTamano',
   PATH_LIST_ANVER = BASE_URLS + '/solicitante/listarAnversoReverso',
   PATH_LIST_COLOR = BASE_URLS + '/solicitante/listarColor',
+  SUSCRIBE_SOLICITANTE = BASE_URLS + '/solicitante/notificacion',
 
   PATH_NOTA_PDF = BASE_URLS + '/responsable/exportNotaPedidoDPF/',
   PATH_REPORTE_PDF = BASE_URLS + '/responsable/exportReporteDPF/',
@@ -41,4 +42,5 @@ export enum UrlsProperties {
   PATH_RECHAZAR_SOLI = BASE_URLS + '/responsable/rechazarSolicitud',
   PATH_AUTORI_SOLI = BASE_URLS + '/responsable/verAutorizacionSolicitud/',
   PATH_FINALIZAR_SOLI = BASE_URLS + '/responsable/finalizarSolicitud',
+  SUSCRIBE_RESPONSABLE = BASE_URLS + '/responsable/notificacion'
 }
