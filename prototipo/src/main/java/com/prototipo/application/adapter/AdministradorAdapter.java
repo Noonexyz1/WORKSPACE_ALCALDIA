@@ -60,6 +60,10 @@ public class AdministradorAdapter implements AdministradorService {
         // insertamos las credenciales a la BD correspondientes para el nuevo usuario
         crearCredencial(usuarioResp);
 
+        // buscamos un responsable activo
+        UsuarioUnidad responsable = usuarioUnidadAbstract.encontrarUsuarioUnidadUltimoActivo();
+
+        userUnidad.setFkResponsable(UsuarioUnidad.builder().id(responsable.getId()).build());
         userUnidad.setId(null);
         userUnidad.setIsActive(true);
         userUnidad.setFkUsuario(usuarioResp);

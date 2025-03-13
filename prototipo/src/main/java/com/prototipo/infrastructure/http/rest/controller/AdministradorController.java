@@ -103,7 +103,7 @@ public class AdministradorController {
                 .fkRol(Rol.builder().id(user.getIdRol()).build())
                 .fkUnidad(Unidad.builder().id(user.getIdUni()).build())
                 .fkCargo(Cargo.builder().id(user.getIdCargo()).build())
-                .fkResponsable(UsuarioUnidad.builder().id(user.getIdResponsable()).build())
+                //.fkResponsable(UsuarioUnidad.builder().id(user.getIdResponsable()).build())
                 .fkDirector(UsuarioUnidad.builder().id(user.getIdDirector()).build())
                 .build();
     }

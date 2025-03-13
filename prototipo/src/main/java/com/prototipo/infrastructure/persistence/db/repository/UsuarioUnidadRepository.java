@@ -63,4 +63,15 @@ public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEnti
             LIMIT 1
             """, nativeQuery = true)
     UsuarioUnidadEntity findUserUnidadByCi(@Param("ci") String ci);
+
+    @Query(value =
+            """
+            SELECT *
+            FROM usuario_unidad uu
+            WHERE uu.is_active = TRUE
+            AND uu.fk_rol_id = 2
+            ORDER BY uu.id DESC
+            LIMIT 1
+            """, nativeQuery = true)
+    UsuarioUnidadEntity findUsuarioUnidadResponsableActive();
 }

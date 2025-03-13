@@ -58,6 +58,13 @@ public class UsuarioUnidadImpl implements UsuarioUnidadAbstract {
         return paginableOut;
     }
 
+    @Override
+    public UsuarioUnidad encontrarUsuarioUnidadUltimoActivo() {
+        UsuarioUnidadEntity usuarioUnidad = usuarioUnidadRepository
+                .findUsuarioUnidadResponsableActive();
+        return mapper.map(usuarioUnidad, UsuarioUnidad.class);
+    }
+
 
     @Override
     @Transactional
