@@ -32,7 +32,7 @@ public class NumeroALiteral {
             literal += convertirCentenas(resto);
         }
 
-        return literal.trim();
+        return literal.trim().toUpperCase();
     }
 
     private static String convertirCentenas(int numero) {

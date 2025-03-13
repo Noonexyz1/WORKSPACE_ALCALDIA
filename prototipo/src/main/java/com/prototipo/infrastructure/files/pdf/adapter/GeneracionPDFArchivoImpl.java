@@ -65,7 +65,7 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
 
                     params.put("precio" + k, BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu()).setScale(2, RoundingMode.HALF_UP).doubleValue());
 
-                    params.put("literalPrecio" + k, DoublesALiteral.convertir(BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu())));
+                    params.put("literalPrecio" + k, DoublesALiteral.convertirDecimalALiteral(BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu())));
 
                     params.put("detalle" + k, detalleFotoVect[j].getNombreDocumento());
                     j++; // Avanzar al siguiente elemento
