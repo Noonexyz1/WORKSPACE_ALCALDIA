@@ -1,7 +1,7 @@
 import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {SolicitudResponse} from '../../../models/SolicitudResponse';
-import {catchError, map, of} from 'rxjs';
+import {BehaviorSubject, catchError, map, of} from 'rxjs';
 import {PageRequestID} from '../../../models/PageRequestID';
 import {UsuarioResponse} from '../../../models/UsuarioResponse';
 import {LocalStorageService} from '../../../services/local-storage/local-storage.service';
@@ -78,7 +78,12 @@ export class ListaSoliSolicitanteAutorizadaComponent {
 
   }
 
-
+  private subject$ = new BehaviorSubject<number>(0);
+  isModalVisible: boolean = false;
+  toggleModal(idSolicitud: number): void {
+    this.subject$.next(idSolicitud);
+    this.isModalVisible = !this.isModalVisible;
+  }
 
   goToPage(page: number): void {
     if (page >= 0 && page < this.pageProperties.totalPages) {
@@ -101,4 +106,7 @@ export class ListaSoliSolicitanteAutorizadaComponent {
     }
   }
 
+  metodoPrueba() {
+    alert("Hola mundo");
+  }
 }
