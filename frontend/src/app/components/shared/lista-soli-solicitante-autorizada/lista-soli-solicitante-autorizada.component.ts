@@ -9,11 +9,14 @@ import {PageProperties} from "../../../models/PageProperties";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {PageRequest} from "../../../models/PageRequest";
 import {PageResponse} from "../../../models/PageResponse";
+import {RegistrarRetiroComponent} from "../registrar-retiro/registrar-retiro.component";
 
 @Component({
   selector: 'app-lista-soli-solicitante-autorizada',
   standalone: true,
-  imports: [],
+  imports: [
+    RegistrarRetiroComponent
+  ],
   templateUrl: './lista-soli-solicitante-autorizada.component.html',
   styleUrl: './lista-soli-solicitante-autorizada.component.css'
 })
@@ -106,7 +109,4 @@ export class ListaSoliSolicitanteAutorizadaComponent {
     }
   }
 
-  metodoPrueba() {
-    alert("Hola mundo");
-  }
 }
