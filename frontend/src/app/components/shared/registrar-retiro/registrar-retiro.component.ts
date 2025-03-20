@@ -41,7 +41,7 @@ export class RegistrarRetiroComponent {
   }
 
   tamDocumentos: number = this.listaDeDocumentos.length - 1;
-  botonPush(event: Event) {
+  botonPush() {
     if (this.tamDocumentos > 0 && this.selectedValue != "" && this.inputValue != "") {
       //this.onInputChange(event);
       let tamanoAreglo = this.arreglo.length - 1;
