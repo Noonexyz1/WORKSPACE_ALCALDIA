@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {SubjectIdSolicitudService} from "../../../services/subject-id-solicitud/subject-id-solicitud.service";
 
 @Component({
   selector: 'app-registrar-retiro',
@@ -15,13 +16,17 @@ export class RegistrarRetiroComponent {
 
   arreglo: number[] = [];
 
-  constructor() {
+  constructor(
+    private subject$: SubjectIdSolicitudService) {
+
     this.listaDeDocumentos[0] = 1;
     this.listaDeDocumentos[1] = 2;
     this.listaDeDocumentos[2] = 3;
 
     //Valor por defecto
     this.arreglo.push(0);
+
+    subject$.obtenerObservable().subscribe(value => console.log(value));
   }
 
   metodoPrueba() {

@@ -10,6 +10,7 @@ import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {PageRequest} from "../../../models/PageRequest";
 import {PageResponse} from "../../../models/PageResponse";
 import {RegistrarRetiroComponent} from "../registrar-retiro/registrar-retiro.component";
+import {SubjectIdSolicitudService} from "../../../services/subject-id-solicitud/subject-id-solicitud.service";
 
 @Component({
   selector: 'app-lista-soli-solicitante-autorizada',
@@ -22,17 +23,13 @@ import {RegistrarRetiroComponent} from "../registrar-retiro/registrar-retiro.com
 })
 export class ListaSoliSolicitanteAutorizadaComponent {
 
-  private http: HttpClient;
-  private localStorage: LocalStorageService;
-
   usuario: UsuarioResponse = new UsuarioResponse();
 
   constructor(
-    http: HttpClient,
-    localStorage: LocalStorageService) {
+    private http: HttpClient,
+    private localStorage: LocalStorageService,
+    private subject$: SubjectIdSolicitudService) {
 
-    this.http = http;
-    this.localStorage = localStorage;
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
   }
@@ -81,10 +78,9 @@ export class ListaSoliSolicitanteAutorizadaComponent {
 
   }
 
-  private subject$ = new BehaviorSubject<number>(0);
   isModalVisible: boolean = false;
   toggleModal(idSolicitud: number): void {
-    this.subject$.next(idSolicitud);
+    this.subject$.publicarDatos(idSolicitud);
     this.isModalVisible = !this.isModalVisible;
   }
 
