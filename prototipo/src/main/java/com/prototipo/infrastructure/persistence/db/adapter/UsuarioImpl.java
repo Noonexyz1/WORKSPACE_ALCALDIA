@@ -1,6 +1,6 @@
 package com.prototipo.infrastructure.persistence.db.adapter;
 
-import com.prototipo.application.port.out.UsuarioAbastract;
+import com.prototipo.application.port.out.persistence.UsuarioAbastract;
 import com.prototipo.domain.model.Usuario;
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioEntity;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioRepository;

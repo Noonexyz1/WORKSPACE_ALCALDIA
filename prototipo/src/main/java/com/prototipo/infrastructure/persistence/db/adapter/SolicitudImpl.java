@@ -2,7 +2,7 @@ package com.prototipo.infrastructure.persistence.db.adapter;
 
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
-import com.prototipo.application.port.out.SolicitudAbstract;
+import com.prototipo.application.port.out.persistence.SolicitudAbstract;
 import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.persistence.db.entity.*;
 import com.prototipo.infrastructure.persistence.db.repository.*;

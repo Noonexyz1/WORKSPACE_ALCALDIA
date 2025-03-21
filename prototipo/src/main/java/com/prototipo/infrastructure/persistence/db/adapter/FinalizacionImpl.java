@@ -2,7 +2,7 @@ package com.prototipo.infrastructure.persistence.db.adapter;
 
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
-import com.prototipo.application.port.out.FinalizacionAbstract;
+import com.prototipo.application.port.out.persistence.FinalizacionAbstract;
 import com.prototipo.domain.model.Finalizacion;
 import com.prototipo.infrastructure.persistence.db.entity.AutorizacionEntity;
 import com.prototipo.infrastructure.persistence.db.entity.FinalizacionEntity;

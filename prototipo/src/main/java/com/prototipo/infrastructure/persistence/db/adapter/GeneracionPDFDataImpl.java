@@ -1,6 +1,6 @@
 package com.prototipo.infrastructure.persistence.db.adapter;
 
-import com.prototipo.application.port.out.GeneracionPDFDataAbstract;
+import com.prototipo.application.port.out.persistence.GeneracionPDFDataAbstract;
 import com.prototipo.domain.model.NotaDePedido;
 import com.prototipo.domain.model.Reporte;
 import com.prototipo.infrastructure.persistence.db.repository.ReportesPDFRepository;

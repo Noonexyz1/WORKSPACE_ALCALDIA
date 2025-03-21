@@ -1,4 +1,4 @@
-package com.prototipo.application.port.out;
+package com.prototipo.application.port.out.pdf;
 
 import com.prototipo.domain.model.*;
 

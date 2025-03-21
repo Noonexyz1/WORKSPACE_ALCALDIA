@@ -1,6 +1,6 @@
 package com.prototipo.infrastructure.persistence.db.adapter;
 
-import com.prototipo.application.port.out.CargoAbstract;
+import com.prototipo.application.port.out.persistence.CargoAbstract;
 import com.prototipo.domain.model.Cargo;
 import com.prototipo.infrastructure.persistence.db.entity.CargoEntity;
 import com.prototipo.infrastructure.persistence.db.repository.CargoRepository;

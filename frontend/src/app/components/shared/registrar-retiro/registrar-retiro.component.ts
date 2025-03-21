@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
 import {SubjectIdSolicitudService} from "../../../services/subject-id-solicitud/subject-id-solicitud.service";
+import {UsuarioUnidadEditRequest} from "../../../models/UsuarioUnidadEditRequest";
+import {UrlsProperties} from "../../../enums/UrlsProperties";
+import {catchError, map, of} from "rxjs";
+import {HttpClient} from "@angular/common/http";
+import {DocumentoRetiroResponse} from "../../../models/DocumentoRetiroResponse";
 
 @Component({
   selector: 'app-registrar-retiro',
@@ -13,11 +18,13 @@ export class RegistrarRetiroComponent {
   //A partir del ID de solicitud que me pasen, debo mostrar toda la informacion haciendo peticiones
 
   listaDeDocumentos: number[] = new Array(3);
+  listaDeDocumentos2: DocumentoRetiroResponse[] = [];
 
   arreglo: number[] = [];
 
   constructor(
-    private subject$: SubjectIdSolicitudService) {
+    private subject$: SubjectIdSolicitudService,
+    private http: HttpClient) {
 
     this.listaDeDocumentos[0] = 1;
     this.listaDeDocumentos[1] = 2;
@@ -26,11 +33,35 @@ export class RegistrarRetiroComponent {
     //Valor por defecto
     this.arreglo.push(0);
 
-    subject$.obtenerObservable().subscribe(value => console.log(value));
+    this.iniciarValores();
+
   }
 
   metodoPrueba() {
     alert("Hola mundo");
+  }
+
+  iniciarValores(){
+    this.subject$.obtenerObservable().subscribe(value => {
+
+      console.log(value)
+      //TODO
+      this.http.get<DocumentoRetiroResponse[]>(
+        UrlsProperties.PATH_DOCU_RETIRO + value,
+      ).pipe(
+        map(() => {
+          //
+        }),
+        catchError(error => {
+          console.error('Error en la petición:', error);
+          alert('Hubo un error al obtener Documentos de retiro');
+          // Retornar un observable vacío en caso de error
+          return of(null);
+        })
+      ).subscribe();
+
+    });
+
   }
 
   inputValue: string = "";

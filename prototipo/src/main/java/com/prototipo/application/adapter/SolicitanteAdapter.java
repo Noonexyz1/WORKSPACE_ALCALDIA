@@ -2,10 +2,10 @@ package com.prototipo.application.adapter;
 
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
-import com.prototipo.application.port.out.FotocopiaAbstract;
-import com.prototipo.application.port.out.GeneracionPDFArchivoAbstract;
-import com.prototipo.application.port.out.ServicioFotocopiaAbstract;
-import com.prototipo.application.port.out.SolicitudAbstract;
+import com.prototipo.application.port.out.persistence.FotocopiaAbstract;
+import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
+import com.prototipo.application.port.out.persistence.ServicioFotocopiaAbstract;
+import com.prototipo.application.port.out.persistence.SolicitudAbstract;
 import com.prototipo.application.port.in.SolicitanteService;
 
 import com.prototipo.domain.enums.*;
@@ -391,6 +391,13 @@ public class SolicitanteAdapter implements SolicitanteService {
         }
     }
 
+    @Override
+    public List<DocumentoRetiro> listDocumentoRetirar(Long idSolicitud) {
+        //TODO, List documentos retiro
+        List<Fotocopia> fotoSoliAbs = fotocopiaAbstract.getFotocopiasSolicitudAbstract(idSolicitud);
+
+        return List.of();
+    }
 
 
     @Override

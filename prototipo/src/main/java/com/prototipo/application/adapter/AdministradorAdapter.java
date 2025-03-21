@@ -2,8 +2,8 @@ package com.prototipo.application.adapter;
 
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
-import com.prototipo.application.port.out.*;
 import com.prototipo.application.port.in.AdministradorService;
+import com.prototipo.application.port.out.persistence.*;
 import com.prototipo.domain.model.*;
 
 import java.util.List;

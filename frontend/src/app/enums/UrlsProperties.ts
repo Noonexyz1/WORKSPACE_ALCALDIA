@@ -28,6 +28,7 @@ export enum UrlsProperties {
   PATH_LIST_ANVER = BASE_URLS + '/solicitante/listarAnversoReverso',
   PATH_LIST_COLOR = BASE_URLS + '/solicitante/listarColor',
   SUSCRIBE_SOLICITANTE = BASE_URLS + '/solicitante/notificacion',
+  PATH_DOCU_RETIRO = BASE_URLS + '/solicitante/verDocumentosRetiro/',
 
   PATH_NOTA_PDF = BASE_URLS + '/responsable/exportNotaPedidoDPF/',
   PATH_REPORTE_PDF = BASE_URLS + '/responsable/exportReporteDPF/',

@@ -1,4 +1,4 @@
-package com.prototipo.application.port.out;
+package com.prototipo.application.port.out.persistence;
 
 import com.prototipo.domain.model.NotaDePedido;
 import com.prototipo.domain.model.Reporte;

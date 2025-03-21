@@ -6,6 +6,7 @@ import com.prototipo.application.port.in.SolicitanteService;
 import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.http.rest.model.request.PageRequest;
 import com.prototipo.infrastructure.http.rest.model.request.SolicitudRequest;
+import com.prototipo.infrastructure.http.rest.model.response.DocumentoRetiroResponse;
 import com.prototipo.infrastructure.http.rest.model.response.PageResponse;
 import com.prototipo.infrastructure.http.rest.model.response.SolicitudSoliciResponse;
 import com.prototipo.infrastructure.service.Observable;
@@ -76,12 +77,30 @@ public class SolicitanteController {
         observable.publicarValor(1);
     }
 
-    @GetMapping("/eliminarSolicitudById/{idSolicitud}")
+    @GetMapping(
+            path = {"/eliminarSolicitudById/{idSolicitud}"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public void eliminarSolicitudById(@PathVariable Long idSolicitud){
         solicitanteService.eliminarSolicitud(idSolicitud);
         observable.publicarValor(1);
     }
 
+    @GetMapping(
+            path = {"/verDocumentosRetiro/{idSolicitud}"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<DocumentoRetiroResponse>> verDocumentosRetiro(
+            @PathVariable Long idSolicitud){
+
+        List<DocumentoRetiro> listDocumentoRet = solicitanteService
+                .listDocumentoRetirar(idSolicitud);
+
+        List<DocumentoRetiroResponse> listDocumentoResp = listDocumentoRet
+                .stream()
+                .map(x -> modelMapper.map(x, DocumentoRetiroResponse.class))
+                .toList();
+
+        return new ResponseEntity<>(listDocumentoResp, HttpStatus.OK);
+    }
 
 
     @PostMapping(

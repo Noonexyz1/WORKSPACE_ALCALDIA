@@ -2,8 +2,13 @@ package com.prototipo.application.adapter;
 
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
-import com.prototipo.application.port.out.*;
 import com.prototipo.application.port.in.ResponsableService;
+import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
+import com.prototipo.application.port.out.persistence.GeneracionPDFDataAbstract;
+import com.prototipo.application.port.out.persistence.AutorizacionAbstract;
+import com.prototipo.application.port.out.persistence.FinalizacionAbstract;
+import com.prototipo.application.port.out.persistence.FotocopiaAbstract;
+import com.prototipo.application.port.out.persistence.SolicitudAbstract;
 import com.prototipo.domain.model.*;
 
 import java.io.File;
@@ -12,7 +17,6 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;

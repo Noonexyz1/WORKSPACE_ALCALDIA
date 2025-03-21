@@ -1,6 +1,6 @@
 package com.prototipo.infrastructure.files.pdf.adapter;
 
-import com.prototipo.application.port.out.GeneracionPDFArchivoAbstract;
+import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
 import com.prototipo.application.util.DoublesALiteral;
 import com.prototipo.application.util.NumeroALiteral;
 import com.prototipo.domain.model.*;
