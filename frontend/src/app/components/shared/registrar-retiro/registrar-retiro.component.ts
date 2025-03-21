@@ -16,9 +16,9 @@ export class RegistrarRetiroComponent {
   arreglo: number[] = [];
 
   constructor() {
-    this.listaDeDocumentos.push(1);
-    this.listaDeDocumentos.push(2);
-    this.listaDeDocumentos.push(3);
+    this.listaDeDocumentos[0] = 1;
+    this.listaDeDocumentos[1] = 2;
+    this.listaDeDocumentos[2] = 3;
 
     //Valor por defecto
     this.arreglo.push(0);
@@ -41,13 +41,21 @@ export class RegistrarRetiroComponent {
   }
 
   tamDocumentos: number = this.listaDeDocumentos.length - 1;
+  tamArrayLimite: number = this.listaDeDocumentos.length;
+  contador: number = 0;
   botonPush() {
     if (this.tamDocumentos > 0 && this.selectedValue != "" && this.inputValue != "") {
-      //this.onInputChange(event);
       let tamanoAreglo = this.arreglo.length - 1;
       this.arreglo[tamanoAreglo] = 1;
-      this.arreglo.push(0);
+
+      // generamos nuevo elemento con condicion
+      if(this.contador < this.tamArrayLimite){
+        this.arreglo.push(0);
+        this.contador++;
+      }
+
       this.tamDocumentos--;
+
       // Reiniciar los campos del formulario
       this.selectedValue = '';
       this.inputValue = '';
@@ -59,6 +67,9 @@ export class RegistrarRetiroComponent {
   }
 
   botonNotaDePedido() {
+    this.botonPush();
+    //Aqui se va a evaluar si no hay redundancia con los id de las fotocopias
+    console.log(this.arreglo)
     alert("Nota de Pedido");
   }
 }
