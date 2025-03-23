@@ -4,6 +4,7 @@ import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
 import com.prototipo.application.port.out.persistence.FotocopiaAbstract;
 import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
+import com.prototipo.application.port.out.persistence.DocumentoRetiroAbstract;
 import com.prototipo.application.port.out.persistence.ServicioFotocopiaAbstract;
 import com.prototipo.application.port.out.persistence.SolicitudAbstract;
 import com.prototipo.application.port.in.SolicitanteService;
@@ -45,6 +46,7 @@ public class SolicitanteAdapter implements SolicitanteService {
     private FotocopiaAbstract fotocopiaAbstract;
     private ServicioFotocopiaAbstract findServicioFotocopia;
     private GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract;
+    private DocumentoRetiroAbstract documentoRetiroAbstract;
 
     public SolicitanteAdapter(
             SolicitudAbstract solicitudAbstract,
@@ -394,9 +396,16 @@ public class SolicitanteAdapter implements SolicitanteService {
     @Override
     public List<DocumentoRetiro> listDocumentoRetirar(Long idSolicitud) {
         //TODO, List documentos retiro
+        //Debo pensar entidad por entidad porque cada modelo de dominio es un mundo aparte
         List<Fotocopia> fotoSoliAbs = fotocopiaAbstract.getFotocopiasSolicitudAbstract(idSolicitud);
+        List<Long> idFotoSoliAbs = fotoSoliAbs.stream().map(Fotocopia::getId).toList();
 
-        return List.of();
+        //Debo pensar entidad por entidad porque cada modelo de dominio es un mundo aparte
+        List<DocumentoRetiro> retiroDocumentoList = idFotoSoliAbs.stream()
+                .map(x -> documentoRetiroAbstract.getRetiroDocuByFkFoto(x))
+                .toList();
+
+        return retiroDocumentoList;
     }
 
 

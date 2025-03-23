@@ -9,7 +9,11 @@ import lombok.*;
 @AllArgsConstructor
 public class DocumentoRetiro {
     private Long id;
-    private Long disponible;
-    private Long usado;
-    private Long total;
+    private Long totalCopia;
+    private Long totalUsado;
+    private Long totalDisponible;
+
+    private String fecha;
+
+    private Fotocopia fkFotocopia;
 }

@@ -34,5 +34,5 @@ public class FotocopiaEntity {
     private ServicioFotocopiaEntity fkServicioFotocopia;
 
     @OneToMany(mappedBy = "fkFotocopia")
-    private List<RetiroDocumentoEntity> listRetiroDocumento;
+    private List<DocumentoRetiroEntity> listRetiroDocumento;
 }

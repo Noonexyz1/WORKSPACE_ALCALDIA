@@ -1,3 +1,0 @@
-En este paquete se pone la persistencia por cada modelo que haya en el domain,
-no me importa como lo persistas pero quiero que por cada modelo simil de entidad
-me persistas y si hay relacion, pues unicamnte ese campo sea el Long id y nada mas.

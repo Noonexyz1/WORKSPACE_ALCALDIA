@@ -9,8 +9,8 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "retiro_doc")
-public class RetiroDocumentoEntity {
+@Table(name = "documento_retiro")
+public class DocumentoRetiroEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
