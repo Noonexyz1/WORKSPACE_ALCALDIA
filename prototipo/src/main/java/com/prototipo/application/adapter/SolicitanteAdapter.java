@@ -52,12 +52,14 @@ public class SolicitanteAdapter implements SolicitanteService {
             SolicitudAbstract solicitudAbstract,
             FotocopiaAbstract fotocopiaAbstract,
             ServicioFotocopiaAbstract findServicioFotocopia,
-            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract) {
+            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract,
+            DocumentoRetiroAbstract documentoRetiroAbstract) {
 
         this.solicitudAbstract = solicitudAbstract;
         this.fotocopiaAbstract = fotocopiaAbstract;
         this.findServicioFotocopia = findServicioFotocopia;
         this.generacionPDFArchivoAbstract = generacionPDFArchivoAbstract;
+        this.documentoRetiroAbstract = documentoRetiroAbstract;
     }
 
 
@@ -395,12 +397,13 @@ public class SolicitanteAdapter implements SolicitanteService {
 
     @Override
     public List<DocumentoRetiro> listDocumentoRetirar(Long idSolicitud) {
-        //TODO, List documentos retiro
         //Debo pensar entidad por entidad porque cada modelo de dominio es un mundo aparte
+        //y como es un mundo aparte, debe persistir aparte
         List<Fotocopia> fotoSoliAbs = fotocopiaAbstract.getFotocopiasSolicitudAbstract(idSolicitud);
         List<Long> idFotoSoliAbs = fotoSoliAbs.stream().map(Fotocopia::getId).toList();
 
         //Debo pensar entidad por entidad porque cada modelo de dominio es un mundo aparte
+        //y como es un mundo aparte, debe persistir aparte
         List<DocumentoRetiro> retiroDocumentoList = idFotoSoliAbs.stream()
                 .map(x -> documentoRetiroAbstract.getRetiroDocuByFkFoto(x))
                 .toList();

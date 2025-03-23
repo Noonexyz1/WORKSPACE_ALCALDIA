@@ -1,6 +1,7 @@
 package com.prototipo.infrastructure.config;
 
 import com.prototipo.application.adapter.SolicitanteAdapter;
+import com.prototipo.application.port.out.persistence.DocumentoRetiroAbstract;
 import com.prototipo.application.port.out.persistence.FotocopiaAbstract;
 import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
 import com.prototipo.application.port.out.persistence.ServicioFotocopiaAbstract;
@@ -22,13 +23,16 @@ public class SolicitudConfig {
             @Qualifier("servicioFotocopiaImpl")
             ServicioFotocopiaAbstract servicioFotocopiaAbstract,
             @Qualifier("generacionPDFArchivoImpl")
-            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract){
+            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract,
+            @Qualifier("documentoRetiroImpl")
+            DocumentoRetiroAbstract documentoRetiroAbstract){
 
         //Se necesita una dependencia
         return new SolicitanteAdapter(
                 solicitudAbstract,
                 fotocopiaAbstract,
                 servicioFotocopiaAbstract,
-                generacionPDFArchivoAbstract);
+                generacionPDFArchivoAbstract,
+                documentoRetiroAbstract);
     }
 }
