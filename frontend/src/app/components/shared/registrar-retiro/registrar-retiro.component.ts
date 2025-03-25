@@ -35,10 +35,14 @@ export class RegistrarRetiroComponent {
 
     this.iniciarValores();
 
+    //TODO, debo tener una lista de documento seleccionados y unicamente renderizarlo de nuevo cada vez haya un nuevo push
+    //TODO, la primera vez obio no habra resultados, pero eso unicamente se puede arreglar en el HTML diciendo que si es null, entonces que muestre la primerfila con opciones y mensajes de elegir una opcion
+
   }
 
-  metodoPrueba() {
-    alert("Hola mundo");
+  documentoRetiro: DocumentoRetiroResponse = new DocumentoRetiroResponse();
+  metodoPrueba(posicionDocu: number) {
+    this.documentoRetiro = this.listaDeDocumentos2[posicionDocu];
   }
 
   iniciarValores(){
@@ -49,8 +53,8 @@ export class RegistrarRetiroComponent {
       this.http.get<DocumentoRetiroResponse[]>(
         UrlsProperties.PATH_DOCU_RETIRO + value,
       ).pipe(
-        map(() => {
-          //
+        map((response: DocumentoRetiroResponse[]) => {
+          this.listaDeDocumentos2 = response;
         }),
         catchError(error => {
           console.error('Error en la petición:', error);

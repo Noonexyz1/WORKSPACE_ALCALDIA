@@ -3,11 +3,7 @@ package com.prototipo.infrastructure.config;
 import com.prototipo.application.adapter.ResponsableAdapter;
 import com.prototipo.application.port.in.ResponsableService;
 import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
-import com.prototipo.application.port.out.persistence.GeneracionPDFDataAbstract;
-import com.prototipo.application.port.out.persistence.AutorizacionAbstract;
-import com.prototipo.application.port.out.persistence.FinalizacionAbstract;
-import com.prototipo.application.port.out.persistence.FotocopiaAbstract;
-import com.prototipo.application.port.out.persistence.SolicitudAbstract;
+import com.prototipo.application.port.out.persistence.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,7 +24,9 @@ public class ResponsableConfig {
             @Qualifier("finalizacionImpl")
             FinalizacionAbstract finalizacionAbstract,
             @Qualifier("generacionPDFArchivoImpl")
-            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract) {
+            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract,
+            @Qualifier("documentoRetiroImpl")
+            DocumentoRetiroAbstract documentoRetiroAbstract) {
 
         return new ResponsableAdapter(
                 solicitudAbstract,
@@ -36,6 +34,7 @@ public class ResponsableConfig {
                 autorizacionAbstract,
                 fotocopiaAbstract,
                 finalizacionAbstract,
-                generacionPDFArchivoAbstract);
+                generacionPDFArchivoAbstract,
+                documentoRetiroAbstract);
     }
 }

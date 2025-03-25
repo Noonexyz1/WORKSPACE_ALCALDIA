@@ -4,4 +4,5 @@ import com.prototipo.domain.model.DocumentoRetiro;
 
 public interface DocumentoRetiroAbstract {
     DocumentoRetiro getRetiroDocuByFkFoto(Long idFotocopia);
+    void aprobarDocumentoRetiro(DocumentoRetiro documentoRetiro);
 }

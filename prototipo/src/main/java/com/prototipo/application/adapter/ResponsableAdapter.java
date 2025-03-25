@@ -4,11 +4,7 @@ import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
 import com.prototipo.application.port.in.ResponsableService;
 import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
-import com.prototipo.application.port.out.persistence.GeneracionPDFDataAbstract;
-import com.prototipo.application.port.out.persistence.AutorizacionAbstract;
-import com.prototipo.application.port.out.persistence.FinalizacionAbstract;
-import com.prototipo.application.port.out.persistence.FotocopiaAbstract;
-import com.prototipo.application.port.out.persistence.SolicitudAbstract;
+import com.prototipo.application.port.out.persistence.*;
 import com.prototipo.domain.model.*;
 
 import java.io.File;
@@ -33,6 +29,7 @@ public class ResponsableAdapter implements ResponsableService {
     private FotocopiaAbstract fotocopiaAbstract;
     private FinalizacionAbstract finalizacionAbstract;
     private GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract;
+    private DocumentoRetiroAbstract documentoRetiroAbstract;
 
     public ResponsableAdapter(
             SolicitudAbstract solicitudAbstract,
@@ -40,7 +37,8 @@ public class ResponsableAdapter implements ResponsableService {
             AutorizacionAbstract autorizacionAbstract,
             FotocopiaAbstract fotocopiaAbstract,
             FinalizacionAbstract finalizacionAbstract,
-            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract) {
+            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract,
+            DocumentoRetiroAbstract documentoRetiroAbstract) {
 
         this.solicitudAbstract = solicitudAbstract;
         this.generacionPDFDataAbstract = generacionPDFDataAbstract;
@@ -48,6 +46,7 @@ public class ResponsableAdapter implements ResponsableService {
         this.fotocopiaAbstract = fotocopiaAbstract;
         this.finalizacionAbstract = finalizacionAbstract;
         this.generacionPDFArchivoAbstract = generacionPDFArchivoAbstract;
+        this.documentoRetiroAbstract = documentoRetiroAbstract;
     }
 
     @Override
@@ -179,6 +178,29 @@ public class ResponsableAdapter implements ResponsableService {
         solicitud.setAutoriFlag(1L);
         solicitudAbstract.guardarSolicitudAbstract(solicitud);
         generarNotaPedidoPDF(solicitud.getId());
+
+
+        //en cuanto se autoriza, debo habilitarle este "credito"
+        List<Fotocopia> fotocopias = fotocopiaAbstract
+                .getFotocopiasSolicitudAbstract(solicitud.getId());
+
+        fotocopias.forEach(x -> {
+            DocumentoRetiro documentoRetiro = DocumentoRetiro.builder()
+                    .totalCopia(x.getNroCopias())
+                    // Es total usado es por documento, no importa si ese documento tiene 20 paginas, se
+                    // entiendes como 1 / que el usuario fotocopiara el documento entero
+                    .totalUsado(0L)
+                    .totalDisponible(x.getNroCopias())
+
+                    .precioParcial(0D)
+                    .precioTotal(x.getPrecioDocu())
+
+                    .fecha(fechaActual.format(formato))
+                    .fkFotocopia(x)
+                    .build();
+            documentoRetiroAbstract.aprobarDocumentoRetiro(documentoRetiro);
+        });
+
     }
 
     @Override

@@ -1,6 +1,5 @@
 package com.prototipo.infrastructure.persistence.db.repository;
 
-import com.prototipo.domain.model.DocumentoRetiro;
 import com.prototipo.infrastructure.persistence.db.entity.DocumentoRetiroEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -17,5 +16,5 @@ public interface DocumentoRetiroRepository extends JpaRepository<DocumentoRetiro
             ORDER BY dr.id DESC
             LIMIT 1
             """, nativeQuery = true)
-    DocumentoRetiro findByFkFotocopia(@Param("idFotocopia") Long idFotocopia);
+    DocumentoRetiroEntity findByFkFotocopia(@Param("idFotocopia") Long idFotocopia);
 }

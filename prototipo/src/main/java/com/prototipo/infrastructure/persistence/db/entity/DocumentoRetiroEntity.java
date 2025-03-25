@@ -19,6 +19,8 @@ public class DocumentoRetiroEntity {
     private Long totalCopia;
     private Long totalUsado;
     private Long totalDisponible;
+    private Double precioParcial;
+    private Double precioTotal;
 
     private String fecha;
 
