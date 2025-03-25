@@ -40,9 +40,8 @@ export class RegistrarRetiroComponent {
 
   }
 
-  documentoRetiro: DocumentoRetiroResponse = new DocumentoRetiroResponse();
+
   metodoPrueba(posicionDocu: number) {
-    this.documentoRetiro = this.listaDeDocumentos2[posicionDocu];
   }
 
   iniciarValores(){
@@ -69,16 +68,31 @@ export class RegistrarRetiroComponent {
   }
 
   inputValue: string = "";
-  selectedValue: string = "";
   onInputChange(event: Event) {
     // Obtener el elemento <input> que disparó el evento
     const inputElement = event.target as HTMLInputElement;
-    const selectElement = document.getElementById('idCategory') as HTMLSelectElement;
 
     // Obtener el valor del input
     this.inputValue = inputElement.value;
-    this.selectedValue = selectElement.value;
   }
+
+  selectedValue: string = "";
+  documentoRetiro: DocumentoRetiroResponse = new DocumentoRetiroResponse();
+  onDocumentoSeleccionado(event: Event) {
+    const selectElement = event.target as HTMLSelectElement;
+    const selectedId = selectElement.value;
+
+    // Buscar el documento correspondiente en tu lista
+    const documentoSeleccionado = this.listaDeDocumentos2
+      .find(doc => doc.id === parseInt(selectedId, 10));
+
+    if (documentoSeleccionado) {
+      this.selectedValue = documentoSeleccionado.id + "";
+      this.documentoRetiro = documentoSeleccionado;
+    }
+  }
+
+
 
   tamDocumentos: number = this.listaDeDocumentos.length - 1;
   tamArrayLimite: number = this.listaDeDocumentos.length;
