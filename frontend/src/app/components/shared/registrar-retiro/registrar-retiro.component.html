@@ -1,7 +1,7 @@
 <div class="p-4 md:p-5">
 
   <!--Esto es una fila como ejemplo, debe estar dentro de un FOR()-->
-  @for (item of arreglo; track $index) {
+  @for (item of documentosSeleccionados; track $index) {
     <form class="grid gap-4 mb-4 sm:grid-cols-6">
 
         <div class="col-span-6 sm:col-span-2">
@@ -9,7 +9,7 @@
             Seleccione un documento</label>
           <select id="idCategory"
                   class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
-            <!--<option selected="">Documento</option>-->
+            <!--<option selected="">--Documento--</option>-->
             @for (doc of listaDeDocumentos2; track $index) {
               <option (click)="metodoPrueba($index)" value="{{ doc.id }}">{{ doc.fkFotocopia.nombreDocumento }}</option>
             }
@@ -26,15 +26,15 @@
 
         <div class="col-span-2 sm:col-span-1">
           <label class="text-center block mb-2 text-sm font-medium text-gray-900 dark:text-white">Disponible</label>
-          <h2 class="text-center">{{ (documentoRetiro.totalDisponible == 0)? "Elige un documento" :documentoRetiro.totalDisponible }}</h2>
+          <h2 class="text-center">{{ (item.totalDisponible != 0)? item.totalDisponible: documentoRetiro.totalDisponible }}</h2>
         </div>
         <div class="col-span-2 sm:col-span-1">
           <label class="text-center block mb-2 text-sm font-medium text-gray-900 dark:text-white">Usado</label>
-          <h2 class="text-center">{{ documentoRetiro.totalUsado }}</h2>
+          <h2 class="text-center">{{ (item.totalUsado != 0)? item.totalUsado: documentoRetiro.totalUsado }}</h2>
         </div>
         <div class="col-span-2 sm:col-span-1">
           <label class="text-center block mb-2 text-sm font-medium text-gray-900 dark:text-white">Total</label>
-          <h2 class="text-center">{{ (documentoRetiro.totalCopia == 0)? "Elige un documento" :documentoRetiro.totalCopia }}</h2>
+          <h2 class="text-center">{{ (item.totalCopia != 0)? item.totalCopia: documentoRetiro.totalCopia }}</h2>
         </div>
 
     </form>

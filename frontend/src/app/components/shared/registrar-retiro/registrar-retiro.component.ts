@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import {SubjectIdSolicitudService} from "../../../services/subject-id-solicitud/subject-id-solicitud.service";
-import {UsuarioUnidadEditRequest} from "../../../models/UsuarioUnidadEditRequest";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {catchError, map, of} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {DocumentoRetiroResponse} from "../../../models/DocumentoRetiroResponse";
+import {DocumentoRetiroRequest} from "../../../models/DocumentoRetiroRequest";
 
 @Component({
   selector: 'app-registrar-retiro',
@@ -20,7 +20,7 @@ export class RegistrarRetiroComponent {
   listaDeDocumentos: number[] = new Array(3);
   listaDeDocumentos2: DocumentoRetiroResponse[] = [];
 
-  arreglo: number[] = [];
+  documentosSeleccionados: DocumentoRetiroRequest[] = [];
 
   constructor(
     private subject$: SubjectIdSolicitudService,
@@ -31,7 +31,7 @@ export class RegistrarRetiroComponent {
     this.listaDeDocumentos[2] = 3;
 
     //Valor por defecto
-    this.arreglo.push(0);
+    this.documentosSeleccionados.push(new DocumentoRetiroRequest());
 
     this.iniciarValores();
 
@@ -58,7 +58,7 @@ export class RegistrarRetiroComponent {
         }),
         catchError(error => {
           console.error('Error en la petición:', error);
-          alert('Hubo un error al obtener Documentos de retiro');
+          // alert('Hubo un error al obtener Documentos de retiro');
           // Retornar un observable vacío en caso de error
           return of(null);
         })
@@ -85,12 +85,23 @@ export class RegistrarRetiroComponent {
   contador: number = 0;
   botonPush() {
     if (this.tamDocumentos > 0 && this.selectedValue != "" && this.inputValue != "") {
-      let tamanoAreglo = this.arreglo.length - 1;
-      this.arreglo[tamanoAreglo] = 1;
+      let tamanoAreglo: number = this.documentosSeleccionados.length - 1;
+
+      let documentoRetiroToPush: DocumentoRetiroRequest = new DocumentoRetiroRequest();
+      documentoRetiroToPush.totalCopia = this.documentoRetiro.totalCopia;
+      documentoRetiroToPush.totalUsado = this.documentoRetiro.totalUsado;
+      documentoRetiroToPush.totalDisponible = this.documentoRetiro.totalDisponible;
+
+      documentoRetiroToPush.nroRetiro = parseInt(this.inputValue, 10);
+      documentoRetiroToPush.idDocumento = parseInt(this.selectedValue, 10);
+
+      this.documentosSeleccionados[tamanoAreglo] = documentoRetiroToPush;
+
+      this.documentoRetiro = new DocumentoRetiroResponse();
 
       // generamos nuevo elemento con condicion
       if(this.contador < this.tamArrayLimite){
-        this.arreglo.push(0);
+        this.documentosSeleccionados.push(new DocumentoRetiroRequest());
         this.contador++;
       }
 
@@ -103,13 +114,13 @@ export class RegistrarRetiroComponent {
   }
 
   botonPop() {
-    this.arreglo.pop();
+    this.documentosSeleccionados.pop();
   }
 
   botonNotaDePedido() {
     this.botonPush();
     //Aqui se va a evaluar si no hay redundancia con los id de las fotocopias
-    console.log(this.arreglo)
+    console.log(this.documentosSeleccionados)
     alert("Nota de Pedido");
   }
 }
