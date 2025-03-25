@@ -132,7 +132,6 @@ export class RegistrarRetiroComponent {
   }
 
   botonNotaDePedido() {
-    this.botonPush();
     //Aqui se va a evaluar si no hay redundancia con los id de las fotocopias
     console.log(this.documentosSeleccionados)
     alert("Nota de Pedido");
