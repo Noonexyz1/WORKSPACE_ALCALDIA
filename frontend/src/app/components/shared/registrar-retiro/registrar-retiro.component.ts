@@ -5,6 +5,7 @@ import {catchError, map, of} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {DocumentoRetiroResponse} from "../../../models/DocumentoRetiroResponse";
 import {DocumentoRetiroRequest} from "../../../models/DocumentoRetiroRequest";
+import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
 
 @Component({
   selector: 'app-registrar-retiro',
@@ -35,9 +36,9 @@ export class RegistrarRetiroComponent {
 
     this.iniciarValores();
 
-    //TODO, debo tener una lista de documento seleccionados y unicamente renderizarlo de nuevo cada vez haya un nuevo push
-    //TODO, la primera vez obio no habra resultados, pero eso unicamente se puede arreglar en el HTML diciendo que si es null, entonces que muestre la primerfila con opciones y mensajes de elegir una opcion
-
+    // debo tener una lista de documento seleccionados y unicamente renderizarlo de nuevo cada vez haya un nuevo push
+    // la primera vez obio no habra resultados, pero eso unicamente se puede arreglar en el HTML diciendo que
+    // si es null, entonces que muestre la primerfila con opciones y mensajes de elegir una opcion
   }
 
 
@@ -46,6 +47,7 @@ export class RegistrarRetiroComponent {
 
   iniciarValores(){
     this.subject$.obtenerObservable().subscribe(value => {
+      if (value == 0) return;
 
       console.log(value)
       //TODO
@@ -134,6 +136,21 @@ export class RegistrarRetiroComponent {
   botonNotaDePedido() {
     //Aqui se va a evaluar si no hay redundancia con los id de las fotocopias
     console.log(this.documentosSeleccionados)
+
+    this.http.post<DocumentoRetiroRequest[]>(
+      UrlsProperties.PATH_REGIS_RETIRODOCU,
+      this.documentosSeleccionados
+    ).subscribe({
+      next: () => {
+        console.log('EXITOS');
+        //this.router.valorParaNavegar("SolicitantePendientes");
+      },
+      error: (error) => {
+        console.error('Error al registrar retiro:', error);
+        alert('Hubo un error al registrar retiro de documento');
+      }
+    });
+
     alert("Nota de Pedido");
   }
 }

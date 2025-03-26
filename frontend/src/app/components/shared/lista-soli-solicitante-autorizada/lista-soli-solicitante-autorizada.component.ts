@@ -11,6 +11,10 @@ import {PageRequest} from "../../../models/PageRequest";
 import {PageResponse} from "../../../models/PageResponse";
 import {RegistrarRetiroComponent} from "../registrar-retiro/registrar-retiro.component";
 import {SubjectIdSolicitudService} from "../../../services/subject-id-solicitud/subject-id-solicitud.service";
+import {
+  SubjectDocumentoRetiroResponseService
+} from "../../../services/subject-retiro-documento/subject-documento-retiro-response.service";
+import {DocumentoRetiroResponse} from "../../../models/DocumentoRetiroResponse";
 
 @Component({
   selector: 'app-lista-soli-solicitante-autorizada',
@@ -28,7 +32,8 @@ export class ListaSoliSolicitanteAutorizadaComponent {
   constructor(
     private http: HttpClient,
     private localStorage: LocalStorageService,
-    private subject$: SubjectIdSolicitudService) {
+    private subject$: SubjectIdSolicitudService,
+    private subject2$: SubjectDocumentoRetiroResponseService) {
 
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();

@@ -4,12 +4,14 @@ import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
 import com.prototipo.application.port.in.SolicitanteService;
 import com.prototipo.domain.model.*;
+import com.prototipo.infrastructure.http.rest.model.request.DocumentoRetiroRequest;
 import com.prototipo.infrastructure.http.rest.model.request.PageRequest;
 import com.prototipo.infrastructure.http.rest.model.request.SolicitudRequest;
 import com.prototipo.infrastructure.http.rest.model.response.DocumentoRetiroResponse;
 import com.prototipo.infrastructure.http.rest.model.response.PageResponse;
 import com.prototipo.infrastructure.http.rest.model.response.SolicitudSoliciResponse;
 import com.prototipo.infrastructure.service.Observable;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -22,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @CrossOrigin(origins = "*", maxAge = 86400)
 @RestController
 @RequestMapping(path = "/solicitante")
@@ -102,6 +105,12 @@ public class SolicitanteController {
         return new ResponseEntity<>(listDocumentoResp, HttpStatus.OK);
     }
 
+    @PostMapping(
+            path = {"/registrarDocumentosRetiro"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public void registrarDocumentosRetiro(@RequestBody List<DocumentoRetiroRequest> listDocumentoReq){
+        //TODO
+    }
 
     @PostMapping(
             path = {"/verSolicitudesPendientes"},
