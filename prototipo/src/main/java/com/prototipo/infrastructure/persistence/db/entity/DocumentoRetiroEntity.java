@@ -20,6 +20,7 @@ public class DocumentoRetiroEntity {
     private Long totalUsado;
     private Long totalDisponible;
     private Double precioParcial;
+    private Double precioSumParcial;
     private Double precioTotal;
 
     private Long nroRetiro;

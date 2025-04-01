@@ -193,6 +193,7 @@ public class ResponsableAdapter implements ResponsableService {
                     .totalDisponible(x.getNroCopias())
 
                     .precioParcial(0D)
+                    .precioSumParcial(0D)
                     .precioTotal(x.getPrecioDocu())
 
                     .fecha(fechaActual.format(formato))

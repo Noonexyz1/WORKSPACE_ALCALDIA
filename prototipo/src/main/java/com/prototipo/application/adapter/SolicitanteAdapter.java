@@ -412,7 +412,7 @@ public class SolicitanteAdapter implements SolicitanteService {
 
     @Override
     public void guardarListaDocuRetiros(List<DocumentoRetiro> listDocumentoRetiro) {
-        //TODO
+        //TODO, deberia generar Nota de pedido PDF?
         List<DocumentoRetiro> listDocuRetiSave = listDocumentoRetiro
                 .stream().map(x -> {
 
@@ -433,11 +433,17 @@ public class SolicitanteAdapter implements SolicitanteService {
                                     docuRetRetry.getFkFotocopia().getNroPaginas() *
                                     x.getNroRetiro()
                     );
-                    newDocuRetry.setPrecioTotal(docuRetRetry.getPrecioTotal());
 
-                    //TODO, se tiene que tener una sumatoria de los preciosParciales porque en un mes el
+                    // Se tiene que tener una sumatoria de los preciosParciales porque en un mes el
                     // solicitante puede hacer mas de dos o tres retiros, pero para un informe de responsable
                     // unicamente se debe hacer por mes, y para ese mes de debe traer la sumatorio
+                    newDocuRetry.setPrecioSumParcial(
+                            docuRetRetry.getPrecioSumParcial() +
+                                    (docuRetRetry.getFkFotocopia().getFkServicioFotocopia().getPrecioRef() *
+                                            docuRetRetry.getFkFotocopia().getNroPaginas() *
+                                            x.getNroRetiro())
+                    );
+                    newDocuRetry.setPrecioTotal(docuRetRetry.getPrecioTotal());
 
                     newDocuRetry.setNroRetiro(x.getNroRetiro());
                     newDocuRetry.setSumNroRetiro(docuRetRetry.getSumNroRetiro() + x.getNroRetiro());

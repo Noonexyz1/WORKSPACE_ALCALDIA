@@ -14,6 +14,7 @@ public class DocumentoRetiro {
     private Long totalDisponible;
 
     private Double precioParcial;
+    private Double precioSumParcial;
     private Double precioTotal;
 
     private Long nroRetiro;
