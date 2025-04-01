@@ -8,10 +8,10 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class DocumentoRetiroRequest {
+    private Long id;
     private Long totalCopia;
     private Long totalUsado;
     private Long totalDisponible;
 
     private Long nroRetiro;
-    private Long idDocumento;
 }

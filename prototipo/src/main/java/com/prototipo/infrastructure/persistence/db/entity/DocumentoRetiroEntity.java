@@ -22,6 +22,9 @@ public class DocumentoRetiroEntity {
     private Double precioParcial;
     private Double precioTotal;
 
+    private Long nroRetiro;
+    private Long sumNroRetiro;
+
     private String fecha;
 
     @ManyToOne

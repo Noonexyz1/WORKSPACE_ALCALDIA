@@ -28,4 +28,6 @@ public interface SolicitanteService {
     byte[] descargarComunicacionInternaPDF(Long idSolicitud) throws IOException;
 
     List<DocumentoRetiro> listDocumentoRetirar(Long idSolicitud);
+
+    void guardarListaDocuRetiros(List<DocumentoRetiro> listDocumentoRetiro);
 }

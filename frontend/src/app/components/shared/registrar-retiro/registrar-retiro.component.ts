@@ -109,7 +109,7 @@ export class RegistrarRetiroComponent {
       documentoRetiroToPush.totalDisponible = this.documentoRetiro.totalDisponible;
 
       documentoRetiroToPush.nroRetiro = parseInt(this.inputValue, 10);
-      documentoRetiroToPush.idDocumento = parseInt(this.selectedValue, 10);
+      documentoRetiroToPush.id = parseInt(this.selectedValue, 10);
 
       this.documentosSeleccionados[tamanoAreglo] = documentoRetiroToPush;
 
@@ -137,6 +137,9 @@ export class RegistrarRetiroComponent {
     //Aqui se va a evaluar si no hay redundancia con los id de las fotocopias
     console.log(this.documentosSeleccionados)
 
+    // Debo quitar el ultimo espacio en blanco o null de esta cola
+    this.botonPop();
+
     this.http.post<DocumentoRetiroRequest[]>(
       UrlsProperties.PATH_REGIS_RETIRODOCU,
       this.documentosSeleccionados
@@ -151,6 +154,5 @@ export class RegistrarRetiroComponent {
       }
     });
 
-    alert("Nota de Pedido");
   }
 }

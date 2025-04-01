@@ -12,8 +12,12 @@ public class DocumentoRetiro {
     private Long totalCopia;
     private Long totalUsado;
     private Long totalDisponible;
+
     private Double precioParcial;
     private Double precioTotal;
+
+    private Long nroRetiro;
+    private Long sumNroRetiro;
 
     private String fecha;
 

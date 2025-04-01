@@ -17,7 +17,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 // IMPORTANTE: En la Arquitectura Hexagonal, el núcleo de la aplicación (dominio)
@@ -105,7 +108,7 @@ public class SolicitanteAdapter implements SolicitanteService {
         ).join();
     }
 
-    private double guardadFotocopiaAbstrac(Fotocopia fotocopia){
+    private double guardadFotocopiaAbstrac(Fotocopia fotocopia) {
         ServicioFotocopia solicitudFotocopiaDto = findServicioFotocopia
                 .findServicioFotocopia(fotocopia.getFkServicioFotocopia());
 
@@ -211,7 +214,6 @@ public class SolicitanteAdapter implements SolicitanteService {
     }
 
 
-
     @Override
     public void generarSolicitudDeFotocopiaPDF(Long idSolicitud) {
         // Traemos los datos necesarios para el reporte
@@ -247,7 +249,6 @@ public class SolicitanteAdapter implements SolicitanteService {
                 .cantidadSumado(solicitudResp.getCopiaTotal() + "")
                 .listReportFotocopias(listReportFotocopias)
                 .build();
-
 
 
         String salidaPdfPsth = "/home/kali/Downloads/solicitudPDF";
@@ -348,7 +349,6 @@ public class SolicitanteAdapter implements SolicitanteService {
                 .build();
 
 
-
         String salidaPdfPsth = "/home/kali/Downloads/comunicacionPDF";
 
         // Crear el directorio si no existe
@@ -367,7 +367,6 @@ public class SolicitanteAdapter implements SolicitanteService {
 
         // Ruta del archivo PDF
         String generacionPdfPath = salidaPdfPsth + "/comunicacion_" + idSolicitud + ".pdf";
-
 
 
         generacionPDFArchivoAbstract.generarComunicacionInternaPDFAbs(
@@ -411,6 +410,48 @@ public class SolicitanteAdapter implements SolicitanteService {
         return retiroDocumentoList;
     }
 
+    @Override
+    public void guardarListaDocuRetiros(List<DocumentoRetiro> listDocumentoRetiro) {
+        //TODO
+        List<DocumentoRetiro> listDocuRetiSave = listDocumentoRetiro
+                .stream().map(x -> {
+
+                    // "23/05/2015"
+                    String fechaActual = LocalDate.now()
+                            .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+                    DocumentoRetiro docuRetRetry = documentoRetiroAbstract.getDocumentoRetiroById(x.getId());
+
+                    DocumentoRetiro newDocuRetry = new DocumentoRetiro();
+                    newDocuRetry.setId(null);
+                    newDocuRetry.setTotalCopia(docuRetRetry.getTotalCopia());
+                    newDocuRetry.setTotalUsado(docuRetRetry.getSumNroRetiro() + x.getNroRetiro());
+                    newDocuRetry.setTotalDisponible(docuRetRetry.getTotalCopia() - (docuRetRetry.getSumNroRetiro() + x.getNroRetiro()));
+
+                    newDocuRetry.setPrecioParcial(
+                            docuRetRetry.getFkFotocopia().getFkServicioFotocopia().getPrecioRef() *
+                                    docuRetRetry.getFkFotocopia().getNroPaginas() *
+                                    x.getNroRetiro()
+                    );
+                    newDocuRetry.setPrecioTotal(docuRetRetry.getPrecioTotal());
+
+                    //TODO, se tiene que tener una sumatoria de los preciosParciales porque en un mes el
+                    // solicitante puede hacer mas de dos o tres retiros, pero para un informe de responsable
+                    // unicamente se debe hacer por mes, y para ese mes de debe traer la sumatorio
+
+                    newDocuRetry.setNroRetiro(x.getNroRetiro());
+                    newDocuRetry.setSumNroRetiro(docuRetRetry.getSumNroRetiro() + x.getNroRetiro());
+
+                    newDocuRetry.setFecha(fechaActual);
+
+                    newDocuRetry.setFkFotocopia(docuRetRetry.getFkFotocopia());
+
+                    return newDocuRetry;
+                }).toList();
+
+        documentoRetiroAbstract.guardarListaDocumentoRetiro(listDocuRetiSave);
+
+    }
 
     @Override
     public byte[] descargaSolicitudDeFotocopiaPDF(Long idSolicitud) throws IOException {

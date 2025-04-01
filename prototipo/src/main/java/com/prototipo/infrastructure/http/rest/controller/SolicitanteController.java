@@ -109,7 +109,11 @@ public class SolicitanteController {
             path = {"/registrarDocumentosRetiro"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
     public void registrarDocumentosRetiro(@RequestBody List<DocumentoRetiroRequest> listDocumentoReq){
-        //TODO
+        //Este metodo es un caso de uso de solicitante service
+        List<DocumentoRetiro> listDocumentoRetiro = listDocumentoReq.stream()
+                .map(x -> modelMapper.map(x, DocumentoRetiro.class))
+                .toList();
+        solicitanteService.guardarListaDocuRetiros(listDocumentoRetiro);
     }
 
     @PostMapping(
