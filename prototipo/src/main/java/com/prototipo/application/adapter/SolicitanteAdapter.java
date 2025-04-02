@@ -455,7 +455,48 @@ public class SolicitanteAdapter implements SolicitanteService {
                     return newDocuRetry;
                 }).toList();
 
-        documentoRetiroAbstract.guardarListaDocumentoRetiro(listDocuRetiSave);
+        List<DocumentoRetiro> documentoRetiros = documentoRetiroAbstract
+                .guardarListaDocumentoRetiro(listDocuRetiSave);
+
+
+        List<Fotocopia> fotocopiaList = documentoRetiros.stream()
+                .map(x -> {
+                    Fotocopia fotocopia = x.getFkFotocopia();
+                    fotocopia.setNroCopias(x.getNroRetiro());
+                    fotocopia.setPrecioDocu(x.getPrecioParcial());
+                    return fotocopia;
+                })
+                .toList();
+
+        String salidaPdfPsth = "/home/kali/Downloads/ordenPDF";
+
+        // Crear el directorio si no existe
+        File outputDir = new File(salidaPdfPsth);
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        }
+
+        InputStream recursoJrxmlPath = getClass().getClassLoader().getResourceAsStream("templates/report/orden.jrxml");
+        if (recursoJrxmlPath == null) {
+            throw new RuntimeException("No se pudo encontrar el archivo reporte.jrxml en el classpath.");
+        }
+
+        String recursoImagenPath = "classpath:/static/images/";
+        
+        String idDocuRetiros = documentoRetiros.stream()
+                .map(doc -> doc.getId().toString()) // Convertir a String
+                .reduce((a, b) -> a + "-" + b)
+                .orElse("");
+
+        // Ruta del archivo PDF
+        String generacionPdfPath = salidaPdfPsth + "/ordenDeFotocopia_" + idDocuRetiros + ".pdf";
+
+        generacionPDFArchivoAbstract.generarOrdenDeFotocopiaPDFAbs(
+                fotocopiaList,
+                recursoJrxmlPath,
+                recursoImagenPath,
+                generacionPdfPath
+        );
 
     }
 

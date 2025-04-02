@@ -8,5 +8,5 @@ public interface DocumentoRetiroAbstract {
     DocumentoRetiro getRetiroDocuByFkFoto(Long idFotocopia);
     void aprobarDocumentoRetiro(DocumentoRetiro documentoRetiro);
     DocumentoRetiro getDocumentoRetiroById(Long id);
-    void guardarListaDocumentoRetiro(List<DocumentoRetiro> listDocuRetiSave);
+    List<DocumentoRetiro> guardarListaDocumentoRetiro(List<DocumentoRetiro> listDocuRetiSave);
 }

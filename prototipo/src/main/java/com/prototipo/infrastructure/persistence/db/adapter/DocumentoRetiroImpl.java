@@ -46,10 +46,15 @@ public class DocumentoRetiroImpl implements DocumentoRetiroAbstract {
 
     @Override
     @Transactional
-    public void guardarListaDocumentoRetiro(List<DocumentoRetiro> listDocuRetiSave) {
+    public List<DocumentoRetiro> guardarListaDocumentoRetiro(List<DocumentoRetiro> listDocuRetiSave) {
         List<DocumentoRetiroEntity> listDocuRet = listDocuRetiSave.stream()
                 .map(x -> modelMapper.map(x, DocumentoRetiroEntity.class))
                 .toList();
-        documentoRetiroRepository.saveAll(listDocuRet);
+
+        List<DocumentoRetiroEntity> documentoRetiroEntities = documentoRetiroRepository.saveAll(listDocuRet);
+
+        return documentoRetiroEntities.stream()
+                .map(x -> modelMapper.map(x, DocumentoRetiro.class))
+                .toList();
     }
 }
