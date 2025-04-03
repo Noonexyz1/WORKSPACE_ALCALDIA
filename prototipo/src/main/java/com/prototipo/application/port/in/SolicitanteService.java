@@ -29,5 +29,5 @@ public interface SolicitanteService {
 
     List<DocumentoRetiro> listDocumentoRetirar(Long idSolicitud);
 
-    void guardarListaDocuRetiros(List<DocumentoRetiro> listDocumentoRetiro);
+    byte[] guardarListaDocuRetiros(List<DocumentoRetiro> listDocumentoRetiro) throws IOException;
 }

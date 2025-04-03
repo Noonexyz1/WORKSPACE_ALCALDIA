@@ -6,6 +6,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface DocumentoRetiroRepository extends JpaRepository<DocumentoRetiroEntity, Long> {
 
@@ -17,4 +19,6 @@ public interface DocumentoRetiroRepository extends JpaRepository<DocumentoRetiro
             LIMIT 1
             """, nativeQuery = true)
     DocumentoRetiroEntity findByFkFotocopia(@Param("idFotocopia") Long idFotocopia);
+
+    List<DocumentoRetiroEntity> findByFkFotocopiaId(Long idFotocopia);
 }

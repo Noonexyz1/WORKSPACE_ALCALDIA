@@ -57,4 +57,13 @@ public class DocumentoRetiroImpl implements DocumentoRetiroAbstract {
                 .map(x -> modelMapper.map(x, DocumentoRetiro.class))
                 .toList();
     }
+
+    @Override
+    public List<DocumentoRetiro> listaDocuRetiroByFkFotocopia(Long idFotocopia) {
+        List<DocumentoRetiroEntity> documentoRetiroEntities = documentoRetiroRepository
+                .findByFkFotocopiaId(idFotocopia);
+        return documentoRetiroEntities.stream()
+                .map(x -> modelMapper.map(x, DocumentoRetiro.class))
+                .toList();
+    }
 }

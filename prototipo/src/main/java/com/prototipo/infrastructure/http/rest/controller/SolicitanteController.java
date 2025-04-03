@@ -105,15 +105,30 @@ public class SolicitanteController {
         return new ResponseEntity<>(listDocumentoResp, HttpStatus.OK);
     }
 
+    @Async
     @PostMapping(
             path = {"/registrarDocumentosRetiro"},
             produces = {MediaType.APPLICATION_JSON_VALUE})
-    public void registrarDocumentosRetiro(@RequestBody List<DocumentoRetiroRequest> listDocumentoReq){
+    public CompletableFuture<ResponseEntity<byte[]>> registrarDocumentosRetiro(
+            @RequestBody List<DocumentoRetiroRequest> listDocumentoReq) throws IOException {
+
         //Este metodo es un caso de uso de solicitante service
         List<DocumentoRetiro> listDocumentoRetiro = listDocumentoReq.stream()
                 .map(x -> modelMapper.map(x, DocumentoRetiro.class))
                 .toList();
-        solicitanteService.guardarListaDocuRetiros(listDocumentoRetiro);
+        byte[] ordenDeFotocopia = solicitanteService.guardarListaDocuRetiros(listDocumentoRetiro);
+
+        return CompletableFuture.supplyAsync(() -> {
+            // Configurar encabezados de la respuesta
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData(
+                    "ordenParaFotocopiaPDF",
+                    "ordenDeFotocopia.pdf"
+            );
+            return ResponseEntity.ok().headers(headers).body(ordenDeFotocopia);
+        });
+
     }
 
     @PostMapping(

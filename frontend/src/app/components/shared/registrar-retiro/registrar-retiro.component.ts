@@ -140,19 +140,35 @@ export class RegistrarRetiroComponent {
     // Debo quitar el ultimo espacio en blanco o null de esta cola
     this.botonPop();
 
-    this.http.post<DocumentoRetiroRequest[]>(
+    // Esto debe registrar y descargar el pdf inmediatamente despues
+    this.http.post(
       UrlsProperties.PATH_REGIS_RETIRODOCU,
-      this.documentosSeleccionados
+      this.documentosSeleccionados,
+      { responseType: 'blob' }
     ).subscribe({
-      next: () => {
-        console.log('EXITOS');
-        //this.router.valorParaNavegar("SolicitantePendientes");
+      next: (response: Blob) => {
+        this.descargarPDF("ordenDeFotocopia.pdf", response);
       },
-      error: (error) => {
-        console.error('Error al registrar retiro:', error);
-        alert('Hubo un error al registrar retiro de documento');
+      error: error => {
+        this.errorDescargaPDF("ordenDeFotocopia.pdf", error);
+        return of(null);
       }
     });
 
+  }
+
+  descargarPDF(nombrePdf: string, response: Blob): void {
+    const blob = new Blob([response], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = nombrePdf;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  errorDescargaPDF(nombrePdf: string, error: any): void {
+    console.error('Error en la petición:', error);
+    alert('Hubo un ERROR al generar ' + nombrePdf);
   }
 }

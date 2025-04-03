@@ -2,6 +2,7 @@ package com.prototipo.application.adapter;
 
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
+import com.prototipo.application.port.in.ResponsableService;
 import com.prototipo.application.port.out.persistence.FotocopiaAbstract;
 import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
 import com.prototipo.application.port.out.persistence.DocumentoRetiroAbstract;
@@ -20,7 +21,6 @@ import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 // IMPORTANTE: En la Arquitectura Hexagonal, el núcleo de la aplicación (dominio)
@@ -50,19 +50,22 @@ public class SolicitanteAdapter implements SolicitanteService {
     private ServicioFotocopiaAbstract findServicioFotocopia;
     private GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract;
     private DocumentoRetiroAbstract documentoRetiroAbstract;
+    private ResponsableService responsableService;
 
     public SolicitanteAdapter(
             SolicitudAbstract solicitudAbstract,
             FotocopiaAbstract fotocopiaAbstract,
             ServicioFotocopiaAbstract findServicioFotocopia,
             GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract,
-            DocumentoRetiroAbstract documentoRetiroAbstract) {
+            DocumentoRetiroAbstract documentoRetiroAbstract,
+            ResponsableService responsableService) {
 
         this.solicitudAbstract = solicitudAbstract;
         this.fotocopiaAbstract = fotocopiaAbstract;
         this.findServicioFotocopia = findServicioFotocopia;
         this.generacionPDFArchivoAbstract = generacionPDFArchivoAbstract;
         this.documentoRetiroAbstract = documentoRetiroAbstract;
+        this.responsableService = responsableService;
     }
 
 
@@ -411,8 +414,7 @@ public class SolicitanteAdapter implements SolicitanteService {
     }
 
     @Override
-    public void guardarListaDocuRetiros(List<DocumentoRetiro> listDocumentoRetiro) {
-        //TODO, deberia generar Nota de pedido PDF?
+    public byte[] guardarListaDocuRetiros(List<DocumentoRetiro> listDocumentoRetiro) throws IOException {
         List<DocumentoRetiro> listDocuRetiSave = listDocumentoRetiro
                 .stream().map(x -> {
 
@@ -458,7 +460,6 @@ public class SolicitanteAdapter implements SolicitanteService {
         List<DocumentoRetiro> documentoRetiros = documentoRetiroAbstract
                 .guardarListaDocumentoRetiro(listDocuRetiSave);
 
-
         List<Fotocopia> fotocopiaList = documentoRetiros.stream()
                 .map(x -> {
                     Fotocopia fotocopia = x.getFkFotocopia();
@@ -467,6 +468,7 @@ public class SolicitanteAdapter implements SolicitanteService {
                     return fotocopia;
                 })
                 .toList();
+
 
         String salidaPdfPsth = "/home/kali/Downloads/ordenPDF";
 
@@ -497,6 +499,44 @@ public class SolicitanteAdapter implements SolicitanteService {
                 recursoImagenPath,
                 generacionPdfPath
         );
+
+
+        // Esto tiene que ser bajo una condicion, pero esto debe pasar de un estado aprobado
+        // a finalizado, unicamente el Responsable debe aprobar
+
+        // traer la Autorizacion que corresponde a la fotocopia del cual estoy haciendo esto
+        Long id = fotocopiaList.getFirst().getFkSolicitud().getId();
+
+        Fotocopia[] listFotocopias = responsableService.listaDeFotocopias(id).toArray(new Fotocopia[0]);
+
+        int tamListFoto = listFotocopias.length;
+        int contandorCeros = 0;
+
+        for (Fotocopia idFotocopia: listFotocopias) {
+            DocumentoRetiro[] documentoRetiroList = documentoRetiroAbstract
+                    .listaDocuRetiroByFkFotocopia(idFotocopia.getId()).toArray(new DocumentoRetiro[0]);
+
+            for (DocumentoRetiro documentoRetiro : documentoRetiroList) {
+                if (documentoRetiro.getTotalDisponible() == 0)
+                    contandorCeros++;
+            }
+        }
+
+        if (tamListFoto == contandorCeros) {
+            Autorizacion autorizacion = responsableService
+                    .obtenerAutorizacion(id);
+
+            Finalizacion finalizacion = Finalizacion.builder()
+                    .fkAutorizacion(Autorizacion.builder().id(autorizacion.getId()).build())
+                    .build();
+
+            //luego hay que cambiar el estado de esta Autorizacion a un estado TERMINADO, este metodo ya lo hace
+            responsableService.guardarFinalizacion(finalizacion);
+        }
+
+        // Aqui tengo que enviar los PDF para descargar
+        // Devolver el contenido del PDF como un arreglo de bytes
+        return Files.readAllBytes(Paths.get(generacionPdfPath));
 
     }
 
