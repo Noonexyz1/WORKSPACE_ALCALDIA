@@ -196,6 +196,9 @@ public class ResponsableAdapter implements ResponsableService {
                     .precioSumParcial(0D)
                     .precioTotal(x.getPrecioDocu())
 
+                    .nroRetiro(0L)
+                    .sumNroRetiro(0L)
+
                     .fecha(fechaActual.format(formato))
                     .fkFotocopia(x)
                     .build();
