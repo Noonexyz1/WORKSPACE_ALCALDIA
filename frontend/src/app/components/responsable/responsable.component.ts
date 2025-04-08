@@ -2,6 +2,9 @@ import {Component, OnInit} from '@angular/core';
 import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import { ModoDarkService } from '../../services/modo-dark/modo-dark.service';
 import { NavBarComponent } from "../shared/nav-bar/nav-bar.component";
+import {UrlsProperties} from "../../enums/UrlsProperties";
+import {catchError, map, of} from "rxjs";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-responsable',
@@ -12,13 +15,53 @@ import { NavBarComponent } from "../shared/nav-bar/nav-bar.component";
 })
 export class ResponsableComponent implements OnInit{
 
-  private modoDarkService: ModoDarkService;
 
-  constructor(modoDarkService: ModoDarkService){
-    this.modoDarkService = modoDarkService;
+  constructor(
+    private modoDarkService: ModoDarkService,
+    private http: HttpClient){
   }
 
   ngOnInit(): void {
     this.modoDarkService.metodoModoDark();
   }
+
+  botonDescargarReporte() {
+    const fechaFormateada: string = this.getCurrentMonthYear(); // Ejemplo: "03/2025"
+
+    this.http.get(
+      UrlsProperties.PATH_REPORTE_PDF,
+      { responseType: 'blob' }
+    ).pipe( // Cambiar el tipo de respuesta
+      map((response: Blob) => {
+        this.descargarPDF("reporteDelMes_" + fechaFormateada + ".pdf", response);
+      }),
+      catchError(error => {
+        this.errorDescargaPDF("reporte_" + fechaFormateada + ".pdf", error);
+        return of(null);
+      })
+    ).subscribe();
+  }
+
+  getCurrentMonthYear(): string {
+    const today = new Date();
+    const month = (today.getMonth() + 1).toString().padStart(2, '0'); // +1 porque los meses van de 0-11
+    const year = today.getFullYear();
+    return `${month}/${year}`;
+  }
+
+  descargarPDF(nombrePdf: string, response: Blob): void {
+    const blob = new Blob([response], { type: 'application/pdf' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = nombrePdf;
+    a.click();
+    window.URL.revokeObjectURL(url);
+  }
+
+  errorDescargaPDF(nombrePdf: string, error: any): void {
+    console.error('Error en la petición:', error);
+    alert('Hubo un ERROR al generar ' + nombrePdf);
+  }
+
 }

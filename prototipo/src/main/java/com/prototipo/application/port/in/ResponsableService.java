@@ -23,8 +23,8 @@ public interface ResponsableService {
     PaginableOut<Finalizacion> listaDeSolicitudesFinalizadasByIdResponsable(PaginableIn paginableIn);
 
     void generarNotaPedidoPDF(Long idSolicitud);
-    void generarReportePDF(Long idSolicitud);
+    void generarReportePDF();
 
     byte[] descargarNotaPedidoPDF(Long idSolicitud) throws IOException;
-    byte[] descargarReportePDF(Long idSolicitud) throws IOException;
+    byte[] descargarReportePDF() throws IOException;
 }

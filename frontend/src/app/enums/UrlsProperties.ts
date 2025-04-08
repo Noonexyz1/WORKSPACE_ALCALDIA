@@ -32,7 +32,7 @@ export enum UrlsProperties {
   PATH_REGIS_RETIRODOCU = BASE_URLS + '/solicitante/registrarDocumentosRetiro',
 
   PATH_NOTA_PDF = BASE_URLS + '/responsable/exportNotaPedidoDPF/',
-  PATH_REPORTE_PDF = BASE_URLS + '/responsable/exportReporteDPF/',
+  PATH_REPORTE_PDF = BASE_URLS + '/responsable/exportReporteDPF',
   PATH_LIST_SOLIPENDIENTE = BASE_URLS + '/responsable/verSolicitudesPendientes',
   PATH_LIST_SOLIAPRO = BASE_URLS + '/responsable/verSolicitudesAprobadas',
   PATH_LIST_SOLIFINALI = BASE_URLS + '/responsable/verSolicitudesFinalizadas',

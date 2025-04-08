@@ -21,6 +21,8 @@ import reactor.core.publisher.Flux;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -409,20 +411,21 @@ public class ResponsableController {
     }
 
     @Async
-    @GetMapping("/exportReporteDPF/{idSolicitud}")
-    public CompletableFuture<ResponseEntity<byte[]>> exportReporteDPF(
-            @PathVariable Long idSolicitud) throws IOException {
+    @GetMapping("/exportReporteDPF")
+    public CompletableFuture<ResponseEntity<byte[]>> exportReporteDPF() throws IOException {
 
-        byte[] reporte = responsableService.descargarReportePDF(idSolicitud);
+        byte[] reporte = responsableService.descargarReportePDF();
 
         return CompletableFuture.supplyAsync(() -> {
-                HttpHeaders headers = new HttpHeaders();
-                headers.setContentType(MediaType.APPLICATION_PDF);
-                headers.setContentDispositionFormData(
-                        "reportePDF",
-                        "reporte_" + idSolicitud + ".pdf"
-                );
-                return ResponseEntity.ok().headers(headers).body(reporte);
+            String mesAnio = LocalDate.now().format(DateTimeFormatter.ofPattern("MM-yyyy"));
+
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData(
+                    "reportePDF",
+                    "reporte_" + mesAnio + ".pdf"
+            );
+            return ResponseEntity.ok().headers(headers).body(reporte);
         });
     }
 }

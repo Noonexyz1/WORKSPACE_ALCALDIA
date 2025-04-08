@@ -122,7 +122,7 @@ export class ListaSoliFinalizadaResponsableComponent{
 
   botonReporteSolicitudPDF(idSolicitud: number | undefined): void {
     this.http.get(
-      UrlsProperties.PATH_REPORTE_PDF + idSolicitud,
+      UrlsProperties.PATH_REPORTE_PDF,
       { responseType: 'blob' }
     ).pipe( // Cambiar el tipo de respuesta
       map((response: Blob) => {
