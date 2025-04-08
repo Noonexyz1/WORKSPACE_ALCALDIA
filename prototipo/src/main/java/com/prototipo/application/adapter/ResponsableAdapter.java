@@ -63,8 +63,8 @@ public class ResponsableAdapter implements ResponsableService {
     }
 
     @Override
-    public List<Reporte> listaDeReportes(Long idSolicitud) {
-        return generacionPDFDataAbstract.generarReportePDFAbstract(idSolicitud);
+    public List<Reporte> listaDeReporteMensual(String mesAnio) {
+        return generacionPDFDataAbstract.generarReporteMensualPDFAbstract(mesAnio);
     }
 
     @Override
@@ -294,10 +294,16 @@ public class ResponsableAdapter implements ResponsableService {
         Solicitud solicitud = solicitudAbstract.buscarSolicitudByIdAbstract(idSolicitud);
 
         String nombreServicio = solicitud.getNombreServicio();
-        Double precioTotal = BigDecimal.valueOf(solicitud.getPrecioTotal()).setScale(2, RoundingMode.HALF_UP).doubleValue();
+
         Long paginaTotal = solicitud.getPaginaTotal();
         Long copiaTotal = solicitud.getCopiaTotal();
-        List<Reporte> listReporte = listaDeReportes(idSolicitud);
+
+        String mesAnio = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/yyyy"));
+        List<Reporte> listReporte = listaDeReporteMensual(mesAnio);
+
+        Double precioTotal = listReporte.stream()
+                .map(Reporte::getPrecioParcial)
+                .reduce(0.0, Double::sum);
 
         ReporteReport reporteReport = ReporteReport.builder()
                 .idSolicitud(idSolicitud)
@@ -308,8 +314,6 @@ public class ResponsableAdapter implements ResponsableService {
                 .copiaTotal(copiaTotal)
                 .listReporte(listReporte)
                 .build();
-
-
 
         String salidaPdfPsth = "/home/kali/Downloads/reportePDF";
 

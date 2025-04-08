@@ -37,19 +37,35 @@ public class GeneracionPDFDataImpl implements GeneracionPDFDataAbstract {
     }
 
     @Override
-    public List<Reporte> generarReportePDFAbstract(Long idSolicitud) {
-        List<Object[]> reportes = reportesPDFRepository.getListReporte(idSolicitud);
+    public List<Reporte> generarReporteMensualPDFAbstract(String mesAnio) {
+        List<Object[]> reportes = reportesPDFRepository.getListReporteMensual(mesAnio);
         List<Reporte> reporteDtos = reportes.stream().map(x -> {
             // Convertir Long a Integer explícitamente
-            String nombreDocumento = (String) x[0];
-            Integer nroPaginas = ((Long) x[1]).intValue();
-            Integer nroCopias = ((Long) x[2]).intValue();
-            String tamano = (String) x[3];
-            String color = (String) x[4];
-            String anverRever = (String) x[5];
-            Double precioRef = BigDecimal.valueOf((Double) x[6]).setScale(2, RoundingMode.HALF_UP).doubleValue();
-            Double precioDocu = BigDecimal.valueOf((Double) x[7]).setScale(2, RoundingMode.HALF_UP).doubleValue();
-            return new Reporte(nombreDocumento, nroPaginas, nroCopias, tamano, color, anverRever, precioRef, precioDocu);
+            String nombreUnidad = (String) x[0];
+            String cite = (String) x[1];
+
+            String nombreDocumento = (String) x[2];
+            Integer nroPaginas = ((Long) x[3]).intValue();
+            Integer nroCopiasExtrac = ((Long) x[4]).intValue();
+            String tamano = (String) x[5];
+            String color = (String) x[6];
+            String anverRever = (String) x[7];
+            Double precioRef = BigDecimal.valueOf((Double) x[8]).setScale(2, RoundingMode.HALF_UP).doubleValue();
+
+            Double precioParcial = BigDecimal.valueOf((Double) x[9]).setScale(2, RoundingMode.HALF_UP).doubleValue();
+
+            return new Reporte(
+                    nombreUnidad,
+                    cite,
+                    nombreDocumento,
+                    nroPaginas,
+                    nroCopiasExtrac,
+                    tamano,
+                    color,
+                    anverRever,
+                    precioRef,
+                    precioParcial
+            );
         }).toList();
 
         return reporteDtos;

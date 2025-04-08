@@ -8,5 +8,5 @@ import java.util.List;
 public interface GeneracionPDFDataAbstract {
     // Esta interfaz parece representar un conjuto de metodos para generar reportes
     List<NotaDePedido> getNotaDePedidoAbstract(Long idSolicitud);
-    List<Reporte> generarReportePDFAbstract(Long idSolicitud);
+    List<Reporte> generarReporteMensualPDFAbstract(String mesAnio);
 }
