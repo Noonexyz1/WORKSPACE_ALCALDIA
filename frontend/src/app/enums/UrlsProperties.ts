@@ -30,6 +30,7 @@ export enum UrlsProperties {
   SUSCRIBE_SOLICITANTE = BASE_URLS + '/solicitante/notificacion',
   PATH_DOCU_RETIRO = BASE_URLS + '/solicitante/verDocumentosRetiro/',
   PATH_REGIS_RETIRODOCU = BASE_URLS + '/solicitante/registrarDocumentosRetiro',
+  PATH_IS_INFORME = BASE_URLS + '/solicitante/isInforme/',
 
   PATH_NOTA_PDF = BASE_URLS + '/responsable/exportNotaPedidoDPF/',
   PATH_REPORTE_PDF = BASE_URLS + '/responsable/exportReporteDPF',

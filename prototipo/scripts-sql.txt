@@ -85,7 +85,7 @@ VALUES
 #estan dispersas en distintos lugares
 SELECT * FROM rol;
 SELECT * FROM unidad;
-SELECT * from usuario;
+SELECT * from usuario; #esto deberia tener un campo titulo para formacion academica
 SELECT * from credencial;
 SELECT * from usuario_unidad;
 SELECT * from cargo;
@@ -95,8 +95,12 @@ SELECT * from fotocopia f;
 SELECT * from serv_fotocopia sf;
 SELECT * from autorizacion a;
 SELECT * from finalizacion f;
+SELECT * from documento_retiro dr;
+
+ALTER TABLE unidad DROP COLUMN limite;
 
 DELETE from solicitud;
+#solicitud 124    autorizacion 50     finalizacion id = 51  fkAutorizacion = 50
 
 #Para asegurarme de que me traigan unicamente el ultimo responsable registrado por el admin
 SELECT *
@@ -106,7 +110,12 @@ AND uu.fk_rol_id = 2
 ORDER BY uu.id DESC
 LIMIT 1
 
-
+# me tiene que traer siempre el ultimo registro/actualizacion
+SELECT *
+FROM documento_retiro dr
+WHERE dr.fk_fotocopia_id = :idFotocopia
+ORDER BY dr.id DESC
+LIMIT 1
 
 SELECT *
 FROM solicitud s
@@ -166,6 +175,7 @@ AND s.id IN (
 )
 ORDER BY s.id DESC;
 
+#Este query es para los reportes Reporte
 SELECT
     f.nombre_documento,
     f.nro_paginas,
@@ -179,6 +189,31 @@ FROM solicitud s, fotocopia f, serv_fotocopia sf
 WHERE f.fk_solicitud_id = s.id
 AND f.fk_servicio_fotocopia_id = sf.id
 AND f.fk_solicitud_id = :idSolicitud;
+
+#Este query es para los reportes Reporte version 2
+SELECT
+    u.nombre_unidad,
+    s.cite,
+    f.nombre_documento,
+    f.nro_paginas,
+    dr.nro_retiro,
+    sf.tamano,
+    sf.color,
+    sf.anver_rever,
+    sf.precio_ref,
+    dr.precio_parcial
+FROM fotocopia f
+JOIN solicitud s ON s.id = f.fk_solicitud_id
+JOIN serv_fotocopia sf ON f.fk_servicio_fotocopia_id = sf.id
+JOIN documento_retiro dr ON f.id = dr.fk_fotocopia_id
+JOIN usuario_unidad uu ON uu.id = s.fk_usuario_solicitante_id
+JOIN unidad u ON u.id = uu.fk_unidad_id
+WHERE RIGHT(dr.fecha, 7) = :mesAnio
+AND dr.total_usado != 0
+#No deberia mandar el idSolicitud porque para este informe debe ser de todos aquellos que han utilizado
+#La tabla fotocopia deberia tener una campo de precio_docu_parcial????
+
+
 
 SELECT *
 FROM serv_fotocopia sf

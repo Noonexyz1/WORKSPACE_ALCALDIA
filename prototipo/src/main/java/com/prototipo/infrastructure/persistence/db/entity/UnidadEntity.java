@@ -18,4 +18,5 @@ public class UnidadEntity {
     private Long id;
     private String nombreUnidad;
     private String direccion;
+    private Double limiteMonetario;
 }

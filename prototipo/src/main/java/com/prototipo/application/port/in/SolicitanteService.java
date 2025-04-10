@@ -30,4 +30,6 @@ public interface SolicitanteService {
     List<DocumentoRetiro> listDocumentoRetirar(Long idSolicitud);
 
     byte[] guardarListaDocuRetiros(List<DocumentoRetiro> listDocumentoRetiro) throws IOException;
+
+    boolean isInforme(Long idSolicitud);
 }

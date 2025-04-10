@@ -541,6 +541,15 @@ public class SolicitanteAdapter implements SolicitanteService {
     }
 
     @Override
+    public boolean isInforme(Long idSolicitud) {
+        Solicitud solicitud = solicitudAbstract.buscarSolicitudByIdAbstract(idSolicitud);
+        UsuarioUnidad fkUsuarioSolicitante = solicitud.getFkUsuarioSolicitante();
+        Unidad fkUnidad = fkUsuarioSolicitante.getFkUnidad();
+        var valor = fkUnidad.getLimiteMonetario() < solicitud.getPrecioTotal();
+        return valor;
+    }
+
+    @Override
     public byte[] descargaSolicitudDeFotocopiaPDF(Long idSolicitud) throws IOException {
         String salidaPdfPsth = "/home/kali/Downloads/solicitudPDF";
         // Ruta del archivo PDF

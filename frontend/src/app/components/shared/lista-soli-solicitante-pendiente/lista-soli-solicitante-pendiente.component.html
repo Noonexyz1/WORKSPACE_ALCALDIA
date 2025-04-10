@@ -131,6 +131,25 @@
                                   </svg>
                                 </label>
                               </li>
+                              @if (hayInforme){
+                                <li>
+                                  <input type="radio" name="job" value="job-1" class="hidden peer" required/>
+                                  <label for="job-1"
+                                         (click)="botonInformePDF()"
+                                         class="inline-flex items-center justify-between w-full p-5 text-gray-900 bg-white border border-gray-200 rounded-lg cursor-pointer dark:hover:text-gray-300 dark:border-gray-500 dark:peer-checked:text-blue-500 peer-checked:border-blue-600 peer-checked:text-blue-600 hover:text-gray-900 hover:bg-gray-100 dark:text-white dark:bg-gray-600 dark:hover:bg-gray-500">
+                                    <div class="block">
+                                      <div class="w-full text-lg font-semibold">Informe de solicitud PDF</div>
+                                    </div>
+                                    <svg class="w-6 h-6 text-gray-800 dark:text-white" aria-hidden="true"
+                                         xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                                         viewBox="0 0 24 24">
+                                      <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
+                                            stroke-width="2"
+                                            d="M4 15v2a3 3 0 0 0 3 3h10a3 3 0 0 0 3-3v-2m-8 1V4m0 12-4-4m4 4 4-4"/>
+                                    </svg>
+                                  </label>
+                                </li>
+                              }
                             </ul>
                           </div>
 

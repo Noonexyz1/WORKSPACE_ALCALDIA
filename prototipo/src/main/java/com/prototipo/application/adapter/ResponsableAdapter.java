@@ -303,10 +303,12 @@ public class ResponsableAdapter implements ResponsableService {
                 .map(Reporte::getPrecioParcial)
                 .reduce(0.0, Double::sum);
 
+        BigDecimal precioRedondeo = new BigDecimal(precioTotal).setScale(2, RoundingMode.HALF_UP);
+
         ReporteReport reporteReport = ReporteReport.builder()
                 .fecha(fechaActualString)
                 .nombreServicio("Fotocopia")
-                .precioTotal(precioTotal)
+                .precioTotal(precioRedondeo.doubleValue())
                 .paginaTotal(Long.valueOf(paginaTotal))
                 .copiaTotal(Long.valueOf(copiaTotal))
                 .listReporte(listReporte)

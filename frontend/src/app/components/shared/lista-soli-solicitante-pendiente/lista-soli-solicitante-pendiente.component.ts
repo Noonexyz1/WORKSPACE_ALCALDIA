@@ -90,9 +90,23 @@ export class ListaSoliSolicitantePendienteComponent {
 
   private subject$ = new BehaviorSubject<number>(0);
   isModalVisible: boolean = false;
+  hayInforme: boolean = true;
   toggleModal(idSolicitud: number): void {
     this.subject$.next(idSolicitud);
     this.isModalVisible = !this.isModalVisible;
+
+    const url = UrlsProperties.PATH_IS_INFORME + idSolicitud;
+    this.http.get<boolean>(url)
+      .subscribe({
+        next: (resp: boolean) => {
+          this.hayInforme = resp;
+        },
+        error: error => {
+          console.error('Error en la petición:', error);
+          alert("Error en la peticion");
+        }
+      });
+
   }
 
   botonSolicitudFotocopiaPDF(): void {
@@ -116,6 +130,11 @@ export class ListaSoliSolicitantePendienteComponent {
         return of(null);
       })
     ).subscribe();
+  }
+
+
+  botonInformePDF() {
+
   }
 
   botonOrdenFotocopiaPDF(): void {
@@ -200,4 +219,6 @@ export class ListaSoliSolicitantePendienteComponent {
       this.listarSolicitudes();
     }
   }
+
+
 }

@@ -227,6 +227,14 @@ public class SolicitanteController {
         return solicitudSoliciResponse;
     }
 
+    @GetMapping(
+            path = {"/isInforme/{idSolicitud}"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Boolean> isInforme(@PathVariable Long idSolicitud) {
+        boolean isInforme = solicitanteService.isInforme(idSolicitud);
+        return new ResponseEntity<>(isInforme, HttpStatus.OK);
+    }
+
 
 
     @GetMapping(
