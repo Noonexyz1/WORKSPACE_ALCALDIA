@@ -22,6 +22,7 @@ export enum UrlsProperties {
   PATH_SOLICITUD_PDF = BASE_URLS + '/solicitante/exportSolicitudDPF/',
   PATH_ORDENFOTO_PDF = BASE_URLS + '/solicitante/exportOrdenDeSolicitudDPF/',
   PATH_COMUINTERNA_PDF = BASE_URLS + '/solicitante/exportComunicacionInternaDPF/',
+  PATH_INFORSOLI_PDF = BASE_URLS + '/solicitante/exportInformeSolicitudDPF/',
   PATH_FINALIZADAS_SOLI = BASE_URLS + '/solicitante/verSolicitudesFinalizadas',
   PATH_ELIMINAR_SOLIC = BASE_URLS + '/solicitante/eliminarSolicitudById/',
   PATH_LIST_TAM = BASE_URLS + '/solicitante/listarTamano',

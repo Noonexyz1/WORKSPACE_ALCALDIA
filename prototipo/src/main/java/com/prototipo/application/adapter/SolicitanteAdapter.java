@@ -3,6 +3,7 @@ package com.prototipo.application.adapter;
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
 import com.prototipo.application.port.in.ResponsableService;
+import com.prototipo.application.port.out.pdf.GeneracionPDFDataAbstract;
 import com.prototipo.application.port.out.persistence.FotocopiaAbstract;
 import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
 import com.prototipo.application.port.out.persistence.DocumentoRetiroAbstract;
@@ -51,6 +52,7 @@ public class SolicitanteAdapter implements SolicitanteService {
     private GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract;
     private DocumentoRetiroAbstract documentoRetiroAbstract;
     private ResponsableService responsableService;
+    private GeneracionPDFDataAbstract generacionPDFDataAbstract;
 
     public SolicitanteAdapter(
             SolicitudAbstract solicitudAbstract,
@@ -58,7 +60,8 @@ public class SolicitanteAdapter implements SolicitanteService {
             ServicioFotocopiaAbstract findServicioFotocopia,
             GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract,
             DocumentoRetiroAbstract documentoRetiroAbstract,
-            ResponsableService responsableService) {
+            ResponsableService responsableService,
+            GeneracionPDFDataAbstract generacionPDFDataAbstract) {
 
         this.solicitudAbstract = solicitudAbstract;
         this.fotocopiaAbstract = fotocopiaAbstract;
@@ -66,6 +69,7 @@ public class SolicitanteAdapter implements SolicitanteService {
         this.generacionPDFArchivoAbstract = generacionPDFArchivoAbstract;
         this.documentoRetiroAbstract = documentoRetiroAbstract;
         this.responsableService = responsableService;
+        this.generacionPDFDataAbstract = generacionPDFDataAbstract;
     }
 
 
@@ -380,6 +384,38 @@ public class SolicitanteAdapter implements SolicitanteService {
         );
     }
 
+    @Override
+    public void generarInformeSolicitudPDF(Long idSolicitud) {
+        InformeReport informeReport = generacionPDFDataAbstract.getInformeReport(idSolicitud);
+
+        String salidaPdfPsth = "/home/kali/Downloads/informePDF";
+
+        // Crear el directorio si no existe
+        File outputDir = new File(salidaPdfPsth);
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        }
+
+        InputStream recursoJrxmlPath = getClass().getClassLoader().getResourceAsStream("templates/report/informe.jrxml");
+        if (recursoJrxmlPath == null) {
+            throw new RuntimeException("No se pudo encontrar el archivo informe.jrxml en el classpath.");
+        }
+
+
+        String recursoImagenPath = "classpath:/static/images/";
+
+        // Ruta del archivo PDF
+        String generacionPdfPath = salidaPdfPsth + "/informe_" + idSolicitud + ".pdf";
+
+
+        generacionPDFArchivoAbstract.generarInformeSolicitudPDFAbs(
+                informeReport,
+                recursoJrxmlPath,
+                recursoImagenPath,
+                generacionPdfPath
+        );
+    }
+
     private String formatListaDocumentos(List<Fotocopia> listFotocopiaSolicitudResp) {
         // Usamos collect() para obtener una lista en versiones de Java anteriores a 16
         List<String> nombres = listFotocopiaSolicitudResp.stream()
@@ -571,6 +607,17 @@ public class SolicitanteAdapter implements SolicitanteService {
         String salidaPdfPsth = "/home/kali/Downloads/comunicacionPDF";
         // Ruta del archivo PDF
         String generacionPdfPath = salidaPdfPsth + "/comunicacion_" + idSolicitud + ".pdf";
+        return Files.readAllBytes(Paths.get(generacionPdfPath));
+    }
+
+    @Override
+    public byte[] descargarInformeSolicitudPDF(Long idSolicitud) throws IOException {
+        //TODO, revisar este metodo
+        generarInformeSolicitudPDF(idSolicitud);
+
+        String salidaPdfPsth = "/home/kali/Downloads/informePDF";
+        // Ruta del archivo PDF
+        String generacionPdfPath = salidaPdfPsth + "/informe_" + idSolicitud + ".pdf";
         return Files.readAllBytes(Paths.get(generacionPdfPath));
     }
 }

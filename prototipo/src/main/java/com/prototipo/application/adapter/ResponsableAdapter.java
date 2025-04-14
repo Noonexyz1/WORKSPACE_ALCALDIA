@@ -4,6 +4,7 @@ import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
 import com.prototipo.application.port.in.ResponsableService;
 import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
+import com.prototipo.application.port.out.pdf.GeneracionPDFDataAbstract;
 import com.prototipo.application.port.out.persistence.*;
 import com.prototipo.domain.model.*;
 

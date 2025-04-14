@@ -134,7 +134,25 @@ export class ListaSoliSolicitantePendienteComponent {
 
 
   botonInformePDF() {
+    let idSolicitud: number = 0;
+    this.subject$.asObservable().subscribe(x => {
+      idSolicitud = x;
+    });
+    const url = UrlsProperties.PATH_INFORSOLI_PDF + idSolicitud;
 
+    // Recibimos la peticion
+    this.http.get(
+      url,
+      { responseType: 'blob' }
+    ).pipe( // Cambiar el tipo de respuesta
+      map((response: Blob) => {
+        this.descargarPDF("informe_" + idSolicitud + ".pdf", response);
+      }),
+      catchError(error => {
+        this.errorDescargaPDF("informe_" + idSolicitud + ".pdf", error);
+        return of(null);
+      })
+    ).subscribe();
   }
 
   botonOrdenFotocopiaPDF(): void {

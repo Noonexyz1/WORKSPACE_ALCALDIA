@@ -319,4 +319,23 @@ public class SolicitanteController {
                 return ResponseEntity.ok().headers(headers).body(comunicacionInterna);
         });
     }
+
+    @Async
+    @GetMapping("/exportInformeSolicitudDPF/{idSolicitud}")
+    public CompletableFuture<ResponseEntity<byte[]>> exportInformeSolicitudDPF(
+            @PathVariable Long idSolicitud) throws IOException {
+
+        byte[] informeSolicitud = solicitanteService.descargarInformeSolicitudPDF(idSolicitud);
+
+        return CompletableFuture.supplyAsync(() -> {
+            // Configurar encabezados de la respuesta
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData(
+                    "informeSolicitudPDF",
+                    "informeSolicitud_" + idSolicitud + ".pdf"
+            );
+            return ResponseEntity.ok().headers(headers).body(informeSolicitud);
+        });
+    }
 }

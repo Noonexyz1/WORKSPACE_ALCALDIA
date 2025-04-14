@@ -2,6 +2,7 @@ package com.prototipo.infrastructure.config;
 
 import com.prototipo.application.adapter.SolicitanteAdapter;
 import com.prototipo.application.port.in.ResponsableService;
+import com.prototipo.application.port.out.pdf.GeneracionPDFDataAbstract;
 import com.prototipo.application.port.out.persistence.DocumentoRetiroAbstract;
 import com.prototipo.application.port.out.persistence.FotocopiaAbstract;
 import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
@@ -29,7 +30,9 @@ public class SolicitudConfig {
             DocumentoRetiroAbstract documentoRetiroAbstract,
 
             @Qualifier("responsableServiceBean")
-            ResponsableService responsableService){
+            ResponsableService responsableService,
+            @Qualifier("generacionPDFDataImpl")
+            GeneracionPDFDataAbstract generacionPDFDataAbstract){
 
         //Se necesita una dependencia
         return new SolicitanteAdapter(
@@ -38,6 +41,7 @@ public class SolicitudConfig {
                 servicioFotocopiaAbstract,
                 generacionPDFArchivoAbstract,
                 documentoRetiroAbstract,
-                responsableService);
+                responsableService,
+                generacionPDFDataAbstract);
     }
 }

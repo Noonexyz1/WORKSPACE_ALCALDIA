@@ -233,4 +233,35 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
 
         JasperExportManager.exportReportToPdfFile(jasperPrint, generacionPdfPath);
     }
+
+    @Override
+    @SneakyThrows
+    public void generarInformeSolicitudPDFAbs(
+            InformeReport informeReport,
+            InputStream recursoJrxmlPath,
+            String recursoImagenPath,
+            String generacionPdfPath) {
+
+        Map<String, Object> params = new HashMap<>();
+        // Asigna los campos de ComunicacionReport a los parámetros del reporte
+        params.put("funcionarioTo", informeReport.getFuncionarioTo());
+        params.put("funcionarioFrom", informeReport.getFuncionarioFrom());
+        params.put("funcionarioToCargo", informeReport.getFuncionarioToCargo());
+        params.put("funcionarioFromCargo", informeReport.getFuncionarioFromCargo());
+        params.put("cite", informeReport.getCite());
+        params.put("fecha", informeReport.getFecha());
+        params.put("cantidadSumado", informeReport.getCantidadSumado());
+        params.put("nombreUnidad", informeReport.getNombreUnidad());
+        params.put("descripcion", informeReport.getDescripcion());
+        params.put("imageDir", recursoImagenPath);
+
+
+        JasperPrint report = JasperFillManager.fillReport(
+                JasperCompileManager.compileReport(recursoJrxmlPath),
+                params,
+                new JREmptyDataSource()
+        );
+
+        JasperExportManager.exportReportToPdfFile(report, generacionPdfPath);
+    }
 }

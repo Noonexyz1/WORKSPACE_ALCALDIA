@@ -40,4 +40,10 @@ public interface GeneracionPDFArchivoAbstract {
             InputStream recursoJrxmlPath,
             String recursoImagenPath,
             String generacionPdfPath);
+
+    void generarInformeSolicitudPDFAbs(
+            InformeReport informeReport,
+            InputStream recursoJrxmlPath,
+            String recursoImagenPath,
+            String generacionPdfPath);
 }

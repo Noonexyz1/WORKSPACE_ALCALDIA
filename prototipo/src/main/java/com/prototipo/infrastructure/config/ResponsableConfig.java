@@ -3,6 +3,7 @@ package com.prototipo.infrastructure.config;
 import com.prototipo.application.adapter.ResponsableAdapter;
 import com.prototipo.application.port.in.ResponsableService;
 import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
+import com.prototipo.application.port.out.pdf.GeneracionPDFDataAbstract;
 import com.prototipo.application.port.out.persistence.*;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;

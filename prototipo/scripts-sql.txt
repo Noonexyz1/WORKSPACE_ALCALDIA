@@ -97,7 +97,7 @@ SELECT * from autorizacion a;
 SELECT * from finalizacion f;
 SELECT * from documento_retiro dr;
 
-ALTER TABLE unidad DROP COLUMN limite;
+#ALTER TABLE unidad DROP COLUMN limite;
 
 DELETE from solicitud;
 #solicitud 124    autorizacion 50     finalizacion id = 51  fkAutorizacion = 50
@@ -213,6 +213,42 @@ AND dr.total_usado != 0
 #No deberia mandar el idSolicitud porque para este informe debe ser de todos aquellos que han utilizado
 #La tabla fotocopia deberia tener una campo de precio_docu_parcial????
 
+private String funcionarioTo;
+private String funcionarioFrom;
+private String funcionarioToCargo;
+private String funcionarioFromCargo;
+private String cite;
+private String fecha;
+private String cantidadSumado;
+private String nombreUnidad;
+private String descripcion;
+
+SELECT
+	usuarioDi.formacion,
+	usuarioDi.nombres,
+	usuarioDi.paterno,
+	usuarioDi.materno,
+	usuarioSoli.formacion,
+	usuarioSoli.nombres,
+	usuarioSoli.paterno,
+	usuarioSoli.materno,
+	cargoDir.nombre_cargo,
+	cargoSoli.nombre_cargo,
+	s.cite,
+	s.fecha,
+	s.copia_total,
+	unidadSoli.nombre_unidad,
+	s.descripcion
+FROM usuario_unidad uu
+JOIN unidad unidadSoli ON unidadSoli.id = uu.fk_unidad_id
+JOIN usuario usuarioSoli ON usuarioSoli.id = uu.fk_usuario_id
+JOIN usuario_unidad usuarioDire ON usuarioDire.id = uu.fk_director_id
+JOIN unidad unidadDire ON unidadDire.id = usuarioDire.fk_unidad_id
+JOIN usuario usuarioDi ON usuarioDi.id = usuarioDire.fk_usuario_id
+JOIN solicitud s ON s.fk_usuario_solicitante_id = uu.id
+JOIN cargo cargoSoli ON cargoSoli.id = uu.fk_cargo_id
+JOIN cargo cargoDir ON cargoDir.id = usuarioDire.fk_cargo_id
+WHERE s.id = :idSolicitud
 
 
 SELECT *
