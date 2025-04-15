@@ -1,8 +1,7 @@
 import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {SolicitudResponse} from '../../../models/SolicitudResponse';
-import {BehaviorSubject, catchError, map, of} from 'rxjs';
-import {PageRequestID} from '../../../models/PageRequestID';
+import {catchError, map, of} from 'rxjs';
 import {UsuarioResponse} from '../../../models/UsuarioResponse';
 import {LocalStorageService} from '../../../services/local-storage/local-storage.service';
 import {PageProperties} from "../../../models/PageProperties";
@@ -14,7 +13,7 @@ import {SubjectIdSolicitudService} from "../../../services/subject-id-solicitud/
 import {
   SubjectDocumentoRetiroResponseService
 } from "../../../services/subject-retiro-documento/subject-documento-retiro-response.service";
-import {DocumentoRetiroResponse} from "../../../models/DocumentoRetiroResponse";
+import {ObservableService} from "../../../services/observable/observable.service";
 
 @Component({
   selector: 'app-lista-soli-solicitante-autorizada',
@@ -33,7 +32,8 @@ export class ListaSoliSolicitanteAutorizadaComponent {
     private http: HttpClient,
     private localStorage: LocalStorageService,
     private subject$: SubjectIdSolicitudService,
-    private subject2$: SubjectDocumentoRetiroResponseService) {
+    private subject2$: SubjectDocumentoRetiroResponseService,
+    private observableBoolean: ObservableService<boolean>) {
 
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();

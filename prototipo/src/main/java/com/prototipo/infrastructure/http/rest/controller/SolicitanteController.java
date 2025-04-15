@@ -113,10 +113,11 @@ public class SolicitanteController {
             @RequestBody List<DocumentoRetiroRequest> listDocumentoReq) throws IOException {
 
         //Este metodo es un caso de uso de solicitante service
-        List<DocumentoRetiro> listDocumentoRetiro = listDocumentoReq.stream()
+        /*List<DocumentoRetiro> listDocumentoRetiro = listDocumentoReq.stream()
                 .map(x -> modelMapper.map(x, DocumentoRetiro.class))
                 .toList();
-        byte[] ordenDeFotocopia = solicitanteService.guardarListaDocuRetiros(listDocumentoRetiro);
+        byte[] ordenDeFotocopia = solicitanteService.guardarListaDocuRetiros(listDocumentoRetiro);*/
+
 
         return CompletableFuture.supplyAsync(() -> {
             // Configurar encabezados de la respuesta
@@ -126,7 +127,7 @@ public class SolicitanteController {
                     "ordenParaFotocopiaPDF",
                     "ordenDeFotocopia.pdf"
             );
-            return ResponseEntity.ok().headers(headers).body(ordenDeFotocopia);
+            return ResponseEntity.ok().headers(headers).body(null);
         });
 
     }

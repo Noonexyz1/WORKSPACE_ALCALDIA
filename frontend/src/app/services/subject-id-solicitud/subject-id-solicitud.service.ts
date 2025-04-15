@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
-import {UsuarioUnidadEditRequest} from "../../models/UsuarioUnidadEditRequest";
 
 @Injectable({
   providedIn: 'root'

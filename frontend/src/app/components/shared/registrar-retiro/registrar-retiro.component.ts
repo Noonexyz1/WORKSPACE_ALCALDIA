@@ -5,7 +5,7 @@ import {catchError, map, of} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {DocumentoRetiroResponse} from "../../../models/DocumentoRetiroResponse";
 import {DocumentoRetiroRequest} from "../../../models/DocumentoRetiroRequest";
-import {RootNavigateService} from "../../../services/root-navigate/root-navigate.service";
+import {ObservableService} from "../../../services/observable/observable.service";
 
 @Component({
   selector: 'app-registrar-retiro',
@@ -25,7 +25,8 @@ export class RegistrarRetiroComponent {
 
   constructor(
     private subject$: SubjectIdSolicitudService,
-    private http: HttpClient) {
+    private http: HttpClient,
+    private observableBoolean: ObservableService<boolean>) {
 
     this.listaDeDocumentos[0] = 1;
     this.listaDeDocumentos[1] = 2;
@@ -39,10 +40,6 @@ export class RegistrarRetiroComponent {
     // debo tener una lista de documento seleccionados y unicamente renderizarlo de nuevo cada vez haya un nuevo push
     // la primera vez obio no habra resultados, pero eso unicamente se puede arreglar en el HTML diciendo que
     // si es null, entonces que muestre la primerfila con opciones y mensajes de elegir una opcion
-  }
-
-
-  metodoPrueba(posicionDocu: number) {
   }
 
   iniciarValores(){

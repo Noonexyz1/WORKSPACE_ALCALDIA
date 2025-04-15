@@ -25,8 +25,11 @@ export class ResponsableComponent implements OnInit{
     this.modoDarkService.metodoModoDark();
   }
 
+  isVisible: boolean = false;
   botonDescargarReporte() {
     const fechaFormateada: string = this.getCurrentMonthYear(); // Ejemplo: "03/2025"
+
+    this.isVisible = !this.isVisible;
 
     this.http.get(
       UrlsProperties.PATH_REPORTE_PDF,
@@ -34,6 +37,7 @@ export class ResponsableComponent implements OnInit{
     ).pipe( // Cambiar el tipo de respuesta
       map((response: Blob) => {
         this.descargarPDF("reporteDelMes_" + fechaFormateada + ".pdf", response);
+        this.isVisible = !this.isVisible;
       }),
       catchError(error => {
         this.errorDescargaPDF("reporte_" + fechaFormateada + ".pdf", error);
