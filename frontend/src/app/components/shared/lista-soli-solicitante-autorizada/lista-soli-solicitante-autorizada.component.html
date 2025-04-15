@@ -1,9 +1,11 @@
 <section class="dark:bg-gray-900">
   <div class="mx-auto px-4 2xl:px-0">
 
-    <h2 class="text-2xl font-semibold text-gray-900 dark:text-white">
-      Lista de solicitudes autorizadas
-    </h2>
+    <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center pb-4">
+      <h2 class="text-4xl font-semibold text-gray-900 dark:text-white">
+        Lista de solicitudes autorizadas
+      </h2>
+    </div>
 
     @if (listSolicitud != null && listSolicitud.length > 0) {
       <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
