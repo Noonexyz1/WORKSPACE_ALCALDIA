@@ -18,7 +18,6 @@ export class RegistrarRetiroComponent {
 
   //A partir del ID de solicitud que me pasen, debo mostrar toda la informacion haciendo peticiones
 
-  listaDeDocumentos: number[] = new Array(3);
   listaDeDocumentos2: DocumentoRetiroResponse[] = [];
 
   documentosSeleccionados: DocumentoRetiroRequest[] = [];
@@ -27,10 +26,6 @@ export class RegistrarRetiroComponent {
     private subject$: SubjectIdSolicitudService,
     private http: HttpClient,
     private observableBoolean: ObservableService<boolean>) {
-
-    this.listaDeDocumentos[0] = 1;
-    this.listaDeDocumentos[1] = 2;
-    this.listaDeDocumentos[2] = 3;
 
     //Valor por defecto
     this.documentosSeleccionados.push(new DocumentoRetiroRequest());
@@ -91,15 +86,11 @@ export class RegistrarRetiroComponent {
     }
   }
 
-
-
-  tamDocumentos: number = this.listaDeDocumentos.length - 1;
-  tamArrayLimite: number = this.listaDeDocumentos.length;
-  contador: number = 0;
   botonPush() {
-    if (this.tamDocumentos > 0 && this.selectedValue != "" && this.inputValue != "") {
+    if (this.selectedValue != "" && this.inputValue != "") {
       let tamanoAreglo: number = this.documentosSeleccionados.length - 1;
 
+      //Formamos el objeto para agregar a la lista
       let documentoRetiroToPush: DocumentoRetiroRequest = new DocumentoRetiroRequest();
       documentoRetiroToPush.totalCopia = this.documentoRetiro.totalCopia;
       documentoRetiroToPush.totalUsado = this.documentoRetiro.totalUsado;
@@ -108,17 +99,12 @@ export class RegistrarRetiroComponent {
       documentoRetiroToPush.nroRetiro = parseInt(this.inputValue, 10);
       documentoRetiroToPush.id = parseInt(this.selectedValue, 10);
 
+      //Aqui agregamos el objeto formado a la lista
       this.documentosSeleccionados[tamanoAreglo] = documentoRetiroToPush;
 
       this.documentoRetiro = new DocumentoRetiroResponse();
 
-      // generamos nuevo elemento con condicion
-      if(this.contador < this.tamArrayLimite){
-        this.documentosSeleccionados.push(new DocumentoRetiroRequest());
-        this.contador++;
-      }
-
-      this.tamDocumentos--;
+      this.documentosSeleccionados.push(new DocumentoRetiroRequest());
 
       // Reiniciar los campos del formulario
       this.selectedValue = '';
