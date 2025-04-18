@@ -8,15 +8,38 @@ import {PageProperties} from "../../../models/PageProperties";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {PageRequest} from "../../../models/PageRequest";
 import {PageResponse} from "../../../models/PageResponse";
+import {QuillModule} from "ngx-quill";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-lista-soli-solicitante-pendiente',
   standalone: true,
-  imports: [],
+  imports: [
+    QuillModule,
+    FormsModule
+  ],
   templateUrl: './lista-soli-solicitante-pendiente.component.html',
   styleUrl: './lista-soli-solicitante-pendiente.component.css'
 })
 export class ListaSoliSolicitantePendienteComponent {
+
+
+  editorContent: string = '';
+
+  // Configuración del editor Quill
+  quillConfig = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'header': 10 }, { 'header': 20 }],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+      ['link'],
+      ['clean']
+    ],
+    clipboard: {
+      matchVisual: false
+    }
+  };
+
 
   usuario: UsuarioResponse = new UsuarioResponse();
 
@@ -138,6 +161,11 @@ export class ListaSoliSolicitantePendienteComponent {
     this.isModaleInforme = !this.isModaleInforme;
     this.isModalVisible = false;
 
+
+
+
+
+
     /*let idSolicitud: number = 0;
     this.subject$.asObservable().subscribe(x => {
       idSolicitud = x;
@@ -157,9 +185,6 @@ export class ListaSoliSolicitantePendienteComponent {
         return of(null);
       })
     ).subscribe();*/
-
-
-
 
   }
 

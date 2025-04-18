@@ -178,15 +178,13 @@
 
                             <!-- Modal body -->
                             <div class="p-8 space-y-6"> <!-- Aumentado padding a p-8 y añadido space-y-6 -->
-                              <p class="text-xl text-gray-600 dark:text-gray-300"> <!-- Aumentado tamaño de texto -->
-                                Selecciona los documentos que desea descargar:
-                              </p>
-
-                              <!-- Espacio para contenido adicional -->
-                              <div class="min-h-[200px] flex items-center justify-center border-2 border-dashed border-gray-300 rounded-lg dark:border-gray-600">
-                                <!-- Contenido de los documentos iría aquí -->
-                                <p class="text-gray-500 dark:text-gray-400">Contenido de documentos...</p>
-                              </div>
+                              <quill-editor
+                                [(ngModel)]="editorContent"
+                                [modules]="quillConfig"
+                                placeholder="Escribe el contenido de tu solicitud aquí..."
+                                class="w-full h-64"
+                              theme="snow">
+                              </quill-editor>
                             </div>
 
                             <!-- Modal footer -->
