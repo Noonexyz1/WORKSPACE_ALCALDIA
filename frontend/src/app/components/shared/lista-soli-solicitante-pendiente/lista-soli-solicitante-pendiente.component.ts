@@ -1,4 +1,4 @@
-import {Component} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {SolicitudResponse} from '../../../models/SolicitudResponse';
 import {BehaviorSubject, catchError, map, of} from 'rxjs';
@@ -132,9 +132,13 @@ export class ListaSoliSolicitantePendienteComponent {
     ).subscribe();
   }
 
-
+  isModaleInforme: boolean = false;
   botonInformePDF() {
-    let idSolicitud: number = 0;
+
+    this.isModaleInforme = !this.isModaleInforme;
+    this.isModalVisible = false;
+
+    /*let idSolicitud: number = 0;
     this.subject$.asObservable().subscribe(x => {
       idSolicitud = x;
     });
@@ -152,7 +156,11 @@ export class ListaSoliSolicitantePendienteComponent {
         this.errorDescargaPDF("informe_" + idSolicitud + ".pdf", error);
         return of(null);
       })
-    ).subscribe();
+    ).subscribe();*/
+
+
+
+
   }
 
   botonOrdenFotocopiaPDF(): void {
@@ -213,6 +221,7 @@ export class ListaSoliSolicitantePendienteComponent {
     console.error('Error en la petición:', error);
     alert('Hubo un ERROR al generar ' + nombrePdf);
   }
+
 
 
 
