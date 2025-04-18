@@ -109,7 +109,6 @@ public class SolicitanteAdapter implements SolicitanteService {
         // Estoy usando CompletableFuture para las tareas asincronas para estos tres procesos
         // estoy conciente que estoy usando Java21 y que hay VirtualThreas pero... naaaaa. solo son tres tareas ;D
         CompletableFuture.allOf(
-                CompletableFuture.runAsync(() -> generarOrdenDeFotocopiaPDF(solicitudSaved.getId())),
                 CompletableFuture.runAsync(() -> generarComunicacionInternaPDF(solicitudSaved.getId())),
                 CompletableFuture.runAsync(() -> generarSolicitudDeFotocopiaPDF(solicitudSaved.getId()))
         ).join();
