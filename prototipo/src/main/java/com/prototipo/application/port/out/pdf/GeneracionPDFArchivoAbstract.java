@@ -45,5 +45,6 @@ public interface GeneracionPDFArchivoAbstract {
             InformeReport informeReport,
             InputStream recursoJrxmlPath,
             String recursoImagenPath,
-            String generacionPdfPath);
+            String generacionPdfPath,
+            String editorContent);
 }

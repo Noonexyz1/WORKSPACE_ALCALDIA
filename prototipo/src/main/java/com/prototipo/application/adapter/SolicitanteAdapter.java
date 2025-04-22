@@ -384,7 +384,7 @@ public class SolicitanteAdapter implements SolicitanteService {
     }
 
     @Override
-    public void generarInformeSolicitudPDF(Long idSolicitud) {
+    public void generarInformeSolicitudPDF(Long idSolicitud, String editorContent) {
         InformeReport informeReport = generacionPDFDataAbstract.getInformeReport(idSolicitud);
 
         String salidaPdfPsth = "/home/kali/Downloads/informePDF";
@@ -406,13 +406,14 @@ public class SolicitanteAdapter implements SolicitanteService {
         // Ruta del archivo PDF
         String generacionPdfPath = salidaPdfPsth + "/informe_" + idSolicitud + ".pdf";
 
-
         generacionPDFArchivoAbstract.generarInformeSolicitudPDFAbs(
                 informeReport,
                 recursoJrxmlPath,
                 recursoImagenPath,
-                generacionPdfPath
+                generacionPdfPath,
+                editorContent
         );
+
     }
 
     private String formatListaDocumentos(List<Fotocopia> listFotocopiaSolicitudResp) {
@@ -610,9 +611,9 @@ public class SolicitanteAdapter implements SolicitanteService {
     }
 
     @Override
-    public byte[] descargarInformeSolicitudPDF(Long idSolicitud) throws IOException {
+    public byte[] descargarInformeSolicitudPDF(Long idSolicitud, String editorContent) throws IOException {
         //TODO, revisar este metodo
-        generarInformeSolicitudPDF(idSolicitud);
+        generarInformeSolicitudPDF(idSolicitud, editorContent);
 
         String salidaPdfPsth = "/home/kali/Downloads/informePDF";
         // Ruta del archivo PDF

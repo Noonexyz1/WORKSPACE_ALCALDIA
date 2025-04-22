@@ -161,7 +161,7 @@
                       <!-- Main modal -->
                       <div id="select-modall" tabindex="-1" aria-hidden="true"
                            class="overflow-y-auto overflow-x-hidden fixed inset-0 z-50 flex justify-center items-center w-full h-full bg-gray-900 bg-opacity-50">
-                        <div class="relative p-4 w-full max-w-4xl h-auto"> <!-- Cambiado a max-w-4xl para más ancho -->
+                        <div class="relative p-4 w-full max-w-6xl h-auto"> <!-- Cambiado a max-w-4xl para más ancho -->
                           <!-- Modal content -->
                           <div class="relative bg-white rounded-lg shadow-2xl dark:bg-gray-800"> <!-- Añadido shadow-2xl y cambiado a gray-800 -->
                             <!-- Modal header -->
@@ -192,7 +192,7 @@
                               <button type="button" class="px-6 py-3 text-lg font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-300 dark:bg-gray-600 dark:text-gray-200 dark:hover:bg-gray-500 dark:focus:ring-gray-800">
                                 Cancelar
                               </button>
-                              <button type="button" class="px-6 py-3 text-lg font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                              <button type="button" (click)="generatePdf()" class="px-6 py-3 text-lg font-medium text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                                 Descargar
                               </button>
                             </div>

@@ -5,6 +5,7 @@ import com.prototipo.application.util.DoublesALiteral;
 import com.prototipo.application.util.NumeroALiteral;
 import com.prototipo.domain.model.*;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.export.SimpleExporterInput;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
 
@@ -240,7 +242,8 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
             InformeReport informeReport,
             InputStream recursoJrxmlPath,
             String recursoImagenPath,
-            String generacionPdfPath) {
+            String generacionPdfPath,
+            String editorContent) {
 
         Map<String, Object> params = new HashMap<>();
         // Asigna los campos de ComunicacionReport a los parámetros del reporte
@@ -254,6 +257,9 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
         params.put("nombreUnidad", informeReport.getNombreUnidad());
         params.put("descripcion", informeReport.getDescripcion());
         params.put("imageDir", recursoImagenPath);
+        params.put("contend", processHtmlContent(editorContent));
+
+        log.info(processHtmlContent(editorContent));
 
 
         JasperPrint report = JasperFillManager.fillReport(
@@ -263,5 +269,39 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
         );
 
         JasperExportManager.exportReportToPdfFile(report, generacionPdfPath);
+    }
+
+    private String processHtmlContent(String htmlContent) {
+        if (htmlContent == null || htmlContent.isEmpty()) {
+            return "";
+        }
+
+        // 1. Limpieza básica de HTML
+        String processed = htmlContent
+                .replaceAll("<p><br></p>", "") // Elimina párrafos vacíos
+                .replaceAll("<p>\\s*</p>", "") // Elimina párrafos con solo espacios
+                .replaceAll("<br>", "<br/>")   // Cierra tags HTML
+                .replaceAll("&nbsp;", " ")     // Reemplaza espacios no rompibles
+                .replaceAll("style=\"[^\"]*\"", ""); // Elimina estilos CSS
+
+        // 2. Corrección específica para listas de Quill
+        processed = processed
+                .replaceAll("<ol>\\s*<li>", "<ol><li>") // Elimina espacios innecesarios
+                .replaceAll("</li>\\s*</ol>", "</li></ol>")
+                .replaceAll("<ul>\\s*<li>", "<ul><li>")
+                .replaceAll("</li>\\s*</ul>", "</li></ul>");
+
+        // 3. Eliminar atributos problemáticos
+        processed = processed
+                .replaceAll("class=\"[^\"]*\"", "") // Elimina clases
+                .replaceAll("data-[^=]*=\"[^\"]*\"", ""); // Elimina data-attributes
+
+        // 4. Corrección de encabezados (si los usas)
+        processed = processed
+                .replaceAll("<h1[^>]*>", "<strong><span style=\"font-size: large;\">")
+                .replaceAll("</h1>", "</span></strong>");
+
+        processed = processed.replace("{\"text\":\"", "").replace("\"}", "");
+        return processed;
     }
 }

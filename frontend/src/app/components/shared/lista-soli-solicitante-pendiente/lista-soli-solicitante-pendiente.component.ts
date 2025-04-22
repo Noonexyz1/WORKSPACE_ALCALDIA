@@ -30,15 +30,58 @@ export class ListaSoliSolicitantePendienteComponent {
   quillConfig = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],
-      [{ 'header': 10 }, { 'header': 20 }],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      ['link'],
-      ['clean']
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }]
     ],
     clipboard: {
-      matchVisual: false
+      matchVisual: true,  // Cambia a true para mejor preservación de formato
+      allowed: {
+        tags: ['p', 'b', 'i', 'u', 's', 'ol', 'ul', 'li', 'br'] // Elementos permitidos
+        //attributes: ['style'] // Atributos permitidos (opcional)
+      },
+      magicPasteLinks: true,  // Convierte URLs en links automáticamente
+      keepSelection: true    // Mantiene la selección después de pegar
+    },
+    keyboard: {
+      bindings: {
+        paste: {  // Manejo especial para pegado
+          key: 'V',
+          metaKey: true
+        }
+      }
     }
   };
+
+
+  generatePdf() {
+    if (!this.editorContent) {
+      alert('Por favor ingrese el contenido de la carta');
+      return;
+    }
+
+    let idSolicitud: number = 0;
+    this.subject$.asObservable().subscribe(x => {
+      idSolicitud = x;
+    });
+    const url = UrlsProperties.PATH_INFORSOLI_PDF + idSolicitud;
+
+    this.http.post(
+      url,
+      { text: this.editorContent },
+      {
+        responseType: 'blob',
+        headers: { 'Content-Type': 'application/json' }
+      }
+    ).subscribe({
+      next: (pdfBlob: Blob) => {
+        this.descargarPDF("informe_" + idSolicitud + ".pdf", pdfBlob);
+      },
+      error: (error) => {
+        this.errorDescargaPDF("informe_" + idSolicitud + ".pdf", error);
+        return of(null);
+      }
+    });
+
+  }
 
 
   usuario: UsuarioResponse = new UsuarioResponse();
@@ -160,31 +203,6 @@ export class ListaSoliSolicitantePendienteComponent {
 
     this.isModaleInforme = !this.isModaleInforme;
     this.isModalVisible = false;
-
-
-
-
-
-
-    /*let idSolicitud: number = 0;
-    this.subject$.asObservable().subscribe(x => {
-      idSolicitud = x;
-    });
-    const url = UrlsProperties.PATH_INFORSOLI_PDF + idSolicitud;
-
-    // Recibimos la peticion
-    this.http.get(
-      url,
-      { responseType: 'blob' }
-    ).pipe( // Cambiar el tipo de respuesta
-      map((response: Blob) => {
-        this.descargarPDF("informe_" + idSolicitud + ".pdf", response);
-      }),
-      catchError(error => {
-        this.errorDescargaPDF("informe_" + idSolicitud + ".pdf", error);
-        return of(null);
-      })
-    ).subscribe();*/
 
   }
 

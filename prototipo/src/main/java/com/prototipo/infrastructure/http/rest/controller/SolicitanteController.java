@@ -322,11 +322,13 @@ public class SolicitanteController {
     }
 
     @Async
-    @GetMapping("/exportInformeSolicitudDPF/{idSolicitud}")
+    @PostMapping("/exportInformeSolicitudDPF/{idSolicitud}")
     public CompletableFuture<ResponseEntity<byte[]>> exportInformeSolicitudDPF(
-            @PathVariable Long idSolicitud) throws IOException {
+            @PathVariable Long idSolicitud,
+            @RequestBody String editorContent) throws IOException {
 
-        byte[] informeSolicitud = solicitanteService.descargarInformeSolicitudPDF(idSolicitud);
+        byte[] informeSolicitud = solicitanteService
+                .descargarInformeSolicitudPDF(idSolicitud, editorContent);
 
         return CompletableFuture.supplyAsync(() -> {
             // Configurar encabezados de la respuesta
