@@ -276,32 +276,38 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
             return "";
         }
 
-        // 1. Limpieza básica de HTML
-        String processed = htmlContent
-                .replaceAll("<p><br></p>", "") // Elimina párrafos vacíos
-                .replaceAll("<p>\\s*</p>", "") // Elimina párrafos con solo espacios
-                .replaceAll("<br>", "<br/>")   // Cierra tags HTML
-                .replaceAll("&nbsp;", " ")     // Reemplaza espacios no rompibles
-                .replaceAll("style=\"[^\"]*\"", ""); // Elimina estilos CSS
+        // 1. Eliminar wrapper JSON si existe
+        String processed = htmlContent.replace("{\"text\":\"", "").replace("\"}", "");
 
-        // 2. Corrección específica para listas de Quill
+        // 2. Convertir formatos a estilos CSS inline
         processed = processed
-                .replaceAll("<ol>\\s*<li>", "<ol><li>") // Elimina espacios innecesarios
-                .replaceAll("</li>\\s*</ol>", "</li></ol>")
-                .replaceAll("<ul>\\s*<li>", "<ul><li>")
-                .replaceAll("</li>\\s*</ul>", "</li></ul>");
+                // Negritas (tanto <strong> como <b>)
+                .replaceAll("<strong>|<b>", "<span style=\"font-weight:bold;\">")
+                .replaceAll("</strong>|</b>", "</span>")
 
-        // 3. Eliminar atributos problemáticos
-        processed = processed
-                .replaceAll("class=\"[^\"]*\"", "") // Elimina clases
-                .replaceAll("data-[^=]*=\"[^\"]*\"", ""); // Elimina data-attributes
+                // Cursivas (tanto <em> como <i>)
+                .replaceAll("<em>|<i>", "<span style=\"font-style:italic;\">")
+                .replaceAll("</em>|</i>", "</span>")
 
-        // 4. Corrección de encabezados (si los usas)
-        processed = processed
-                .replaceAll("<h1[^>]*>", "<strong><span style=\"font-size: large;\">")
-                .replaceAll("</h1>", "</span></strong>");
+                // Subrayado
+                .replaceAll("<u>", "<span style=\"text-decoration:underline;\">")
+                .replaceAll("</u>", "</span>")
 
-        processed = processed.replace("{\"text\":\"", "").replace("\"}", "");
-        return processed;
+                // Tachado
+                .replaceAll("<s>|<strike>", "<span style=\"text-decoration:line-through;\">")
+                .replaceAll("</s>|</strike>", "</span>")
+
+                // Limpieza básica
+                .replaceAll("<p><br></p>", "")
+                .replaceAll("<p>\\s*</p>", "")
+                .replaceAll("<br>", "<br/>")
+                .replaceAll("&nbsp;", " ")
+
+                // Eliminar atributos problemáticos (excepto style)
+                .replaceAll("class=\"[^\"]*\"", "")
+                .replaceAll("data-[^=]*=\"[^\"]*\"", "");
+
+        // 3. Asegurar estructura HTML completa
+        return "<html><body style=\"font-family:Helvetica;\">" + processed + "</body></html>";
     }
 }
