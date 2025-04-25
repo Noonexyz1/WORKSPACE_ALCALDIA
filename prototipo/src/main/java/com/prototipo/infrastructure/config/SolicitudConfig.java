@@ -2,12 +2,8 @@ package com.prototipo.infrastructure.config;
 
 import com.prototipo.application.adapter.SolicitanteAdapter;
 import com.prototipo.application.port.in.ResponsableService;
-import com.prototipo.application.port.out.pdf.GeneracionPDFDataAbstract;
-import com.prototipo.application.port.out.persistence.DocumentoRetiroAbstract;
-import com.prototipo.application.port.out.persistence.FotocopiaAbstract;
+import com.prototipo.application.port.out.persistence.*;
 import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
-import com.prototipo.application.port.out.persistence.ServicioFotocopiaAbstract;
-import com.prototipo.application.port.out.persistence.SolicitudAbstract;
 import com.prototipo.application.port.in.SolicitanteService;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -31,8 +27,8 @@ public class SolicitudConfig {
 
             @Qualifier("responsableServiceBean")
             ResponsableService responsableService,
-            @Qualifier("generacionPDFDataImpl")
-            GeneracionPDFDataAbstract generacionPDFDataAbstract){
+            @Qualifier("informeReportImpl")
+            InformeReportAbstract informeReportAbstract){
 
         //Se necesita una dependencia
         return new SolicitanteAdapter(
@@ -42,6 +38,6 @@ public class SolicitudConfig {
                 generacionPDFArchivoAbstract,
                 documentoRetiroAbstract,
                 responsableService,
-                generacionPDFDataAbstract);
+                informeReportAbstract);
     }
 }

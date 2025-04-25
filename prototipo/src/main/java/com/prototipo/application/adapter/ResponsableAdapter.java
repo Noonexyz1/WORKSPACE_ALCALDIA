@@ -4,7 +4,6 @@ import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
 import com.prototipo.application.port.in.ResponsableService;
 import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
-import com.prototipo.application.port.out.pdf.GeneracionPDFDataAbstract;
 import com.prototipo.application.port.out.persistence.*;
 import com.prototipo.domain.model.*;
 
@@ -25,29 +24,32 @@ public class ResponsableAdapter implements ResponsableService {
     //Para que haria otro ResponsableAbstract para esta clase???
     //Si unicamente puedo ADAPTAR una implementacion existente para esta!! ;D
     private SolicitudAbstract solicitudAbstract;
-    private GeneracionPDFDataAbstract generacionPDFDataAbstract;
     private AutorizacionAbstract autorizacionAbstract;
     private FotocopiaAbstract fotocopiaAbstract;
     private FinalizacionAbstract finalizacionAbstract;
     private GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract;
     private DocumentoRetiroAbstract documentoRetiroAbstract;
+    private NotaDePedidoAbstract notaDePedidoAbstract;
+    private ReporteAbstract reporteAbstract;
 
     public ResponsableAdapter(
             SolicitudAbstract solicitudAbstract,
-            GeneracionPDFDataAbstract generacionPDFDataAbstract,
             AutorizacionAbstract autorizacionAbstract,
             FotocopiaAbstract fotocopiaAbstract,
             FinalizacionAbstract finalizacionAbstract,
             GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract,
-            DocumentoRetiroAbstract documentoRetiroAbstract) {
+            DocumentoRetiroAbstract documentoRetiroAbstract,
+            NotaDePedidoAbstract notaDePedidoAbstract,
+            ReporteAbstract reporteAbstract) {
 
         this.solicitudAbstract = solicitudAbstract;
-        this.generacionPDFDataAbstract = generacionPDFDataAbstract;
         this.autorizacionAbstract = autorizacionAbstract;
         this.fotocopiaAbstract = fotocopiaAbstract;
         this.finalizacionAbstract = finalizacionAbstract;
         this.generacionPDFArchivoAbstract = generacionPDFArchivoAbstract;
         this.documentoRetiroAbstract = documentoRetiroAbstract;
+        this.notaDePedidoAbstract = notaDePedidoAbstract;
+        this.reporteAbstract = reporteAbstract;
     }
 
     @Override
@@ -60,12 +62,12 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public List<NotaDePedido> listaDeNotasDePedido(Long idSolicitud) {
-        return generacionPDFDataAbstract.getNotaDePedidoAbstract(idSolicitud);
+        return notaDePedidoAbstract.getNotaDePedidoAbstract(idSolicitud);
     }
 
     @Override
     public List<Reporte> listaDeReporteMensual(String mesAnio) {
-        return generacionPDFDataAbstract.generarReporteMensualPDFAbstract(mesAnio);
+        return reporteAbstract.generarReporteMensualPDFAbstract(mesAnio);
     }
 
     @Override

@@ -3,12 +3,8 @@ package com.prototipo.application.adapter;
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
 import com.prototipo.application.port.in.ResponsableService;
-import com.prototipo.application.port.out.pdf.GeneracionPDFDataAbstract;
-import com.prototipo.application.port.out.persistence.FotocopiaAbstract;
+import com.prototipo.application.port.out.persistence.*;
 import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
-import com.prototipo.application.port.out.persistence.DocumentoRetiroAbstract;
-import com.prototipo.application.port.out.persistence.ServicioFotocopiaAbstract;
-import com.prototipo.application.port.out.persistence.SolicitudAbstract;
 import com.prototipo.application.port.in.SolicitanteService;
 
 import com.prototipo.domain.enums.*;
@@ -52,7 +48,7 @@ public class SolicitanteAdapter implements SolicitanteService {
     private GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract;
     private DocumentoRetiroAbstract documentoRetiroAbstract;
     private ResponsableService responsableService;
-    private GeneracionPDFDataAbstract generacionPDFDataAbstract;
+    private InformeReportAbstract informeReportAbstract;
 
     public SolicitanteAdapter(
             SolicitudAbstract solicitudAbstract,
@@ -61,7 +57,7 @@ public class SolicitanteAdapter implements SolicitanteService {
             GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract,
             DocumentoRetiroAbstract documentoRetiroAbstract,
             ResponsableService responsableService,
-            GeneracionPDFDataAbstract generacionPDFDataAbstract) {
+            InformeReportAbstract informeReportAbstract) {
 
         this.solicitudAbstract = solicitudAbstract;
         this.fotocopiaAbstract = fotocopiaAbstract;
@@ -69,7 +65,7 @@ public class SolicitanteAdapter implements SolicitanteService {
         this.generacionPDFArchivoAbstract = generacionPDFArchivoAbstract;
         this.documentoRetiroAbstract = documentoRetiroAbstract;
         this.responsableService = responsableService;
-        this.generacionPDFDataAbstract = generacionPDFDataAbstract;
+        this.informeReportAbstract = informeReportAbstract;
     }
 
 
@@ -385,7 +381,7 @@ public class SolicitanteAdapter implements SolicitanteService {
 
     @Override
     public void generarInformeSolicitudPDF(Long idSolicitud, String editorContent) {
-        InformeReport informeReport = generacionPDFDataAbstract.getInformeReport(idSolicitud);
+        InformeReport informeReport = informeReportAbstract.getInformeReport(idSolicitud);
 
         String salidaPdfPsth = "/home/kali/Downloads/informePDF";
 
