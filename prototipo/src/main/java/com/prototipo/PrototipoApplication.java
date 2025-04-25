@@ -32,7 +32,7 @@ public class PrototipoApplication {
 		};
 	}*/
 
-	@Bean
+	/*@Bean
 	public CommandLineRunner init(MyAmazingBot myAmazingBot){
 		return args -> {
 			String botToken = "7903334844:AAEGWODZKlRWz4arXig9njLupzNqiB8MA4A";
@@ -44,6 +44,6 @@ public class PrototipoApplication {
 				e.printStackTrace();
 			}
 		};
-	}
+	}*/
 
 }
