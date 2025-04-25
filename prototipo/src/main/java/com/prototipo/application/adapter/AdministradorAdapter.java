@@ -2,8 +2,8 @@ package com.prototipo.application.adapter;
 
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
-import com.prototipo.application.port.out.*;
 import com.prototipo.application.port.in.AdministradorService;
+import com.prototipo.application.port.out.persistence.*;
 import com.prototipo.domain.model.*;
 
 import java.util.List;
@@ -60,6 +60,10 @@ public class AdministradorAdapter implements AdministradorService {
         // insertamos las credenciales a la BD correspondientes para el nuevo usuario
         crearCredencial(usuarioResp);
 
+        // buscamos un responsable activo
+        UsuarioUnidad responsable = usuarioUnidadAbstract.encontrarUsuarioUnidadUltimoActivo();
+
+        userUnidad.setFkResponsable(UsuarioUnidad.builder().id(responsable.getId()).build());
         userUnidad.setId(null);
         userUnidad.setIsActive(true);
         userUnidad.setFkUsuario(usuarioResp);

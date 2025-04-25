@@ -151,7 +151,7 @@ export class EditarUsuarioComponent {
 
       idDirector: this.localStorage.getItem('userData').id,
 
-      //TODO, averiguar que hace esta variable
+      //TODO, esto ya tiene solucion en el back
       idResponsable: 2
     };
 

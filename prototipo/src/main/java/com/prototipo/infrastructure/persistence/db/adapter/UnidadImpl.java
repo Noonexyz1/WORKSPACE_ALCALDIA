@@ -1,6 +1,6 @@
 package com.prototipo.infrastructure.persistence.db.adapter;
 
-import com.prototipo.application.port.out.UnidadAbstract;
+import com.prototipo.application.port.out.persistence.UnidadAbstract;
 import com.prototipo.domain.model.Unidad;
 import com.prototipo.infrastructure.persistence.db.repository.UnidadRepository;
 import org.modelmapper.ModelMapper;

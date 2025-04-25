@@ -1,7 +1,7 @@
 package com.prototipo.application.adapter;
 
-import com.prototipo.application.port.out.CredencialAbstract;
-import com.prototipo.application.port.out.UsuarioAbastract;
+import com.prototipo.application.port.out.persistence.CredencialAbstract;
+import com.prototipo.application.port.out.persistence.UsuarioAbastract;
 import com.prototipo.application.port.in.AutenticacionService;
 import com.prototipo.domain.model.Credencial;
 import com.prototipo.domain.model.Usuario;

@@ -12,6 +12,7 @@ export class RootNavigateService {
     // Agregar elementos
     this.mapa.set('Administrador', '/administrador/listaDeUsuarios');
     this.mapa.set('SolicitantePendientes', '/solicitante/solicitudesPendientes');
+    this.mapa.set('SolicitanteAutorizadas', '/solicitante/solicitudesAutorizadas');
     this.mapa.set('ResponsablePendientes', '/responsable/solicitudesPendientes');
     this.mapa.set('ResponsableAutorizadas', '/responsable/solicitudesAutorizadas');
     this.mapa.set('ResponsableFinalizadas', '/responsable/solicitudesFinalizadas');

@@ -1,10 +1,11 @@
 package com.prototipo.infrastructure.files.pdf.adapter;
 
-import com.prototipo.application.port.out.GeneracionPDFArchivoAbstract;
+import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
 import com.prototipo.application.util.DoublesALiteral;
 import com.prototipo.application.util.NumeroALiteral;
 import com.prototipo.domain.model.*;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
 import net.sf.jasperreports.export.SimpleExporterInput;
@@ -24,6 +25,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@Slf4j
 @Component
 public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
 
@@ -65,7 +67,7 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
 
                     params.put("precio" + k, BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu()).setScale(2, RoundingMode.HALF_UP).doubleValue());
 
-                    params.put("literalPrecio" + k, DoublesALiteral.convertir(BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu())));
+                    params.put("literalPrecio" + k, DoublesALiteral.convertirDecimalALiteral(BigDecimal.valueOf(detalleFotoVect[j].getPrecioDocu())));
 
                     params.put("detalle" + k, detalleFotoVect[j].getNombreDocumento());
                     j++; // Avanzar al siguiente elemento
@@ -232,5 +234,80 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
         );
 
         JasperExportManager.exportReportToPdfFile(jasperPrint, generacionPdfPath);
+    }
+
+    @Override
+    @SneakyThrows
+    public void generarInformeSolicitudPDFAbs(
+            InformeReport informeReport,
+            InputStream recursoJrxmlPath,
+            String recursoImagenPath,
+            String generacionPdfPath,
+            String editorContent) {
+
+        Map<String, Object> params = new HashMap<>();
+        // Asigna los campos de ComunicacionReport a los parámetros del reporte
+        params.put("funcionarioTo", informeReport.getFuncionarioTo());
+        params.put("funcionarioFrom", informeReport.getFuncionarioFrom());
+        params.put("funcionarioToCargo", informeReport.getFuncionarioToCargo());
+        params.put("funcionarioFromCargo", informeReport.getFuncionarioFromCargo());
+        params.put("cite", informeReport.getCite());
+        params.put("fecha", informeReport.getFecha());
+        params.put("cantidadSumado", informeReport.getCantidadSumado());
+        params.put("nombreUnidad", informeReport.getNombreUnidad());
+        params.put("descripcion", informeReport.getDescripcion());
+        params.put("imageDir", recursoImagenPath);
+        params.put("contend", processHtmlContent(editorContent));
+
+        log.info(processHtmlContent(editorContent));
+
+
+        JasperPrint report = JasperFillManager.fillReport(
+                JasperCompileManager.compileReport(recursoJrxmlPath),
+                params,
+                new JREmptyDataSource()
+        );
+
+        JasperExportManager.exportReportToPdfFile(report, generacionPdfPath);
+    }
+
+    private String processHtmlContent(String htmlContent) {
+        if (htmlContent == null || htmlContent.isEmpty()) {
+            return "";
+        }
+
+        // 1. Eliminar wrapper JSON si existe
+        String processed = htmlContent.replace("{\"text\":\"", "").replace("\"}", "");
+
+        // 2. Convertir formatos a estilos CSS inline
+        processed = processed
+                // Negritas (tanto <strong> como <b>)
+                .replaceAll("<strong>|<b>", "<span style=\"font-weight:bold;\">")
+                .replaceAll("</strong>|</b>", "</span>")
+
+                // Cursivas (tanto <em> como <i>)
+                .replaceAll("<em>|<i>", "<span style=\"font-style:italic;\">")
+                .replaceAll("</em>|</i>", "</span>")
+
+                // Subrayado
+                .replaceAll("<u>", "<span style=\"text-decoration:underline;\">")
+                .replaceAll("</u>", "</span>")
+
+                // Tachado
+                .replaceAll("<s>|<strike>", "<span style=\"text-decoration:line-through;\">")
+                .replaceAll("</s>|</strike>", "</span>")
+
+                // Limpieza básica
+                .replaceAll("<p><br></p>", "")
+                .replaceAll("<p>\\s*</p>", "")
+                .replaceAll("<br>", "<br/>")
+                .replaceAll("&nbsp;", " ")
+
+                // Eliminar atributos problemáticos (excepto style)
+                .replaceAll("class=\"[^\"]*\"", "")
+                .replaceAll("data-[^=]*=\"[^\"]*\"", "");
+
+        // 3. Asegurar estructura HTML completa
+        return "<html><body style=\"font-family:Helvetica;\">" + processed + "</body></html>";
     }
 }

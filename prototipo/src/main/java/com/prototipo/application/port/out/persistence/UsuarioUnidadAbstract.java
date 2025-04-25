@@ -1,4 +1,4 @@
-package com.prototipo.application.port.out;
+package com.prototipo.application.port.out.persistence;
 
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
@@ -11,4 +11,5 @@ public interface UsuarioUnidadAbstract {
     UsuarioUnidad encontarUsuarioUnidadId(Long idUsuarioUnidad);
     UsuarioUnidad encontrarUsuarioUnidadByCi(String ci);
     PaginableOut<UsuarioUnidad> listaDeUsuariosAbsDef(PaginableIn paginableIn);
+    UsuarioUnidad encontrarUsuarioUnidadUltimoActivo();
 }

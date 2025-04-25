@@ -8,21 +8,87 @@ import {PageProperties} from "../../../models/PageProperties";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {PageRequest} from "../../../models/PageRequest";
 import {PageResponse} from "../../../models/PageResponse";
+import {QuillModule} from "ngx-quill";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-lista-soli-solicitante-pendiente',
   standalone: true,
-  imports: [],
+  imports: [
+    QuillModule,
+    FormsModule
+  ],
   templateUrl: './lista-soli-solicitante-pendiente.component.html',
   styleUrl: './lista-soli-solicitante-pendiente.component.css'
 })
 export class ListaSoliSolicitantePendienteComponent {
 
+
+  editorContent: string = '';
+
+  // Configuración del editor Quill
+  quillConfig = {
+    toolbar: [
+      ['bold', 'italic', 'underline', 'strike'],
+      [{ 'list': 'ordered'}, { 'list': 'bullet' }]
+    ],
+    clipboard: {
+      matchVisual: true,  // Cambia a true para mejor preservación de formato
+      allowed: {
+        tags: ['p', 'b', 'i', 'u', 's', 'ol', 'ul', 'li', 'br'] // Elementos permitidos
+        //attributes: ['style'] // Atributos permitidos (opcional)
+      },
+      magicPasteLinks: true,  // Convierte URLs en links automáticamente
+      keepSelection: true    // Mantiene la selección después de pegar
+    },
+    keyboard: {
+      bindings: {
+        paste: {  // Manejo especial para pegado
+          key: 'V',
+          metaKey: true
+        }
+      }
+    }
+  };
+
+
+  generatePdf() {
+    if (!this.editorContent) {
+      alert('Por favor ingrese el contenido de la carta');
+      return;
+    }
+
+    let idSolicitud: number = 0;
+    this.subject$.asObservable().subscribe(x => {
+      idSolicitud = x;
+    });
+    const url = UrlsProperties.PATH_INFORSOLI_PDF + idSolicitud;
+
+    this.http.post(
+      url,
+      { text: this.editorContent },
+      {
+        responseType: 'blob',
+        headers: { 'Content-Type': 'application/json' }
+      }
+    ).subscribe({
+      next: (pdfBlob: Blob) => {
+        this.descargarPDF("informe_" + idSolicitud + ".pdf", pdfBlob);
+      },
+      error: (error) => {
+        this.errorDescargaPDF("informe_" + idSolicitud + ".pdf", error);
+        return of(null);
+      }
+    });
+
+  }
+
+
   usuario: UsuarioResponse = new UsuarioResponse();
 
   constructor(
-    private http: HttpClient,
-    private localStorage: LocalStorageService) {
+    private readonly http: HttpClient,
+    private readonly localStorage: LocalStorageService) {
 
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
@@ -88,11 +154,25 @@ export class ListaSoliSolicitantePendienteComponent {
     ).subscribe();
   }
 
-  private subject$ = new BehaviorSubject<number>(0);
+  private readonly subject$ = new BehaviorSubject<number>(0);
   isModalVisible: boolean = false;
+  hayInforme: boolean = true;
   toggleModal(idSolicitud: number): void {
     this.subject$.next(idSolicitud);
     this.isModalVisible = !this.isModalVisible;
+
+    const url = UrlsProperties.PATH_IS_INFORME + idSolicitud;
+    this.http.get<boolean>(url)
+      .subscribe({
+        next: (resp: boolean) => {
+          this.hayInforme = resp;
+        },
+        error: error => {
+          console.error('Error en la petición:', error);
+          alert("Error en la peticion");
+        }
+      });
+
   }
 
   botonSolicitudFotocopiaPDF(): void {
@@ -116,6 +196,14 @@ export class ListaSoliSolicitantePendienteComponent {
         return of(null);
       })
     ).subscribe();
+  }
+
+  isModaleInforme: boolean = false;
+  botonInformePDF() {
+
+    this.isModaleInforme = !this.isModaleInforme;
+    this.isModalVisible = false;
+
   }
 
   botonOrdenFotocopiaPDF(): void {
@@ -180,6 +268,7 @@ export class ListaSoliSolicitantePendienteComponent {
 
 
 
+
   goToPage(page: number): void {
     if (page >= 0 && page < this.pageProperties.totalPages) {
       this.pageProperties.currentPage = page;
@@ -200,4 +289,6 @@ export class ListaSoliSolicitantePendienteComponent {
       this.listarSolicitudes();
     }
   }
+
+
 }

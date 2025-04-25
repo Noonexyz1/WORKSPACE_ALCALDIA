@@ -2,34 +2,39 @@ import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {SolicitudResponse} from '../../../models/SolicitudResponse';
 import {catchError, map, of} from 'rxjs';
-import {PageRequestID} from '../../../models/PageRequestID';
 import {UsuarioResponse} from '../../../models/UsuarioResponse';
 import {LocalStorageService} from '../../../services/local-storage/local-storage.service';
 import {PageProperties} from "../../../models/PageProperties";
 import {UrlsProperties} from "../../../enums/UrlsProperties";
 import {PageRequest} from "../../../models/PageRequest";
 import {PageResponse} from "../../../models/PageResponse";
+import {RegistrarRetiroComponent} from "../registrar-retiro/registrar-retiro.component";
+import {SubjectIdSolicitudService} from "../../../services/subject-id-solicitud/subject-id-solicitud.service";
+import {
+  SubjectDocumentoRetiroResponseService
+} from "../../../services/subject-retiro-documento/subject-documento-retiro-response.service";
+import {ObservableService} from "../../../services/observable/observable.service";
 
 @Component({
   selector: 'app-lista-soli-solicitante-autorizada',
   standalone: true,
-  imports: [],
+  imports: [
+    RegistrarRetiroComponent
+  ],
   templateUrl: './lista-soli-solicitante-autorizada.component.html',
   styleUrl: './lista-soli-solicitante-autorizada.component.css'
 })
 export class ListaSoliSolicitanteAutorizadaComponent {
 
-  private http: HttpClient;
-  private localStorage: LocalStorageService;
-
   usuario: UsuarioResponse = new UsuarioResponse();
 
   constructor(
-    http: HttpClient,
-    localStorage: LocalStorageService) {
+    private http: HttpClient,
+    private localStorage: LocalStorageService,
+    private subject$: SubjectIdSolicitudService,
+    private subject2$: SubjectDocumentoRetiroResponseService,
+    private observableBoolean: ObservableService<boolean>) {
 
-    this.http = http;
-    this.localStorage = localStorage;
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
   }
@@ -78,7 +83,11 @@ export class ListaSoliSolicitanteAutorizadaComponent {
 
   }
 
-
+  isModalVisible: boolean = false;
+  toggleModal(idSolicitud: number): void {
+    this.subject$.publicarDatos(idSolicitud);
+    this.isModalVisible = !this.isModalVisible;
+  }
 
   goToPage(page: number): void {
     if (page >= 0 && page < this.pageProperties.totalPages) {

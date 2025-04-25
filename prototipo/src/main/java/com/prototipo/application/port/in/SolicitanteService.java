@@ -22,8 +22,16 @@ public interface SolicitanteService {
     void generarOrdenDeFotocopiaPDF(Long idSolicitud);
     void generarComunicacionInternaPDF(Long idSolicitud);
     void generarSolicitudDeFotocopiaPDF(Long idSolicitud);
+    void generarInformeSolicitudPDF(Long idSolicitud, String editorContent);
 
     byte[] descargaSolicitudDeFotocopiaPDF(Long idSolicitud) throws IOException;
     byte[] descargarOrdenDeFotocopiaPDF(Long idSolicitud) throws IOException;
     byte[] descargarComunicacionInternaPDF(Long idSolicitud) throws IOException;
+    byte[] descargarInformeSolicitudPDF(Long idSolicitud, String editorContent) throws IOException;
+
+    List<DocumentoRetiro> listDocumentoRetirar(Long idSolicitud);
+
+    byte[] guardarListaDocuRetiros(List<DocumentoRetiro> listDocumentoRetiro) throws IOException;
+
+    boolean isInforme(Long idSolicitud);
 }

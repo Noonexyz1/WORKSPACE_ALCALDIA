@@ -22,14 +22,19 @@ export enum UrlsProperties {
   PATH_SOLICITUD_PDF = BASE_URLS + '/solicitante/exportSolicitudDPF/',
   PATH_ORDENFOTO_PDF = BASE_URLS + '/solicitante/exportOrdenDeSolicitudDPF/',
   PATH_COMUINTERNA_PDF = BASE_URLS + '/solicitante/exportComunicacionInternaDPF/',
+  PATH_INFORSOLI_PDF = BASE_URLS + '/solicitante/exportInformeSolicitudDPF/',
   PATH_FINALIZADAS_SOLI = BASE_URLS + '/solicitante/verSolicitudesFinalizadas',
   PATH_ELIMINAR_SOLIC = BASE_URLS + '/solicitante/eliminarSolicitudById/',
   PATH_LIST_TAM = BASE_URLS + '/solicitante/listarTamano',
   PATH_LIST_ANVER = BASE_URLS + '/solicitante/listarAnversoReverso',
   PATH_LIST_COLOR = BASE_URLS + '/solicitante/listarColor',
+  SUSCRIBE_SOLICITANTE = BASE_URLS + '/solicitante/notificacion',
+  PATH_DOCU_RETIRO = BASE_URLS + '/solicitante/verDocumentosRetiro/',
+  PATH_REGIS_RETIRODOCU = BASE_URLS + '/solicitante/registrarDocumentosRetiro',
+  PATH_IS_INFORME = BASE_URLS + '/solicitante/isInforme/',
 
   PATH_NOTA_PDF = BASE_URLS + '/responsable/exportNotaPedidoDPF/',
-  PATH_REPORTE_PDF = BASE_URLS + '/responsable/exportReporteDPF/',
+  PATH_REPORTE_PDF = BASE_URLS + '/responsable/exportReporteDPF',
   PATH_LIST_SOLIPENDIENTE = BASE_URLS + '/responsable/verSolicitudesPendientes',
   PATH_LIST_SOLIAPRO = BASE_URLS + '/responsable/verSolicitudesAprobadas',
   PATH_LIST_SOLIFINALI = BASE_URLS + '/responsable/verSolicitudesFinalizadas',
@@ -41,4 +46,5 @@ export enum UrlsProperties {
   PATH_RECHAZAR_SOLI = BASE_URLS + '/responsable/rechazarSolicitud',
   PATH_AUTORI_SOLI = BASE_URLS + '/responsable/verAutorizacionSolicitud/',
   PATH_FINALIZAR_SOLI = BASE_URLS + '/responsable/finalizarSolicitud',
+  SUSCRIBE_RESPONSABLE = BASE_URLS + '/responsable/notificacion'
 }

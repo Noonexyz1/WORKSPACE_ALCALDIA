@@ -1,0 +1,82 @@
+<div class="p-4 md:p-5">
+
+  <!--Esto es una fila como ejemplo, debe estar dentro de un FOR()-->
+  @for (item of documentosSeleccionados; track $index) {
+    <form class="grid gap-4 mb-4 sm:grid-cols-6">
+
+      <div class="col-span-6 sm:col-span-2">
+        <label for="idCategory" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          Seleccione un documento
+        </label>
+        <select id="idCategory" (change)="onDocumentoSeleccionado($event)"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500">
+          <option value="">--Seleccione--</option>
+          @for (doc of listaDeDocumentos2; track $index) {
+            <option [value]="doc.id">{{ doc.fkFotocopia.nombreDocumento }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="col-span-6 sm:col-span-1">
+        <label for="idCantidad" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Cantidad</label>
+        <input type="number" name="price" id="idCantidad" (input)="onInputChange($event)"
+               class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full p-2.5 dark:bg-gray-600 dark:border-gray-500 dark:placeholder-gray-400 dark:text-white dark:focus:ring-primary-500 dark:focus:border-primary-500"
+               placeholder="$2999" required="">
+      </div>
+
+      <div class="col-span-2 sm:col-span-1">
+        <label class="text-center block mb-2 text-sm font-medium text-gray-900 dark:text-white">Disponible</label>
+        <h2
+          class="text-center">{{ (item.totalDisponible != 0) ? item.totalDisponible : documentoRetiro.totalDisponible }}</h2>
+      </div>
+      <div class="col-span-2 sm:col-span-1">
+        <label class="text-center block mb-2 text-sm font-medium text-gray-900 dark:text-white">Usado</label>
+        <h2 class="text-center">{{ (item.totalUsado != 0) ? item.totalUsado : documentoRetiro.totalUsado }}</h2>
+      </div>
+      <div class="col-span-2 sm:col-span-1">
+        <label class="text-center block mb-2 text-sm font-medium text-gray-900 dark:text-white">Total</label>
+        <h2 class="text-center">{{ (item.totalCopia != 0) ? item.totalCopia : documentoRetiro.totalCopia }}</h2>
+      </div>
+
+    </form>
+  }<!--Fin FOR()-->
+
+  <div class="flex justify-center gap-4 border-b"></div>
+
+  <div class="flex justify-center gap-4 p-4">
+    <!-- Primer botón (verde) -->
+    <button (click)="botonPush()"
+            class="flex items-center px-4 py-2 text-white bg-green-700 hover:bg-green-800 focus:ring-4 focus:outline-none focus:ring-green-300 font-medium rounded-full text-sm dark:bg-green-600 dark:hover:bg-green-700 dark:focus:ring-green-800 transition-colors">
+      <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+           fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M12 7.757v8.486M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+      </svg>
+      <span class="ml-2">Agregar pedido</span>
+    </button>
+
+    <!-- Segundo botón (rojo) -->
+    <button (click)="botonPop()"
+            class="flex items-center px-4 py-2 text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-full text-sm dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-800 transition-colors">
+      <svg class="w-5 h-5 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+           fill="none" viewBox="0 0 24 24">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M7.757 12h8.486M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
+      </svg>
+      <span class="ml-2">Quitar pedido</span>
+    </button>
+  </div>
+
+  <button type="submit" (click)="botonNotaDePedido()"
+          class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+    <svg class="w-6 h-6 text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+         width="24"
+         height="24" fill="currentColor" viewBox="0 0 24 24">
+      <path fill-rule="evenodd"
+            d="M8 3a2 2 0 0 0-2 2v3h12V5a2 2 0 0 0-2-2H8Zm-3 7a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h1v-4a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v4h1a2 2 0 0 0 2-2v-5a2 2 0 0 0-2-2H5Zm4 11a1 1 0 0 1-1-1v-4h8v4a1 1 0 0 1-1 1H9Z"
+            clip-rule="evenodd"/>
+    </svg>
+    Orden de Pedido
+  </button>
+
+</div>

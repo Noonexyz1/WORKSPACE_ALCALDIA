@@ -2,10 +2,9 @@ package com.prototipo.application.adapter;
 
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
-import com.prototipo.application.port.out.FotocopiaAbstract;
-import com.prototipo.application.port.out.GeneracionPDFArchivoAbstract;
-import com.prototipo.application.port.out.ServicioFotocopiaAbstract;
-import com.prototipo.application.port.out.SolicitudAbstract;
+import com.prototipo.application.port.in.ResponsableService;
+import com.prototipo.application.port.out.persistence.*;
+import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
 import com.prototipo.application.port.in.SolicitanteService;
 
 import com.prototipo.domain.enums.*;
@@ -16,6 +15,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
@@ -45,17 +46,26 @@ public class SolicitanteAdapter implements SolicitanteService {
     private FotocopiaAbstract fotocopiaAbstract;
     private ServicioFotocopiaAbstract findServicioFotocopia;
     private GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract;
+    private DocumentoRetiroAbstract documentoRetiroAbstract;
+    private ResponsableService responsableService;
+    private InformeReportAbstract informeReportAbstract;
 
     public SolicitanteAdapter(
             SolicitudAbstract solicitudAbstract,
             FotocopiaAbstract fotocopiaAbstract,
             ServicioFotocopiaAbstract findServicioFotocopia,
-            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract) {
+            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract,
+            DocumentoRetiroAbstract documentoRetiroAbstract,
+            ResponsableService responsableService,
+            InformeReportAbstract informeReportAbstract) {
 
         this.solicitudAbstract = solicitudAbstract;
         this.fotocopiaAbstract = fotocopiaAbstract;
         this.findServicioFotocopia = findServicioFotocopia;
         this.generacionPDFArchivoAbstract = generacionPDFArchivoAbstract;
+        this.documentoRetiroAbstract = documentoRetiroAbstract;
+        this.responsableService = responsableService;
+        this.informeReportAbstract = informeReportAbstract;
     }
 
 
@@ -95,13 +105,12 @@ public class SolicitanteAdapter implements SolicitanteService {
         // Estoy usando CompletableFuture para las tareas asincronas para estos tres procesos
         // estoy conciente que estoy usando Java21 y que hay VirtualThreas pero... naaaaa. solo son tres tareas ;D
         CompletableFuture.allOf(
-                CompletableFuture.runAsync(() -> generarOrdenDeFotocopiaPDF(solicitudSaved.getId())),
                 CompletableFuture.runAsync(() -> generarComunicacionInternaPDF(solicitudSaved.getId())),
                 CompletableFuture.runAsync(() -> generarSolicitudDeFotocopiaPDF(solicitudSaved.getId()))
         ).join();
     }
 
-    private double guardadFotocopiaAbstrac(Fotocopia fotocopia){
+    private double guardadFotocopiaAbstrac(Fotocopia fotocopia) {
         ServicioFotocopia solicitudFotocopiaDto = findServicioFotocopia
                 .findServicioFotocopia(fotocopia.getFkServicioFotocopia());
 
@@ -207,7 +216,6 @@ public class SolicitanteAdapter implements SolicitanteService {
     }
 
 
-
     @Override
     public void generarSolicitudDeFotocopiaPDF(Long idSolicitud) {
         // Traemos los datos necesarios para el reporte
@@ -243,7 +251,6 @@ public class SolicitanteAdapter implements SolicitanteService {
                 .cantidadSumado(solicitudResp.getCopiaTotal() + "")
                 .listReportFotocopias(listReportFotocopias)
                 .build();
-
 
 
         String salidaPdfPsth = "/home/kali/Downloads/solicitudPDF";
@@ -344,7 +351,6 @@ public class SolicitanteAdapter implements SolicitanteService {
                 .build();
 
 
-
         String salidaPdfPsth = "/home/kali/Downloads/comunicacionPDF";
 
         // Crear el directorio si no existe
@@ -365,13 +371,45 @@ public class SolicitanteAdapter implements SolicitanteService {
         String generacionPdfPath = salidaPdfPsth + "/comunicacion_" + idSolicitud + ".pdf";
 
 
-
         generacionPDFArchivoAbstract.generarComunicacionInternaPDFAbs(
                 comunicacionReport,
                 recursoJrxmlPath,
                 recursoImagenPath,
                 generacionPdfPath
         );
+    }
+
+    @Override
+    public void generarInformeSolicitudPDF(Long idSolicitud, String editorContent) {
+        InformeReport informeReport = informeReportAbstract.getInformeReport(idSolicitud);
+
+        String salidaPdfPsth = "/home/kali/Downloads/informePDF";
+
+        // Crear el directorio si no existe
+        File outputDir = new File(salidaPdfPsth);
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        }
+
+        InputStream recursoJrxmlPath = getClass().getClassLoader().getResourceAsStream("templates/report/informe.jrxml");
+        if (recursoJrxmlPath == null) {
+            throw new RuntimeException("No se pudo encontrar el archivo informe.jrxml en el classpath.");
+        }
+
+
+        String recursoImagenPath = "classpath:/static/images/";
+
+        // Ruta del archivo PDF
+        String generacionPdfPath = salidaPdfPsth + "/informe_" + idSolicitud + ".pdf";
+
+        generacionPDFArchivoAbstract.generarInformeSolicitudPDFAbs(
+                informeReport,
+                recursoJrxmlPath,
+                recursoImagenPath,
+                generacionPdfPath,
+                editorContent
+        );
+
     }
 
     private String formatListaDocumentos(List<Fotocopia> listFotocopiaSolicitudResp) {
@@ -391,7 +429,157 @@ public class SolicitanteAdapter implements SolicitanteService {
         }
     }
 
+    @Override
+    public List<DocumentoRetiro> listDocumentoRetirar(Long idSolicitud) {
+        //Debo pensar entidad por entidad porque cada modelo de dominio es un mundo aparte
+        //y como es un mundo aparte, debe persistir aparte
+        List<Fotocopia> fotoSoliAbs = fotocopiaAbstract.getFotocopiasSolicitudAbstract(idSolicitud);
+        List<Long> idFotoSoliAbs = fotoSoliAbs.stream().map(Fotocopia::getId).toList();
 
+        //Debo pensar entidad por entidad porque cada modelo de dominio es un mundo aparte
+        //y como es un mundo aparte, debe persistir aparte
+        List<DocumentoRetiro> retiroDocumentoList = idFotoSoliAbs.stream()
+                .map(x -> documentoRetiroAbstract.getRetiroDocuByFkFoto(x))
+                .toList();
+
+        return retiroDocumentoList;
+    }
+
+    @Override
+    public byte[] guardarListaDocuRetiros(List<DocumentoRetiro> listDocumentoRetiro) throws IOException {
+        List<DocumentoRetiro> listDocuRetiSave = listDocumentoRetiro
+                .stream().map(x -> {
+
+                    // "23/05/2015"
+                    String fechaActual = LocalDate.now()
+                            .format(DateTimeFormatter.ofPattern("dd/MM/yyyy"));
+
+                    DocumentoRetiro docuRetRetry = documentoRetiroAbstract.getDocumentoRetiroById(x.getId());
+
+                    DocumentoRetiro newDocuRetry = new DocumentoRetiro();
+                    newDocuRetry.setId(null);
+                    newDocuRetry.setTotalCopia(docuRetRetry.getTotalCopia());
+                    newDocuRetry.setTotalUsado(docuRetRetry.getSumNroRetiro() + x.getNroRetiro());
+                    newDocuRetry.setTotalDisponible(docuRetRetry.getTotalCopia() - (docuRetRetry.getSumNroRetiro() + x.getNroRetiro()));
+
+                    newDocuRetry.setPrecioParcial(
+                            docuRetRetry.getFkFotocopia().getFkServicioFotocopia().getPrecioRef() *
+                                    docuRetRetry.getFkFotocopia().getNroPaginas() *
+                                    x.getNroRetiro()
+                    );
+
+                    // Se tiene que tener una sumatoria de los preciosParciales porque en un mes el
+                    // solicitante puede hacer mas de dos o tres retiros, pero para un informe de responsable
+                    // unicamente se debe hacer por mes, y para ese mes de debe traer la sumatorio
+                    newDocuRetry.setPrecioSumParcial(
+                            docuRetRetry.getPrecioSumParcial() +
+                                    (docuRetRetry.getFkFotocopia().getFkServicioFotocopia().getPrecioRef() *
+                                            docuRetRetry.getFkFotocopia().getNroPaginas() *
+                                            x.getNroRetiro())
+                    );
+                    newDocuRetry.setPrecioTotal(docuRetRetry.getPrecioTotal());
+
+                    newDocuRetry.setNroRetiro(x.getNroRetiro());
+                    newDocuRetry.setSumNroRetiro(docuRetRetry.getSumNroRetiro() + x.getNroRetiro());
+
+                    newDocuRetry.setFecha(fechaActual);
+
+                    newDocuRetry.setFkFotocopia(docuRetRetry.getFkFotocopia());
+
+                    return newDocuRetry;
+                }).toList();
+
+        List<DocumentoRetiro> documentoRetiros = documentoRetiroAbstract
+                .guardarListaDocumentoRetiro(listDocuRetiSave);
+
+        List<Fotocopia> fotocopiaList = documentoRetiros.stream()
+                .map(x -> {
+                    Fotocopia fotocopia = x.getFkFotocopia();
+                    fotocopia.setNroCopias(x.getNroRetiro());
+                    fotocopia.setPrecioDocu(x.getPrecioParcial());
+                    return fotocopia;
+                })
+                .toList();
+
+
+        String salidaPdfPsth = "/home/kali/Downloads/ordenPDF";
+
+        // Crear el directorio si no existe
+        File outputDir = new File(salidaPdfPsth);
+        if (!outputDir.exists()) {
+            outputDir.mkdirs();
+        }
+
+        InputStream recursoJrxmlPath = getClass().getClassLoader().getResourceAsStream("templates/report/orden.jrxml");
+        if (recursoJrxmlPath == null) {
+            throw new RuntimeException("No se pudo encontrar el archivo reporte.jrxml en el classpath.");
+        }
+
+        String recursoImagenPath = "classpath:/static/images/";
+        
+        String idDocuRetiros = documentoRetiros.stream()
+                .map(doc -> doc.getId().toString()) // Convertir a String
+                .reduce((a, b) -> a + "-" + b)
+                .orElse("");
+
+        // Ruta del archivo PDF
+        String generacionPdfPath = salidaPdfPsth + "/ordenDeFotocopia_" + idDocuRetiros + ".pdf";
+
+        generacionPDFArchivoAbstract.generarOrdenDeFotocopiaPDFAbs(
+                fotocopiaList,
+                recursoJrxmlPath,
+                recursoImagenPath,
+                generacionPdfPath
+        );
+
+
+        // Esto tiene que ser bajo una condicion, pero esto debe pasar de un estado aprobado
+        // a finalizado, unicamente el Responsable debe aprobar
+
+        // traer la Autorizacion que corresponde a la fotocopia del cual estoy haciendo esto
+        Long id = fotocopiaList.getFirst().getFkSolicitud().getId();
+
+        Fotocopia[] listFotocopias = responsableService.listaDeFotocopias(id).toArray(new Fotocopia[0]);
+
+        int tamListFoto = listFotocopias.length;
+        int contandorCeros = 0;
+
+        for (Fotocopia idFotocopia: listFotocopias) {
+            DocumentoRetiro[] documentoRetiroList = documentoRetiroAbstract
+                    .listaDocuRetiroByFkFotocopia(idFotocopia.getId()).toArray(new DocumentoRetiro[0]);
+
+            for (DocumentoRetiro documentoRetiro : documentoRetiroList) {
+                if (documentoRetiro.getTotalDisponible() == 0)
+                    contandorCeros++;
+            }
+        }
+
+        if (tamListFoto == contandorCeros) {
+            Autorizacion autorizacion = responsableService
+                    .obtenerAutorizacion(id);
+
+            Finalizacion finalizacion = Finalizacion.builder()
+                    .fkAutorizacion(Autorizacion.builder().id(autorizacion.getId()).build())
+                    .build();
+
+            //luego hay que cambiar el estado de esta Autorizacion a un estado TERMINADO, este metodo ya lo hace
+            responsableService.guardarFinalizacion(finalizacion);
+        }
+
+        // Aqui tengo que enviar los PDF para descargar
+        // Devolver el contenido del PDF como un arreglo de bytes
+        return Files.readAllBytes(Paths.get(generacionPdfPath));
+
+    }
+
+    @Override
+    public boolean isInforme(Long idSolicitud) {
+        Solicitud solicitud = solicitudAbstract.buscarSolicitudByIdAbstract(idSolicitud);
+        UsuarioUnidad fkUsuarioSolicitante = solicitud.getFkUsuarioSolicitante();
+        Unidad fkUnidad = fkUsuarioSolicitante.getFkUnidad();
+        var valor = fkUnidad.getLimiteMonetario() < solicitud.getPrecioTotal();
+        return valor;
+    }
 
     @Override
     public byte[] descargaSolicitudDeFotocopiaPDF(Long idSolicitud) throws IOException {
@@ -415,6 +603,17 @@ public class SolicitanteAdapter implements SolicitanteService {
         String salidaPdfPsth = "/home/kali/Downloads/comunicacionPDF";
         // Ruta del archivo PDF
         String generacionPdfPath = salidaPdfPsth + "/comunicacion_" + idSolicitud + ".pdf";
+        return Files.readAllBytes(Paths.get(generacionPdfPath));
+    }
+
+    @Override
+    public byte[] descargarInformeSolicitudPDF(Long idSolicitud, String editorContent) throws IOException {
+        //TODO, revisar este metodo
+        generarInformeSolicitudPDF(idSolicitud, editorContent);
+
+        String salidaPdfPsth = "/home/kali/Downloads/informePDF";
+        // Ruta del archivo PDF
+        String generacionPdfPath = salidaPdfPsth + "/informe_" + idSolicitud + ".pdf";
         return Files.readAllBytes(Paths.get(generacionPdfPath));
     }
 }

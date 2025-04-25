@@ -13,7 +13,7 @@ public interface ResponsableService {
     void guardarFinalizacion(Finalizacion finalizacion);
     Autorizacion obtenerAutorizacion(Long idSolicitud);
     List<NotaDePedido> listaDeNotasDePedido(Long idSolicitud);
-    List<Reporte> listaDeReportes(Long idSolicitud);
+    List<Reporte> listaDeReporteMensual(String mesAnio);
     List<Fotocopia> listaDeFotocopias(Long idSolicitud);
     PaginableOut<Finalizacion> listaDeSolicitudesFinalizadasByIdSolicitud(PaginableIn paginableIn);
     PaginableOut<Solicitud> listaDeSolicitudesPendientesByIdSolicitud(PaginableIn paginableIn);
@@ -23,8 +23,8 @@ public interface ResponsableService {
     PaginableOut<Finalizacion> listaDeSolicitudesFinalizadasByIdResponsable(PaginableIn paginableIn);
 
     void generarNotaPedidoPDF(Long idSolicitud);
-    void generarReportePDF(Long idSolicitud);
+    void generarReportePDF();
 
     byte[] descargarNotaPedidoPDF(Long idSolicitud) throws IOException;
-    byte[] descargarReportePDF(Long idSolicitud) throws IOException;
+    byte[] descargarReportePDF() throws IOException;
 }

@@ -21,6 +21,7 @@ public class UsuarioEntity {
     private String materno;
     private String correo;
     private String ci;
+    private String formacion;
 
     @OneToOne(mappedBy = "fkUsuario")
     private CredencialEntity credencial;

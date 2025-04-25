@@ -1,6 +1,6 @@
 package com.prototipo.infrastructure.persistence.db.adapter;
 
-import com.prototipo.application.port.out.FotocopiaAbstract;
+import com.prototipo.application.port.out.persistence.FotocopiaAbstract;
 import com.prototipo.domain.model.Fotocopia;
 import com.prototipo.infrastructure.persistence.db.entity.FotocopiaEntity;
 import com.prototipo.infrastructure.persistence.db.repository.DetalleSolicitudRepository;

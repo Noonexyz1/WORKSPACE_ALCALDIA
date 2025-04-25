@@ -4,11 +4,14 @@ import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
 import com.prototipo.application.port.in.SolicitanteService;
 import com.prototipo.domain.model.*;
+import com.prototipo.infrastructure.http.rest.model.request.DocumentoRetiroRequest;
 import com.prototipo.infrastructure.http.rest.model.request.PageRequest;
 import com.prototipo.infrastructure.http.rest.model.request.SolicitudRequest;
+import com.prototipo.infrastructure.http.rest.model.response.DocumentoRetiroResponse;
 import com.prototipo.infrastructure.http.rest.model.response.PageResponse;
 import com.prototipo.infrastructure.http.rest.model.response.SolicitudSoliciResponse;
 import com.prototipo.infrastructure.service.Observable;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
@@ -21,6 +24,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
+@Slf4j
 @CrossOrigin(origins = "*", maxAge = 86400)
 @RestController
 @RequestMapping(path = "/solicitante")
@@ -76,13 +80,57 @@ public class SolicitanteController {
         observable.publicarValor(1);
     }
 
-    @GetMapping("/eliminarSolicitudById/{idSolicitud}")
+    @GetMapping(
+            path = {"/eliminarSolicitudById/{idSolicitud}"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
     public void eliminarSolicitudById(@PathVariable Long idSolicitud){
         solicitanteService.eliminarSolicitud(idSolicitud);
         observable.publicarValor(1);
     }
 
+    @GetMapping(
+            path = {"/verDocumentosRetiro/{idSolicitud}"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<List<DocumentoRetiroResponse>> verDocumentosRetiro(
+            @PathVariable Long idSolicitud){
 
+        List<DocumentoRetiro> listDocumentoRet = solicitanteService
+                .listDocumentoRetirar(idSolicitud);
+
+        List<DocumentoRetiroResponse> listDocumentoResp = listDocumentoRet
+                .stream()
+                .map(x -> modelMapper.map(x, DocumentoRetiroResponse.class))
+                .toList();
+
+        return new ResponseEntity<>(listDocumentoResp, HttpStatus.OK);
+    }
+
+    @Async
+    @PostMapping(
+            path = {"/registrarDocumentosRetiro"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public CompletableFuture<ResponseEntity<byte[]>> registrarDocumentosRetiro(
+            @RequestBody List<DocumentoRetiroRequest> listDocumentoReq) throws IOException {
+
+        //Este metodo es un caso de uso de solicitante service
+        List<DocumentoRetiro> listDocumentoRetiro = listDocumentoReq.stream()
+                .map(x -> modelMapper.map(x, DocumentoRetiro.class))
+                .toList();
+
+        byte[] ordenDeFotocopia = solicitanteService.guardarListaDocuRetiros(listDocumentoRetiro);
+
+        return CompletableFuture.supplyAsync(() -> {
+            // Configurar encabezados de la respuesta
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData(
+                    "ordenParaFotocopiaPDF",
+                    "ordenDeFotocopia.pdf"
+            );
+            return ResponseEntity.ok().headers(headers).body(ordenDeFotocopia);
+        });
+
+    }
 
     @PostMapping(
             path = {"/verSolicitudesPendientes"},
@@ -180,6 +228,14 @@ public class SolicitanteController {
         return solicitudSoliciResponse;
     }
 
+    @GetMapping(
+            path = {"/isInforme/{idSolicitud}"},
+            produces = {MediaType.APPLICATION_JSON_VALUE})
+    public ResponseEntity<Boolean> isInforme(@PathVariable Long idSolicitud) {
+        boolean isInforme = solicitanteService.isInforme(idSolicitud);
+        return new ResponseEntity<>(isInforme, HttpStatus.OK);
+    }
+
 
 
     @GetMapping(
@@ -262,6 +318,27 @@ public class SolicitanteController {
                         "comunicacion_" + idSolicitud + ".pdf"
                 );
                 return ResponseEntity.ok().headers(headers).body(comunicacionInterna);
+        });
+    }
+
+    @Async
+    @PostMapping("/exportInformeSolicitudDPF/{idSolicitud}")
+    public CompletableFuture<ResponseEntity<byte[]>> exportInformeSolicitudDPF(
+            @PathVariable Long idSolicitud,
+            @RequestBody String editorContent) throws IOException {
+
+        byte[] informeSolicitud = solicitanteService
+                .descargarInformeSolicitudPDF(idSolicitud, editorContent);
+
+        return CompletableFuture.supplyAsync(() -> {
+            // Configurar encabezados de la respuesta
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_PDF);
+            headers.setContentDispositionFormData(
+                    "informeSolicitudPDF",
+                    "informeSolicitud_" + idSolicitud + ".pdf"
+            );
+            return ResponseEntity.ok().headers(headers).body(informeSolicitud);
         });
     }
 }

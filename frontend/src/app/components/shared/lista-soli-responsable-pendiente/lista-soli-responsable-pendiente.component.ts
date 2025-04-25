@@ -58,6 +58,7 @@ export class ListaSoliPendienteResponsableComponent implements OnInit, OnDestroy
   private subscription: Subscription | undefined;
 
   ngOnInit(): void {
+    this.observableNotify.pathToSuscribe = UrlsProperties.SUSCRIBE_RESPONSABLE;
     this.subscription = this.observableNotify.obtenerActualizacion()
       .subscribe({
         next: (valor: number) => {

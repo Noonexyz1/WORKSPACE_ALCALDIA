@@ -2,7 +2,7 @@ package com.prototipo.infrastructure.persistence.db.adapter;
 
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
-import com.prototipo.application.port.out.SolicitudAbstract;
+import com.prototipo.application.port.out.persistence.SolicitudAbstract;
 import com.prototipo.domain.model.*;
 import com.prototipo.infrastructure.persistence.db.entity.*;
 import com.prototipo.infrastructure.persistence.db.repository.*;
@@ -210,15 +210,15 @@ public class SolicitudImpl implements SolicitudAbstract {
 
         //Los mapero a mano porque ModelMapper no sabe mapear relaciones REFLEXIVAS
         UsuarioUnidadEntity usrSoliEnty = solicitudEntity.getFkUsuarioSolicitante();
-        UsuarioUnidadEntity usrResponsableEnty = solicitudEntity.getFkUsuarioSolicitante().getFkResponsable();
+        UsuarioUnidadEntity usrDirectorEnty = solicitudEntity.getFkUsuarioSolicitante().getFkDirector();
 
         UsuarioUnidad usuarioResponsable = UsuarioUnidad.builder()
-                .id(usrResponsableEnty.getId())
-                .isActive(usrResponsableEnty.getIsActive())
-                .fkUsuario(modelMapper.map(usrResponsableEnty.getFkUsuario(), Usuario.class))
-                .fkUnidad(modelMapper.map(usrResponsableEnty.getFkUnidad(), Unidad.class))
-                .fkRol(modelMapper.map(usrResponsableEnty.getFkRol(), Rol.class))
-                .fkCargo(modelMapper.map(usrResponsableEnty.getFkCargo(), Cargo.class))
+                .id(usrDirectorEnty.getId())
+                .isActive(usrDirectorEnty.getIsActive())
+                .fkUsuario(modelMapper.map(usrDirectorEnty.getFkUsuario(), Usuario.class))
+                .fkUnidad(modelMapper.map(usrDirectorEnty.getFkUnidad(), Unidad.class))
+                .fkRol(modelMapper.map(usrDirectorEnty.getFkRol(), Rol.class))
+                .fkCargo(modelMapper.map(usrDirectorEnty.getFkCargo(), Cargo.class))
                 .build();
 
         UsuarioUnidad usuarioSolicitante = UsuarioUnidad.builder()

@@ -2,7 +2,7 @@
 
   <div class="mx-auto px-4 2xl:px-0">
     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center pb-4">
-      <h2 class="text-2xl font-semibold text-gray-900 dark:text-white sm:text-2xl">
+      <h2 class="text-4xl font-semibold text-gray-900 dark:text-white">
         Lista de solicitudes finalizadas
       </h2>
       <form [formGroup]="idSolicitudForm" class="w-full sm:w-96">
@@ -59,9 +59,9 @@
             <th scope="col" class="px-6 py-3">
               Unidad
             </th>
-            <th scope="col" class="px-6 py-3">
+            <!--<th scope="col" class="px-6 py-3">
               Accion
-            </th>
+            </th>-->
           </tr>
           </thead>
 
@@ -88,7 +88,7 @@
                 <td class="px-6 py-4">
                   {{ solicitudFinalizada.nombreUnidad }}
                 </td>
-                <td class="px-6 py-4">
+                <!--<td class="px-6 py-4">
                   <button type="submit" (click)="botonReporteSolicitudPDF(solicitudFinalizada.idSolicitud)"
                           class="text-white inline-flex items-center bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
                     <svg class="w-6 h-6 text-white dark:text-white" aria-hidden="true"
@@ -99,7 +99,7 @@
                     </svg>
                     Reporte PDF
                   </button>
-                </td>
+                </td>-->
               </tr>
             }
           </tbody>

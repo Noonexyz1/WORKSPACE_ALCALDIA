@@ -1,0 +1,10 @@
+En este paquete se pone la persistencia por cada modelo que haya en el domain,
+no me importa como lo persistas pero quiero que por cada modelo simil de entidad
+me persistas y si hay relacion, pues unicamnte ese campo sea el Long id y nada mas.
+
+El diseno de la BD no debe ser copia del dominio ni bisceversa, porque se dependeria
+intrinsecamente del diseno, cuando en el dominio debe haber unicamente los modelos sin relacion
+alguna, unicamente la relacion debe ser de Long id si la hay, entonces es mas facil mapearlos
+y la logica unicaemnte se centra en pura logica de programacion sin tener eque estar prepcupado
+por hacer queries para cumplir ese caso de uso, y es mas testeable, los procesos o metodos deben
+producir esa relacion

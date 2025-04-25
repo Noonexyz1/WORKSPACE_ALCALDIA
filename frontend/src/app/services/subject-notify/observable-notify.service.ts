@@ -9,16 +9,17 @@ export class ObservableNotifyService {
   private eventSource: EventSource | undefined;
   private observer: BehaviorSubject<number> = new BehaviorSubject<number>(0);
 
+  pathToSuscribe: string = '';
+
   constructor() {
     this.iniciarConexion(); // Iniciar SSE automáticamente
   }
-
   private iniciarConexion(): void {
     if (this.eventSource) {
       this.eventSource.close(); // Cerrar conexión previa si existía
     }
 
-    this.eventSource = new EventSource('http://localhost:8081/responsable/notificacion');
+    this.eventSource = new EventSource(this.pathToSuscribe);
 
     this.eventSource.onmessage = (event: MessageEvent) => {
       const valor = parseInt(event.data, 10);

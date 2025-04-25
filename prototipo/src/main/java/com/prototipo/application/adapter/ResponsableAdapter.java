@@ -2,8 +2,9 @@ package com.prototipo.application.adapter;
 
 import com.prototipo.application.model.PaginableIn;
 import com.prototipo.application.model.PaginableOut;
-import com.prototipo.application.port.out.*;
 import com.prototipo.application.port.in.ResponsableService;
+import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
+import com.prototipo.application.port.out.persistence.*;
 import com.prototipo.domain.model.*;
 
 import java.io.File;
@@ -12,7 +13,6 @@ import java.io.InputStream;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,26 +24,32 @@ public class ResponsableAdapter implements ResponsableService {
     //Para que haria otro ResponsableAbstract para esta clase???
     //Si unicamente puedo ADAPTAR una implementacion existente para esta!! ;D
     private SolicitudAbstract solicitudAbstract;
-    private GeneracionPDFDataAbstract generacionPDFDataAbstract;
     private AutorizacionAbstract autorizacionAbstract;
     private FotocopiaAbstract fotocopiaAbstract;
     private FinalizacionAbstract finalizacionAbstract;
     private GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract;
+    private DocumentoRetiroAbstract documentoRetiroAbstract;
+    private NotaDePedidoAbstract notaDePedidoAbstract;
+    private ReporteAbstract reporteAbstract;
 
     public ResponsableAdapter(
             SolicitudAbstract solicitudAbstract,
-            GeneracionPDFDataAbstract generacionPDFDataAbstract,
             AutorizacionAbstract autorizacionAbstract,
             FotocopiaAbstract fotocopiaAbstract,
             FinalizacionAbstract finalizacionAbstract,
-            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract) {
+            GeneracionPDFArchivoAbstract generacionPDFArchivoAbstract,
+            DocumentoRetiroAbstract documentoRetiroAbstract,
+            NotaDePedidoAbstract notaDePedidoAbstract,
+            ReporteAbstract reporteAbstract) {
 
         this.solicitudAbstract = solicitudAbstract;
-        this.generacionPDFDataAbstract = generacionPDFDataAbstract;
         this.autorizacionAbstract = autorizacionAbstract;
         this.fotocopiaAbstract = fotocopiaAbstract;
         this.finalizacionAbstract = finalizacionAbstract;
         this.generacionPDFArchivoAbstract = generacionPDFArchivoAbstract;
+        this.documentoRetiroAbstract = documentoRetiroAbstract;
+        this.notaDePedidoAbstract = notaDePedidoAbstract;
+        this.reporteAbstract = reporteAbstract;
     }
 
     @Override
@@ -56,12 +62,12 @@ public class ResponsableAdapter implements ResponsableService {
 
     @Override
     public List<NotaDePedido> listaDeNotasDePedido(Long idSolicitud) {
-        return generacionPDFDataAbstract.getNotaDePedidoAbstract(idSolicitud);
+        return notaDePedidoAbstract.getNotaDePedidoAbstract(idSolicitud);
     }
 
     @Override
-    public List<Reporte> listaDeReportes(Long idSolicitud) {
-        return generacionPDFDataAbstract.generarReportePDFAbstract(idSolicitud);
+    public List<Reporte> listaDeReporteMensual(String mesAnio) {
+        return reporteAbstract.generarReporteMensualPDFAbstract(mesAnio);
     }
 
     @Override
@@ -175,6 +181,33 @@ public class ResponsableAdapter implements ResponsableService {
         solicitud.setAutoriFlag(1L);
         solicitudAbstract.guardarSolicitudAbstract(solicitud);
         generarNotaPedidoPDF(solicitud.getId());
+
+
+        //en cuanto se autoriza, debo habilitarle este "credito"
+        List<Fotocopia> fotocopias = fotocopiaAbstract
+                .getFotocopiasSolicitudAbstract(solicitud.getId());
+
+        fotocopias.forEach(x -> {
+            DocumentoRetiro documentoRetiro = DocumentoRetiro.builder()
+                    .totalCopia(x.getNroCopias())
+                    // Es total usado es por documento, no importa si ese documento tiene 20 paginas, se
+                    // entiendes como 1 / que el usuario fotocopiara el documento entero
+                    .totalUsado(0L)
+                    .totalDisponible(x.getNroCopias())
+
+                    .precioParcial(0D)
+                    .precioSumParcial(0D)
+                    .precioTotal(x.getPrecioDocu())
+
+                    .nroRetiro(0L)
+                    .sumNroRetiro(0L)
+
+                    .fecha(fechaActual.format(formato))
+                    .fkFotocopia(x)
+                    .build();
+            documentoRetiroAbstract.aprobarDocumentoRetiro(documentoRetiro);
+        });
+
     }
 
     @Override
@@ -189,7 +222,9 @@ public class ResponsableAdapter implements ResponsableService {
 
         autorizacion.setFinaliFlag(1L);
         autorizacionAbstract.guardarAutorizacionAbs(autorizacion);
-        generarReportePDF(autorizacion.getFkSolicitud().getId());
+        //esto deberia quitarlo, y tambien para la consistencia, este metodo no deberia hacer dos cosas como
+        //guardar finalizacion y generar PDFs como dice el nombre de este metodo, solo guardarFinalizacion
+        //generarReportePDF(autorizacion.getFkSolicitud().getId());
     }
 
     @Override
@@ -253,33 +288,34 @@ public class ResponsableAdapter implements ResponsableService {
     }
 
     @Override
-    public void generarReportePDF(Long idSolicitud) {
+    public void generarReportePDF() {
 
         // Formato con nombre del mes completo
-        LocalDate fechaActual = LocalDate.now();
         DateTimeFormatter formato = DateTimeFormatter
                 .ofPattern("dd 'de' MMMM 'de' yyyy", new Locale("es", "ES"));
-        String fechaActualString = fechaActual.format(formato);
+        String fechaActualString = LocalDate.now().format(formato);
 
-        Solicitud solicitud = solicitudAbstract.buscarSolicitudByIdAbstract(idSolicitud);
 
-        String nombreServicio = solicitud.getNombreServicio();
-        Double precioTotal = BigDecimal.valueOf(solicitud.getPrecioTotal()).setScale(2, RoundingMode.HALF_UP).doubleValue();
-        Long paginaTotal = solicitud.getPaginaTotal();
-        Long copiaTotal = solicitud.getCopiaTotal();
-        List<Reporte> listReporte = listaDeReportes(idSolicitud);
+        String mesAnio = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/yyyy"));
+        List<Reporte> listReporte = listaDeReporteMensual(mesAnio);
+
+        Integer paginaTotal = listReporte.stream().map(Reporte::getNroPaginas).reduce(0, Integer::sum);
+        Integer copiaTotal = listReporte.stream().map(Reporte::getNroCopiasExtrac).reduce( 0, Integer::sum);
+
+        Double precioTotal = listReporte.stream()
+                .map(Reporte::getPrecioParcial)
+                .reduce(0.0, Double::sum);
+
+        BigDecimal precioRedondeo = new BigDecimal(precioTotal).setScale(2, RoundingMode.HALF_UP);
 
         ReporteReport reporteReport = ReporteReport.builder()
-                .idSolicitud(idSolicitud)
                 .fecha(fechaActualString)
-                .nombreServicio(nombreServicio)
-                .precioTotal(precioTotal)
-                .paginaTotal(paginaTotal)
-                .copiaTotal(copiaTotal)
+                .nombreServicio("Fotocopia")
+                .precioTotal(precioRedondeo.doubleValue())
+                .paginaTotal(Long.valueOf(paginaTotal))
+                .copiaTotal(Long.valueOf(copiaTotal))
                 .listReporte(listReporte)
                 .build();
-
-
 
         String salidaPdfPsth = "/home/kali/Downloads/reportePDF";
 
@@ -296,8 +332,12 @@ public class ResponsableAdapter implements ResponsableService {
 
         String recursoImagenPath = "classpath:/static/images/";
 
-        // Ruta del archivo PDF
-        String generacionPdfPath = salidaPdfPsth + "/reporte_" + idSolicitud + ".pdf";
+
+        //Debo tener cuado con esto "MM/yyyy" esa barra puede interpretarse como separador de rutas
+        //String mesAnio = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/yyyy"));
+        //Ruta del archivo PDF
+        String mesAnioNombre = LocalDate.now().format(DateTimeFormatter.ofPattern("MM-yyyy"));
+        String generacionPdfPath = salidaPdfPsth + "/reporte_" + mesAnioNombre + ".pdf";
 
 
         generacionPDFArchivoAbstract.generarReportePDFAbs(
@@ -320,10 +360,15 @@ public class ResponsableAdapter implements ResponsableService {
     }
 
     @Override
-    public byte[] descargarReportePDF(Long idSolicitud) throws IOException {
+    public byte[] descargarReportePDF() throws IOException {
+        //aqui se debe generar le reporte pdf
+        generarReportePDF();
+
+        String mesAnio = LocalDate.now().format(DateTimeFormatter.ofPattern("MM-yyyy"));
+
         String salidaPdfPsth = "/home/kali/Downloads/reportePDF";
         // Ruta del archivo PDF
-        String generacionPdfPath = salidaPdfPsth + "/reporte_" + idSolicitud + ".pdf";
+        String generacionPdfPath = salidaPdfPsth + "/reporte_" + mesAnio + ".pdf";
         return Files.readAllBytes(Paths.get(generacionPdfPath));
     }
 

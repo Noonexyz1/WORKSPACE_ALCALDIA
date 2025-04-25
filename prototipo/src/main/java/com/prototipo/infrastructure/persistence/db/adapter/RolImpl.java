@@ -1,6 +1,6 @@
 package com.prototipo.infrastructure.persistence.db.adapter;
 
-import com.prototipo.application.port.out.RolAbstract;
+import com.prototipo.application.port.out.persistence.RolAbstract;
 import com.prototipo.domain.model.Rol;
 import com.prototipo.infrastructure.persistence.db.entity.RolEntity;
 import com.prototipo.infrastructure.persistence.db.repository.RolRepository;

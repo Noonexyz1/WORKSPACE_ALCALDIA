@@ -8,7 +8,8 @@ import {authInterceptor} from "./util/auth-interceptor.service";
 export const appConfig: ApplicationConfig = {
   providers: [
     provideZoneChangeDetection({ eventCoalescing: true }),
-    provideHttpClient( withInterceptors([authInterceptor])), // Proveer HttpClientModule, pero porque??
+    //provideHttpClient(withInterceptors([authInterceptor])), // para reenviar las sessionID
+    provideHttpClient(), // Proveer HttpClientModule, pero porque??
     provideRouter(routes)
   ]
 };

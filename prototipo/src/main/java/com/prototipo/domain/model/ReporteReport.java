@@ -10,7 +10,6 @@ import java.util.List;
 @NoArgsConstructor
 @Builder
 public class ReporteReport {
-    private Long idSolicitud;
     private String fecha;
     private String nombreServicio;
     private Double precioTotal;

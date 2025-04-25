@@ -11,4 +11,5 @@ public class Unidad {
     private Long id;
     private String nombre;
     private String direccion;
+    private Double limiteMonetario;
 }

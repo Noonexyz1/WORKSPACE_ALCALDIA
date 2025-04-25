@@ -1,6 +1,6 @@
 package com.prototipo.infrastructure.persistence.db.adapter;
 
-import com.prototipo.application.port.out.CredencialAbstract;
+import com.prototipo.application.port.out.persistence.CredencialAbstract;
 import com.prototipo.domain.model.Credencial;
 import com.prototipo.infrastructure.persistence.db.entity.CredencialEntity;
 import com.prototipo.infrastructure.persistence.db.entity.RolEntity;

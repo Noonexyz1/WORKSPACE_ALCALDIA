@@ -10,11 +10,13 @@ public class DoublesALiteral {
     private static final String[] DECENAS = {"", "diez", "veinte", "treinta", "cuarenta", "cincuenta", "sesenta", "setenta", "ochenta", "noventa"};
     private static final String[] CENTENAS = {"", "ciento", "doscientos", "trescientos", "cuatrocientos", "quinientos", "seiscientos", "setecientos", "ochocientos", "novecientos"};
 
-    public static String convertir(BigDecimal numero) {
+    public static String convertirDecimalALiteral(BigDecimal numero) {
         BigInteger parteEntera = numero.toBigInteger();
         BigDecimal parteDecimal = numero.remainder(BigDecimal.ONE).multiply(BigDecimal.valueOf(100)).setScale(0, BigDecimal.ROUND_HALF_UP);
         //return convertirNumero(parteEntera) + " con " + (parteDecimal.equals(BigDecimal.ZERO) ? "00" : parteDecimal) + "/100";
-        return convertirNumero(parteEntera) + " con " + NumeroALiteral.convertirNumeroALiteral(parteDecimal.intValue());
+        //return convertirNumero(parteEntera) + " con " + NumeroALiteral.convertirNumeroALiteral(parteDecimal.intValue());
+        String valorReturn = convertirNumero(parteEntera) + " " + (parteDecimal.equals(BigDecimal.ZERO) ? "00" : parteDecimal);
+        return valorReturn.trim().toUpperCase() + "/100 BOLIVIANOS";
     }
 
     private static String convertirNumero(BigInteger numero) {
