@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit} from '@angular/core';
+import {Component} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {SolicitudResponse} from '../../../models/SolicitudResponse';
 import {BehaviorSubject, catchError, map, of} from 'rxjs';
@@ -87,8 +87,8 @@ export class ListaSoliSolicitantePendienteComponent {
   usuario: UsuarioResponse = new UsuarioResponse();
 
   constructor(
-    private http: HttpClient,
-    private localStorage: LocalStorageService) {
+    private readonly http: HttpClient,
+    private readonly localStorage: LocalStorageService) {
 
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
@@ -154,7 +154,7 @@ export class ListaSoliSolicitantePendienteComponent {
     ).subscribe();
   }
 
-  private subject$ = new BehaviorSubject<number>(0);
+  private readonly subject$ = new BehaviorSubject<number>(0);
   isModalVisible: boolean = false;
   hayInforme: boolean = true;
   toggleModal(idSolicitud: number): void {
