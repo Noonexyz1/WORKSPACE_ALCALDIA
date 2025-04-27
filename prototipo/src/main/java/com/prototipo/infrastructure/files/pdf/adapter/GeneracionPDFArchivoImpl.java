@@ -82,7 +82,7 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
             }
 
             // Agregar la ruta de la imagen a los parámetros
-            params.put("imageDir", recursoImagenPath);
+            //params.put("imageDir", recursoImagenPath);
 
             // Generar la página actual
             JasperPrint report = JasperFillManager.fillReport(
@@ -137,7 +137,6 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
         params.put("nombreOrganizacion", comunicacionReport.getNombreOrganizacion());
         params.put("documentos", comunicacionReport.getDocumentos());
         params.put("totalCopias", comunicacionReport.getTotalCopias());
-        params.put("imageDir", recursoImagenPath);
 
         JasperPrint report = JasperFillManager.fillReport(
                 JasperCompileManager.compileReport(recursoJrxmlPath),
@@ -167,7 +166,6 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
         parameter.put("nombreOrganizacion", solicitudReport.getNombreOrganizacion());
         parameter.put("cantidadSumado", solicitudReport.getCantidadSumado());
         parameter.put("ds", new JRBeanCollectionDataSource(solicitudReport.getListReportFotocopias()));
-        parameter.put("imageDir", recursoImagenPath);
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(
                 JasperCompileManager.compileReport(recursoJrxmlPath),
@@ -194,7 +192,6 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
         params.put("nombreServicio", notaDePedidoReport.getNombreServicio());
         params.put("precioTotal", notaDePedidoReport.getPrecioTotal());
         params.put("ds", new JRBeanCollectionDataSource(notaDePedidoReport.getListNotaPedido()));
-        params.put("imageDir", recursoImagenPath);
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(
                 JasperCompileManager.compileReport(recursoJrxmlPath),
@@ -225,7 +222,6 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
         params.put("paginaTotal", reporteReport.getPaginaTotal());
         params.put("copiaTotal", reporteReport.getCopiaTotal());
         params.put("ds", new JRBeanCollectionDataSource(reporteReport.getListReporte()));
-        params.put("imageDir", recursoImagenPath);
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(
                 JasperCompileManager.compileReport(recursoJrxmlPath),
@@ -256,7 +252,6 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
         params.put("cantidadSumado", informeReport.getCantidadSumado());
         params.put("nombreUnidad", informeReport.getNombreUnidad());
         params.put("descripcion", informeReport.getDescripcion());
-        params.put("imageDir", recursoImagenPath);
         params.put("contend", processHtmlContent(editorContent));
 
         log.info(processHtmlContent(editorContent));

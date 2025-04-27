@@ -61,7 +61,7 @@
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</element>
 		<element kind="image" uuid="f4035fa3-3054-42da-a5f1-3055689e2540" x="0" y="0" width="569" height="85">
-			<expression><![CDATA[$P{imageDir} + "membretado-head.jpeg"]]></expression>
+			<expression><![CDATA["classpath:/templates/report/membretado-head.jpeg"]]></expression>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</element>
 		<element kind="staticText" uuid="c139a55c-161a-498e-8f92-2c213d13572d" x="469" y="65" width="102" height="25" fontSize="5.0" bold="true" hTextAlign="Center" vTextAlign="Middle" style="NEGRITA">
@@ -219,7 +219,7 @@
 	</detail>
 	<pageFooter height="45" splitType="Stretch">
 		<element kind="image" uuid="11c47de2-8df4-4e6c-a590-b183fd14be0c" x="2" y="6" width="569" height="27">
-			<expression><![CDATA[$P{imageDir} + "membretado-foot.jpeg"]]></expression>
+			<expression><![CDATA["classpath:/templates/report/membretado-foot.jpeg"]]></expression>
 		</element>
 	</pageFooter>
 	<summary height="93">

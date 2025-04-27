@@ -24,13 +24,6 @@ public interface GeneracionPDFArchivoAbstract {
             String recursoImagenPath,
             String generacionPdfPath);
 
-    void generarOrdenDeFotocopiaPDFAbs(
-            List<Fotocopia> listFotocopia,
-
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath);
-
     void generarInformeSolicitudPDFAbs(
             InformeReport informeReport,
 
@@ -39,6 +32,13 @@ public interface GeneracionPDFArchivoAbstract {
             String generacionPdfPath,
 
             String editorContent);
+
+    void generarOrdenDeFotocopiaPDFAbs(
+            List<Fotocopia> listFotocopia,
+
+            InputStream recursoJrxmlPath,
+            String recursoImagenPath,
+            String generacionPdfPath);
 
 
 
