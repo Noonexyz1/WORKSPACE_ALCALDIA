@@ -10,12 +10,12 @@ public interface GeneracionPDFArchivoAbstract {
      /* Este metodo solo deberia tener un argumento y ese argumento deberia ser la
      de los datos a imprimir en el PDF y demas argumentos deberia ir a la
      infraestrucutura y ser gestionado por ella misma */
-    void generarOrdenDeFotocopiaPDFAbs(
-            List<Fotocopia> listFotocopia,
+     void generarSolicitudDeFotocopiaPDFAbs(
+             SolicitudReport solicitudReport,
 
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath);
+             InputStream recursoJrxmlPath,
+             String recursoImagenPath,
+             String generacionPdfPath);
 
     void generarComunicacionInternaPDFAbs(
             ComunicacionReport comunicacionReport,
@@ -24,14 +24,21 @@ public interface GeneracionPDFArchivoAbstract {
             String recursoImagenPath,
             String generacionPdfPath);
 
-    void generarSolicitudDeFotocopiaPDFAbs(
-            SolicitudReport solicitudReport,
+    void generarOrdenDeFotocopiaPDFAbs(
+            List<Fotocopia> listFotocopia,
 
             InputStream recursoJrxmlPath,
             String recursoImagenPath,
             String generacionPdfPath);
 
+    void generarInformeSolicitudPDFAbs(
+            InformeReport informeReport,
 
+            InputStream recursoJrxmlPath,
+            String recursoImagenPath,
+            String generacionPdfPath,
+
+            String editorContent);
 
 
 
@@ -48,13 +55,4 @@ public interface GeneracionPDFArchivoAbstract {
             InputStream recursoJrxmlPath,
             String recursoImagenPath,
             String generacionPdfPath);
-
-    void generarInformeSolicitudPDFAbs(
-            InformeReport informeReport,
-
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath,
-
-            String editorContent);
 }

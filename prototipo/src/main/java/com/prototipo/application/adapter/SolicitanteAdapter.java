@@ -279,41 +279,11 @@ public class SolicitanteAdapter implements SolicitanteService {
                 generacionPdfPath);
     }
 
-    @Override
-    public void generarOrdenDeFotocopiaPDF(Long idSolicitud) {
-        // IMPORTANTE: Tu como capa application debes de construir los datos para luego pasarlos
-        // a la interfaz Abs (ya que esta se encarga de realizar logica de prog) y esta
-        // preocuparse por cumplirla ya sea con otra libreria.
-        // Osea construimos el modelo de dato para que la otra capa simplemente genere el PDF con este modelo.
-        // Este modelo seria por ejemplo un OrdenFotocopia
-        List<Fotocopia> listFotocopia = listaDeFotocopias(idSolicitud);
-
-
-        String salidaPdfPsth = "/home/kali/Downloads/ordenPDF";
-
-        // Crear el directorio si no existe
-        File outputDir = new File(salidaPdfPsth);
-        if (!outputDir.exists()) {
-            outputDir.mkdirs();
-        }
-
-        InputStream recursoJrxmlPath = getClass().getClassLoader().getResourceAsStream("templates/report/orden.jrxml");
-        if (recursoJrxmlPath == null) {
-            throw new RuntimeException("No se pudo encontrar el archivo reporte.jrxml en el classpath.");
-        }
-
-
-        String recursoImagenPath = "classpath:/static/images/";
-
-        // Ruta del archivo PDF
-        String generacionPdfPath = salidaPdfPsth + "/ordenDeFotocopia_" + idSolicitud + ".pdf";
-
-        generacionPDFArchivoAbstract.generarOrdenDeFotocopiaPDFAbs(
-                listFotocopia,
-                recursoJrxmlPath,
-                recursoImagenPath,
-                generacionPdfPath);
-    }
+    // IMPORTANTE: Tu como capa application debes de construir los datos para luego pasarlos
+    // a la interfaz Abs (ya que esta se encarga de realizar logica de prog) y esta
+    // preocuparse por cumplirla ya sea con otra libreria.
+    // Osea construimos el modelo de dato para que la otra capa simplemente genere el PDF con este modelo.
+    // Este modelo seria por ejemplo un OrdenFotocopia
 
     @Override
     public void generarComunicacionInternaPDF(Long idSolicitud) {

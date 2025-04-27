@@ -19,7 +19,6 @@ public interface SolicitanteService {
     PaginableOut<Solicitud> listaDeAutorizaciones(PaginableIn paginableIn);
     PaginableOut<Solicitud> listaDeFinalizaciones(PaginableIn paginableIn);
 
-    void generarOrdenDeFotocopiaPDF(Long idSolicitud);
     void generarComunicacionInternaPDF(Long idSolicitud);
     void generarSolicitudDeFotocopiaPDF(Long idSolicitud);
     void generarInformeSolicitudPDF(Long idSolicitud, String editorContent);
