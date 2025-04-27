@@ -2,7 +2,6 @@ package com.prototipo.application.port.out.pdf;
 
 import com.prototipo.domain.model.*;
 
-import java.io.InputStream;
 import java.util.List;
 
 public interface GeneracionPDFArchivoAbstract {
@@ -12,47 +11,29 @@ public interface GeneracionPDFArchivoAbstract {
      infraestrucutura y ser gestionado por ella misma */
      void generarSolicitudDeFotocopiaPDFAbs(
              SolicitudReport solicitudReport,
-
-             InputStream recursoJrxmlPath,
-             String recursoImagenPath,
-             String generacionPdfPath);
+             Long idDocumento);
 
     void generarComunicacionInternaPDFAbs(
             ComunicacionReport comunicacionReport,
-
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath);
+            Long idDocumento);
 
     void generarInformeSolicitudPDFAbs(
             InformeReport informeReport,
-
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath,
-
+            Long idDocumento,
             String editorContent);
 
+    //TODO...verificar el codigo circundante de estea implemetancion
     void generarOrdenDeFotocopiaPDFAbs(
             List<Fotocopia> listFotocopia,
-
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath);
+            String idDocumentos);
 
 
 
     void generarNotaPedidoPDFAbs(
             NotaDePedidoReport notaDePedidoReport,
-
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath);
+            Long idDocumento);
 
     void generarReportePDFAbs(
             ReporteReport reporteReport,
-
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath);
+            String fechaReport);
 }

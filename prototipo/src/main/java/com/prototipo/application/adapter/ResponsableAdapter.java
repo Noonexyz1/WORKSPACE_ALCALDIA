@@ -259,31 +259,9 @@ public class ResponsableAdapter implements ResponsableService {
                 .listNotaPedido(listNotaPedidoPDF)
                 .build();
 
-
-        String salidaPdfPsth = "/home/kali/Downloads/notaPedidoPDF";
-
-        // Crear el directorio si no existe
-        File outputDir = new File(salidaPdfPsth);
-        if (!outputDir.exists()) {
-            outputDir.mkdirs();
-        }
-
-        InputStream recursoJrxmlPath = getClass().getClassLoader().getResourceAsStream("templates/report/notaPedido.jrxml");
-        if (recursoJrxmlPath == null) {
-            throw new RuntimeException("No se pudo encontrar el archivo notaPedido.jrxml en el classpath.");
-        }
-
-        String recursoImagenPath = "classpath:/static/images/";
-
-        // Ruta del archivo PDF
-        String generacionPdfPath = salidaPdfPsth + "/notaPedido_" + idSolicitud + ".pdf";
-
-
         generacionPDFArchivoAbstract.generarNotaPedidoPDFAbs(
                 notaDePedidoReport,
-                recursoJrxmlPath,
-                recursoImagenPath,
-                generacionPdfPath
+                idSolicitud
         );
     }
 
@@ -317,34 +295,14 @@ public class ResponsableAdapter implements ResponsableService {
                 .listReporte(listReporte)
                 .build();
 
-        String salidaPdfPsth = "/home/kali/Downloads/reportePDF";
-
-        // Crear el directorio si no existe
-        File outputDir = new File(salidaPdfPsth);
-        if (!outputDir.exists()) {
-            outputDir.mkdirs();
-        }
-
-        InputStream recursoJrxmlPath = getClass().getClassLoader().getResourceAsStream("templates/report/reporte.jrxml");
-        if (recursoJrxmlPath == null) {
-            throw new RuntimeException("No se pudo encontrar el archivo reporte.jrxml en el classpath.");
-        }
-
-        String recursoImagenPath = "classpath:/static/images/";
-
-
         //Debo tener cuado con esto "MM/yyyy" esa barra puede interpretarse como separador de rutas
         //String mesAnio = LocalDate.now().format(DateTimeFormatter.ofPattern("MM/yyyy"));
         //Ruta del archivo PDF
         String mesAnioNombre = LocalDate.now().format(DateTimeFormatter.ofPattern("MM-yyyy"));
-        String generacionPdfPath = salidaPdfPsth + "/reporte_" + mesAnioNombre + ".pdf";
-
 
         generacionPDFArchivoAbstract.generarReportePDFAbs(
                 reporteReport,
-                recursoJrxmlPath,
-                recursoImagenPath,
-                generacionPdfPath
+                mesAnioNombre
         );
     }
 

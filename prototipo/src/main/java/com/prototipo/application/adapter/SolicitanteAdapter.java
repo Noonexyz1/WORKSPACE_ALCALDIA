@@ -252,31 +252,10 @@ public class SolicitanteAdapter implements SolicitanteService {
                 .listReportFotocopias(listReportFotocopias)
                 .build();
 
-
-        String salidaPdfPsth = "/home/kali/Downloads/solicitudPDF";
-
-        // Crear el directorio si no existe
-        File outputDir = new File(salidaPdfPsth);
-        if (!outputDir.exists()) {
-            outputDir.mkdirs();
-        }
-
-        InputStream recursoJrxmlPath = getClass().getClassLoader().getResourceAsStream("templates/report/solicitud.jrxml");
-        if (recursoJrxmlPath == null) {
-            throw new RuntimeException("No se pudo encontrar el archivo reporte.jrxml en el classpath.");
-        }
-
-
-        String recursoImagenPath = "classpath:/static/images/";
-
-        // Ruta del archivo PDF
-        String generacionPdfPath = salidaPdfPsth + "/solicitud_" + idSolicitud + ".pdf";
-
         generacionPDFArchivoAbstract.generarSolicitudDeFotocopiaPDFAbs(
                 solicitudReport,
-                recursoJrxmlPath,
-                recursoImagenPath,
-                generacionPdfPath);
+                idSolicitud
+        );
     }
 
     // IMPORTANTE: Tu como capa application debes de construir los datos para luego pasarlos
@@ -320,32 +299,9 @@ public class SolicitanteAdapter implements SolicitanteService {
                 .totalCopias((int) totalCopias)
                 .build();
 
-
-        String salidaPdfPsth = "/home/kali/Downloads/comunicacionPDF";
-
-        // Crear el directorio si no existe
-        File outputDir = new File(salidaPdfPsth);
-        if (!outputDir.exists()) {
-            outputDir.mkdirs();
-        }
-
-        InputStream recursoJrxmlPath = getClass().getClassLoader().getResourceAsStream("templates/report/comunicacion.jrxml");
-        if (recursoJrxmlPath == null) {
-            throw new RuntimeException("No se pudo encontrar el archivo comunicacion.jrxml en el classpath.");
-        }
-
-
-        String recursoImagenPath = "classpath:/static/images/";
-
-        // Ruta del archivo PDF
-        String generacionPdfPath = salidaPdfPsth + "/comunicacion_" + idSolicitud + ".pdf";
-
-
         generacionPDFArchivoAbstract.generarComunicacionInternaPDFAbs(
                 comunicacionReport,
-                recursoJrxmlPath,
-                recursoImagenPath,
-                generacionPdfPath
+                idSolicitud
         );
     }
 
@@ -353,30 +309,9 @@ public class SolicitanteAdapter implements SolicitanteService {
     public void generarInformeSolicitudPDF(Long idSolicitud, String editorContent) {
         InformeReport informeReport = informeReportAbstract.getInformeReport(idSolicitud);
 
-        String salidaPdfPsth = "/home/kali/Downloads/informePDF";
-
-        // Crear el directorio si no existe
-        File outputDir = new File(salidaPdfPsth);
-        if (!outputDir.exists()) {
-            outputDir.mkdirs();
-        }
-
-        InputStream recursoJrxmlPath = getClass().getClassLoader().getResourceAsStream("templates/report/informe.jrxml");
-        if (recursoJrxmlPath == null) {
-            throw new RuntimeException("No se pudo encontrar el archivo informe.jrxml en el classpath.");
-        }
-
-
-        String recursoImagenPath = "classpath:/static/images/";
-
-        // Ruta del archivo PDF
-        String generacionPdfPath = salidaPdfPsth + "/informe_" + idSolicitud + ".pdf";
-
         generacionPDFArchivoAbstract.generarInformeSolicitudPDFAbs(
                 informeReport,
-                recursoJrxmlPath,
-                recursoImagenPath,
-                generacionPdfPath,
+                idSolicitud,
                 editorContent
         );
 
@@ -472,6 +407,7 @@ public class SolicitanteAdapter implements SolicitanteService {
                 .toList();
 
 
+        /*------------TODO----------------------------*/
         String salidaPdfPsth = "/home/kali/Downloads/ordenPDF";
 
         // Crear el directorio si no existe
@@ -480,27 +416,18 @@ public class SolicitanteAdapter implements SolicitanteService {
             outputDir.mkdirs();
         }
 
-        InputStream recursoJrxmlPath = getClass().getClassLoader().getResourceAsStream("templates/report/orden.jrxml");
-        if (recursoJrxmlPath == null) {
-            throw new RuntimeException("No se pudo encontrar el archivo reporte.jrxml en el classpath.");
-        }
-
-        String recursoImagenPath = "classpath:/static/images/";
-        
         String idDocuRetiros = documentoRetiros.stream()
                 .map(doc -> doc.getId().toString()) // Convertir a String
                 .reduce((a, b) -> a + "-" + b)
                 .orElse("");
 
-        // Ruta del archivo PDF
         String generacionPdfPath = salidaPdfPsth + "/ordenDeFotocopia_" + idDocuRetiros + ".pdf";
 
         generacionPDFArchivoAbstract.generarOrdenDeFotocopiaPDFAbs(
                 fotocopiaList,
-                recursoJrxmlPath,
-                recursoImagenPath,
-                generacionPdfPath
+                idDocuRetiros
         );
+        /*---------------------------------------------*/
 
 
         // Esto tiene que ser bajo una condicion, pero esto debe pasar de un estado aprobado
@@ -536,10 +463,11 @@ public class SolicitanteAdapter implements SolicitanteService {
             responsableService.guardarFinalizacion(finalizacion);
         }
 
+        /*------------TODO----------------------------*/
         // Aqui tengo que enviar los PDF para descargar
         // Devolver el contenido del PDF como un arreglo de bytes
         return Files.readAllBytes(Paths.get(generacionPdfPath));
-
+        /*--------------------------------------------*/
     }
 
     @Override

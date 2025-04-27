@@ -4,6 +4,8 @@ import com.prototipo.application.port.out.pdf.GeneracionPDFArchivoAbstract;
 import com.prototipo.application.util.DoublesALiteral;
 import com.prototipo.application.util.NumeroALiteral;
 import com.prototipo.domain.model.*;
+import com.prototipo.infrastructure.files.pdf.config.RecursoJrxmlEnum;
+import com.prototipo.infrastructure.files.pdf.config.RecursoSalidaEnum;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import net.sf.jasperreports.engine.*;
@@ -33,9 +35,7 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
     @SneakyThrows
     public void generarOrdenDeFotocopiaPDFAbs(
             List<Fotocopia> listFotocopia,
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath) {
+            String idDocumentos) {
 
         // Convertir la lista a un array para facilitar el acceso por índice
         Fotocopia[] detalleFotoVect = listFotocopia.toArray(new Fotocopia[0]);
@@ -49,7 +49,7 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
         int nroPaginas = (int) Math.ceil((double) listFotocopia.size() / 4);
 
         // Compilar el reporte una sola vez (fuera del bucle)
-        JasperReport jasperReport = JasperCompileManager.compileReport(recursoJrxmlPath);
+        JasperReport jasperReport = JasperCompileManager.compileReport(RecursoJrxmlEnum.ORDEN_JRXML.asInputStream());
 
         // 2. Generar cada página
         for (int i = 1; i <= nroPaginas; i++) {
@@ -97,7 +97,9 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
         }
 
         // 3. Exportar todas las páginas a un solo PDF
-        try (FileOutputStream fos = new FileOutputStream(generacionPdfPath)) {
+        try (FileOutputStream fos = new FileOutputStream(
+                RecursoSalidaEnum.ORDEN_PDF.getParametro("ordenDeFotocopia_" + idDocumentos))
+        ) {
             JRPdfExporter exporter = new JRPdfExporter();
             exporter.setExporterInput(SimpleExporterInput.getInstance(paginasJasperPrints)); // Agregar todas las páginas
             exporter.setExporterOutput(new SimpleOutputStreamExporterOutput(fos)); // Definir el flujo de salida
@@ -123,9 +125,7 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
     @SneakyThrows
     public void generarComunicacionInternaPDFAbs(
             ComunicacionReport comunicacionReport,
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath) {
+            Long idDocumento) {
 
         Map<String, Object> params = new HashMap<>();
         // Asigna los campos de ComunicacionReport a los parámetros del reporte
@@ -139,21 +139,22 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
         params.put("totalCopias", comunicacionReport.getTotalCopias());
 
         JasperPrint report = JasperFillManager.fillReport(
-                JasperCompileManager.compileReport(recursoJrxmlPath),
+                JasperCompileManager.compileReport(RecursoJrxmlEnum.COMUNICACION_JRXML.asInputStream()),
                 params,
                 new JREmptyDataSource()
         );
 
-        JasperExportManager.exportReportToPdfFile(report, generacionPdfPath);
+        JasperExportManager.exportReportToPdfFile(
+                report,
+                RecursoSalidaEnum.COMUNICACION_PDF.getParametro("comunicacion_" + idDocumento)
+        );
     }
 
     @Override
     @SneakyThrows
     public void generarSolicitudDeFotocopiaPDFAbs(
             SolicitudReport solicitudReport,
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath) {
+            Long idDocumento) {
 
         // Asigna los campos de SolicitudReport a los parámetros del reporte plantilla
         Map<String, Object> parameter = new HashMap<>();
@@ -168,12 +169,15 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
         parameter.put("ds", new JRBeanCollectionDataSource(solicitudReport.getListReportFotocopias()));
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(
-                JasperCompileManager.compileReport(recursoJrxmlPath),
+                JasperCompileManager.compileReport(RecursoJrxmlEnum.SOLICITUD_JRXML.asInputStream()),
                 parameter,
                 new JREmptyDataSource()
         );
 
-        JasperExportManager.exportReportToPdfFile(jasperPrint, generacionPdfPath);
+        JasperExportManager.exportReportToPdfFile(
+                jasperPrint,
+                RecursoSalidaEnum.SOLICITUD_PDF.getParametro("solicitud_" + idDocumento)
+        );
 
     }
 
@@ -183,9 +187,7 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
     @SneakyThrows
     public void generarNotaPedidoPDFAbs(
             NotaDePedidoReport notaDePedidoReport,
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath) {
+            Long idDocumento) {
 
         Map<String, Object> params = new HashMap<>();
         params.put("fecha", notaDePedidoReport.getFecha());
@@ -194,13 +196,16 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
         params.put("ds", new JRBeanCollectionDataSource(notaDePedidoReport.getListNotaPedido()));
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(
-                JasperCompileManager.compileReport(recursoJrxmlPath),
+                JasperCompileManager.compileReport(RecursoJrxmlEnum.NOTAPEDIDO_JRXML.asInputStream()),
                 params,
                 new JREmptyDataSource()
         );
 
         // Exportar el PDF a un archivo
-        JasperExportManager.exportReportToPdfFile(jasperPrint, generacionPdfPath);
+        JasperExportManager.exportReportToPdfFile(
+                jasperPrint,
+                RecursoSalidaEnum.NOTA_PDF.getParametro("notaPedido_" + idDocumento)
+        );
 
         // Devolver el contenido del PDF como un arreglo de bytes
         //return Files.readAllBytes(Paths.get(outputFilePath));
@@ -210,9 +215,7 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
     @SneakyThrows
     public void generarReportePDFAbs(
             ReporteReport reporteReport,
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath) {
+            String fechaReport) {
 
         Map<String, Object> params = new HashMap<>();
         // Asigna los campos de SolicitudReport a los parámetros del reporte
@@ -224,21 +227,22 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
         params.put("ds", new JRBeanCollectionDataSource(reporteReport.getListReporte()));
 
         JasperPrint jasperPrint = JasperFillManager.fillReport(
-                JasperCompileManager.compileReport(recursoJrxmlPath),
+                JasperCompileManager.compileReport(RecursoJrxmlEnum.REPORTE_JRXML.asInputStream()),
                 params,
                 new JREmptyDataSource()
         );
 
-        JasperExportManager.exportReportToPdfFile(jasperPrint, generacionPdfPath);
+        JasperExportManager.exportReportToPdfFile(
+                jasperPrint,
+                RecursoSalidaEnum.REPORTE_PDF.getParametro("reporte_" + fechaReport)
+        );
     }
 
     @Override
     @SneakyThrows
     public void generarInformeSolicitudPDFAbs(
             InformeReport informeReport,
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath,
+            Long idDocumento,
             String editorContent) {
 
         Map<String, Object> params = new HashMap<>();
@@ -258,12 +262,15 @@ public class GeneracionPDFArchivoImpl implements GeneracionPDFArchivoAbstract {
 
 
         JasperPrint report = JasperFillManager.fillReport(
-                JasperCompileManager.compileReport(recursoJrxmlPath),
+                JasperCompileManager.compileReport(RecursoJrxmlEnum.INFORME_JRXML.asInputStream()),
                 params,
                 new JREmptyDataSource()
         );
 
-        JasperExportManager.exportReportToPdfFile(report, generacionPdfPath);
+        JasperExportManager.exportReportToPdfFile(
+                report,
+                RecursoSalidaEnum.INFORME_PDF.getParametro("informe_" + idDocumento)
+        );
     }
 
     private String processHtmlContent(String htmlContent) {
