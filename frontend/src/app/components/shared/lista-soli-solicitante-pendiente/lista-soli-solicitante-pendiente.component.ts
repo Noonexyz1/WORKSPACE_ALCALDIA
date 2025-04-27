@@ -74,6 +74,7 @@ export class ListaSoliSolicitantePendienteComponent {
     ).subscribe({
       next: (pdfBlob: Blob) => {
         this.descargarPDF("informe_" + idSolicitud + ".pdf", pdfBlob);
+        this.isModalInforme = !this.isModalInforme;
       },
       error: (error) => {
         this.errorDescargaPDF("informe_" + idSolicitud + ".pdf", error);
@@ -198,12 +199,16 @@ export class ListaSoliSolicitantePendienteComponent {
     ).subscribe();
   }
 
-  isModaleInforme: boolean = false;
+  isModalInforme: boolean = false;
   botonInformePDF() {
 
-    this.isModaleInforme = !this.isModaleInforme;
+    this.isModalInforme = !this.isModalInforme;
     this.isModalVisible = false;
 
+  }
+
+  botonCerrarModalInforme(): void {
+    this.isModalInforme = !this.isModalInforme;
   }
 
   botonOrdenFotocopiaPDF(): void {
