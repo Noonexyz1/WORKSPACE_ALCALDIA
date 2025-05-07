@@ -1,6 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {DetalleSolicitudResponse} from "../../../../utils/models/DetalleSolicitudResponse";
+import {DetalleSolicitudResponse} from "../../../utils/models/DetalleSolicitudResponse";
 
 @Component({
   selector: 'app-row-solicitud-extend',

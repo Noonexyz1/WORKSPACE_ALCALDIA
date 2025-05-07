@@ -5,7 +5,7 @@ import {UsuarioResponse} from '../../utils/models/UsuarioResponse';
 import {SolicitudResponResponse} from '../../utils/models/SolicitudResponResponse';
 import {LocalStorageService} from '../../utils/services/local-storage/local-storage.service';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {RowSolicitudExtendComponent} from "./row-table-responsable-pendiente/row-solicitud-extend/row-solicitud-extend.component";
+import {RowSolicitudExtendComponent} from "./row-solicitud-extend/row-solicitud-extend.component";
 import {PageProperties} from "../../utils/models/PageProperties";
 import {DetalleSolicitudExtendidoResponse} from "../../utils/models/DetalleSolicitudExtendidoResponse";
 import {RootNavigateService} from "../../utils/services/root-navigate/root-navigate.service";
