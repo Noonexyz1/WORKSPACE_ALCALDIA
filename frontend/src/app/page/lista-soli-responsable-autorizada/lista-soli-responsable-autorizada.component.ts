@@ -1,9 +1,9 @@
-import {Component} from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { catchError, map, of } from 'rxjs';
-import { UsuarioResponse } from '../../utils/models/UsuarioResponse';
-import { SolicitudResponResponse } from '../../utils/models/SolicitudResponResponse';
-import { LocalStorageService } from '../../utils/services/local-storage/local-storage.service';
+import {AfterViewInit, ChangeDetectorRef, Component} from '@angular/core';
+import {HttpClient} from '@angular/common/http';
+import {catchError, map, of} from 'rxjs';
+import {UsuarioResponse} from '../../utils/models/UsuarioResponse';
+import {SolicitudResponResponse} from '../../utils/models/SolicitudResponResponse';
+import {LocalStorageService} from '../../utils/services/local-storage/local-storage.service';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {RootNavigateService} from "../../utils/services/root-navigate/root-navigate.service";
 import {PageProperties} from "../../utils/models/PageProperties";
@@ -11,6 +11,7 @@ import {UrlsProperties} from "../../utils/enums/UrlsProperties";
 import {PageRequest} from "../../utils/models/PageRequest";
 import {PageResponse} from "../../utils/models/PageResponse";
 import {numeroMayorACeroValidator} from "../../utils/extra/Validation";
+import {Popover} from "flowbite";
 
 @Component({
   selector: 'app-lista-soli-responsable-autorizada',
@@ -18,7 +19,7 @@ import {numeroMayorACeroValidator} from "../../utils/extra/Validation";
   imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './lista-soli-responsable-autorizada.component.html'
 })
-export class ListaSoliAutorizadaResponsableComponent {
+export class ListaSoliAutorizadaResponsableComponent implements AfterViewInit{
 
   listSolicitud: SolicitudResponResponse[] = [];
 
@@ -27,10 +28,11 @@ export class ListaSoliAutorizadaResponsableComponent {
   usuario: UsuarioResponse = new UsuarioResponse();
 
   constructor(
-    private http: HttpClient,
-    private rootNavigateService: RootNavigateService,
-    private localStorage: LocalStorageService,
-    private formBuilder: FormBuilder){
+    private readonly http: HttpClient,
+    private readonly rootNavigateService: RootNavigateService,
+    private readonly localStorage: LocalStorageService,
+    private readonly formBuilder: FormBuilder,
+    private readonly cdr: ChangeDetectorRef) {
 
     this.http = http;
     this.localStorage = localStorage;
@@ -41,6 +43,34 @@ export class ListaSoliAutorizadaResponsableComponent {
     });
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
+  }
+
+  ngAfterViewInit() {
+    this.cdr.detectChanges(); // Forzar detección de cambios
+
+    setTimeout(() => {
+      this.initializePopovers();
+    }, 100); // Pequeño delay para asegurar renderizado
+  }
+
+  initializePopovers() {
+    const popoverTriggers = document.querySelectorAll('[data-popover-target]');
+
+    popoverTriggers.forEach(trigger => {
+      const targetId = trigger.getAttribute('data-popover-target');
+      if (!targetId) return;
+
+      const targetElement = document.getElementById(targetId);
+      if (!targetElement) return;
+
+      // Crea nueva instancia
+      new Popover(targetElement, trigger as HTMLElement, {
+        triggerType: 'click',
+        onHide: () => {
+          // Limpieza opcional
+        }
+      });
+    });
   }
 
   isActiveBtnFinalizar: boolean = false;
