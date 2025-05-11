@@ -1,6 +1,6 @@
 <section class="dark:bg-gray-900">
 
-  <div class="mx-auto px-4 2xl:px-0">
+  <div class="mx-auto pb-4 2xl:px-0">
     <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center pb-4">
       <h2 class="text-4xl font-semibold text-gray-900 dark:text-white">
         Lista de solicitudes autorizadas
@@ -36,14 +36,14 @@
       </form>
     </div>
     @if ((listSolicitud != null && listSolicitud.length > 0)) {
-      <div class="overflow-x-auto shadow-md sm:rounded-lg">
+      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <!-- Cabera de la tabla -->
           <thead class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
           <tr>
             <th scope="col" class="px-2 py-3">Accion</th>
             <th scope="col" class="px-3 text-center  py-3">Id</th>
-            <th scope="col" class="px-3 text-center py-3">Cite</th>
+            <th scope="col" class="px-3 text-center py-3">Cite</th>-
             <th scope="col" class="px-3 text-center py-3">Fecha</th>
             <th scope="col" class="px-3 text-center py-3">Autor</th>
             <th scope="col" class="px-3 text-center py-3">Cargo</th>
