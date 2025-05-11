@@ -1,4 +1,4 @@
-import {AfterViewInit, ChangeDetectorRef, Component} from '@angular/core';
+import {AfterViewInit, ChangeDetectorRef, Component, HostListener} from '@angular/core';
 import {HttpClient} from '@angular/common/http';
 import {catchError, map, of} from 'rxjs';
 import {UsuarioResponse} from '../../utils/models/UsuarioResponse';
@@ -71,6 +71,23 @@ export class ListaSoliAutorizadaResponsableComponent implements AfterViewInit{
         }
       });
     });
+  }
+
+  showPopoverId: null | number | undefined = null;
+  togglePopover(solicitudId: number | undefined, event?: MouseEvent): void {
+    if (event) {
+      event.stopPropagation();
+    }
+    this.showPopoverId = this.showPopoverId === solicitudId ? null : solicitudId;
+    console.log(solicitudId);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    // Cierra el popover si se hace clic en cualquier parte fuera de él
+    if (this.showPopoverId !== null) {
+      this.showPopoverId = null;
+    }
   }
 
   isActiveBtnFinalizar: boolean = false;
