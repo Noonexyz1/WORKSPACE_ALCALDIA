@@ -1,7 +1,7 @@
 @if (!isLoading) {
   <form [formGroup]="solicitudForm" class="dark:bg-gray-900 m-2">
-    <div class="grid grid-cols-4 ">
-      <div class="flex flex-col col-span-1">
+    <div class="grid grid-cols-1 gap-10 md:grid-cols-4">
+      <div class="flex flex-col md:col-span-1">
 
         <div>
           <div class="flex flex-col relative z-0 w-full mb-5 group">
@@ -44,21 +44,6 @@
             }
           </div>
 
-<!--          <div class="relative z-0 w-full mb-5 group col-span-2">-->
-<!--            <input formControlName="descripcion" type="text" id="citeIDd"-->
-<!--                   class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"-->
-<!--                   placeholder=" " required/>-->
-<!--            <label for="citeID"-->
-<!--                   class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">-->
-<!--              Descripcion breve:-->
-<!--            </label>-->
-<!--            @if (solicitudForm.get("descripcion")?.invalid || solicitudForm.get("descripcion")?.touched) {-->
-<!--              @if (solicitudForm.get("descripcion")?.hasError("required")) {-->
-<!--                <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>-->
-<!--              }-->
-<!--            }-->
-<!--          </div>-->
-
           <div>
             <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
               Descripcion breve:
@@ -87,11 +72,10 @@
 
       </div>
 
-      <div class="col-span-3">
+      <div class="sm:col-span-3">
         @if (estadoNroDocumentos) {
-          <div class="py-2">
-            <br>
-            <p class="text-xl font-bold text-gray-600 dark:text-slate-400">
+          <div class="">
+            <p class="text-4xl font-bold text-gray-600 dark:text-slate-400">
               Registre los documentos
             </p>
             <br>
@@ -236,8 +220,21 @@
             </button>
           </div>
         } @else {
-          <div class="bg-red-500">
-            <h1>Aun no se ha registrado el numero de documentos</h1>
+          <div class="h-full flex items-center justify-center">
+            <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 text-center">
+              <!-- Icono de información (SVG recomendado) -->
+              <div class="mx-auto mb-3 w-10 h-10 text-blue-500 dark:text-blue-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                Documentos sin registrar
+              </h5>
+              <p class="font-normal text-gray-700 dark:text-gray-400">
+                Llene el formulario de "Nueva Solicitud" de la izquierda y haga click en el botón "Siguiente paso ->" para completar todos los pasos de tu SOLICITUD DE FOTOCOPIA
+              </p>
+            </div>
           </div>
         }
       </div>
