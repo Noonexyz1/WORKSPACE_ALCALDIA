@@ -5,6 +5,7 @@ import {RootNavigateService} from '../../utils/services/root-navigate/root-navig
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {HttpClient} from '@angular/common/http';
 import {UrlsProperties} from "../../utils/enums/UrlsProperties";
+import {ImagesProperties} from "../../utils/enums/ImagesProperties";
 
 @Component({
   selector: 'app-cambiar-pass',
@@ -18,6 +19,8 @@ export class CambiarPassComponent {
   private formBuilder: FormBuilder;
   private rootNavigateService: RootNavigateService;
   nuevoPassForm: FormGroup;
+
+  PATH_IMAGE_LOGO: string = ImagesProperties.PATH_IMAGE_LOGO;
 
   constructor(http: HttpClient,
               formBuilder: FormBuilder,
