@@ -81,7 +81,7 @@
             <br>
             <div formArrayName="documentos">
               @for (documento of documentos.controls; track $index; let i = $index) {
-                <div [formGroupName]="i">
+                <div [formGroupName]="i" class="px-2 rounded-lg border border-gray-300 dark:border-gray-700">
                   <p class="text-xl font-bold text-gray-900 dark:text-white">
                     Documento {{ i + 1 }}
                   </p>
