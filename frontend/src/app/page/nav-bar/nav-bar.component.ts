@@ -38,11 +38,12 @@ export class NavBarComponent {
     this.http.get(UrlsProperties.PATH_CLOSE_LOGIN, { withCredentials: true }).subscribe({
       next: () => {
         console.log('Sesión cerrada correctamente');
-        //this.router.navigate(['/login']); // Redirigir después de cerrar sesión
+        this.routerService.navigate(['/login']); // Redirigir después de cerrar sesión
       },
       error: (error) => {
         console.error('Error al cerrar sesión:', error);
         alert('Hubo un error al cerrar la sesión');
+        this.routerService.navigate(['/login']); // Redirigir después de cerrar sesión
       }
     });
   }
