@@ -4,7 +4,6 @@ import { CredencialRequest } from '../../utils/models/CredencialRequest';
 import { UsuarioResponse } from '../../utils/models/UsuarioResponse';
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { catchError, map, of } from 'rxjs';
-import { Router } from '@angular/router';
 import { RootNavigateService } from '../../utils/services/root-navigate/root-navigate.service';
 import { LocalStorageService } from '../../utils/services/local-storage/local-storage.service';
 import {UrlsProperties} from "../../utils/enums/UrlsProperties";
@@ -14,8 +13,7 @@ import {ImagesProperties} from "../../utils/enums/ImagesProperties";
   selector: 'app-login',
   standalone: true,
   imports: [ReactiveFormsModule],
-  templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  templateUrl: './login.component.html'
 })
 export class LoginComponent {
 

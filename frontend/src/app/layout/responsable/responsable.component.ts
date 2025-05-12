@@ -11,8 +11,7 @@ import {SeparadorVersionComponent} from "../../page/separador-version/separador-
   selector: 'app-responsable',
   standalone: true,
     imports: [RouterOutlet, RouterLink, NavBarComponent, RouterLinkActive, SeparadorVersionComponent],
-  templateUrl: './responsable.component.html',
-  styleUrl: './responsable.component.css'
+  templateUrl: './responsable.component.html'
 })
 export class ResponsableComponent implements OnInit{
 

@@ -8,8 +8,7 @@ import {SeparadorVersionComponent} from "../../page/separador-version/separador-
   selector: 'app-administrador',
   standalone: true,
   imports: [RouterLink, RouterOutlet, NavBarComponent, RouterLinkActive, SeparadorVersionComponent],
-  templateUrl: './administrador.component.html',
-  styleUrl: './administrador.component.css'
+  templateUrl: './administrador.component.html'
 })
 export class AdministradorComponent implements OnInit{
 

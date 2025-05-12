@@ -8,8 +8,7 @@ import {SeparadorVersionComponent} from "../../page/separador-version/separador-
   selector: 'app-solicitante',
   standalone: true,
     imports: [RouterOutlet, RouterLink, NavBarComponent, RouterLinkActive, SeparadorVersionComponent],
-  templateUrl: './solicitante.component.html',
-  styleUrl: './solicitante.component.css'
+  templateUrl: './solicitante.component.html'
 })
 export class SolicitanteComponent implements OnInit{
 
