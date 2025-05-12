@@ -2,11 +2,12 @@ import {Component, OnInit} from '@angular/core';
 import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import { ModoDarkService } from '../../utils/services/modo-dark/modo-dark.service';
 import { NavBarComponent } from "../../page/nav-bar/nav-bar.component";
+import {SeparadorVersionComponent} from "../../page/separador-version/separador-version.component";
 
 @Component({
   selector: 'app-solicitante',
   standalone: true,
-  imports: [RouterOutlet, RouterLink, NavBarComponent, RouterLinkActive],
+    imports: [RouterOutlet, RouterLink, NavBarComponent, RouterLinkActive, SeparadorVersionComponent],
   templateUrl: './solicitante.component.html',
   styleUrl: './solicitante.component.css'
 })

@@ -5,11 +5,12 @@ import { NavBarComponent } from "../../page/nav-bar/nav-bar.component";
 import {UrlsProperties} from "../../utils/enums/UrlsProperties";
 import {catchError, map, of} from "rxjs";
 import {HttpClient} from "@angular/common/http";
+import {SeparadorVersionComponent} from "../../page/separador-version/separador-version.component";
 
 @Component({
   selector: 'app-responsable',
   standalone: true,
-    imports: [RouterOutlet, RouterLink, NavBarComponent, RouterLinkActive],
+    imports: [RouterOutlet, RouterLink, NavBarComponent, RouterLinkActive, SeparadorVersionComponent],
   templateUrl: './responsable.component.html',
   styleUrl: './responsable.component.css'
 })
