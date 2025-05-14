@@ -5,7 +5,6 @@ import {UsuarioResponse} from '../../utils/models/UsuarioResponse';
 import {SolicitudResponResponse} from '../../utils/models/SolicitudResponResponse';
 import {LocalStorageService} from '../../utils/services/local-storage/local-storage.service';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {RowSolicitudExtendComponent} from "./row-solicitud-extend/row-solicitud-extend.component";
 import {PageProperties} from "../../utils/models/PageProperties";
 import {DetalleSolicitudExtendidoResponse} from "../../utils/models/DetalleSolicitudExtendidoResponse";
 import {RootNavigateService} from "../../utils/services/root-navigate/root-navigate.service";
@@ -19,7 +18,7 @@ import {ObservableNotifyService} from "../../utils/services/subject-notify/obser
 @Component({
   selector: 'app-lista-soli-responsable-pendiente',
   standalone: true,
-  imports: [FormsModule, RowSolicitudExtendComponent, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule],
   templateUrl: './lista-soli-responsable-pendiente.component.html'
 })
 export class ListaSoliPendienteResponsableComponent implements OnInit, OnDestroy{
