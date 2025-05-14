@@ -1,57 +1,55 @@
-<div>
-  <div class="p-3 border border-gray-500 rounded-2xl py-4 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-9">
+<div class="p-3 border border-gray-500 rounded-2xl py-4 grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-9">
 
-    <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">ID:</dt>
-      <dd
-        class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.idDetalleSolicitud }}
-      </dd>
-    </dl>
+  <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+    <dt class="text-base font-medium text-gray-500 dark:text-gray-400">ID:</dt>
+    <dd
+      class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.idDetalleSolicitud }}
+    </dd>
+  </dl>
 
-    <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1 pr-4">
-      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Documento:</dt>
-      <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.nombreDocumento }}
-      </dd>
-    </dl>
+  <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1 pr-4">
+    <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Documento:</dt>
+    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.nombreDocumento }}
+    </dd>
+  </dl>
 
-    <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Nro Copias:</dt>
-      <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.nroCopias }}</dd>
-    </dl>
+  <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+    <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Nro Copias:</dt>
+    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.nroCopias }}</dd>
+  </dl>
 
-    <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Nro Paginas:</dt>
-      <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.nroPaginas }}</dd>
-    </dl>
+  <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+    <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Nro Paginas:</dt>
+    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.nroPaginas }}</dd>
+  </dl>
 
-    <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Tam Pagina:</dt>
-      <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.tamanoPagina }}</dd>
-    </dl>
+  <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+    <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Tam Pagina:</dt>
+    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.tamanoPagina }}</dd>
+  </dl>
 
-    <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Anv/Rev:</dt>
-      <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.anversoReverso }}
-      </dd>
-    </dl>
+  <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+    <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Anv/Rev:</dt>
+    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.anversoReverso }}
+    </dd>
+  </dl>
 
-    <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Color:</dt>
-      <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.colorFotocopia }}
-      </dd>
-    </dl>
+  <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+    <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Color:</dt>
+    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.colorFotocopia }}
+    </dd>
+  </dl>
 
-    <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Precio/Ref:</dt>
-      <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.precioRef }} Bs.
-      </dd>
-    </dl>
+  <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+    <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Precio/Ref:</dt>
+    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.precioRef }} Bs.
+    </dd>
+  </dl>
 
-    <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
-      <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Precio/Documento:</dt>
-      <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.precioDocu }} Bs.
-      </dd>
-    </dl>
+  <dl class="w-1/2 sm:w-1/4 lg:w-auto lg:flex-1">
+    <dt class="text-base font-medium text-gray-500 dark:text-gray-400">Precio/Documento:</dt>
+    <dd class="mt-1.5 text-base font-semibold text-gray-900 dark:text-white">{{ solicitudDetalle.precioDocu }} Bs.
+    </dd>
+  </dl>
 
-  </div>
 </div>
