@@ -1,0 +1,2 @@
+Paquete con Componentes que Si tiene que ver con Rutas pero Rutas Finales (No rutas generales).
+Unicamente es el CONTENEDOR padre de varios componentes del paquete SHARE
