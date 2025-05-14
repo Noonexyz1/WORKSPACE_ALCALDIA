@@ -1,10 +1,8 @@
 import { Component } from '@angular/core';
 import { SubjectUsuarioUnidadService } from '../../utils/services/subject-usuario-unidad/subject-usuario-unidad.service';
-import { UsuarioUnidadRequest } from '../../utils/models/UsuarioUnidadRequest';
 import { HttpClient } from '@angular/common/http';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { catchError, map, of } from 'rxjs';
-import { Router } from '@angular/router';
 import { RolResponse } from '../../utils/models/RolResponse';
 import { UnidadResponse } from '../../utils/models/UnidadResponse';
 import { RootNavigateService } from '../../utils/services/root-navigate/root-navigate.service';

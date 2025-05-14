@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, map, of } from 'rxjs';
-import { PageRequestID } from '../../utils/models/PageRequestID';
 import { UsuarioResponse } from '../../utils/models/UsuarioResponse';
 import { LocalStorageService } from '../../utils/services/local-storage/local-storage.service';
 import {PageProperties} from "../../utils/models/PageProperties";

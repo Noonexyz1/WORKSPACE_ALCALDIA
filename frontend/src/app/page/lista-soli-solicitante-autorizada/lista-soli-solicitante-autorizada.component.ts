@@ -10,9 +10,7 @@ import {PageRequest} from "../../utils/models/PageRequest";
 import {PageResponse} from "../../utils/models/PageResponse";
 import {RegistrarRetiroComponent} from "../registrar-retiro/registrar-retiro.component";
 import {SubjectIdSolicitudService} from "../../utils/services/subject-id-solicitud/subject-id-solicitud.service";
-import {
-  SubjectDocumentoRetiroResponseService
-} from "../../utils/services/subject-retiro-documento/subject-documento-retiro-response.service";
+import {SubjectDocumentoRetiroResponseService} from "../../utils/services/subject-retiro-documento/subject-documento-retiro-response.service";
 import {ObservableService} from "../../utils/services/observable/observable.service";
 
 @Component({
