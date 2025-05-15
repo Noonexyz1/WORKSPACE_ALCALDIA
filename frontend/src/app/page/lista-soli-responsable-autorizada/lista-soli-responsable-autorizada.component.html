@@ -2,7 +2,16 @@
 
   <app-tabla-responsable
     [tituloDeTabla]="this.tituloDeTabla"
-    [listTituloTabla] = "this.listTituloTabla"  >
+    [listTituloTabla]="this.listTituloTabla"
+    [pagina]="this.pagina"
+
+    (idSolicitudPublisher)="botonBuscarSolicitudById($event)"
+    (idSolicitudNotaPublisher)="botonNotaDeSolicitud($event)"
+
+    (goToPagePublisher)="goToPage($event)"
+    (goToPreviousPagePublisher)="goToPreviousPage($event)"
+    (goToNextPagePublisher)="goToNextPage($event)"
+  >
   </app-tabla-responsable>
 
 </section>
