@@ -1,4 +1,4 @@
-import {Component, HostListener} from '@angular/core';
+import {Component, HostListener, Input} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {SolicitudResponResponse} from "../../utils/models/SolicitudResponResponse";
 import {PageProperties} from "../../utils/models/PageProperties";
@@ -29,6 +29,11 @@ export class TablaResponsableComponent {
     { length: this.pageProperties.totalPages},
     (_, index) => index
   );
+
+
+  @Input() tituloDeTabla: string = "";
+  @Input() listTituloTabla: string[] = [];
+
 
   constructor(
     private readonly http: HttpClient,
@@ -174,6 +179,8 @@ export class TablaResponsableComponent {
     console.error('Error en la petición:', error);
     alert('Hubo un ERROR al generar ' + nombrePdf);
   }
+
+
 
   goToPage(page: number): void {
     if (page >= 0 && page < this.pageProperties.totalPages) {

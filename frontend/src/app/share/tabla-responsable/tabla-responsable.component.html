@@ -1,8 +1,10 @@
 <div class="mx-auto pb-4 2xl:px-0">
   <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center pb-4">
+    <!-- Titulo de Tabla-->
     <h2 class="text-4xl font-semibold text-gray-900 dark:text-white">
-      Lista de solicitudes autorizadas
+      {{ this.tituloDeTabla }}
     </h2>
+    <!-- Buscador de Solicitudes por ID de Solicitud-->
     <form [formGroup]="idSolicitudForm" class="w-full sm:w-96">
       <label for="default-search" class="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">
         Search
@@ -33,20 +35,17 @@
       </div>
     </form>
   </div>
+
   @if ((listSolicitud != null && listSolicitud.length > 0)) {
     <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
       <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
         <!-- Cabera de la tabla -->
         <thead class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
-        <tr>
-          <th scope="col" class="px-2 py-3">Accion</th>
-          <th scope="col" class="px-3 text-center  py-3">Id</th>
-          <th scope="col" class="px-3 text-center py-3">Cite</th>
-          <th scope="col" class="px-3 text-center py-3">Fecha</th>
-          <th scope="col" class="px-3 text-center py-3">Autor</th>
-          <th scope="col" class="px-3 text-center py-3">Cargo</th>
-          <th scope="col" class="px-3 text-center py-3">Unidad</th>
-        </tr>
+          <tr>
+            @for (item of listTituloTabla; track item) {
+              <th scope="col" class="px-2 text-center py-3">{{ item }}</th>
+            }
+          </tr>
         </thead>
 
         <!-- Contenido de la tabla -->

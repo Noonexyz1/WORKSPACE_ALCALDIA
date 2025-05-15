@@ -9,5 +9,8 @@ import {TablaResponsableComponent} from "../../share/tabla-responsable/tabla-res
   templateUrl: './lista-soli-responsable-autorizada.component.html'
 })
 export class ListaSoliAutorizadaResponsableComponent {
-  
+
+  tituloDeTabla: string = "Lista de solicitudes autorizadas";
+  listTituloTabla: string[] = ["Accion", "Id", "Cite", "Fecha", "Autor", "Cargo", "Unidad"];
+
 }
