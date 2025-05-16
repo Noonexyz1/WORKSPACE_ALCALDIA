@@ -1,6 +1,6 @@
 import {Component} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {TablaResponsableComponent} from "../../share/tabla-responsable/tabla-responsable.component";
+import {ItemPopover, TablaResponsableComponent} from "../../share/tabla-responsable/tabla-responsable.component";
 import {PageRequest} from "../../utils/models/PageRequest";
 import {PageResponse} from "../../utils/models/PageResponse";
 import {SolicitudResponResponse} from "../../utils/models/SolicitudResponResponse";
@@ -9,6 +9,8 @@ import {catchError, map, of} from "rxjs";
 import {UsuarioResponse} from "../../utils/models/UsuarioResponse";
 import {LocalStorageService} from "../../utils/services/local-storage/local-storage.service";
 import {HttpClient} from "@angular/common/http";
+import {iconoDocumento, iconoOjo} from "../../utils/icons/IconsSVG";
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-lista-soli-responsable-autorizada',
@@ -20,6 +22,8 @@ export class ListaSoliAutorizadaResponsableComponent {
 
   tituloDeTabla: string = "Lista de solicitudes autorizadas";
   listTituloTabla: string[] = ["Accion", "Id", "Cite", "Fecha", "Autor", "Cargo", "Unidad"];
+
+  listPopover: ItemPopover[] = [];
 
   usuario: UsuarioResponse = new UsuarioResponse();
 
@@ -37,10 +41,31 @@ export class ListaSoliAutorizadaResponsableComponent {
 
   constructor(
     private readonly http: HttpClient,
-    private readonly localStorage: LocalStorageService) {
+    private readonly localStorage: LocalStorageService,
+    private readonly sanitizer: DomSanitizer) {
 
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
+
+    //Inciamos los valores
+    this.listPopover = [
+      {
+        icono: this.getSafeSvg(iconoDocumento),
+        opcion: 'Generar nota de pedidos',
+        accion: (idSolicitud: number) => {this.botonNotaDeSolicitud(idSolicitud)}
+      },
+      {
+        icono: this.getSafeSvg(iconoOjo),
+        opcion: 'Ver detalles completos',
+        accion: (idSolicitud: number) => {this.botonNotaDeSolicitud(idSolicitud)}
+      },
+    ];
+
+  }
+
+
+  private getSafeSvg(svg: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(svg);
   }
 
 

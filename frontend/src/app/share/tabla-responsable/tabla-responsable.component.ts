@@ -3,6 +3,17 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {SolicitudResponResponse} from "../../utils/models/SolicitudResponResponse";
 import {PageResponse} from "../../utils/models/PageResponse";
 import {numeroMayorACeroValidator} from "../../utils/extra/Validation";
+import {SafeHtml} from "@angular/platform-browser";
+
+export interface ItemPopover {
+  icono: SafeHtml;
+  opcion: string;
+  //En atributos, solo tienes que declara la firma nada mas jajaj como en Java
+  accion: (idSolicitud: number) => void;
+
+  //{} estun objeto, estas diciendo que retorne un objeto ajajaja
+  //accion: (idSolicitud: number) => {};
+}
 
 @Component({
   selector: 'app-tabla-responsable',
@@ -15,6 +26,7 @@ import {numeroMayorACeroValidator} from "../../utils/extra/Validation";
 export class TablaResponsableComponent {
 
   idSolicitudForm: FormGroup;
+  listaConsecutiva: number[] = [];
 
   @Input() tituloDeTabla: string = "";
   @Input() listTituloTabla: string[] = [];
@@ -27,6 +39,7 @@ export class TablaResponsableComponent {
     totalPages: 0,
     totalElements: 0
   };
+  @Input() listPopoverItem: ItemPopover[] = [];
 
   //Estos para modificar al componente padre
   //Esto parece un publicador
@@ -38,7 +51,6 @@ export class TablaResponsableComponent {
   @Output() goToNextPagePublisher = new EventEmitter<number>(); //Emite eventos de tipo number
 
 
-  listaConsecutiva: number[] = [];
 
   constructor(
     private readonly formBuilder: FormBuilder) {
@@ -92,6 +104,13 @@ export class TablaResponsableComponent {
     //Aqui debo publicar el id que se ha escrito en el campo
     let idSolicitudPublic: number | undefined = idSolicitud;
     this.idSolicitudNotaPublisher.emit(idSolicitudPublic);
+  }
+
+
+
+  // Como si fuera un adapter
+  botonAccion(item: ItemPopover, idSolicitud: number): void {
+    item.accion(idSolicitud);
   }
 
 
