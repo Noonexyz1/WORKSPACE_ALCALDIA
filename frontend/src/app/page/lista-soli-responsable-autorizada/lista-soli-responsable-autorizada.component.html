@@ -15,4 +15,13 @@
   >
   </app-tabla-responsable>
 
+  @if (isModalClose) {
+    <app-modal-solicitud-info
+      [solicitudDetalle]="solicitudDetalle"
+      [isBotonesActivos]="isBotonesActivos"
+      (isModalClose)="toggleModal($event)"
+    >
+    </app-modal-solicitud-info>
+  }
+
 </section>

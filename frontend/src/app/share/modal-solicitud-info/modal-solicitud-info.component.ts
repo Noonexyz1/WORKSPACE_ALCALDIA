@@ -1,17 +1,5 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
-
-export interface ItemSolicitud {
-  idSolicitud: number;
-  idDetalleSolicitud: number;
-  nombreDocumento: string;
-  nroCopias: number;
-  nroPaginas: number;
-  tamanoPagina: string;
-  anversoReverso: string;
-  colorFotocopia: string;
-  precioRef: number;
-  precioDocu: number;
-}
+import {Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
+import {DetalleSolicitudResponse} from "../../utils/models/DetalleSolicitudResponse";
 
 export interface SolicitudData {
   idSolicitud: number;
@@ -20,7 +8,7 @@ export interface SolicitudData {
   descripcion: string;
   nombreServicio: string;
   precioTotal: number;
-  detalleSolicitudResponses: ItemSolicitud[];
+  detalleSolicitudResponses: DetalleSolicitudResponse[];
 }
 
 export interface ModalSolicitudData {
@@ -57,7 +45,7 @@ export class ModalSolicitudInfoComponent {
 
 
   toggleModal() {
-    this.isModalClose.emit(true)
+    this.isModalClose.emit(false)
   }
 
   botonAutorizar() {

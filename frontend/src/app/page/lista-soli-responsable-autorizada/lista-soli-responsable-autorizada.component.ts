@@ -11,11 +11,16 @@ import {LocalStorageService} from "../../utils/services/local-storage/local-stor
 import {HttpClient} from "@angular/common/http";
 import {iconoDocumento, iconoOjo} from "../../utils/icons/IconsSVG";
 import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import {
+  ModalSolicitudData,
+  ModalSolicitudInfoComponent
+} from "../../share/modal-solicitud-info/modal-solicitud-info.component";
+import {DetalleSolicitudExtendidoResponse} from "../../utils/models/DetalleSolicitudExtendidoResponse";
 
 @Component({
   selector: 'app-lista-soli-responsable-autorizada',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, TablaResponsableComponent],
+  imports: [FormsModule, ReactiveFormsModule, TablaResponsableComponent, ModalSolicitudInfoComponent],
   templateUrl: './lista-soli-responsable-autorizada.component.html'
 })
 export class ListaSoliAutorizadaResponsableComponent {
@@ -39,6 +44,12 @@ export class ListaSoliAutorizadaResponsableComponent {
   };
 
 
+
+  isModalClose: boolean = false;
+  isBotonesActivos: boolean = false;
+
+
+
   constructor(
     private readonly http: HttpClient,
     private readonly localStorage: LocalStorageService,
@@ -59,7 +70,7 @@ export class ListaSoliAutorizadaResponsableComponent {
         icono: this.getSafeSvg(iconoOjo),
         opcion: 'Ver detalles completos',
         //Las firmas son iguales jaja se puede enviar directamente el metodo pero lo voy a dejar asi
-        accion: (idSolicitud: number) => {this.botonNotaDeSolicitud(idSolicitud)}
+        accion: (idSolicitud: number) => {this.botonTraerDatosModal(idSolicitud)}
       },
     ];
 
@@ -146,6 +157,53 @@ export class ListaSoliAutorizadaResponsableComponent {
     ).subscribe();
   }
 
+
+  solicitudDetalle: ModalSolicitudData = {
+    tituloModal: '',
+    datosSolicitud: {
+      idSolicitud: 0,
+      cite: '',
+      fecha: '',
+      descripcion: '',
+      nombreServicio: '',
+      precioTotal: 0,
+      detalleSolicitudResponses: [],
+    },
+  }
+
+  botonTraerDatosModal(idSolicitud: number): void {
+    this.isModalClose = true;
+
+    this.http.get<DetalleSolicitudExtendidoResponse>(
+      UrlsProperties.PATH_DETALLE_SOLI + idSolicitud
+    ).pipe(
+      map((response: DetalleSolicitudExtendidoResponse) => {
+        //Aqui armamos el objeto ModalSolicitudData
+        this.solicitudDetalle = {
+          tituloModal:"asdf",
+          datosSolicitud: {
+            idSolicitud: response.idSolicitud,
+            cite: response.cite,
+            fecha: response.fecha,
+            descripcion: response.descripcion,
+            nombreServicio: response.nombreServicio,
+            precioTotal: response.precioTotal,
+            detalleSolicitudResponses: response.detalleSolicitudResponses,
+          }
+        }
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al listar los datos para el modal');
+        return of(null); // Retornar un observable vacío en caso de error
+      })
+    ).subscribe();
+  }
+
+
+
+
+
   private descargarPDF(nombrePdf: string, response: Blob): void {
     const blob = new Blob([response], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(blob);
@@ -180,4 +238,9 @@ export class ListaSoliAutorizadaResponsableComponent {
     this.listarSolicitudes();
   }
 
+
+
+  toggleModal(isActive: boolean) {
+    this.isModalClose = isActive;
+  }
 }
