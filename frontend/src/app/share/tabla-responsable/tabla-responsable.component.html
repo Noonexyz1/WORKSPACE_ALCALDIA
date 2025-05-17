@@ -92,12 +92,15 @@
                     <!-- Cuerpo del Popover -->
                     <div class="p-2 space-y-1">
                       @for (item of listPopoverItem; track item) {
+
+                        <!-- Necesito el atributo item para lanzar el metodo correspondiente que el padreme envio en su array -->
                         <button
-                          (click)="botonAccion(item, solicitud.idSolicitud!)"
+                          (click)="botonAccion(solicitud.idSolicitud!, item)"
                           class="w-full flex items-center px-3 py-2 text-sm text-left text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md transition-colors">
                           <span [innerHTML]="item.icono"></span>
                           {{ item.opcion }}
                         </button>
+
                       }
                     </div>
 

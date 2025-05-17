@@ -52,11 +52,13 @@ export class ListaSoliAutorizadaResponsableComponent {
       {
         icono: this.getSafeSvg(iconoDocumento),
         opcion: 'Generar nota de pedidos',
+        //Las firmas son iguales jaja se puede enviar directamente el metodo pero lo voy a dejar asi
         accion: (idSolicitud: number) => {this.botonNotaDeSolicitud(idSolicitud)}
       },
       {
         icono: this.getSafeSvg(iconoOjo),
         opcion: 'Ver detalles completos',
+        //Las firmas son iguales jaja se puede enviar directamente el metodo pero lo voy a dejar asi
         accion: (idSolicitud: number) => {this.botonNotaDeSolicitud(idSolicitud)}
       },
     ];
@@ -123,7 +125,7 @@ export class ListaSoliAutorizadaResponsableComponent {
 
 
   // Estos son metodos que seran disparados en cuanto se recibe un evento
-  botonNotaDeSolicitud(idSolicitud: number | undefined): void {
+  botonNotaDeSolicitud(idSolicitud: number): void {
     this.http.get(
       UrlsProperties.PATH_NOTA_PDF + idSolicitud,
       { responseType: 'blob' }

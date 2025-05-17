@@ -109,10 +109,10 @@ export class TablaResponsableComponent {
 
 
   // Como si fuera un adapter
-  botonAccion(item: ItemPopover, idSolicitud: number): void {
+  //Necesito el atributo item para lanzar el metodo correspondiente del padre
+  botonAccion(idSolicitud: number, item: ItemPopover): void {
     item.accion(idSolicitud);
   }
-
 
 
 

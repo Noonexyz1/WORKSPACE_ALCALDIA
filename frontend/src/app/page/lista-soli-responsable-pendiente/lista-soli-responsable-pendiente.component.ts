@@ -36,12 +36,12 @@ export class ListaSoliPendienteResponsableComponent implements OnInit, OnDestroy
   usuario: UsuarioResponse = new UsuarioResponse();
 
   constructor(
-    private http: HttpClient,
-    private rootNavigateService: RootNavigateService,
-    private localStorage: LocalStorageService,
-    private formBuilder: FormBuilder,
-    private observableNotify: ObservableNotifyService,
-    private cdr: ChangeDetectorRef) {
+    private readonly http: HttpClient,
+    private readonly rootNavigateService: RootNavigateService,
+    private readonly localStorage: LocalStorageService,
+    private readonly formBuilder: FormBuilder,
+    private readonly observableNotify: ObservableNotifyService,
+    private readonly cdr: ChangeDetectorRef) {
 
     this.http = http;
     this.localStorage = localStorage;
