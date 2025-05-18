@@ -25,13 +25,9 @@ import {DetalleSolicitudExtendidoResponse} from "../../utils/models/DetalleSolic
 })
 export class ListaSoliAutorizadaResponsableComponent {
 
+  //DATOS PARA EL COMPONENTE TABLA
   tituloDeTabla: string = "Lista de solicitudes autorizadas";
   listTituloTabla: string[] = ["Accion", "Id", "Cite", "Fecha", "Autor", "Cargo", "Unidad"];
-
-  listPopover: ItemPopover[] = [];
-
-  usuario: UsuarioResponse = new UsuarioResponse();
-
   //Inicializamos por defecto este atributo para que se cambien a lo largo de la vida del componente
   pagina: PageResponse<SolicitudResponResponse> = {
     page: 0,
@@ -42,12 +38,27 @@ export class ListaSoliAutorizadaResponsableComponent {
     totalPages: 0,
     totalElements: 0
   };
+  listPopover: ItemPopover[] = [];
 
+
+  //DATOS PARA EL COMPONENTE MODAL
+  isBotonesActivos: boolean = false;
+  solicitudDetalle: ModalSolicitudData = {
+    tituloModal: '',
+    datosSolicitud: {
+      idSolicitud: 0,
+      cite: '',
+      fecha: '',
+      descripcion: '',
+      nombreServicio: '',
+      precioTotal: 0,
+      detalleSolicitudResponses: [],
+    },
+  }
 
 
   isModalClose: boolean = false;
-  isBotonesActivos: boolean = false;
-
+  usuario: UsuarioResponse = new UsuarioResponse();
 
 
   constructor(
@@ -158,19 +169,6 @@ export class ListaSoliAutorizadaResponsableComponent {
   }
 
 
-  solicitudDetalle: ModalSolicitudData = {
-    tituloModal: '',
-    datosSolicitud: {
-      idSolicitud: 0,
-      cite: '',
-      fecha: '',
-      descripcion: '',
-      nombreServicio: '',
-      precioTotal: 0,
-      detalleSolicitudResponses: [],
-    },
-  }
-
   botonTraerDatosModal(idSolicitud: number): void {
     this.isModalClose = true;
 
@@ -199,9 +197,6 @@ export class ListaSoliAutorizadaResponsableComponent {
       })
     ).subscribe();
   }
-
-
-
 
 
   private descargarPDF(nombrePdf: string, response: Blob): void {

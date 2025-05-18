@@ -17,8 +17,8 @@
 
   @if (isModalClose) {
     <app-modal-solicitud-info
-      [solicitudDetalle]="solicitudDetalle"
       [isBotonesActivos]="isBotonesActivos"
+      [solicitudDetalle]="solicitudDetalle"
       (isModalClose)="toggleModal($event)"
     >
     </app-modal-solicitud-info>
