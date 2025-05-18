@@ -42,7 +42,6 @@ export class ListaSoliAutorizadaResponsableComponent {
 
 
   //DATOS PARA EL COMPONENTE MODAL
-  isBotonesActivos: boolean = false;
   solicitudDetalle: ModalSolicitudData = {
     tituloModal: '',
     datosSolicitud: {
@@ -138,7 +137,7 @@ export class ListaSoliAutorizadaResponsableComponent {
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
-        alert('Hubo un error al listar las solicitudes pendientes para el responsable');
+        alert('Hubo un error al listar las solicitudes autorizadas para el responsable');
         return of(null); // Retornar un observable vacío en caso de error
       })
     ).subscribe();
