@@ -237,4 +237,8 @@ export class ListaSoliPendienteResponsableComponent {
       })
     ).subscribe();
   }
+
+  botonTrashPublisher() {
+    this.listarSolicitudes();
+  }
 }

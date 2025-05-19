@@ -27,6 +27,7 @@ export class TablaResponsableComponent {
 
   idSolicitudForm: FormGroup;
   listaConsecutiva: number[] = [];
+  isTrashActive: boolean = false;
 
   @Input() tituloDeTabla: string = "";
   @Input() listTituloTabla: string[] = [];
@@ -41,6 +42,8 @@ export class TablaResponsableComponent {
   };
   @Input() listPopoverItem: ItemPopover[] = [];
 
+
+
   //Estos para modificar al componente padre
   //Esto parece un publicador
   @Output() idSolicitudPublisher = new EventEmitter<number>(); //Emite eventos de tipo number
@@ -50,6 +53,7 @@ export class TablaResponsableComponent {
   @Output() goToPreviousPagePublisher = new EventEmitter<number>(); //Emite eventos de tipo number
   @Output() goToNextPagePublisher = new EventEmitter<number>(); //Emite eventos de tipo number
 
+  @Output() botonTrashPublisher = new EventEmitter<boolean>(); //Emite eventos de tipo boolean
 
 
   constructor(
@@ -98,14 +102,6 @@ export class TablaResponsableComponent {
     this.idSolicitudPublisher.emit(id);
   }
 
-  /* Se ha llevado acabo un evento disparador por el HTML como un BOTON con dicho valor o tipo
-  que se emitio como resultado es el MindSet */
-  botonNotaDeSolicitud(idSolicitud: number | undefined): void {
-    //Aqui debo publicar el id que se ha escrito en el campo
-    let idSolicitudPublic: number | undefined = idSolicitud;
-    this.idSolicitudNotaPublisher.emit(idSolicitudPublic);
-  }
-
 
 
   // Como si fuera un adapter
@@ -142,4 +138,14 @@ export class TablaResponsableComponent {
     }
   }
 
+  botonTrachCliked() {
+    this.botonTrashPublisher.emit();
+    this.isTrashActive = false;
+  }
+
+  onInputChange($event: Event) {
+    const value = ($event.target as HTMLInputElement).value;
+    console.log('Valor actual:', value);
+    this.isTrashActive = true;
+  }
 }
