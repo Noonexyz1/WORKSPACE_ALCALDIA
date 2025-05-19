@@ -177,7 +177,7 @@ export class ListaSoliAutorizadaResponsableComponent {
       map((response: DetalleSolicitudExtendidoResponse) => {
         //Aqui armamos el objeto ModalSolicitudData
         this.solicitudDetalle = {
-          tituloModal:"asdf",
+          tituloModal:"Detalle de solicitud",
           datosSolicitud: {
             idSolicitud: response.idSolicitud,
             cite: response.cite,

@@ -3,91 +3,129 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, map, of } from 'rxjs';
 import { UsuarioResponse } from '../../utils/models/UsuarioResponse';
 import { LocalStorageService } from '../../utils/services/local-storage/local-storage.service';
-import {PageProperties} from "../../utils/models/PageProperties";
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {UrlsProperties} from "../../utils/enums/UrlsProperties";
 import {SolicitudResponResponse} from "../../utils/models/SolicitudResponResponse";
 import {PageRequest} from "../../utils/models/PageRequest";
 import {PageResponse} from "../../utils/models/PageResponse";
-import {numeroMayorACeroValidator} from "../../utils/extra/Validation";
+import {
+  ModalSolicitudData,
+  ModalSolicitudInfoComponent
+} from "../../share/modal-solicitud-info/modal-solicitud-info.component";
+import {ItemPopover, TablaResponsableComponent} from "../../share/tabla-responsable/tabla-responsable.component";
+import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
+import {iconoDocumento, iconoOjo} from "../../utils/icons/IconsSVG";
+import {DetalleSolicitudExtendidoResponse} from "../../utils/models/DetalleSolicitudExtendidoResponse";
 
 @Component({
   selector: 'app-lista-soli-responsable-finalizada',
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule],
+  imports: [FormsModule, ReactiveFormsModule, ModalSolicitudInfoComponent, TablaResponsableComponent],
   templateUrl: './lista-soli-responsable-finalizada.component.html'
 })
 export class ListaSoliFinalizadaResponsableComponent{
 
-  listSolicitudFinal: SolicitudResponResponse[] = [];
+  //DATOS PARA EL COMPONENTE TABLA
+  tituloDeTabla: string = "Lista de solicitudes finalizadas";
+  listTituloTabla: string[] = ["Accion", "Id", "Cite", "Fecha", "Autor", "Cargo", "Unidad"];
+  //Inicializamos por defecto este atributo para que se cambien a lo largo de la vida del componente
+  pagina: PageResponse<SolicitudResponResponse> = {
+    page: 0,
+    size: 10,
+    sortBy: 'id',
+    direction: "ASC",
+    content: [],
+    totalPages: 0,
+    totalElements: 0
+  };
+  listPopover: ItemPopover[] = [];
 
-  usuario: UsuarioResponse = new UsuarioResponse();
 
-  idSolicitudForm: FormGroup;
-
-  constructor(
-    private http: HttpClient,
-    private localStorage: LocalStorageService,
-    private formBuilder: FormBuilder){
-
-    this.usuario = this.localStorage.getItem('userData');
-    this.formBuilder = formBuilder;
-    this.idSolicitudForm = this.formBuilder.group({
-      id: ['', [Validators.required, numeroMayorACeroValidator]]
-    });
-    this.listarSolicitudes();
+  //DATOS PARA EL COMPONENTE MODAL
+  solicitudDetalle: ModalSolicitudData = {
+    tituloModal: '',
+    datosSolicitud: {
+      idSolicitud: 0,
+      cite: '',
+      fecha: '',
+      descripcion: '',
+      nombreServicio: '',
+      precioTotal: 0,
+      detalleSolicitudResponses: [],
+    },
   }
 
-  pageProperties: PageProperties = new PageProperties();
-  listaConsecutiva: number[] = Array.from(
-    { length: this.pageProperties.totalPages },
-    (_, index) => index
-  );
 
-  listarSolicitudes(): void {
+  isModalClose: boolean = false;
+  usuario: UsuarioResponse = new UsuarioResponse();
+
+
+  constructor(
+    private readonly http: HttpClient,
+    private readonly localStorage: LocalStorageService,
+    private readonly sanitizer: DomSanitizer) {
+
+    this.usuario = this.localStorage.getItem('userData');
+    this.listarSolicitudes();
+
+    //Inciamos los valores
+    this.listPopover = [
+      {
+        icono: this.getSafeSvg(iconoDocumento),
+        opcion: 'Generar nota de pedidos',
+        //Las firmas son iguales jaja se puede enviar directamente el metodo pero lo voy a dejar asi
+        accion: (idSolicitud: number) => {this.botonNotaDeSolicitud(idSolicitud)}
+      },
+      {
+        icono: this.getSafeSvg(iconoOjo),
+        opcion: 'Ver detalles completos',
+        //Las firmas son iguales jaja se puede enviar directamente el metodo pero lo voy a dejar asi
+        accion: (idSolicitud: number) => {this.botonTraerDatosModal(idSolicitud)}
+      },
+    ];
+
+  }
+
+
+  private getSafeSvg(svg: string): SafeHtml {
+    return this.sanitizer.bypassSecurityTrustHtml(svg);
+  }
+
+
+  private listarSolicitudes(): void {
     const body: PageRequest = {
       id: this.usuario.id,
-      page: this.pageProperties.currentPage,
-      size: this.pageProperties.pageSize,
-      sortBy: this.pageProperties.sortBy,
-      direction: this.pageProperties.direction
-    }
+      page: this.pagina.page,
+      size: this.pagina.size,
+      sortBy: this.pagina.sortBy,
+      direction: this.pagina.direction
+    };
 
     this.http.post<PageResponse<SolicitudResponResponse>>(
       UrlsProperties.PATH_LIST_SOLIFINALI,
       body
     ).pipe(
       map((response: PageResponse<SolicitudResponResponse>) => {
-        this.pageProperties.currentPage = response.page;
-        this.pageProperties.pageSize = response.size;
-        this.pageProperties.sortBy = response.sortBy;
-        this.pageProperties.direction = response.direction;
-
-        this.listSolicitudFinal = response.content;
-        this.pageProperties.totalPages = response.totalPages;
-        this.pageProperties.totalElements = response.totalElements;
-
-        this.listaConsecutiva = Array.from(
-          {length: this.pageProperties.totalPages},
-          (_, index) => index
-        );
+        this.pagina = response;
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
         alert('Hubo un error al listar las solicitudes para el responsable');
         return of(null); // Retornar un observable vacío en caso de error
       })
-    )
-    .subscribe();
+    ).subscribe();
   }
 
-  botonBuscarSolicitudById(): void {
+
+  // Estos son metodos que seran disparados en cuanto se recibe un evento
+  botonBuscarSolicitudById(id: number): void {
+    //Con este id emitido hacer tal...
     const body: PageRequest = {
-      id: this.idSolicitudForm.get('id')?.value,
-      page: this.pageProperties.currentPage,
-      size: this.pageProperties.pageSize,
-      sortBy: this.pageProperties.sortBy,
-      direction: this.pageProperties.direction
+      id: id,
+      page: this.pagina.page,
+      size: this.pagina.size,
+      sortBy: this.pagina.sortBy,
+      direction: this.pagina.direction
     }
 
     this.http.post<PageResponse<SolicitudResponResponse>>(
@@ -95,45 +133,72 @@ export class ListaSoliFinalizadaResponsableComponent{
       body
     ).pipe(
       map((response: PageResponse<SolicitudResponResponse>) => {
-        this.pageProperties.currentPage = response.page;
-        this.pageProperties.pageSize = response.size;
-        this.pageProperties.sortBy = response.sortBy;
-        this.pageProperties.direction = response.direction;
-
-        this.listSolicitudFinal = response.content;
-        this.pageProperties.totalPages = response.totalPages;
-        this.pageProperties.totalElements = response.totalElements;
-
-        this.listaConsecutiva = Array.from(
-          {length: this.pageProperties.totalPages},
-          (_, index) => index
-        );
+        this.pagina = response;
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
-        alert('Hubo un error al listar las solicitudes pendientes para el responsable');
+        alert('Hubo un error al listar las solicitudes finalizadas para el responsable');
         return of(null); // Retornar un observable vacío en caso de error
       })
     ).subscribe();
 
   }
 
-  botonReporteSolicitudPDF(idSolicitud: number | undefined): void {
+
+  // Estos son metodos que seran disparados en cuanto se recibe un evento
+  botonNotaDeSolicitud(idSolicitud: number): void {
     this.http.get(
-      UrlsProperties.PATH_REPORTE_PDF,
+      UrlsProperties.PATH_NOTA_PDF + idSolicitud,
       { responseType: 'blob' }
-    ).pipe( // Cambiar el tipo de respuesta
+    ).pipe(
       map((response: Blob) => {
-        this.descargarPDF("reporte_" + idSolicitud + ".pdf", response);
+        this.descargarPDF("notaPedido_" + idSolicitud + ".pdf", response);
+
+        // Habilita el botón "Finalizar" solo para la fila correspondiente
+        const solicitud = this.pagina.content.find(s => s.idSolicitud === idSolicitud);
+        if (solicitud) {
+          solicitud.isActiveBtnFinalizar = true;
+        }
       }),
       catchError(error => {
-        this.errorDescargaPDF("reporte_" + idSolicitud + ".pdf", error);
+        this.errorDescargaPDF("notaPedido_" + idSolicitud + ".pdf", error);
         return of(null);
       })
     ).subscribe();
   }
 
-  descargarPDF(nombrePdf: string, response: Blob): void {
+
+  botonTraerDatosModal(idSolicitud: number): void {
+    this.isModalClose = true;
+
+    this.http.get<DetalleSolicitudExtendidoResponse>(
+      UrlsProperties.PATH_DETALLE_SOLI + idSolicitud
+    ).pipe(
+      map((response: DetalleSolicitudExtendidoResponse) => {
+        //Aqui armamos el objeto ModalSolicitudData
+        this.solicitudDetalle = {
+          tituloModal:"Detalle de solicitud",
+          datosSolicitud: {
+            idSolicitud: response.idSolicitud,
+            cite: response.cite,
+            fecha: response.fecha,
+            descripcion: response.descripcion,
+            nombreServicio: response.nombreServicio,
+            precioTotal: response.precioTotal,
+            detalleSolicitudResponses: response.detalleSolicitudResponses,
+          }
+        }
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al listar los datos para el modal');
+        return of(null); // Retornar un observable vacío en caso de error
+      })
+    ).subscribe();
+  }
+
+
+  private descargarPDF(nombrePdf: string, response: Blob): void {
     const blob = new Blob([response], { type: 'application/pdf' });
     const url = window.URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -143,33 +208,33 @@ export class ListaSoliFinalizadaResponsableComponent{
     window.URL.revokeObjectURL(url);
   }
 
-  errorDescargaPDF(nombrePdf: string, error: any): void {
+  private errorDescargaPDF(nombrePdf: string, error: any): void {
     console.error('Error en la petición:', error);
     alert('Hubo un ERROR al generar ' + nombrePdf);
   }
 
 
-
-
+  // Estos son metodos que seran disparados en cuanto se recibe un evento
   goToPage(page: number): void {
-    if (page >= 0 && page < this.pageProperties.totalPages) {
-      this.pageProperties.currentPage = page;
-      this.listarSolicitudes();
-    }
+    this.pagina.page = page;
+    this.listarSolicitudes();
   }
 
-  goToPreviousPage(): void {
-    if (this.pageProperties.currentPage > 0) {
-      this.pageProperties.currentPage--;
-      this.listarSolicitudes();
-    }
+  // Estos son metodos que seran disparados en cuanto se recibe un evento
+  goToPreviousPage(newPage: number): void {
+    this.pagina.page = newPage;
+    this.listarSolicitudes();
   }
 
-  goToNextPage(): void {
-    if (this.pageProperties.currentPage < this.pageProperties.totalPages - 1) {
-      this.pageProperties.currentPage++;
-      this.listarSolicitudes();
-    }
+  // Estos son metodos que seran disparados en cuanto se recibe un evento
+  goToNextPage(newPage: number): void {
+    this.pagina.page = newPage;
+    this.listarSolicitudes();
   }
 
+
+
+  toggleModal(isActive: boolean) {
+    this.isModalClose = isActive;
+  }
 }

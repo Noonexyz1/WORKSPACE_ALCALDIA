@@ -26,7 +26,7 @@ import {AprobacionSoliRequest} from "../../utils/models/AutorizacionRequest";
 })
 export class ListaSoliPendienteResponsableComponent {
 
-//DATOS PARA EL COMPONENTE TABLA
+  //DATOS PARA EL COMPONENTE TABLA
   tituloDeTabla: string = "Lista de solicitudes pendientes";
   listTituloTabla: string[] = ["Accion", "Id", "Cite", "Fecha", "Autor", "Cargo", "Unidad"];
   //Inicializamos por defecto este atributo para que se cambien a lo largo de la vida del componente
