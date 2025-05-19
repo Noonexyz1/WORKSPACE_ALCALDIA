@@ -1,4 +1,4 @@
-import {Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {DetalleSolicitudResponse} from "../../utils/models/DetalleSolicitudResponse";
 
 export interface SolicitudData {
@@ -40,8 +40,8 @@ export class ModalSolicitudInfoComponent {
 
 
   @Output() isModalClose = new EventEmitter<boolean>();
-  @Output() isAutorizarClicked = new EventEmitter<boolean>();
-  @Output() isRechazarClicked = new EventEmitter<boolean>();
+  @Output() autorizarClicked = new EventEmitter<number>();
+  @Output() rechazarClicked = new EventEmitter<number>();
 
 
   toggleModal() {
@@ -49,11 +49,11 @@ export class ModalSolicitudInfoComponent {
   }
 
   botonAutorizar() {
-    this.isAutorizarClicked.emit(true)
+    this.autorizarClicked.emit(this.solicitudDetalle.datosSolicitud.idSolicitud)
   }
 
   botonRechazar() {
-    this.isRechazarClicked.emit(true)
+    this.rechazarClicked.emit(this.solicitudDetalle.datosSolicitud.idSolicitud)
   }
 
 }

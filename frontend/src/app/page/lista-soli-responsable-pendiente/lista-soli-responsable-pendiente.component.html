@@ -19,6 +19,8 @@
       [isBotonesActivos]="this.isBotonesActivos"
       [solicitudDetalle]="this.solicitudDetalle"
       (isModalClose)="toggleModal($event)"
+      (autorizarClicked)="botonAutorizarSolicitud($event)"
+      (rechazarClicked)="botonRechazarSolicitud($event)"
     >
     </app-modal-solicitud-info>
   }

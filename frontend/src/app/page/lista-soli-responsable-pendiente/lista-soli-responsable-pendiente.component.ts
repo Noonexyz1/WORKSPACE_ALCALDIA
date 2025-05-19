@@ -16,6 +16,7 @@ import {
 } from "../../share/modal-solicitud-info/modal-solicitud-info.component";
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {iconoOjo} from "../../utils/icons/IconsSVG";
+import {AprobacionSoliRequest} from "../../utils/models/AutorizacionRequest";
 
 @Component({
   selector: 'app-lista-soli-responsable-pendiente',
@@ -55,9 +56,6 @@ export class ListaSoliPendienteResponsableComponent {
       detalleSolicitudResponses: [],
     },
   }
-
-
-  //TODO, implementar los botones de aprobar solicitud o rechazar
 
 
   isModalClose: boolean = false;
@@ -152,7 +150,7 @@ export class ListaSoliPendienteResponsableComponent {
       map((response: DetalleSolicitudExtendidoResponse) => {
         //Aqui armamos el objeto ModalSolicitudData
         this.solicitudDetalle = {
-          tituloModal:"asdf",
+          tituloModal:"Detalle de solicitud",
           datosSolicitud: {
             idSolicitud: response.idSolicitud,
             cite: response.cite,
@@ -193,5 +191,50 @@ export class ListaSoliPendienteResponsableComponent {
 
   toggleModal(isActive: boolean) {
     this.isModalClose = isActive;
+  }
+
+
+  botonAutorizarSolicitud(idSolicitud: number) {
+    console.log("Id de Solicitud a autorizar/rechazar: " + idSolicitud)
+
+    this.http.post<AprobacionSoliRequest>(
+      UrlsProperties.PATH_AUTORIZAR_SOLI,
+      {
+        idResponsable: this.usuario.id,
+        idSolicitud: idSolicitud
+      }
+    ).pipe(
+      map(() => {
+        this.isModalClose = !this.isModalClose;
+        this.listarSolicitudes();
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al enviar las solicitudes cotizadas');
+        return of(null); // Retornar un observable vacío en caso de error
+      })
+    ).subscribe();
+  }
+
+  botonRechazarSolicitud(idSolicitud: number) {
+    console.log("Id de Solicitud a autorizar/rechazar: " + idSolicitud)
+
+    this.http.post<AprobacionSoliRequest>(
+      UrlsProperties.PATH_RECHAZAR_SOLI,
+      {
+        idResponsable: this.usuario.id,
+        idSolicitud: idSolicitud
+      }
+    ).pipe(
+      map(() => {
+        this.isModalClose = !this.isModalClose;
+        this.listarSolicitudes();
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al rechazar las solicitudes cotizadas');
+        return of(null); // Retornar un observable vacío en caso de error
+      })
+    ).subscribe();
   }
 }
