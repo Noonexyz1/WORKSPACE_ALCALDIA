@@ -48,7 +48,6 @@
 		<variable name="total" resetType="Column" calculation="Count" class="java.math.BigDecimal"/>
 	</dataset>
 	<parameter name="fecha" class="java.lang.String"/>
-	<parameter name="imageDir" class="java.lang.String"/>
 	<parameter name="nombreServicio" class="java.lang.String"/>
 	<parameter name="precioTotal" class="java.lang.Double"/>
 	<parameter name="paginaTotal" class="java.lang.Long"/>
@@ -58,7 +57,7 @@
 	<background splitType="Stretch"/>
 	<pageHeader height="122" splitType="Stretch">
 		<element kind="image" uuid="d46e97e3-a8a2-40b1-a006-83065eca1ea9" x="0" y="0" width="569" height="85">
-			<expression><![CDATA[$P{imageDir} + "membretado-head.jpeg"]]></expression>
+			<expression><![CDATA["classpath:/templates/report/membretado-head.jpeg"]]></expression>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</element>
 		<element kind="staticText" uuid="01e22287-9575-482e-a06a-9a096e03dd1a" x="469" y="65" width="102" height="25" fontSize="5.0" bold="true" hTextAlign="Center" vTextAlign="Middle" style="NEGRITA">
@@ -259,7 +258,7 @@
 	</detail>
 	<pageFooter height="45" splitType="Stretch">
 		<element kind="image" uuid="65bdef40-8166-4985-96c4-e8c4f543f1ea" x="2" y="6" width="569" height="27">
-			<expression><![CDATA[$P{imageDir} + "membretado-foot.jpeg"]]></expression>
+			<expression><![CDATA["classpath:/templates/report/membretado-foot.jpeg"]]></expression>
 		</element>
 		<property name="com.jaspersoft.studio.unit.height" value="px"/>
 	</pageFooter>

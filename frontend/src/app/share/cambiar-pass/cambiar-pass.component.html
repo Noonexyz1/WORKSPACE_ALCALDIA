@@ -1,0 +1,83 @@
+<section class="min-h-screen bg-gray-50 dark:bg-gray-900">
+  <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+    <div class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700 border-[10px]">
+      <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+        <div class="flex flex-col items-center justify-center">
+          <img class="w-[50vw] h-auto max-h-[10vh] md:w-[250px] mr-2"
+               src="{{PATH_IMAGE_LOGO}}"
+               alt="logo">
+          <h1 class="text-xl font-sans leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+            Sistema de control de Fotocopias
+          </h1>
+          <br>
+        </div>
+
+        <form [formGroup]="nuevoPassForm" class="w-full max-w-2xl mx-auto grid grid-cols-2 gap-4 m-4">
+          <div class="relative z-0 w-full group col-span-2">
+            <span class="self-center text-4xl font-semibold whitespace-nowrap dark:text-white">
+            Nueva contraseña</span>
+          </div>
+
+          <div class="relative z-0 w-full group col-span-2 py-2">
+            <input formControlName="ci" type="email" name="floating_first_name" id="ciID"
+                   class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                   placeholder=" " required/>
+            <label for="ciID"
+                   class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+              CI sin expedido</label>
+            @if (nuevoPassForm.get("ci")?.invalid || nuevoPassForm.get("ci")?.touched) {
+              @if (nuevoPassForm.get("ci")?.hasError("required")) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+              }
+              @if (nuevoPassForm.get("ci")?.hasError("minlength")) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">Minimo seis caracteres validos</p>
+              }
+            }
+          </div>
+
+          <div class="relative z-0 w-full group col-span-2 py-2.5">
+            <input formControlName="pass" type="password" name="floating_first_name" id="passID"
+                   class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                   placeholder=" " required/>
+            <label for="passID"
+                   class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+              Contraseña actual</label>
+            @if (nuevoPassForm.get("pass")?.invalid || nuevoPassForm.get("pass")?.touched) {
+              @if (nuevoPassForm.get("pass")?.hasError("required")) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+              }
+            }
+          </div>
+
+          <div class="relative z-0 w-full group col-span-2 py-2.5">
+            <input formControlName="nuevoPass" type="password" name="floating_first_name" id="floating_first_name"
+                   class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                   placeholder=" " required/>
+            <label for="floating_first_name"
+                   class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+              Nueva contraseña</label>
+            @if (nuevoPassForm.get("nuevoPass")?.invalid || nuevoPassForm.get("nuevoPass")?.touched) {
+              @if (nuevoPassForm.get("nuevoPass")?.hasError("required")) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+              }
+            }
+          </div>
+
+          <div></div>
+          <div class="relative z-0 w-full group col-span-2">
+            <button type="button" (click)="botonCambiarPass()" [disabled]="nuevoPassForm.invalid"
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+              Cambiar contraseña
+            </button>
+          </div>
+
+        </form>
+
+      </div>
+    </div>
+  </div>
+</section>
+
+
+
+

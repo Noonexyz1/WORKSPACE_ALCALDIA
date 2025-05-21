@@ -2,49 +2,38 @@ package com.prototipo.application.port.out.pdf;
 
 import com.prototipo.domain.model.*;
 
-import java.io.InputStream;
 import java.util.List;
 
 public interface GeneracionPDFArchivoAbstract {
 
-    void generarOrdenDeFotocopiaPDFAbs(
-            List<Fotocopia> listFotocopia,
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath);
+     /* Este metodo solo deberia tener un argumento y ese argumento deberia ser la
+     de los datos a imprimir en el PDF y demas argumentos deberia ir a la
+     infraestrucutura y ser gestionado por ella misma */
+     void generarSolicitudDeFotocopiaPDFAbs(
+             SolicitudReport solicitudReport,
+             Long idDocumento);
 
     void generarComunicacionInternaPDFAbs(
             ComunicacionReport comunicacionReport,
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath);
+            Long idDocumento);
 
-    void generarSolicitudDeFotocopiaPDFAbs(
-            SolicitudReport solicitudReport,
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath);
+    void generarInformeSolicitudPDFAbs(
+            InformeReport informeReport,
+            Long idDocumento,
+            String editorContent);
 
-
+    //TODO...verificar el codigo circundante de estea implemetancion
+    void generarOrdenDeFotocopiaPDFAbs(
+            List<Fotocopia> listFotocopia,
+            String idDocumentos);
 
 
 
     void generarNotaPedidoPDFAbs(
             NotaDePedidoReport notaDePedidoReport,
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath);
+            Long idDocumento);
 
     void generarReportePDFAbs(
             ReporteReport reporteReport,
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath);
-
-    void generarInformeSolicitudPDFAbs(
-            InformeReport informeReport,
-            InputStream recursoJrxmlPath,
-            String recursoImagenPath,
-            String generacionPdfPath,
-            String editorContent);
+            String fechaReport);
 }

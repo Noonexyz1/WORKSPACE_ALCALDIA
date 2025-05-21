@@ -23,7 +23,6 @@
 	<parameter name="cantidadSumado" class="java.lang.String"/>
 	<parameter name="nombreUnidad" class="java.lang.String"/>
 	<parameter name="descripcion" class="java.lang.String"/>
-	<parameter name="imageDir" class="java.lang.String"/>
 	<parameter name="contend" class="java.lang.String"/>
 	<background splitType="Stretch"/>
 	<pageHeader height="114" splitType="Stretch">
@@ -34,7 +33,7 @@
 			<expression><![CDATA["El Alto, " + $P{fecha}]]></expression>
 		</element>
 		<element kind="image" uuid="80dd1a78-1809-403e-a347-b54f5ba01d35" x="0" y="0" width="569" height="85">
-			<expression><![CDATA[$P{imageDir} + "membretado-head.jpeg"]]></expression>
+			<expression><![CDATA["classpath:/templates/report/membretado-head.jpeg"]]></expression>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</element>
 	</pageHeader>
@@ -85,7 +84,7 @@
 	</detail>
 	<pageFooter height="49" splitType="Stretch">
 		<element kind="image" uuid="27b5e3d0-1a8f-4de3-a055-07334eb013aa" x="2" y="6" width="569" height="27">
-			<expression><![CDATA[$P{imageDir} + "membretado-foot.jpeg"]]></expression>
+			<expression><![CDATA["classpath:/templates/report/membretado-foot.jpeg"]]></expression>
 		</element>
 	</pageFooter>
 	<summary height="77" splitType="Stretch">

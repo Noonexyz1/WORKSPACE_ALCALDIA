@@ -1,0 +1,258 @@
+@if (!isLoading) {
+  <form [formGroup]="solicitudForm" class="dark:bg-gray-900 m-2">
+    <div class="grid grid-cols-1 gap-10 xl:grid-cols-4">
+      <div class="flex flex-col md:col-span-1">
+
+        <div>
+          <div class="flex flex-col relative z-0 w-full mb-5 group">
+            <span class="self-center text-4xl font-semibold whitespace-nowrap dark:text-white">
+              Nueva solicitud
+            </span>
+          </div>
+          <div class="relative z-0 w-full mb-5 group">
+            <input formControlName="cite" type="text" id="citeID"
+                   class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                   placeholder=" " required/>
+            <label for="citeID"
+                   class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+              CITE:
+            </label>
+            @if (solicitudForm.get("cite")?.invalid || solicitudForm.get("cite")?.touched) {
+              @if (solicitudForm.get("cite")?.hasError("required")) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+              }
+            }
+          </div>
+
+          <div class="relative z-0 w-full mb-5 group">
+            <input formControlName="nroDeDocumento" type="number" id="nroDocID"
+                   class="block py-2.5 px-2 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                   placeholder=" " required/>
+            <label for="nroDocID"
+                   class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+              Numero de documentos
+            </label>
+            @if (solicitudForm.get("nroDeDocumento")?.invalid || solicitudForm.get("nroDeDocumento")?.touched) {
+              @if (solicitudForm.get("nroDeDocumento")?.hasError("required")) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+              }
+              @if (solicitudForm.get("nroDeDocumento")?.hasError("numeroMayorACeroValidator")) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                  {{ solicitudForm.get("nroDeDocumento")?.errors?.["numeroMayorACeroValidator"] }}
+                </p>
+              }
+            }
+          </div>
+
+          <div>
+            <label for="message" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+              Descripcion breve:
+            </label>
+            <textarea id="message" rows="4"
+                      formControlName="descripcion"
+                      class="block p-2.5 w-full text-lg text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                      placeholder="Documentos para procesos...">
+            </textarea>
+            @if (solicitudForm.get("descripcion")?.invalid || solicitudForm.get("descripcion")?.touched) {
+              @if (solicitudForm.get("descripcion")?.hasError("required")) {
+                <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+              }
+            }
+          </div>
+
+          @if (!estadoNroDocumentos) {
+          <div class="relative z-0 w-full mt-4 group flex items-center gap-2">
+            <button (click)="botonSetNumeroDeCopias()" [disabled]="solicitudForm.invalid"
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+              Siguiente paso ->
+            </button>
+          </div>
+          }
+        </div>
+
+      </div>
+
+      <div class="sm:col-span-3">
+        @if (estadoNroDocumentos) {
+          <div class="">
+            <p class="text-4xl font-bold text-gray-600 dark:text-slate-400">
+              Registre los documentos
+            </p>
+            <br>
+            <div formArrayName="documentos">
+              @for (documento of documentos.controls; track $index; let i = $index) {
+                <div [formGroupName]="i" class="px-2 rounded-lg border border-gray-300 dark:border-gray-700">
+                  <p class="text-xl font-bold text-gray-900 dark:text-white">
+                    Documento {{ i + 1 }}
+                  </p>
+                  <div class="gap-3 pb-3 grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-7">
+                    <!-- Nombre del documento -->
+                    <div class="xl:col-span-2 p-2">
+                      <div class="relative z-0 w-full group">
+                        <input formControlName="nombreDocumento" type="text"
+                               class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                               placeholder=" " required/>
+                        <label
+                          class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                          Nombre del documento
+                        </label>
+                        @if (documento.get("nombreDocumento")?.invalid && (documento.get("nombreDocumento")?.dirty || documento.get("nombreDocumento")?.touched)) {
+                          @if (documento.get("nombreDocumento")?.hasError("required")) {
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+                          }
+                        }
+                      </div>
+                    </div>
+
+                    <!-- Nro. Pag. -->
+                    <div class="p-2">
+                      <div class="relative z-0 w-full group">
+                        <input formControlName="nroPaginas" type="number"
+                               class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                               placeholder=" " required/>
+                        <label
+                          class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                          Nro. Pag.
+                        </label>
+                        @if (documento.get("nroPaginas")?.invalid && (documento.get("nroPaginas")?.dirty || documento.get("nroPaginas")?.touched)) {
+                          @if (documento.get("nroPaginas")?.hasError("required")) {
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+                          }
+                          @if (documento.get("nroPaginas")?.hasError("numeroMayorACeroValidator")) {
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                              {{ documento.get("nroPaginas")?.errors?.["numeroMayorACeroValidator"] }}
+                            </p>
+                          }
+                        }
+                      </div>
+                    </div>
+
+                    <!-- Cant. de copias -->
+                    <div class="p-2">
+                      <div class="relative z-0 w-full group">
+                        <input formControlName="nroCopias" type="number"
+                               class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+                               placeholder=" " required/>
+                        <label
+                          class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+                          Cantidad
+                        </label>
+                        @if (documento.get("nroCopias")?.invalid && (documento.get("nroCopias")?.dirty || documento.get("nroCopias")?.touched)) {
+                          @if (documento.get("nroCopias")?.hasError("required")) {
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+                          }
+                          @if (documento.get("nroCopias")?.hasError("numeroMayorACeroValidator")) {
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-500">
+                              {{ documento.get("nroCopias")?.errors?.["numeroMayorACeroValidator"] }}
+                            </p>
+                          }
+                        }
+                      </div>
+                    </div>
+
+                    <!-- Tamaño de página -->
+                    <div class="p-2">
+                      <label for="selectTamano" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        Tamaño</label>
+                      <select formControlName="tamanoPagina" id="selectTamano"
+                              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        @if (listaTamano != null && listaTamano.length > 0) {
+                          @for (tamano of listaTamano; track tamano) {
+                            <option value="{{tamano}}">{{ tamano }}</option>
+                          }
+                        }
+                      </select>
+                      @if (documento.get("tamanoPagina")?.invalid && (documento.get("tamanoPagina")?.dirty || documento.get("tamanoPagina")?.touched)) {
+                        @if (documento.get("tamanoPagina")?.hasError("required")) {
+                          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+                        }
+                      }
+                    </div>
+
+                    <!-- Anverso Reverso -->
+                    <div class="p-2">
+                      <label for="selectAnver" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        Anver/Reverso</label>
+                      <select formControlName="anversoReverso" id="selectAnver"
+                              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        @if (listaAnverRever != null && listaAnverRever.length > 0) {
+                          @for (anver of listaAnverRever; track anver) {
+                            <option value="{{anver}}">{{ anver }}</option>
+                          }
+                        }
+                      </select>
+                      @if (documento.get("anversoReverso")?.invalid && (documento.get("anversoReverso")?.dirty || documento.get("anversoReverso")?.touched)) {
+                        @if (documento.get("anversoReverso")?.hasError("required")) {
+                          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+                        }
+                      }
+                    </div>
+
+                    <!-- Color fotocopia -->
+                    <div class="p-2">
+                      <label for="selectColor" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                        Color</label>
+                      <select formControlName="colorFotocopia" id="selectColor"
+                              class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                        @if (listaColor != null && listaColor.length > 0) {
+                          @for (color of listaColor; track color) {
+                            <option value="{{color}}">{{ color }}</option>
+                          }
+                        }
+                      </select>
+                      @if (documento.get("colorFotocopia")?.invalid && (documento.get("colorFotocopia")?.dirty || documento.get("colorFotocopia")?.touched)) {
+                        @if (documento.get("colorFotocopia")?.hasError("required")) {
+                          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+                        }
+                      }
+                    </div>
+                  </div>
+                </div>
+                <br>
+              }
+            </div>
+          </div>
+          <br>
+          <div class="relative z-0 w-full mb-5 group">
+            <button (click)="botonNuevaSolicitud()" [disabled]="solicitudForm.invalid"
+                    class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+              Solicitar Fotocopias
+            </button>
+          </div>
+        } @else {
+          <div class="h-full flex items-center justify-center">
+            <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow-sm hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 text-center">
+              <!-- Icono de información (SVG recomendado) -->
+              <div class="mx-auto mb-3 w-10 h-10 text-blue-500 dark:text-blue-400">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+              </div>
+              <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+                Documentos sin registrar
+              </h5>
+              <p class="font-normal text-gray-700 dark:text-gray-400">
+                Llene el formulario de "Nueva Solicitud" de la izquierda y haga click en el botón "Siguiente paso ->" para completar todos los pasos de tu SOLICITUD DE FOTOCOPIA
+              </p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </form>
+} @else {
+  <div class="container" style="height: 100vh; display: flex; justify-content: center; align-items: center;">
+    <div role="status">
+      <svg aria-hidden="true" class="inline w-20 h-20 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+           viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path
+          d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+          fill="currentColor"/>
+        <path
+          d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
+          fill="currentFill"/>
+      </svg>
+      <span class="sr-only">Loading...</span>
+    </div>
+  </div>
+}

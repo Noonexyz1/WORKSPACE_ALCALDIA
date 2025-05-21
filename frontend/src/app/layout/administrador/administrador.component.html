@@ -1,0 +1,63 @@
+<div class="min-h-screen bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-900 dark:to-gray-800 transition-colors duration-300">
+
+  <!-- Componente NavBar -->
+  <app-nav-bar></app-nav-bar>
+
+  <!-- Sidebar Mejorado -->
+  <aside class="fixed top-0 left-0 z-40 w-64 h-screen pt-14 transition-transform -translate-x-full bg-white border-r border-gray-200 shadow-xl md:translate-x-0 dark:bg-gray-800 dark:border-gray-700"
+         aria-label="Admin Sidenav" id="drawer-navigation">
+    <div class="overflow-y-auto py-5 px-3 h-full bg-gradient-to-b from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-900">
+      <!-- Sección de Administrador -->
+      <div class="mb-6">
+        <div class="flex items-center p-2 mb-4 text-gray-700 rounded-lg dark:text-white group">
+          <span class="ml-1 text-lg font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-indigo-600 dark:from-blue-400 dark:to-indigo-400">
+            ADMINISTRADOR
+          </span>
+        </div>
+
+        <ul class="space-y-1.5">
+          <!-- Item Listar Usuarios -->
+          <li>
+            <a routerLink="listaDeUsuarios"
+               routerLinkActive="bg-blue-50/80 dark:bg-blue-900/30 border-l-4 border-blue-500 dark:border-blue-400"
+               class="flex items-center p-3 text-sm font-medium text-gray-700 rounded-lg transition-all hover:bg-blue-50 hover:shadow-xs dark:text-gray-300 dark:hover:bg-gray-700 group">
+              <div class="p-1.5 mr-3 rounded-lg bg-blue-100 dark:bg-blue-900/30 group-hover:bg-blue-200 dark:group-hover:bg-blue-800">
+                <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M15 4h3a1 1 0 0 1 1 1v15a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1h3m0 3h6m-3 5h3m-6 0h.01M12 16h3m-6 0h.01M10 3v4h4V3h-4Z"/>
+                </svg>
+              </div>
+              <span>Listar Usuarios</span>
+            </a>
+          </li>
+
+          <!-- Item Nuevo Usuario -->
+          <li>
+            <a routerLink="nuevoUsuario"
+               routerLinkActive="bg-blue-50/80 dark:bg-blue-900/30 border-l-4 border-blue-500 dark:border-blue-400"
+               class="flex items-center p-3 text-sm font-medium text-gray-700 rounded-lg transition-all hover:bg-blue-50 hover:shadow-xs dark:text-gray-300 dark:hover:bg-gray-700 group">
+              <div class="p-1.5 mr-3 rounded-lg bg-green-100 dark:bg-green-900/30 group-hover:bg-green-200 dark:group-hover:bg-green-800">
+                <svg class="w-5 h-5 text-green-600 dark:text-green-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M16 12h4m-2 2v-4M4 18v-1a3 3 0 0 1 3-3h4a3 3 0 0 1 3 3v1a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1Zm8-10a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
+                </svg>
+              </div>
+              <span>Nuevo Usuario</span>
+            </a>
+          </li>
+
+        </ul>
+      </div>
+
+      <app-separador-version></app-separador-version>
+
+    </div>
+  </aside>
+
+  <main class="p-4 pt-20 md:ml-64">
+    <div class="min-h-screen">
+      <router-outlet></router-outlet>
+    </div>
+  </main>
+
+</div>

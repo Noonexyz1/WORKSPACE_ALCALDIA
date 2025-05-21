@@ -1,0 +1,26 @@
+<section class="dark:bg-gray-900 m-2">
+
+  <app-tabla-responsable
+    [tituloDeTabla]="this.tituloDeTabla"
+    [listTituloTabla]="this.listTituloTabla"
+    [pagina]="this.pagina"
+    [listPopoverItem]="this.listPopover"
+
+    (idSolicitudPublisher)="botonBuscarSolicitudById($event)"
+    (idSolicitudNotaPublisher)="botonNotaDeSolicitud($event)"
+
+    (goToPagePublisher)="goToPage($event)"
+    (goToPreviousPagePublisher)="goToPreviousPage($event)"
+    (goToNextPagePublisher)="goToNextPage($event)"
+  >
+  </app-tabla-responsable>
+
+  @if (isModalClose) {
+    <app-modal-solicitud-info
+      [solicitudDetalle]="solicitudDetalle"
+      (isModalClose)="toggleModal($event)"
+    >
+    </app-modal-solicitud-info>
+  }
+
+</section>

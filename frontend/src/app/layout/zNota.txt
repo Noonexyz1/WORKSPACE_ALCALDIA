@@ -1,0 +1,3 @@
+Paquete con Componentes que Si tiene que ver con Rutas pero Rutas GENERALES, osea Componentes que estructuran la pagina
+Es el CONTENEDOR padre de varios componentes del paquete PAGE
+Este componente CONTENEDOR deberia hacer peticiones y enviar los datos a los Componentes Hijos, seria lo ideal

@@ -1,0 +1,3 @@
+Paquete con Componentes que no tiene que ver con Rutas.
+Unicamente diseno y algo de logica.
+Estos Componentes solo deberian Renderizar los Datos enviados por el Padre

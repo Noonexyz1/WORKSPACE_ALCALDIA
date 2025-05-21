@@ -27,16 +27,16 @@
 	<detail>
 		<band height="561" splitType="Stretch">
 			<element kind="image" uuid="cedb96c3-0f6f-4872-8f3b-fdb862cab9f7" x="10" y="69" width="370" height="230">
-				<expression><![CDATA[$P{imageDir} + "orden.jpeg"]]></expression>
+				<expression><![CDATA["classpath:/templates/report/orden.jpeg"]]></expression>
 			</element>
 			<element kind="image" uuid="b29c13b0-b189-442a-853e-a874086371d7" x="375" y="69" width="370" height="230">
-				<expression><![CDATA[$P{imageDir} + "orden.jpeg"]]></expression>
+				<expression><![CDATA["classpath:/templates/report/orden.jpeg"]]></expression>
 			</element>
 			<element kind="image" uuid="300602e0-90f0-4de8-89f1-a4e8cd3ec707" x="10" y="294" width="370" height="230">
-				<expression><![CDATA[$P{imageDir} + "orden.jpeg"]]></expression>
+				<expression><![CDATA["classpath:/templates/report/orden.jpeg"]]></expression>
 			</element>
 			<element kind="image" uuid="f96100c7-ef15-466d-b77b-5c6367ba9224" x="375" y="294" width="370" height="230">
-				<expression><![CDATA[$P{imageDir} + "orden.jpeg"]]></expression>
+				<expression><![CDATA["classpath:/templates/report/orden.jpeg"]]></expression>
 			</element>
 			<element kind="textField" uuid="9e2cec8f-7bba-4ff1-b182-ff03d654fd08" x="220" y="105" width="110" height="10" fontSize="6.0" hTextAlign="Center" vTextAlign="Middle">
 				<expression><![CDATA[$P{nroCantidadFotocopia1} == null ? 0: $P{nroCantidadFotocopia1}]]></expression>

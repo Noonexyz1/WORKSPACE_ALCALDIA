@@ -81,7 +81,6 @@
 	<parameter name="totalCopias" class="java.lang.Integer"/>
 	<parameter name="documentos" class="java.lang.String"/>
 	<parameter name="ds" class="net.sf.jasperreports.engine.data.JRBeanArrayDataSource"/>
-	<parameter name="imageDir" class="java.lang.String"/>
 	<query language="sql"><![CDATA[]]></query>
 	<background splitType="Stretch"/>
 	<pageHeader height="161" splitType="Stretch">
@@ -98,7 +97,7 @@
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</element>
 		<element kind="image" uuid="475a908b-6076-490b-9d49-478de4ac6698" x="3" y="0" width="549" height="82">
-			<expression><![CDATA[$P{imageDir} + "membretado-head.jpeg"]]></expression>
+			<expression><![CDATA["classpath:/templates/report/membretado-head.jpeg"]]></expression>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</element>
 	</pageHeader>
@@ -158,7 +157,7 @@
 	</detail>
 	<pageFooter height="45" splitType="Stretch">
 		<element kind="image" uuid="ed47076b-763b-4674-a794-5a3aaa52a477" x="2" y="2" width="549" height="26">
-			<expression><![CDATA[$P{imageDir} + "membretado-foot.jpeg"]]></expression>
+			<expression><![CDATA["classpath:/templates/report/membretado-foot.jpeg"]]></expression>
 			<property name="com.jaspersoft.studio.unit.height" value="px"/>
 		</element>
 	</pageFooter>
