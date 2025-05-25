@@ -9,7 +9,6 @@ import {UrlsProperties} from "../../utils/enums/UrlsProperties";
 import {PageRequest} from "../../utils/models/PageRequest";
 import {PageResponse} from "../../utils/models/PageResponse";
 import {RegistrarRetiroComponent} from "../../share/registrar-retiro/registrar-retiro.component";
-import {SubjectIdSolicitudService} from "../../utils/services/subject-id-solicitud/subject-id-solicitud.service";
 import {
   ItemPopover,
   PaginaData,
@@ -83,31 +82,6 @@ export class ListaSoliSolicitanteAutorizadaComponent {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
   listarSolicitudes(): void {
     const body: PageRequest = {
       id: this.usuario.id,
@@ -153,7 +127,7 @@ export class ListaSoliSolicitanteAutorizadaComponent {
     }
 
     this.http.post<PageResponse<SolicitudResponse>>(
-      UrlsProperties.PATH_LIST_SOLIC,
+      UrlsProperties.PATH_AUTORIZ_SOLI,
       body
     ).pipe(
       map((response: PageResponse<SolicitudResponse>) => {

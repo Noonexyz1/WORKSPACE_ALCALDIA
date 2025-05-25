@@ -1,11 +1,9 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {SubjectIdSolicitudService} from "../../utils/services/subject-id-solicitud/subject-id-solicitud.service";
 import {UrlsProperties} from "../../utils/enums/UrlsProperties";
 import {catchError, map, of} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {DocumentoRetiroResponse} from "../../utils/models/DocumentoRetiroResponse";
 import {DocumentoRetiroRequest} from "../../utils/models/DocumentoRetiroRequest";
-import {ObservableService} from "../../utils/services/observable/observable.service";
 
 @Component({
   selector: 'app-registrar-retiro',
