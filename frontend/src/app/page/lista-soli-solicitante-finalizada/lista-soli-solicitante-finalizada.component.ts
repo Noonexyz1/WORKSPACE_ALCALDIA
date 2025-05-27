@@ -29,7 +29,7 @@ export class ListaSoliSolicitanteFinalizadaComponent {
 
 
   //DATOS PARA EL COMPONENTE TABLA
-  tituloDeTabla: string = "Lista de solicitudes pendientes";
+  tituloDeTabla: string = "Lista de solicitudes finalizadas";
   listTituloTabla: string[] = ["Accion", "Id", "Cite", "Fecha", "Descripcion"];
   //Inicializamos por defecto este atributo para que se cambien a lo largo de la vida del componente
   pagina: PaginaData = {
