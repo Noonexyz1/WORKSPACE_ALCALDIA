@@ -28,7 +28,7 @@ export interface UsuarioData {
 })
 export class FormularioUsuarioComponent implements OnInit {
 
-  @Input() tituloFormulario: string = '';
+  @Input() tituloFormulario: string = 'Titulo por defecto';
   @Input() listaDeCargos: ItemDropDown[] = [];
   @Input() listaDeRoles: ItemDropDown[] = [];
   @Input() listaDeUnidades: ItemDropDown[] = [];

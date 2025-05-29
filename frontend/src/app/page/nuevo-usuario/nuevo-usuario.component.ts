@@ -9,11 +9,12 @@ import { RootNavigateService } from '../../utils/services/root-navigate/root-nav
 import {CargoResponse} from "../../utils/models/CargoResponse";
 import {LocalStorageService} from "../../utils/services/local-storage/local-storage.service";
 import {UrlsProperties} from "../../utils/enums/UrlsProperties";
+import {FormularioUsuarioComponent} from "../../share/formulario-usuario/formulario-usuario.component";
 
 @Component({
   selector: 'app-nuevo-usuario',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, FormularioUsuarioComponent],
   templateUrl: './nuevo-usuario.component.html'
 })
 export class NuevoUsuarioComponent {
