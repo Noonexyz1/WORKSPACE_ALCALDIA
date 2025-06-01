@@ -1,6 +1,10 @@
 import {Component} from '@angular/core';
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {ItemPopover, TablaResponsableComponent} from "../../share/tabla-responsable/tabla-responsable.component";
+import {
+  ItemPopover,
+  PaginaData,
+  TablaResponsableComponent
+} from "../../share/tabla-responsable/tabla-responsable.component";
 import {PageRequest} from "../../utils/models/PageRequest";
 import {PageResponse} from "../../utils/models/PageResponse";
 import {SolicitudResponResponse} from "../../utils/models/SolicitudResponResponse";
@@ -16,6 +20,7 @@ import {
   ModalSolicitudInfoComponent
 } from "../../share/modal-solicitud-info/modal-solicitud-info.component";
 import {DetalleSolicitudExtendidoResponse} from "../../utils/models/DetalleSolicitudExtendidoResponse";
+import {ModelMapperService} from "../../utils/mapper/model-mapper.service";
 
 @Component({
   selector: 'app-lista-soli-responsable-autorizada',
@@ -29,7 +34,7 @@ export class ListaSoliAutorizadaResponsableComponent {
   tituloDeTabla: string = "Lista de solicitudes autorizadas";
   listTituloTabla: string[] = ["Accion", "Id", "Cite", "Fecha", "Autor", "Cargo", "Unidad"];
   //Inicializamos por defecto este atributo para que se cambien a lo largo de la vida del componente
-  pagina: PageResponse<SolicitudResponResponse> = {
+  pagina: PaginaData = {
     page: 0,
     size: 10,
     sortBy: 'id',
@@ -63,7 +68,8 @@ export class ListaSoliAutorizadaResponsableComponent {
   constructor(
     private readonly http: HttpClient,
     private readonly localStorage: LocalStorageService,
-    private readonly sanitizer: DomSanitizer) {
+    private readonly sanitizer: DomSanitizer,
+    private readonly modelMapper: ModelMapperService) {
 
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
@@ -74,13 +80,13 @@ export class ListaSoliAutorizadaResponsableComponent {
         icono: this.getSafeSvg(iconoDocumento),
         opcion: 'Generar nota de pedidos',
         //Las firmas son iguales jaja se puede enviar directamente el metodo pero lo voy a dejar asi
-        accion: (idSolicitud: number) => {this.botonNotaDeSolicitud(idSolicitud)}
+        accion: (idSolicitud: string) => {this.botonNotaDeSolicitud(+idSolicitud)}
       },
       {
         icono: this.getSafeSvg(iconoOjo),
         opcion: 'Ver detalles completos',
         //Las firmas son iguales jaja se puede enviar directamente el metodo pero lo voy a dejar asi
-        accion: (idSolicitud: number) => {this.botonTraerDatosModal(idSolicitud)}
+        accion: (idSolicitud: string) => {this.botonTraerDatosModal(+idSolicitud)}
       },
     ];
 
@@ -106,7 +112,10 @@ export class ListaSoliAutorizadaResponsableComponent {
       body
     ).pipe(
       map((response: PageResponse<SolicitudResponResponse>) => {
-        this.pagina = response;
+
+        this.pagina = this.modelMapper
+          .pageResponseToPaginaDataResponsable(response, this.listPopover);
+
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
@@ -133,7 +142,8 @@ export class ListaSoliAutorizadaResponsableComponent {
       body
     ).pipe(
       map((response: PageResponse<SolicitudResponResponse>) => {
-        this.pagina = response;
+        this.pagina = this.modelMapper
+          .pageResponseToPaginaDataResponsable(response, this.listPopover);
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
@@ -155,10 +165,11 @@ export class ListaSoliAutorizadaResponsableComponent {
         this.descargarPDF("notaPedido_" + idSolicitud + ".pdf", response);
 
         // Habilita el botón "Finalizar" solo para la fila correspondiente
-        const solicitud = this.pagina.content.find(s => s.idSolicitud === idSolicitud);
+        /*const solicitud = this.pagina.content.find(s => s.idSolicitud === idSolicitud);
         if (solicitud) {
           solicitud.isActiveBtnFinalizar = true;
-        }
+        }*/
+
       }),
       catchError(error => {
         this.errorDescargaPDF("notaPedido_" + idSolicitud + ".pdf", error);

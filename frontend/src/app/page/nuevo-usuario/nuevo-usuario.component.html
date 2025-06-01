@@ -1,0 +1,184 @@
+<section class="dark:bg-gray-900 m-2">
+  <form [formGroup]="nuevoUsuario" class="w-full max-w-2xl mx-auto m-2">
+    <div class="relative z-0 w-full mb-5 group">
+    <span class="self-center text-4xl font-semibold whitespace-nowrap dark:text-white">
+      Nuevo usuario
+    </span>
+    </div>
+
+    <div class="relative z-0 w-full mb-5 group py-2.5">
+      <input formControlName="ci" type="text" name="floating_email" id="ciID"
+             class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+             placeholder=" " required/>
+      <label for="floating_email"
+             class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+        CI. sin expedido</label>
+      @if (nuevoUsuario.get("ci")?.invalid || nuevoUsuario.get("ci")?.touched) {
+        @if (nuevoUsuario.get("ci")?.hasError("required")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+        }
+        @if (nuevoUsuario.get("ci")?.hasError("minlength")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Minimo seis caracteres validos</p>
+        }
+      }
+    </div>
+
+    <div class="relative z-0 w-full mb-5 group py-2.5">
+      <input formControlName="nombres" type="text" name="floating_email" id="nombresID"
+             class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+             placeholder=" " required/>
+      <label for="floating_email"
+             class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+        Nombres</label>
+
+      @if (nuevoUsuario.get("nombres")?.invalid || nuevoUsuario.get("nombres")?.touched) {
+        @if (nuevoUsuario.get("nombres")?.hasError("required")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+        }
+        @if (nuevoUsuario.get("nombres")?.hasError("minlength")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Minimo tres caracteres validos</p>
+        }
+      }
+
+    </div>
+
+
+    <div class="grid md:grid-cols-2 md:gap-6">
+      <div class="relative z-0 w-full mb-5 group py-2.5">
+        <input formControlName="paterno" type="text" name="floating_first_name" id="floating_first_name"
+               class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+               placeholder=" " required/>
+        <label for="floating_first_name"
+               class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+          Apellido Paterno</label>
+
+        @if (nuevoUsuario.get("paterno")?.invalid || nuevoUsuario.get("paterno")?.touched) {
+          @if (nuevoUsuario.get("paterno")?.hasError("required")) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+          }
+          @if (nuevoUsuario.get("paterno")?.hasError("minlength")) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">Minimo tres caracteres validos</p>
+          }
+        }
+
+      </div>
+      <div class="relative z-0 w-full mb-5 group py-2.5">
+        <input formControlName="materno" type="text" name="floating_last_name" id="floating_last_name"
+               class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+               placeholder=" " required/>
+        <label for="floating_last_name"
+               class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+          Apellido Materno</label>
+
+        @if (nuevoUsuario.get("materno")?.invalid || nuevoUsuario.get("materno")?.touched) {
+          @if (nuevoUsuario.get("materno")?.hasError("required")) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+          }
+          @if (nuevoUsuario.get("materno")?.hasError("minlength")) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">Minimo tres caracteres validos</p>
+          }
+        }
+
+      </div>
+    </div>
+
+    <div class="relative z-0 w-full mb-5 group py-2.5">
+      <input formControlName="correo" type="email" name="floating_email" id="floating_email"
+             class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+             placeholder=" " required/>
+      <label for="floating_email"
+             class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+        Correo Electronico</label>
+
+      @if (nuevoUsuario.get("correo")?.invalid || nuevoUsuario.get("correo")?.touched) {
+        @if (nuevoUsuario.get("correo")?.hasError("required")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+        }
+        @if (nuevoUsuario.get("correo")?.hasError("email")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Ingrese formato de correo valido</p>
+        }
+      }
+
+    </div>
+
+    <div class="grid md:grid-cols-2 md:gap-6">
+      <div class="relative z-0 w-full mb-5 group">
+        <label for="selectCargo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          Seleccione Cargo
+        </label>
+        <select formControlName="idCargo" id="selectCargo"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          @if (listaCargos != null && listaCargos.length > 0) {
+            @for (cargo of listaCargos; track cargo.id) {
+              <option value="{{cargo.id}}">{{ cargo.nombreCargo }}</option>
+            }
+          }
+        </select>
+
+        @if (nuevoUsuario.get("idCargo")?.invalid || nuevoUsuario.get("idCargo")?.touched) {
+          @if (nuevoUsuario.get("idCargo")?.hasError("required")) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">Debe seleccionar una opción</p>
+          }
+        }
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 md:gap-6">
+      <div class="relative z-0 w-full mb-5 group">
+        <label for="selectRol" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          Seleccione Rol</label>
+        <select formControlName="idRol" id="selectRol"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          @if (listaRoles != null && listaRoles.length > 0) {
+            @for (rol of listaRoles; track rol.id) {
+              <option value="{{rol.id}}">{{ rol.nombreRol }}</option>
+            }
+          }
+        </select>
+
+        @if (nuevoUsuario.get("idRol")?.invalid || nuevoUsuario.get("idRol")?.touched) {
+          @if (nuevoUsuario.get("idRol")?.hasError("required")) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">Debe seleccionar una opción</p>
+          }
+        }
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 md:gap-6">
+      <div class="relative z-0 w-full mb-5 group">
+        <label for="selectUnidad" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          Seleccione Unidad</label>
+        <select formControlName="idUni" id="selectUnidad"
+                class="scrollable-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          @if (listaUnidades != null && listaUnidades.length > 0) {
+            @for (rol of listaUnidades; track rol.id) {
+              <option value="{{rol.id}}">{{ rol.direccion }} - {{ rol.nombre }}</option>
+            }
+            <!-- Puedes agregar más opciones aquí -->
+          }
+        </select>
+
+        @if (nuevoUsuario.get("idUni")?.invalid || nuevoUsuario.get("idUni")?.touched) {
+          @if (nuevoUsuario.get("idUni")?.hasError("required")) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">Debe seleccionar una opción</p>
+          }
+        }
+
+        <style>
+          /* Estilo del select que se ajusta según el tamaño vertical de la ventana */
+          .scrollable-select {
+            max-height: 50vh; /* El menú se ajusta a la mitad de la altura de la pantalla */
+            overflow-y: auto; /* Barra de desplazamiento cuando sea necesario */
+          }
+        </style>
+      </div>
+    </div>
+
+    <button type="button" (click)="botonRegistrarUsuario()" [disabled]="nuevoUsuario.invalid"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+      Registrar
+    </button>
+
+  </form>
+
+</section>

@@ -2,7 +2,7 @@ import {Routes} from '@angular/router';
 import {LoginComponent} from './share/login/login.component';
 import {AdministradorComponent} from './layout/administrador/administrador.component';
 import {ListaDeUsuariosComponent} from './page/lista-de-usuarios/lista-de-usuarios.component';
-import {NuevoUsuarioComponent} from './share/nuevo-usuario/nuevo-usuario.component';
+import {NuevoUsuarioComponent} from './page/nuevo-usuario/nuevo-usuario.component';
 import {CambiarPassComponent} from './share/cambiar-pass/cambiar-pass.component';
 import {
   ListaSoliSolicitantePendienteComponent
@@ -10,7 +10,7 @@ import {
 import {NuevaSolicitudComponent} from './share/nueva-solicitud/nueva-solicitud.component';
 import {SolicitanteComponent} from './layout/solicitante/solicitante.component';
 import {ResponsableComponent} from './layout/responsable/responsable.component';
-import {EditarUsuarioComponent} from './share/editar-usuario/editar-usuario.component';
+import {EditarUsuarioComponent} from './page/editar-usuario/editar-usuario.component';
 import {
   ListaSoliAutorizadaResponsableComponent
 } from './page/lista-soli-responsable-autorizada/lista-soli-responsable-autorizada.component';

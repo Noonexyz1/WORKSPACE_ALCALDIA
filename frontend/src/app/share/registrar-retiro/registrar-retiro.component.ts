@@ -1,11 +1,9 @@
-import { Component } from '@angular/core';
-import {SubjectIdSolicitudService} from "../../utils/services/subject-id-solicitud/subject-id-solicitud.service";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {UrlsProperties} from "../../utils/enums/UrlsProperties";
 import {catchError, map, of} from "rxjs";
 import {HttpClient} from "@angular/common/http";
 import {DocumentoRetiroResponse} from "../../utils/models/DocumentoRetiroResponse";
 import {DocumentoRetiroRequest} from "../../utils/models/DocumentoRetiroRequest";
-import {ObservableService} from "../../utils/services/observable/observable.service";
 
 @Component({
   selector: 'app-registrar-retiro',
@@ -13,52 +11,55 @@ import {ObservableService} from "../../utils/services/observable/observable.serv
   imports: [],
   templateUrl: './registrar-retiro.component.html'
 })
-export class RegistrarRetiroComponent {
+export class RegistrarRetiroComponent implements OnInit{
 
   //A partir del ID de solicitud que me pasen, debo mostrar toda la informacion haciendo peticiones
+  @Input() idSolicitud: number = 0;
 
+  @Output() botonOrdenPedidoPublisher = new EventEmitter<boolean>();
+
+
+  //ESTADOS GLOBALES
   listaDeDocumentos2: DocumentoRetiroResponse[] = [];
-
   documentosSeleccionados: DocumentoRetiroRequest[] = [];
 
+
+
   constructor(
-    private subject$: SubjectIdSolicitudService,
-    private http: HttpClient,
-    private observableBoolean: ObservableService<boolean>) {
+    private readonly http: HttpClient) {
 
     //Valor por defecto
     this.documentosSeleccionados.push(new DocumentoRetiroRequest());
-
-    this.iniciarValores();
 
     // debo tener una lista de documento seleccionados y unicamente renderizarlo de nuevo cada vez haya un nuevo push
     // la primera vez obio no habra resultados, pero eso unicamente se puede arreglar en el HTML diciendo que
     // si es null, entonces que muestre la primerfila con opciones y mensajes de elegir una opcion
   }
 
-  iniciarValores(){
-    this.subject$.obtenerObservable().subscribe(value => {
-      if (value == 0) return;
 
-      console.log(value)
-      //TODO
-      this.http.get<DocumentoRetiroResponse[]>(
-        UrlsProperties.PATH_DOCU_RETIRO + value,
-      ).pipe(
-        map((response: DocumentoRetiroResponse[]) => {
-          this.listaDeDocumentos2 = response;
-        }),
-        catchError(error => {
-          console.error('Error en la petición:', error);
-          // alert('Hubo un error al obtener Documentos de retiro');
-          // Retornar un observable vacío en caso de error
-          return of(null);
-        })
-      ).subscribe();
-
-    });
-
+  ngOnInit(): void {
+    this.iniciarValores();
   }
+
+
+  iniciarValores(){
+    console.log(this.idSolicitud)
+
+    this.http.get<DocumentoRetiroResponse[]>(
+      UrlsProperties.PATH_DOCU_RETIRO + this.idSolicitud,
+    ).pipe(
+      map((response: DocumentoRetiroResponse[]) => {
+        this.listaDeDocumentos2 = response;
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        // alert('Hubo un error al obtener Documentos de retiro');
+        // Retornar un observable vacío en caso de error
+        return of(null);
+      })
+    ).subscribe();
+  }
+
 
   inputValue: string = "";
   onInputChange(event: Event) {
@@ -83,6 +84,34 @@ export class RegistrarRetiroComponent {
       this.selectedValue = documentoSeleccionado.id + "";
       this.documentoRetiro = documentoSeleccionado;
     }
+  }
+
+
+  botonGenerarNotaDePedidoPDF() {
+    //Aqui se va a evaluar si no hay redundancia con los id de las fotocopias
+    console.log(this.documentosSeleccionados)
+
+    // Debo quitar el ultimo espacio en blanco o null de esta cola
+    this.botonPop();
+
+    // Esto debe registrar y descargar el pdf inmediatamente despues
+    this.http.post(
+      UrlsProperties.PATH_REGIS_RETIRODOCU,
+      this.documentosSeleccionados,
+      { responseType: 'blob' }
+    ).subscribe({
+      next: (response: Blob) => {
+        this.descargarPDF("ordenDeFotocopia.pdf", response);
+
+        this.botonOrdenPedidoPublisher.emit();
+
+      },
+      error: error => {
+        this.errorDescargaPDF("ordenDeFotocopia.pdf", error);
+        return of(null);
+      }
+    });
+
   }
 
   botonPush() {
@@ -113,30 +142,6 @@ export class RegistrarRetiroComponent {
 
   botonPop() {
     this.documentosSeleccionados.pop();
-  }
-
-  botonNotaDePedido() {
-    //Aqui se va a evaluar si no hay redundancia con los id de las fotocopias
-    console.log(this.documentosSeleccionados)
-
-    // Debo quitar el ultimo espacio en blanco o null de esta cola
-    this.botonPop();
-
-    // Esto debe registrar y descargar el pdf inmediatamente despues
-    this.http.post(
-      UrlsProperties.PATH_REGIS_RETIRODOCU,
-      this.documentosSeleccionados,
-      { responseType: 'blob' }
-    ).subscribe({
-      next: (response: Blob) => {
-        this.descargarPDF("ordenDeFotocopia.pdf", response);
-      },
-      error: error => {
-        this.errorDescargaPDF("ordenDeFotocopia.pdf", error);
-        return of(null);
-      }
-    });
-
   }
 
   descargarPDF(nombrePdf: string, response: Blob): void {

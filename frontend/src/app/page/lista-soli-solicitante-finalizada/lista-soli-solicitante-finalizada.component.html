@@ -1,112 +1,19 @@
 <section class="dark:bg-gray-900 m-2">
 
-  <div class="mx-auto px-4 2xl:px-0">
-    <div class="gap-4 sm:flex sm:items-center sm:justify-between pb-4">
-      <h2 class="text-4xl font-semibold text-gray-900 dark:text-white">
-        Lista de solicitudes finalizadas
-      </h2>
-    </div>
-    @if (listSolicitud != null && listSolicitud.length > 0) {
-      <div class="relative overflow-x-auto shadow-md sm:rounded-lg">
 
-        <table class="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
-          <!-- Cabera de la tabla -->
-          <thead class="text-xs text-gray-700 uppercase bg-gray-300 dark:bg-gray-700 dark:text-gray-400">
-          <tr>
-            <th scope="col" class="px-6 py-3">Id</th>
-            <th scope="col" class="px-6 py-3">Cite</th>
-            <th scope="col" class="px-6 py-3">Fecha</th>
-            <th scope="col" class="px-6 py-3">Descripcion</th>
-          </tr>
-          </thead>
+  <app-tabla-responsable
+    [tituloDeTabla]="this.tituloDeTabla"
+    [listTituloTabla]="this.listTituloTabla"
+    [pagina]="this.pagina"
 
-          <!-- Contenido de la tabla -->
-          <tbody>
-            @for (solicitud of listSolicitud; track solicitud.id) {
-              <tr
-                class="odd:bg-white odd:dark:bg-gray-900 even:bg-gray-50 even:dark:bg-gray-800 border-b dark:border-gray-700">
-                <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                  {{ solicitud.id }}
-                </th>
-                <td class="px-6 py-4">
-                  {{ solicitud.cite }}
-                </td>
-                <td class="px-6 py-4">
-                  {{ solicitud.fecha }}
-                </td>
-                <td class="px-6 py-4">
-                  {{ solicitud.descripcion }}
-                </td>
-              </tr>
-            }
-          </tbody>
+    (idSolicitudPublisher)="botonBuscarSolicitudById($event)"
+    (botonTrashPublisher)="botonTrashPublisher()"
 
-        </table>
+    (goToPagePublisher)="goToPage($event)"
+    (goToPreviousPagePublisher)="goToPreviousPage($event)"
+    (goToNextPagePublisher)="goToNextPage($event)"
+  >
+  </app-tabla-responsable>
 
-      </div>
-
-      <!-- Opciones de paginacion -->
-      <nav class="mt-6 flex items-center justify-center sm:mt-8" aria-label="Page navigation example">
-        <ul class="flex h-8 items-center -space-x-px text-sm">
-
-          <li>
-            <a (click)="goToPreviousPage()"
-               class="ms-0 flex h-8 items-center justify-center rounded-s-lg border border-e-0 border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-              <span class="sr-only">Anterior</span>
-              <svg class="h-4 w-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                   width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="2" d="m15 19-7-7 7-7"/>
-              </svg>
-            </a>
-          </li>
-
-          @for (element of listaConsecutiva; track element) {
-            @if (pageProperties.currentPage != element) {
-              <li>
-                <button (click)="goToPage(element)"
-                        class="flex h-8 items-center justify-center border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-                  {{ element + 1 }}
-                </button>
-              </li>
-            } @else {
-              <li>
-                <button (click)="goToPage(element)"
-                        class="z-10 flex items-center justify-center px-3 h-8 leading-tight text-blue-600 border border-blue-300 bg-blue-50 hover:bg-blue-100 hover:text-blue-700 dark:border-gray-700 dark:bg-gray-700 dark:text-white">
-                  {{ element + 1 }}
-                </button>
-              </li>
-            }
-          }
-
-          <li>
-            <a (click)="goToNextPage()"
-               class="flex h-8 items-center justify-center rounded-e-lg border border-gray-300 bg-white px-3 leading-tight text-gray-500 hover:bg-gray-100 hover:text-gray-700 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
-              <span class="sr-only">Siguiente</span>
-              <svg class="h-4 w-4 rtl:rotate-180" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                   width="24" height="24" fill="none" viewBox="0 0 24 24">
-                <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"
-                      stroke-width="2" d="m9 5 7 7-7 7"/>
-              </svg>
-            </a>
-          </li>
-
-        </ul>
-      </nav>
-
-    } @else {
-      <section class="bg-white dark:bg-gray-900">
-        <div class="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
-          <div class="mx-auto max-w-screen-sm text-center">
-            <p class="mb-4 text-3xl tracking-tight font-bold text-gray-900 md:text-4xl dark:text-white">No hay
-              solicitudes finalizadas.</p>
-            <p class="mb-4 text-lg font-light text-gray-500 dark:text-gray-400">Las solicitudes se van a mostrar de
-              forma automatica o actualize la pagina.</p>
-          </div>
-        </div>
-      </section>
-    }
-
-  </div>
 
 </section>

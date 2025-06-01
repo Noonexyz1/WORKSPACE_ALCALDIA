@@ -9,7 +9,11 @@ import {DetalleSolicitudExtendidoResponse} from "../../utils/models/DetalleSolic
 import {UrlsProperties} from "../../utils/enums/UrlsProperties";
 import {PageRequest} from "../../utils/models/PageRequest";
 import {PageResponse} from "../../utils/models/PageResponse";
-import {ItemPopover, TablaResponsableComponent} from "../../share/tabla-responsable/tabla-responsable.component";
+import {
+  ItemPopover,
+  PaginaData, RowIntemData,
+  TablaResponsableComponent
+} from "../../share/tabla-responsable/tabla-responsable.component";
 import {
   ModalSolicitudData,
   ModalSolicitudInfoComponent
@@ -17,6 +21,7 @@ import {
 import {DomSanitizer, SafeHtml} from "@angular/platform-browser";
 import {iconoOjo} from "../../utils/icons/IconsSVG";
 import {AprobacionSoliRequest} from "../../utils/models/AutorizacionRequest";
+import {ModelMapperService} from "../../utils/mapper/model-mapper.service";
 
 @Component({
   selector: 'app-lista-soli-responsable-pendiente',
@@ -30,16 +35,16 @@ export class ListaSoliPendienteResponsableComponent {
   tituloDeTabla: string = "Lista de solicitudes pendientes";
   listTituloTabla: string[] = ["Accion", "Id", "Cite", "Fecha", "Autor", "Cargo", "Unidad"];
   //Inicializamos por defecto este atributo para que se cambien a lo largo de la vida del componente
-  pagina: PageResponse<SolicitudResponResponse> = {
+  pagina: PaginaData = {
     page: 0,
-    size: 10,
-    sortBy: 'id',
-    direction: "ASC",
+    size: 10, // Valor por defecto más lógico
+    sortBy: "id", // Campo por defecto común
+    direction: "ASC", // Dirección por defecto
     content: [],
-    totalPages: 0,
-    totalElements: 0
+    totalPages: 1,
+    totalElements: 1
   };
-  listPopover: ItemPopover[] = [];
+  itemPopoverList: ItemPopover[] = [];
 
 
   //DATOS PARA EL COMPONENTE MODAL
@@ -65,18 +70,20 @@ export class ListaSoliPendienteResponsableComponent {
   constructor(
     private readonly http: HttpClient,
     private readonly localStorage: LocalStorageService,
-    private readonly sanitizer: DomSanitizer) {
+    private readonly sanitizer: DomSanitizer,
+    private readonly modelMapper: ModelMapperService) {
 
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
 
     //Inciamos los valores
-    this.listPopover = [
+    //debo crear un arrego de ItemPopover para luego insertarlo a la pagina e enviarlo al hijo
+    this.itemPopoverList = [
       {
         icono: this.getSafeSvg(iconoOjo),
         opcion: 'Ver detalles completos',
         //Las firmas son iguales jaja se puede enviar directamente el metodo pero lo voy a dejar asi
-        accion: (idSolicitud: number) => {this.botonTraerDatosModal(idSolicitud)}
+        accion: (idSolicitud: string) => {this.botonTraerDatosModal(+idSolicitud)}
       },
     ];
 
@@ -102,7 +109,10 @@ export class ListaSoliPendienteResponsableComponent {
       body
     ).pipe(
       map((response: PageResponse<SolicitudResponResponse>) => {
-        this.pagina = response;
+
+        this.pagina = this.modelMapper
+          .pageResponseToPaginaDataResponsable(response, this.itemPopoverList);
+
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
@@ -129,7 +139,10 @@ export class ListaSoliPendienteResponsableComponent {
       body
     ).pipe(
       map((response: PageResponse<SolicitudResponResponse>) => {
-        this.pagina = response;
+
+        this.pagina = this.modelMapper
+          .pageResponseToPaginaDataResponsable(response, this.itemPopoverList);
+
       }),
       catchError(error => {
         console.error('Error en la petición:', error);

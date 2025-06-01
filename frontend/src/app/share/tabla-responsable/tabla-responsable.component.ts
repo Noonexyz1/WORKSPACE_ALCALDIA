@@ -1,7 +1,5 @@
 import {Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
-import {SolicitudResponResponse} from "../../utils/models/SolicitudResponResponse";
-import {PageResponse} from "../../utils/models/PageResponse";
 import {numeroMayorACeroValidator} from "../../utils/extra/Validation";
 import {SafeHtml} from "@angular/platform-browser";
 
@@ -9,10 +7,26 @@ export interface ItemPopover {
   icono: SafeHtml;
   opcion: string;
   //En atributos, solo tienes que declara la firma nada mas jajaj como en Java
-  accion: (idSolicitud: number) => void;
+  accion: (idSolicitud: string) => void;
 
   //{} estun objeto, estas diciendo que retorne un objeto ajajaja
   //accion: (idSolicitud: number) => {};
+}
+
+export interface RowIntemData {
+  accion: ItemPopover[];
+  // se necesita que el valor del inidice 0, sea un ID
+  columData: string[];
+}
+
+export interface PaginaData {
+  page: number;            // Número de página actual
+  size: number;            // Tamaño de la página
+  sortBy: string;          // Campo de ordenamiento
+  direction: string;       // Dirección del ordenamiento
+  content: RowIntemData[]; // Los elementos de la página actual
+  totalPages: number;      // Total de páginas disponibles
+  totalElements: number;   // Total de elementos en la BD
 }
 
 @Component({
@@ -31,17 +45,15 @@ export class TablaResponsableComponent {
 
   @Input() tituloDeTabla: string = "";
   @Input() listTituloTabla: string[] = [];
-  @Input() pagina: PageResponse<SolicitudResponResponse> = {
+  @Input() pagina: PaginaData = {
     page: 0,
-    size: 0,
-    sortBy: "",
-    direction: "",
+    size: 0, // Valor por defecto más lógico
+    sortBy: '', // Campo por defecto común
+    direction: '', // Dirección por defecto
     content: [],
     totalPages: 0,
     totalElements: 0
   };
-  @Input() listPopoverItem: ItemPopover[] = [];
-
 
 
   //Estos para modificar al componente padre
@@ -68,7 +80,7 @@ export class TablaResponsableComponent {
   // Actualizar cuando cambie pagina
   ngOnChanges() {
     this.listaConsecutiva = Array.from(
-      { length: this.pagina.totalPages },
+      {length: this.pagina.totalPages},
       (_, index) => index
     );
   }
@@ -82,16 +94,14 @@ export class TablaResponsableComponent {
     }
   }
 
-  showPopoverId: null | number | undefined = null;
-  togglePopover(solicitudId: number | undefined, event?: MouseEvent): void {
+  showPopoverId: null | string | undefined = null;
+  togglePopover(solicitudId: string | undefined, event?: MouseEvent): void {
     if (event) {
       event.stopPropagation();
     }
     this.showPopoverId = this.showPopoverId === solicitudId ? null : solicitudId;
     console.log(solicitudId);
   }
-
-
 
 
   /* Se ha llevado acabo un evento disparador por el HTML como un BOTON con dicho valor o tipo
@@ -103,13 +113,11 @@ export class TablaResponsableComponent {
   }
 
 
-
   // Como si fuera un adapter
   //Necesito el atributo item para lanzar el metodo correspondiente del padre
-  botonAccion(idSolicitud: number, item: ItemPopover): void {
+  botonAccion(idSolicitud: string, item: ItemPopover): void {
     item.accion(idSolicitud);
   }
-
 
 
   /* Se ha llevado acabo un evento disparador por el HTML como un BOTON con dicho valor o tipo
@@ -137,6 +145,9 @@ export class TablaResponsableComponent {
       this.goToNextPagePublisher.emit(this.pagina.page + 1); // Emitir la nueva página
     }
   }
+
+
+
 
   botonTrachCliked() {
     this.botonTrashPublisher.emit();

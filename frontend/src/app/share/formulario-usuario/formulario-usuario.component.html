@@ -1,0 +1,190 @@
+<form [formGroup]="usuarioFormData" class="w-full max-w-full mx-auto m-2 grid lg:grid-cols-2 gap-10">
+
+  <!-- titulo -->
+  <div class="relative z-0 w-full lg:col-span-2">
+    <span class="self-center text-4xl font-semibold whitespace-nowrap dark:text-white">
+    {{ this.tituloFormulario }}
+  </span>
+  </div>
+
+  <!-- Inpust -->
+  <div class="grid xl:grid-cols-2 gap-4 lg">
+
+    <div class="relative z-0 w-full mb-5 group py-2.5">
+      <input formControlName="ci" type="text" name="floating_email" id="ciID"
+             class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+             placeholder=" " required/>
+      <label for="floating_email"
+             class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+        CI. sin expedido</label>
+      @if (usuarioFormData.get("ci")?.invalid || usuarioFormData.get("ci")?.touched) {
+        @if (usuarioFormData.get("ci")?.hasError("required")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+        }
+        @if (usuarioFormData.get("ci")?.hasError("minlength")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Minimo seis caracteres validos</p>
+        }
+      }
+    </div>
+
+    <div class="relative z-0 w-full mb-5 group py-2.5">
+      <input formControlName="nombres" type="text" name="floating_email" id="nombresID"
+             class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+             placeholder=" " required/>
+      <label for="floating_email"
+             class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+        Nombres</label>
+
+      @if (usuarioFormData.get("nombres")?.invalid || usuarioFormData.get("nombres")?.touched) {
+        @if (usuarioFormData.get("nombres")?.hasError("required")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+        }
+        @if (usuarioFormData.get("nombres")?.hasError("minlength")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Minimo tres caracteres validos</p>
+        }
+      }
+    </div>
+
+    <div class="relative z-0 w-full mb-5 group py-2.5">
+      <input formControlName="paterno" type="text" name="floating_first_name" id="floating_first_name"
+             class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+             placeholder=" " required/>
+      <label for="floating_first_name"
+             class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+        Apellido Paterno</label>
+
+      @if (usuarioFormData.get("paterno")?.invalid || usuarioFormData.get("paterno")?.touched) {
+        @if (usuarioFormData.get("paterno")?.hasError("required")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+        }
+        @if (usuarioFormData.get("paterno")?.hasError("minlength")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Minimo tres caracteres validos</p>
+        }
+      }
+
+    </div>
+
+    <div class="relative z-0 w-full mb-5 group py-2.5">
+      <input formControlName="materno" type="text" name="floating_last_name" id="floating_last_name"
+             class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+             placeholder=" " required/>
+      <label for="floating_last_name"
+             class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+        Apellido Materno</label>
+
+      @if (usuarioFormData.get("materno")?.invalid || usuarioFormData.get("materno")?.touched) {
+        @if (usuarioFormData.get("materno")?.hasError("required")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+        }
+        @if (usuarioFormData.get("materno")?.hasError("minlength")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Minimo tres caracteres validos</p>
+        }
+      }
+
+    </div>
+
+    <div class="relative z-0 w-full mb-5 group py-2.5">
+      <input formControlName="correo" type="email" name="floating_email" id="floating_email"
+             class="block py-2.5 px-0 w-full text-lg text-gray-900 bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:text-white dark:border-gray-600 dark:focus:border-blue-500 focus:outline-none focus:ring-0 focus:border-blue-600 peer"
+             placeholder=" " required/>
+      <label for="floating_email"
+             class="peer-focus:font-medium absolute text-lg text-gray-500 dark:text-gray-400 duration-300 transform -translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:start-0 rtl:peer-focus:translate-x-1/4 rtl:peer-focus:left-auto peer-focus:text-blue-600 peer-focus:dark:text-blue-500 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:-translate-y-6">
+        Correo Electronico</label>
+
+      @if (usuarioFormData.get("correo")?.invalid || usuarioFormData.get("correo")?.touched) {
+        @if (usuarioFormData.get("correo")?.hasError("required")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Este campo es requerido</p>
+        }
+        @if (usuarioFormData.get("correo")?.hasError("email")) {
+          <p class="mt-2 text-sm text-red-600 dark:text-red-500">Ingrese formato de correo valido</p>
+        }
+      }
+
+    </div>
+
+  </div>
+
+  <!-- DropDowns -->
+  <div class="">
+    <div class="grid md:grid-cols-2 md:gap-6">
+      <div class="relative z-0 w-full mb-5 group">
+        <label for="selectCargo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          Seleccione Cargo
+        </label>
+        <select formControlName="idCargo" id="selectCargo"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          @if (listaDeCargos != null && listaDeCargos.length > 0) {
+            @for (cargo of listaDeCargos; track cargo.id) {
+              <option value="{{cargo.id}}">{{ cargo.opcion }}</option>
+            }
+          }
+        </select>
+
+        @if (usuarioFormData.get("idCargo")?.invalid || usuarioFormData.get("idCargo")?.touched) {
+          @if (usuarioFormData.get("idCargo")?.hasError("required")) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">Debe seleccionar una opción</p>
+          }
+        }
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 md:gap-6">
+      <div class="relative z-0 w-full mb-5 group">
+        <label for="selectRol" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          Seleccione Rol</label>
+        <select formControlName="idRol" id="selectRol"
+                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          @if (listaDeCargos != null && listaDeCargos.length > 0) {
+            @for (rol of listaDeCargos; track rol.id) {
+              <option value="{{rol.id}}">{{ rol.opcion }}</option>
+            }
+          }
+        </select>
+
+        @if (usuarioFormData.get("idRol")?.invalid || usuarioFormData.get("idRol")?.touched) {
+          @if (usuarioFormData.get("idRol")?.hasError("required")) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">Debe seleccionar una opción</p>
+          }
+        }
+      </div>
+    </div>
+
+    <div class="grid md:grid-cols-2 md:gap-6">
+      <div class="relative z-0 w-full mb-5 group">
+        <label for="selectUnidad" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+          Seleccione Unidad</label>
+        <select formControlName="idUni" id="selectUnidad"
+                class="scrollable-select bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+          @if (listaDeUnidades != null && listaDeUnidades.length > 0) {
+            @for (rol of listaDeUnidades; track rol.id) {
+              <option value="{{rol.id}}">{{ rol.opcion }}</option>
+            }
+            <!-- Puedes agregar más opciones aquí -->
+          }
+        </select>
+
+        @if (usuarioFormData.get("idUni")?.invalid || usuarioFormData.get("idUni")?.touched) {
+          @if (usuarioFormData.get("idUni")?.hasError("required")) {
+            <p class="mt-2 text-sm text-red-600 dark:text-red-500">Debe seleccionar una opción</p>
+          }
+        }
+
+        <style>
+          /* Estilo del select que se ajusta según el tamaño vertical de la ventana */
+          .scrollable-select {
+            max-height: 50vh; /* El menú se ajusta a la mitad de la altura de la pantalla */
+            overflow-y: auto; /* Barra de desplazamiento cuando sea necesario */
+          }
+        </style>
+      </div>
+    </div>
+  </div>
+
+  <div class="lg:col-span-2 flex justify-center">
+    <button type="button" (click)="botonRegistrarUsuario()" [disabled]="usuarioFormData.invalid"
+            class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-lg w-full sm:w-auto px-5 py-2.5 text-center dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+      Registrar
+    </button>
+  </div>
+
+</form>

@@ -8,37 +8,65 @@ import {PageProperties} from "../../utils/models/PageProperties";
 import {UrlsProperties} from "../../utils/enums/UrlsProperties";
 import {PageRequest} from "../../utils/models/PageRequest";
 import {PageResponse} from "../../utils/models/PageResponse";
+import {
+  ItemPopover,
+  PaginaData,
+  TablaResponsableComponent
+} from "../../share/tabla-responsable/tabla-responsable.component";
+import {ModelMapperService} from "../../utils/mapper/model-mapper.service";
 
 @Component({
   selector: 'app-lista-soli-solicitante-finalizada',
   standalone: true,
-  imports: [],
+  imports: [
+    TablaResponsableComponent
+  ],
   templateUrl: './lista-soli-solicitante-finalizada.component.html'
 })
 export class ListaSoliSolicitanteFinalizadaComponent {
 
-  private http: HttpClient;
-  private localStorage: LocalStorageService;
 
+
+
+  //DATOS PARA EL COMPONENTE TABLA
+  tituloDeTabla: string = "Lista de solicitudes finalizadas";
+  listTituloTabla: string[] = ["Accion", "Id", "Cite", "Fecha", "Descripcion"];
+  //Inicializamos por defecto este atributo para que se cambien a lo largo de la vida del componente
+  pagina: PaginaData = {
+    page: 0,
+    size: 10, // Valor por defecto más lógico
+    sortBy: "id", // Campo por defecto común
+    direction: "ASC", // Dirección por defecto
+    content: [],
+    totalPages: 1,
+    totalElements: 1
+  };
+  itemPopoverList: ItemPopover[] = [];
+
+
+
+
+
+  //ESTADOS GLOBALES
+  pageProperties: PageProperties = new PageProperties();
   usuario: UsuarioResponse = new UsuarioResponse();
 
-  constructor(
-    http: HttpClient,
-    localStorage: LocalStorageService) {
 
-    this.http = http;
-    this.localStorage = localStorage;
+
+
+
+  constructor(
+    private readonly http: HttpClient,
+    private readonly localStorage: LocalStorageService,
+    private readonly modelMapper: ModelMapperService) {
+
     this.usuario = this.localStorage.getItem('userData');
     this.listarSolicitudes();
   }
 
-  listSolicitud: SolicitudResponse[] = [];
 
-  pageProperties: PageProperties = new PageProperties();
-  listaConsecutiva: number[] = Array.from(
-    { length: this.pageProperties.totalPages },
-    (_, index) => index
-  );
+
+
   listarSolicitudes(): void {
     const body: PageRequest = {
       id: this.usuario.id,
@@ -53,19 +81,10 @@ export class ListaSoliSolicitanteFinalizadaComponent {
       body
     ).pipe(
       map((response: PageResponse<SolicitudResponse>) => {
-        this.pageProperties.currentPage = response.page;
-        this.pageProperties.pageSize = response.size;
-        this.pageProperties.sortBy = response.sortBy;
-        this.pageProperties.direction = response.direction;
 
-        this.listSolicitud = response.content;
-        this.pageProperties.totalPages = response.totalPages;
-        this.pageProperties.totalElements = response.totalElements;
+        this.pagina = this.modelMapper
+          .pageResponseSoliToPaginaDataResponsable(response, this.itemPopoverList);
 
-        this.listaConsecutiva = Array.from(
-          {length: this.pageProperties.totalPages},
-          (_, index) => index
-        );
       }),
       catchError(error => {
         console.error('Error en la petición:', error);
@@ -77,26 +96,56 @@ export class ListaSoliSolicitanteFinalizadaComponent {
   }
 
 
+  // Estos son metodos que seran disparados en cuanto se recibe un evento
+  botonBuscarSolicitudById(id: number): void {
+    //Con este id emitido hacer tal...
+    const body: PageRequest = {
+      id: id,
+      page: this.pageProperties.currentPage,
+      size: this.pageProperties.pageSize,
+      sortBy: this.pageProperties.sortBy,
+      direction: this.pageProperties.direction
+    }
 
+    this.http.post<PageResponse<SolicitudResponse>>(
+      UrlsProperties.PATH_FINALIZADAS_SOLI,
+      body
+    ).pipe(
+      map((response: PageResponse<SolicitudResponse>) => {
+
+        this.pagina = this.modelMapper
+          .pageResponseSoliToPaginaDataResponsable(response, this.itemPopoverList);
+
+      }),
+      catchError(error => {
+        console.error('Error en la petición:', error);
+        alert('Hubo un error al listar las solicitudes de usuario');
+        return of(null); // Retornar un observable vacío en caso de error
+      })
+    ).subscribe();
+
+  }
+
+  botonTrashPublisher() {
+    this.listarSolicitudes();
+  }
+
+  // Estos son metodos que seran disparados en cuanto se recibe un evento
   goToPage(page: number): void {
-    if (page >= 0 && page < this.pageProperties.totalPages) {
-      this.pageProperties.currentPage = page;
-      this.listarSolicitudes();
-    }
+    this.pagina.page = page;
+    this.listarSolicitudes();
   }
 
-  goToPreviousPage(): void {
-    if (this.pageProperties.currentPage > 0) {
-      this.pageProperties.currentPage--;
-      this.listarSolicitudes();
-    }
+  // Estos son metodos que seran disparados en cuanto se recibe un evento
+  goToPreviousPage(newPage: number): void {
+    this.pagina.page = newPage;
+    this.listarSolicitudes();
   }
 
-  goToNextPage(): void {
-    if (this.pageProperties.currentPage < this.pageProperties.totalPages - 1) {
-      this.pageProperties.currentPage++;
-      this.listarSolicitudes();
-    }
+  // Estos son metodos que seran disparados en cuanto se recibe un evento
+  goToNextPage(newPage: number): void {
+    this.pagina.page = newPage;
+    this.listarSolicitudes();
   }
 
 }
