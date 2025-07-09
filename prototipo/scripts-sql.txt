@@ -1,9 +1,17 @@
-#----------------------DATOS INICIALES-----------------------------
+##################################################################################################
+#--------------------------------------DATOS INICIALES--------------------------------------------
+##################################################################################################
 #Esta tabla si o si para produccion
 INSERT INTO prototipo.rol(nombre_rol)
 values("Administrador"),
 ("Responsable"),
 ("Solicitante");
+
+#Esta tabla si o si para produccion
+INSERT INTO cargo(nombre_cargo)
+VALUES("Director"),
+("Responsable"),
+("Funcionario");
 
 #Esta tabla si o si para produccion
 INSERT INTO prototipo.unidad(nombre_unidad, direccion)
@@ -29,30 +37,6 @@ VALUES
 ("Unidad de Desarrollo Social", "Piso 7"),
 ("Unidad de Servicios Generales", "Piso 2");
 
-
-#Esta tabla si o si para produccion
-INSERT INTO usuario(ci, correo, materno, nombres, paterno)
-VALUES('1234567','jefe@gmail.com','Lopez','Wilder Ariel','Ali'),
-('234567','responsable@gmail.com','Aguilar','Tania','Lopez'),
-('34567','HazelAuroraZambrano@gmail.com','Ureña','Hazel Aurora','Zambrano'),
-('4567','MateoAndrésSilvaCastro@gmail.com','Silva','Mateo','Andrés'),
-('567','SebastiánEmilioVargasRuiz@gmail.com','Ruiz','Sebastián Emilio','Vargas');
-
-#Esta tabla si o si para produccion
-INSERT INTO credencial(fk_usuario_id, ci, pass)
-VALUES(1, "1234567", "123"),
-(2, "234567", "funcionario234567"),
-(3,"34567",'funcionario34567'),
-(4,"4567",'funcionario4567'),
-(5,"567",'funcionario567');
-#El administrador debe poder iniciar con el sistema
-
-#Esta tabla si o si para produccion
-INSERT INTO cargo(nombre_cargo)
-VALUES("Director"),
-("Responsable"),
-("Funcionario");
-
 #Esta tabla si o si para produccion
 INSERT INTO serv_fotocopia(color, anver_rever, tamano, precio_ref, is_active)
 VALUES("Blanco y negro", "Anverso", "Carta", 0.20, 1),
@@ -65,6 +49,29 @@ VALUES("Blanco y negro", "Anverso", "Carta", 0.20, 1),
 ("Color", "Anverso y reverso", "Oficio", 0.80, 1);
 
 
+#Esta tabla si o si para produccion -- DEBE TENER AL MENOS EL REGISTRO DE UN ADMINISTRADOR
+INSERT INTO usuario(ci, correo, materno, nombres, paterno, formacion)
+VALUES('1234567','jefe@gmail.com','Lopez','Wilder Ariel','Ali', 'Lic.');
+
+
+INSERT INTO usuario(ci, correo, materno, nombres, paterno, formacion)
+VALUES('234567','responsable@gmail.com','Aguilar','Tania','Lopez', 'Ing.'),
+('34567','HazelAuroraZambrano@gmail.com','Ureña','Hazel Aurora','Zambrano', 'Ing.'),
+('4567','MateoAndrésSilvaCastro@gmail.com','Silva','Mateo','Andrés', 'Arq.'),
+('567','SebastiánEmilioVargasRuiz@gmail.com','Ruiz','Sebastián Emilio','Vargas', 'Dr.');
+
+##################################################################################################
+
+#Esta tabla si o si para produccion
+INSERT INTO credencial(fk_usuario_id, ci, pass)
+VALUES(1, "1234567", "f1234567");
+
+INSERT INTO credencial(fk_usuario_id, ci, pass)
+VALUES(2, "234567", "funcionario234567"),
+(3,"34567",'funcionario34567'),
+(4,"4567",'funcionario4567'),
+(5,"567",'funcionario567');
+#El administrador debe poder iniciar con el sistema
 
 ############3##tengo que tener total atencion a esta tabla
 #Esta tabla si o si para produccion
@@ -78,8 +85,13 @@ VALUES
 (TRUE,3,1,2,3,8,5);
 ############tengo que tener total atencion a esta tabla
 
+##################################################################################################
 
-#----------------------PRUEBAS-----------------------------
+
+
+##################################################################################################
+#------------------------------------------PRUEBAS------------------------------------------------
+##################################################################################################
 
 #NO todas las unidades estan juntas en un piso,
 #estan dispersas en distintos lugares
@@ -212,16 +224,6 @@ WHERE RIGHT(dr.fecha, 7) = :mesAnio
 AND dr.total_usado != 0
 #No deberia mandar el idSolicitud porque para este informe debe ser de todos aquellos que han utilizado
 #La tabla fotocopia deberia tener una campo de precio_docu_parcial????
-
-private String funcionarioTo;
-private String funcionarioFrom;
-private String funcionarioToCargo;
-private String funcionarioFromCargo;
-private String cite;
-private String fecha;
-private String cantidadSumado;
-private String nombreUnidad;
-private String descripcion;
 
 SELECT
 	usuarioDi.formacion,
@@ -385,3 +387,5 @@ WHERE uu.fk_usuario_id = (
 		AND c.pass = "123"
 	)
 );
+
+##################################################################################################
