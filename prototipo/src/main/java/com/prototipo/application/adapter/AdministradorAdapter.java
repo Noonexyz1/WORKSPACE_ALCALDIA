@@ -114,12 +114,12 @@ public class AdministradorAdapter implements AdministradorService {
         if (credencialResp == null) {
             Credencial newCredencial = Credencial.builder()
                     .ci(usuarioResp.getCi())
-                    .pass("funcionario" + usuarioResp.getCi())
+                    .pass("f" + usuarioResp.getCi())
                     .fkUsuario(usuarioResp)
                     .build();
             credencialAbstract.guardarCredencialAbstract(newCredencial);
         } else {
-            credencialResp.setPass("funcionario" + usuarioResp.getCi());
+            credencialResp.setPass("f" + usuarioResp.getCi());
             credencialAbstract.guardarCredencialAbstract(credencialResp);
         }
     }
