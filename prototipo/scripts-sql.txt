@@ -9,33 +9,33 @@ values("Administrador"),
 
 #Esta tabla si o si para produccion
 INSERT INTO cargo(nombre_cargo)
-VALUES("Director"),
-("Responsable"),
-("Funcionario");
+VALUES("Director de ..."),
+("Responsable de ..."),
+("Funcionario de ...");
 
 #Esta tabla si o si para produccion
-INSERT INTO prototipo.unidad(nombre_unidad, direccion)
+INSERT INTO prototipo.unidad(limite_monetario, nombre_unidad, direccion)
 VALUES
-("Unidad de Atención al Ciudadano", "Piso 1"),
-("Unidad de Atención al Estudiante", "Piso 1"),
-("Unidad de Atención al Prójimo", "Piso 1"),
-("Unidad de Obras Públicas", "Piso 2"),
-("Unidad de Obras Comunitarias", "Piso 2"),
-("Unidad de Registro Civil", "Piso 3"),
-("Unidad de Transporte y Movilidad", "Piso 3"),
-("Unidad de Desarrollo Económico", "Piso 3"),
-("Unidad de Asesoría Jurídica", "Piso 3"),
-("Unidad de Recursos Humanos", "Piso 3"),
-("Unidad de Secretaría de Hacienda", "Piso 3"),
-("Unidad de Oficina de la Alcaldesa", "Piso 3"),
-("Unidad de Planeación Urbana", "Piso 4"),
-("Unidad de Medio Ambiente", "Piso 4"),
-("Unidad de Sumariante", "Piso 4"),
-("Unidad de Sistemas", "Piso 4"),
-("Unidad de Gabinete de Gobierno", "Piso 5"),
-("Unidad de Cultura y Deporte", "Piso 6"),
-("Unidad de Desarrollo Social", "Piso 7"),
-("Unidad de Servicios Generales", "Piso 2");
+(5000, "Unidad de Atención al Ciudadano", "Piso 1"),
+(5000, "Unidad de Atención al Estudiante", "Piso 1"),
+(5000, "Unidad de Atención al Prójimo", "Piso 1"),
+(5000, "Unidad de Obras Públicas", "Piso 2"),
+(5000, "Unidad de Obras Comunitarias", "Piso 2"),
+(5000, "Unidad de Registro Civil", "Piso 3"),
+(5000, "Unidad de Transporte y Movilidad", "Piso 3"),
+(5000, "Unidad de Desarrollo Económico", "Piso 3"),
+(5000, "Unidad de Asesoría Jurídica", "Piso 3"),
+(5000, "Unidad de Recursos Humanos", "Piso 3"),
+(5000, "Unidad de Secretaría de Hacienda", "Piso 3"),
+(5000, "Unidad de Oficina de la Alcaldesa", "Piso 3"),
+(5000, "Unidad de Planeación Urbana", "Piso 4"),
+(5000, "Unidad de Medio Ambiente", "Piso 4"),
+(5000, "Unidad de Sumariante", "Piso 4"),
+(5000, "Unidad de Sistemas", "Piso 4"),
+(5000, "Unidad de Gabinete de Gobierno", "Piso 5"),
+(5000, "Unidad de Cultura y Deporte", "Piso 6"),
+(5000, "Unidad de Desarrollo Social", "Piso 7"),
+(5000, "Unidad de Servicios Generales", "Piso 2");
 
 #Esta tabla si o si para produccion
 INSERT INTO serv_fotocopia(color, anver_rever, tamano, precio_ref, is_active)
@@ -54,38 +54,27 @@ INSERT INTO usuario(ci, correo, materno, nombres, paterno, formacion)
 VALUES('1234567','jefe@gmail.com','Lopez','Wilder Ariel','Ali', 'Lic.');
 
 
-INSERT INTO usuario(ci, correo, materno, nombres, paterno, formacion)
-VALUES('234567','responsable@gmail.com','Aguilar','Tania','Lopez', 'Ing.'),
-('34567','HazelAuroraZambrano@gmail.com','Ureña','Hazel Aurora','Zambrano', 'Ing.'),
-('4567','MateoAndrésSilvaCastro@gmail.com','Silva','Mateo','Andrés', 'Arq.'),
-('567','SebastiánEmilioVargasRuiz@gmail.com','Ruiz','Sebastián Emilio','Vargas', 'Dr.');
 
-##################################################################################################
+
+
 
 #Esta tabla si o si para produccion
 INSERT INTO credencial(fk_usuario_id, ci, pass)
 VALUES(1, "1234567", "f1234567");
 
-INSERT INTO credencial(fk_usuario_id, ci, pass)
-VALUES(2, "234567", "funcionario234567"),
-(3,"34567",'funcionario34567'),
-(4,"4567",'funcionario4567'),
-(5,"567",'funcionario567');
-#El administrador debe poder iniciar con el sistema
-
-############3##tengo que tener total atencion a esta tabla
 #Esta tabla si o si para produccion
 INSERT INTO usuario_unidad
 (is_active, fk_cargo_id, fk_director_id, fk_responsable_id, fk_rol_id, fk_unidad_id, fk_usuario_id)
-VALUES
-(TRUE,3,NULL,NULL,1,20,1),
-(TRUE,3,1,NULL,2,20,2),
-(TRUE,3,1,2,3,16,3),
-(TRUE,3,1,2,3,6,4),
-(TRUE,3,1,2,3,8,5);
-############tengo que tener total atencion a esta tabla
+VALUES(TRUE,1,NULL,NULL,1,20,1);
+#El administrador debe poder iniciar con el sistema
+
+#INSERT INTO usuario_unidad
+#(is_active, fk_cargo_id, fk_director_id, fk_responsable_id, fk_rol_id, fk_unidad_id, fk_usuario_id)
+#VALUES(TRUE,3,1,NULL,2,20,2);
 
 ##################################################################################################
+
+
 
 
 
