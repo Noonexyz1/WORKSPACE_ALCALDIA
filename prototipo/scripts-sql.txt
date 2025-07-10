@@ -79,24 +79,37 @@ VALUES(TRUE,1,NULL,NULL,1,20,1);
 
 
 ##################################################################################################
-#------------------------------------------PRUEBAS------------------------------------------------
+#----------------------------------------VER DATOS------------------------------------------------
 ##################################################################################################
 
 #NO todas las unidades estan juntas en un piso,
 #estan dispersas en distintos lugares
 SELECT * FROM rol;
 SELECT * FROM unidad;
+SELECT * from cargo;
+SELECT * from serv_fotocopia sf;
 SELECT * from usuario; #esto deberia tener un campo titulo para formacion academica
 SELECT * from credencial;
 SELECT * from usuario_unidad;
-SELECT * from cargo;
+
 
 SELECT * from solicitud s;
 SELECT * from fotocopia f;
-SELECT * from serv_fotocopia sf;
 SELECT * from autorizacion a;
 SELECT * from finalizacion f;
 SELECT * from documento_retiro dr;
+##################################################################################################
+
+
+
+
+
+
+
+##################################################################################################
+#------------------------------------------PRUEBAS------------------------------------------------
+##################################################################################################
+
 
 #ALTER TABLE unidad DROP COLUMN limite;
 
