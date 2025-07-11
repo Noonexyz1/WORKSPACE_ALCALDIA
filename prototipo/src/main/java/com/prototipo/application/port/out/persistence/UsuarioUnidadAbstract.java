@@ -12,4 +12,5 @@ public interface UsuarioUnidadAbstract {
     UsuarioUnidad encontrarUsuarioUnidadByCi(String ci);
     PaginableOut<UsuarioUnidad> listaDeUsuariosAbsDef(PaginableIn paginableIn);
     UsuarioUnidad encontrarUsuarioUnidadUltimoActivo();
+    UsuarioUnidad encontrarUsuarioUnidadResponsableActivo();
 }

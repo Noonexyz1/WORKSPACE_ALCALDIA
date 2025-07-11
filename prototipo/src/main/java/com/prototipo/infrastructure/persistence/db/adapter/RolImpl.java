@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class RolImpl implements RolAbstract {
@@ -24,5 +25,17 @@ public class RolImpl implements RolAbstract {
         return listRoles.stream()
                 .map(x -> modelMapper.map(x, Rol.class))
                 .toList();
+    }
+
+    @Override
+    public Rol buscarRolPorId(Long id) {
+        Optional<RolEntity> rolEntity = this.rolRepository.findById(id);
+        if (rolEntity.isEmpty()) {
+            throw new RuntimeException("Este Rol no existe");
+        }
+        return Rol.builder()
+                .id(rolEntity.get().getId())
+                .nombreRol(rolEntity.get().getNombreRol())
+                .build();
     }
 }

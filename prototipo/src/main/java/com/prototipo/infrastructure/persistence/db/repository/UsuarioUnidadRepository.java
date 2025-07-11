@@ -82,4 +82,18 @@ public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEnti
     ORDER BY uu.id DESC
     LIMIT 1*/
 
+
+    @Query(value =
+            """
+            SELECT *
+            FROM usuario_unidad uu
+            WHERE uu.fk_rol_id = (
+                SELECT r.id
+                FROM rol r
+                WHERE r.nombre_rol = "Responsable"
+            )
+            AND uu.is_active = TRUE
+            """, nativeQuery = true)
+    UsuarioUnidadEntity encontrarResponsableActivo();
+
 }

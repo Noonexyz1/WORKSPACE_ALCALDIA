@@ -6,4 +6,5 @@ import java.util.List;
 
 public interface RolAbstract {
     List<Rol> listarRoles();
+    Rol buscarRolPorId(Long id);
 }

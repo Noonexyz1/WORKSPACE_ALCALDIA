@@ -65,6 +65,18 @@ public class UsuarioUnidadImpl implements UsuarioUnidadAbstract {
         return mapper.map(usuarioUnidad, UsuarioUnidad.class);
     }
 
+    //Este metodo unicamente buscara el Responsable Activo y el ultimo
+    @Override
+    public UsuarioUnidad encontrarUsuarioUnidadResponsableActivo() {
+        UsuarioUnidadEntity usuarioUnidad = this.usuarioUnidadRepository.encontrarResponsableActivo();
+        if (usuarioUnidad == null) {
+            throw new RuntimeException("Usuario Responsable activo no encontrado");
+        }
+        return UsuarioUnidad.builder()
+                .id(usuarioUnidad.getId())
+                .build();
+    }
+
 
     @Override
     @Transactional

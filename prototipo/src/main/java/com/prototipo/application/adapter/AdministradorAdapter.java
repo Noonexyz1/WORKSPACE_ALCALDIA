@@ -60,27 +60,29 @@ public class AdministradorAdapter implements AdministradorService {
         // insertamos las credenciales a la BD correspondientes para el nuevo usuario
         crearCredencial(usuarioResp);
 
-        // buscamos un responsable activo
-        UsuarioUnidad responsable = usuarioUnidadAbstract.encontrarUsuarioUnidadUltimoActivo();
+        //Buscamos el id del userUnidad la parte del usuario que quire ser responsable
+        Rol role = this.rolAbstract.buscarRolPorId(userUnidad.getFkRol().getId());
 
-        userUnidad.setFkResponsable(UsuarioUnidad.builder().id(responsable.getId()).build());
-        userUnidad.setId(null);
-        userUnidad.setIsActive(true);
-        userUnidad.setFkUsuario(usuarioResp);
-
-        //Este metodo unicamente evalua si existe el usuario nuevo en unidadUsuario o no
-        UsuarioUnidad userRespon = existeUsuarioUnidad(usuarioResp);
-
-        if (userRespon == null) {
-            usuarioUnidadAbstract.guardarUsuarioUnidad(userUnidad);
-        } else {
-            if (!hayCambioUserUni(userUnidad, userRespon)) {
-                userRespon.setIsActive(false);
-                usuarioUnidadAbstract.guardarUsuarioUnidad(userRespon);
-                usuarioUnidadAbstract.guardarUsuarioUnidad(userUnidad);
-            }
+        //Si es la opcion de responsable, entonces este no tiene responsable la primera vez
+        if (role.getNombreRol().equals("Responsable")) {
+            userUnidad.setFkResponsable(null);
+            userUnidad.setId(null);
+            userUnidad.setIsActive(true);
         }
 
+        //Si es opcion Solicitante, entonces deberia ponerle el director, y el responsable
+        if (role.getNombreRol().equals("Solicitante")) {
+            //Buscamos el responsable existente activo y el ultimo
+            UsuarioUnidad usuarioUnidad = this.usuarioUnidadAbstract
+                    .encontrarUsuarioUnidadResponsableActivo();
+
+            userUnidad.setFkResponsable(usuarioUnidad);
+
+            userUnidad.setId(null);
+            userUnidad.setIsActive(true);
+        }
+        userUnidad.setFkUsuario(usuarioResp);
+        this.usuarioUnidadAbstract.guardarUsuarioUnidad(userUnidad);
     }
 
     private boolean hayCambioUserUni(UsuarioUnidad userUniNew, UsuarioUnidad userRespon){

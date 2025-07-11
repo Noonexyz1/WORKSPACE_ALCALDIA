@@ -391,3 +391,30 @@ WHERE uu.fk_usuario_id = (
 );
 
 ##################################################################################################
+
+SELECT *
+FROM usuario_unidad uu
+WHERE uu.is_active = TRUE
+ORDER BY uu.id DESC
+LIMIT 1
+
+
+SELECT *
+FROM usuario_unidad uu
+JOIN rol r ON r.id = uu.fk_rol_id
+WHERE r.nombre_rol = "Administrador"
+AND uu.is_active = TRUE;
+
+
+SELECT *
+FROM usuario_unidad uu
+WHERE uu.fk_rol_id = (
+	SELECT r.id
+	FROM rol r
+	WHERE r.nombre_rol = "Responsable"
+)
+AND uu.is_active = TRUE;
+
+
+
+
