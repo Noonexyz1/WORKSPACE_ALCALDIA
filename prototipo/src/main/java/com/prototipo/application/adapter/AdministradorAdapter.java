@@ -65,9 +65,16 @@ public class AdministradorAdapter implements AdministradorService {
 
         //Si es la opcion de responsable, entonces este no tiene responsable la primera vez
         if (role.getNombreRol().equals("Responsable")) {
-            userUnidad.setFkResponsable(null);
-            userUnidad.setId(null);
-            userUnidad.setIsActive(true);
+            //Buscamos el responsable existente activo y el ultimo
+            UsuarioUnidad usuarioUnidad = this.usuarioUnidadAbstract
+                    .encontrarUsuarioUnidadResponsableActivo();
+            if (usuarioUnidad == null) {
+                userUnidad.setFkResponsable(null);
+                userUnidad.setId(null);
+                userUnidad.setIsActive(true);
+            } else {
+                throw new RuntimeException("Ya existe un responsable, solo puede haber uno, elimine el usuario que es responsable si desea un responsable nuevo");
+            }
         }
 
         //Si es opcion Solicitante, entonces deberia ponerle el director, y el responsable
@@ -76,14 +83,27 @@ public class AdministradorAdapter implements AdministradorService {
             UsuarioUnidad usuarioUnidad = this.usuarioUnidadAbstract
                     .encontrarUsuarioUnidadResponsableActivo();
 
+            if (usuarioUnidad == null) {
+                throw new RuntimeException("No hay un Responsable activo. Por favor cree un reponsable antes de crear un funcionario comun");
+            }
+
             userUnidad.setFkResponsable(usuarioUnidad);
 
             userUnidad.setId(null);
             userUnidad.setIsActive(true);
         }
+
         userUnidad.setFkUsuario(usuarioResp);
         this.usuarioUnidadAbstract.guardarUsuarioUnidad(userUnidad);
     }
+
+
+    //TODO, PAra la parte de Editar
+    /*Si el administrador prdente crear otro responsable, pues este no debe poderse crear ya que
+    * pues se debe verificar si ya hay un responasble activo, si hay un responsable activo, entonces no puede crear un
+    * registro, y ademas, ademas, eso tendria que ser en la parte de crear un responsable,
+    * indicar que ya existe, y si si quiere crear un responsable, pues que deba eliminar ese responsable, y luego crear el
+    * nuevo responsable*/
 
     private boolean hayCambioUserUni(UsuarioUnidad userUniNew, UsuarioUnidad userRespon){
         if (userRespon.getFkResponsable() == null &&

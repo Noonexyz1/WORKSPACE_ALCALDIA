@@ -69,12 +69,13 @@ public class UsuarioUnidadImpl implements UsuarioUnidadAbstract {
     @Override
     public UsuarioUnidad encontrarUsuarioUnidadResponsableActivo() {
         UsuarioUnidadEntity usuarioUnidad = this.usuarioUnidadRepository.encontrarResponsableActivo();
-        if (usuarioUnidad == null) {
-            throw new RuntimeException("Usuario Responsable activo no encontrado");
+        if (usuarioUnidad != null) {
+            return UsuarioUnidad.builder()
+                    .id(usuarioUnidad.getId())
+                    .build();
+        } else {
+            return null;
         }
-        return UsuarioUnidad.builder()
-                .id(usuarioUnidad.getId())
-                .build();
     }
 
 
