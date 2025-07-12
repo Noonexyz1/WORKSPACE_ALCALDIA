@@ -54,12 +54,12 @@ public class AdministradorAdapter implements AdministradorService {
 
     @Override
     public void crearUsuarioUnidad(Usuario user, UsuarioUnidad userUnidad){
-        //Verificar primero si ya existe el usuario registrado
-        Usuario usuarioResp = crearUsuario(user);
+        /*LAS PERSISTENCIAS DEBEN IR AL FINAL DE CADA METODO, PARA ASI ASEGURARNOS
+        * DE QUE HAYA UN BUEN FUNCIONAMIENTO COMO EN LOGICA COMPRENCION E INTEGRIDAD
+        * mas que toddo cuando hay codiciones de exceptiones*/
 
-        // insertamos las credenciales a la BD correspondientes para el nuevo usuario
-        crearCredencial(usuarioResp);
 
+        /*ESTOS SON VERIFICACIONES O SIMPLES CONSULTAS A PRESISTENCIAS PARA REALIZAR LA LOGICA*/
         //Buscamos el id del userUnidad la parte del usuario que quire ser responsable
         Rol role = this.rolAbstract.buscarRolPorId(userUnidad.getFkRol().getId());
 
@@ -93,6 +93,12 @@ public class AdministradorAdapter implements AdministradorService {
             userUnidad.setIsActive(true);
         }
 
+
+        /*LOS TIPOS DE PERSISTENCIA SIEMPRE VAN ALFINAL DE CADA METODO O LOGICA POR INTEGRIDAD REFERENCIAL o LOGICA*/
+        //Verificar primero si ya existe el usuario registrado
+        Usuario usuarioResp = crearUsuario(user);
+        // insertamos las credenciales a la BD correspondientes para el nuevo usuario
+        crearCredencial(usuarioResp);
         userUnidad.setFkUsuario(usuarioResp);
         this.usuarioUnidadAbstract.guardarUsuarioUnidad(userUnidad);
     }
