@@ -54,8 +54,17 @@ public class AdministradorAdapter implements AdministradorService {
 
     @Override
     public void editarUsuarioUnidad(Usuario usuario, UsuarioUnidad usuarioUnidad) {
+
+        //Primero hacemos las consultas pertinentes
+        Usuario usuarioEncontrado = this.usuarioAbastract
+                .encontrarUsuarioPorId(usuario.getId());
+        UsuarioUnidad usuarioUnidadEncotrado = this.usuarioUnidadAbstract
+                .encontrarUsuarioUnidadByCi(usuarioEncontrado.getCi());
+
+
         //Si me mandas un id 2 = Responsable, toddo termina, se cansela toddo
         //los cambion en el formulario asi sea CI o sea todos los campos
+        //Esta logica es unicamente para los cambios de ROLES
         if (usuarioUnidad.getFkRol().getId() == 2 /*2 es Responsable*/) {
 
             //Me solicitan ser responsable okay entonces...
@@ -65,12 +74,17 @@ public class AdministradorAdapter implements AdministradorService {
             if (usuarioUnidadResponsableActivo != null) {
                 throw new RuntimeException("Ya existe un responsable, solo puede haber uno, elimine el usuario que es responsable si desea un responsable nuevo");
             }
+
+            //Aqui aun se mantien el ID del usuarioUnidadEncotrado, damos de baja este registro
+            usuarioUnidadEncotrado.setIsActive(false);
+            usuarioUnidadEncotrado = this.usuarioUnidadAbstract.guardarUsuarioUnidad(usuarioUnidadEncotrado);
+
+            //Si me piden que este registro sea responsable, entonces creo un nuevo registro
+            usuarioUnidadEncotrado.setId(null);
+            usuarioUnidadEncotrado.setFkResponsable(null);
+            usuarioUnidadEncotrado.setIsActive(true);
         }
 
-        Usuario usuarioEncontrado = this.usuarioAbastract
-                .encontrarUsuarioPorId(usuario.getId());
-        UsuarioUnidad usuarioUnidadEncotrado = this.usuarioUnidadAbstract
-                .encontrarUsuarioUnidadByCi(usuarioEncontrado.getCi());
 
         usuarioEncontrado.setCi(usuario.getCi());
         usuarioEncontrado.setNombres(usuario.getNombres());
