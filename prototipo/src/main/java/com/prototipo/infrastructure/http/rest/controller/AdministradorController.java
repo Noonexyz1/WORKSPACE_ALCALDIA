@@ -95,8 +95,7 @@ public class AdministradorController {
     public void editarUsuario(@RequestBody UsuarioUnidadEditRequest editUser) {
         Usuario usuario = modelMapper.map(editUser, Usuario.class);
         UsuarioUnidad usuarioUnidad = usuarioUnidadBuilder(editUser);
-        //TODO, esto dberia ser otro metodo de editar, no de crear
-        administradorService.crearUsuarioUnidad(usuario, usuarioUnidad);
+        administradorService.editarUsuarioUnidad(usuario, usuarioUnidad);
     }
 
     private UsuarioUnidad usuarioUnidadBuilder(UsuarioUnidadEditRequest user){

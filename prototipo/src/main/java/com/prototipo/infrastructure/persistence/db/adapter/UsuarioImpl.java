@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Component
 public class UsuarioImpl implements UsuarioAbastract {
 
@@ -38,6 +40,16 @@ public class UsuarioImpl implements UsuarioAbastract {
                 .nombreCargo((String)usuarioDto[8])
                 .build();
         return usuario;
+    }
+
+    @Override
+    public Usuario encontrarUsuarioPorId(Long id) {
+        Optional<UsuarioEntity> usuarioEntity = this.usuarioRepository.findById(id);
+        if (usuarioEntity.isEmpty()) {
+            return null;
+        } else {
+            return this.modelMapper.map(usuarioEntity.get(), Usuario.class);
+        }
     }
 
     @Override

@@ -13,4 +13,5 @@ public interface AdministradorService {
     List<Unidad> listaDeUnidades();
     List<Cargo> listaDeCargos();
     PaginableOut<UsuarioUnidad> listaDeUsuarios(PaginableIn paginableIn);
+    void editarUsuarioUnidad(Usuario usuario, UsuarioUnidad usuarioUnidad);
 }

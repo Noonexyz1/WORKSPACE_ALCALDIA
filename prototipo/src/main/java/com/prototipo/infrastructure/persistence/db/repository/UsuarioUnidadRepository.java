@@ -53,14 +53,6 @@ public interface UsuarioUnidadRepository extends JpaRepository<UsuarioUnidadEnti
                 SELECT u.id
                 FROM usuario u
                 WHERE u.ci = :ci)
-            AND 0 = ALL (
-                    SELECT uu.is_active
-                    FROM usuario_unidad uu
-                    WHERE uu.fk_usuario_id = (
-                        SELECT u.id
-                        FROM usuario u
-                        WHERE u.ci = :ci))
-            LIMIT 1
             """, nativeQuery = true)
     UsuarioUnidadEntity findUserUnidadByCi(@Param("ci") String ci);
 

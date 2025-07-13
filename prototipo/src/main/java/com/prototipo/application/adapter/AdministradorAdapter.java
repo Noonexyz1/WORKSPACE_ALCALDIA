@@ -53,6 +53,42 @@ public class AdministradorAdapter implements AdministradorService {
     }
 
     @Override
+    public void editarUsuarioUnidad(Usuario usuario, UsuarioUnidad usuarioUnidad) {
+        //Si me mandas un id 2 = Responsable, toddo termina, se cansela toddo
+        //los cambion en el formulario asi sea CI o sea todos los campos
+        if (usuarioUnidad.getFkRol().getId() == 2 /*2 es Responsable*/) {
+
+            //Me solicitan ser responsable okay entonces...
+            //condicion, no debe haber un responsable activo
+            UsuarioUnidad usuarioUnidadResponsableActivo = this.usuarioUnidadAbstract
+                    .encontrarUsuarioUnidadResponsableActivo();
+            if (usuarioUnidadResponsableActivo != null) {
+                throw new RuntimeException("Ya existe un responsable, solo puede haber uno, elimine el usuario que es responsable si desea un responsable nuevo");
+            }
+        }
+
+        Usuario usuarioEncontrado = this.usuarioAbastract
+                .encontrarUsuarioPorId(usuario.getId());
+        UsuarioUnidad usuarioUnidadEncotrado = this.usuarioUnidadAbstract
+                .encontrarUsuarioUnidadByCi(usuarioEncontrado.getCi());
+
+        usuarioEncontrado.setCi(usuario.getCi());
+        usuarioEncontrado.setNombres(usuario.getNombres());
+        usuarioEncontrado.setPaterno(usuario.getPaterno());
+        usuarioEncontrado.setMaterno(usuario.getMaterno());
+        usuarioEncontrado.setCorreo(usuario.getCorreo());
+
+        usuarioUnidadEncotrado.setFkRol(usuarioUnidad.getFkRol());
+        usuarioUnidadEncotrado.setFkCargo(usuarioUnidad.getFkCargo());
+        usuarioUnidadEncotrado.setFkUnidad(usuarioUnidad.getFkUnidad());
+
+        //PERSISTIMOS
+        this.crearCredencial(usuarioEncontrado);
+        this.usuarioAbastract.guardarUsuarioAbastract(usuarioEncontrado);
+        this.usuarioUnidadAbstract.guardarUsuarioUnidad(usuarioUnidadEncotrado);
+    }
+
+    @Override
     public void crearUsuarioUnidad(Usuario user, UsuarioUnidad userUnidad){
         /*LAS PERSISTENCIAS DEBEN IR AL FINAL DE CADA METODO, PARA ASI ASEGURARNOS
         * DE QUE HAYA UN BUEN FUNCIONAMIENTO COMO EN LOGICA COMPRENCION E INTEGRIDAD
@@ -104,13 +140,6 @@ public class AdministradorAdapter implements AdministradorService {
     }
 
 
-    //TODO, PAra la parte de Editar
-    /*Si el administrador prdente crear otro responsable, pues este no debe poderse crear ya que
-    * pues se debe verificar si ya hay un responasble activo, si hay un responsable activo, entonces no puede crear un
-    * registro, y ademas, ademas, eso tendria que ser en la parte de crear un responsable,
-    * indicar que ya existe, y si si quiere crear un responsable, pues que deba eliminar ese responsable, y luego crear el
-    * nuevo responsable*/
-
     private boolean hayCambioUserUni(UsuarioUnidad userUniNew, UsuarioUnidad userRespon){
         if (userRespon.getFkResponsable() == null &&
                 userRespon.getFkDirector() == null) {
@@ -147,6 +176,7 @@ public class AdministradorAdapter implements AdministradorService {
                     .build();
             credencialAbstract.guardarCredencialAbstract(newCredencial);
         } else {
+            credencialResp.setCi(usuarioResp.getCi());
             credencialResp.setPass("f" + usuarioResp.getCi());
             credencialAbstract.guardarCredencialAbstract(credencialResp);
         }
