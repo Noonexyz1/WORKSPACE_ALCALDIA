@@ -24,4 +24,6 @@ public interface UsuarioRepository extends JpaRepository<UsuarioEntity, Long> {
             WHERE u.ci = :ci
             """, nativeQuery = true)
     UsuarioEntity encontrarUsuarioPorCi(@Param("ci") String ci);
+
+    UsuarioEntity findByCi(String ci);
 }

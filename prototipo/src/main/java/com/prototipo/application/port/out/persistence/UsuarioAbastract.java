@@ -7,4 +7,6 @@ public interface UsuarioAbastract {
     Usuario iniciarSesionAbstract(String ci);
 
     Usuario encontrarUsuarioPorId(Long id);
+
+    Usuario encontrarUsuarioPorCi(String ci);
 }

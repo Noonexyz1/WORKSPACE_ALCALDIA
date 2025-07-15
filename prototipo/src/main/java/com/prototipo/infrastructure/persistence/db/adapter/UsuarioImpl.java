@@ -2,6 +2,7 @@ package com.prototipo.infrastructure.persistence.db.adapter;
 
 import com.prototipo.application.port.out.persistence.UsuarioAbastract;
 import com.prototipo.domain.model.Usuario;
+import com.prototipo.domain.model.UsuarioUnidad;
 import com.prototipo.infrastructure.persistence.db.entity.UsuarioEntity;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioRepository;
 import com.prototipo.infrastructure.persistence.db.repository.UsuarioUnidadRepository;
@@ -49,6 +50,16 @@ public class UsuarioImpl implements UsuarioAbastract {
             return null;
         } else {
             return this.modelMapper.map(usuarioEntity.get(), Usuario.class);
+        }
+    }
+
+    @Override
+    public Usuario encontrarUsuarioPorCi(String ci) {
+        UsuarioEntity usuarioEntity = this.usuarioRepository.findByCi(ci);
+        if (usuarioEntity == null) {
+            return null;
+        } else {
+            return this.modelMapper.map(usuarioEntity, Usuario.class);
         }
     }
 

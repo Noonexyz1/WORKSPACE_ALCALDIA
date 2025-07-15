@@ -108,6 +108,11 @@ public class AdministradorAdapter implements AdministradorService {
         * DE QUE HAYA UN BUEN FUNCIONAMIENTO COMO EN LOGICA COMPRENCION E INTEGRIDAD
         * mas que toddo cuando hay codiciones de exceptiones*/
 
+        //Debemos validar si el ci del usuario nuevo ya es repetido o cuando no deberia serlo
+        Usuario usuarioPorCi = this.usuarioAbastract.encontrarUsuarioPorCi(user.getCi());
+        if (usuarioPorCi != null) {
+            throw new RuntimeException("Ya existe un usuario con este CI, Operacion cancelada");
+        }
 
         /*ESTOS SON VERIFICACIONES O SIMPLES CONSULTAS A PRESISTENCIAS PARA REALIZAR LA LOGICA*/
         //Buscamos el id del userUnidad la parte del usuario que quire ser responsable
